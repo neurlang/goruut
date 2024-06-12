@@ -1,0 +1,1 @@
+document.write("<h1>Welcome from JS</h1>");

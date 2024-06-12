@@ -1,0 +1,5 @@
+{
+  "Port": "18080",
+  "AdminPort": "28080",
+  "BuiltinDictLanguages": ["Czech", "Slovak"]
+}
