@@ -60,7 +60,7 @@ Output should be:
 ## Intended Audience
 
 goruut is useful for transforming raw text into phonetic pronunciations, similar to [phonemizer](https://github.com/bootphon/phonemizer).
-Unlike phonemizer, gruut looks up words in a pre-built lexicon (pronunciation dictionary) or guesses word pronunciations with a pre-trained
+Unlike phonemizer, goruut looks up words in a pre-built lexicon (pronunciation dictionary) or guesses word pronunciations with a pre-trained
 grapheme-to-phoneme model.
 
 
