@@ -94,7 +94,10 @@ func main() {
 	hints := flag.Bool("hints", false, "display language file improvements hints")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	same := flag.Bool("same", false, "show same matrices")
+	nostress := flag.Bool("nostress", false, "delete stress")
+	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
+	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode")
 	flag.Parse()
 
 	var lang *Language
@@ -191,9 +194,16 @@ func main() {
 
 	loop(*srcFile, func(word1, word2 string) {
 
-		if []rune(word2)[0] == rune('ˈ') {
-			word2 = string([]rune(word2)[1:])
+		if nostress != nil && *nostress {
+			word2 = strings.ReplaceAll(word2, "ˈ", "")
+			word2 = strings.ReplaceAll(word2, "ˌ", "")
 		}
+
+		if nospaced != nil && *nospaced {
+			word2 = strings.ReplaceAll(word2, " ", "")
+			word1 = strings.ReplaceAll(word1, " ", "")
+		}
+
 		var mat = levenshtein.MatrixTSlices[float32, string](srcslice([]rune(word1)), dstslice([]rune(word2)),
 			nil, nil, func(x *string, y *string) *float32 {
 				if _, ok := dict[*x+"\x00"+*y]; ok {
@@ -234,8 +244,12 @@ func main() {
 				return
 			}
 			if hints != nil && *hints {
-				for _, r := range w1p[x] {
-					fmt.Printf("\\u%04X", r)
+				if escapeunicode != nil && *escapeunicode {
+					for _, r := range w1p[x] {
+						fmt.Printf("\\u%04X", r)
+					}
+				} else {
+					fmt.Print(w1p[x])
 				}
 				fmt.Println("", w2p[y])
 
