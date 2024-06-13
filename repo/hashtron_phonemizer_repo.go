@@ -98,6 +98,9 @@ func (l *languages) DstMultiSuffix(lang string) map[string]struct{} {
 	return (*l)[lang].mapDstMultiSuffix
 }
 func (l *languages) Map(lang string) map[string]map[string]struct{} {
+	if (*l)[lang] == nil {
+		return nil
+	}
 	return (*l)[lang].mapMapping
 }
 func (l *languages) SrcSlice(language string, word []rune) (o []string) {
@@ -246,6 +249,12 @@ func (s *sample) Feature(n int) uint32 {
 
 func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
 	r.LoadLanguage(lang)
+
+	if r.lang.Map(lang) == nil {
+		ret = make(map[uint64]string)
+		ret[murmur3hash(word+"\x00"+word)] = word
+		return
+	}
 
 	srca := r.lang.SrcSlice(lang, []rune(word))
 	dsta := []string{}
