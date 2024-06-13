@@ -35,14 +35,16 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 	for _, file := range files {
 		clean := log.Error1((*r.getter).GetDict(lang, file))
 
-		clean = bytes.ReplaceAll(clean, []byte("\t"), []byte(","))
-
 		reader := csv.NewReader(bytes.NewReader(clean))
+
+		reader.Comma = '\t'
 
 		recs := log.Error1(reader.ReadAll())
 		log.Now().Debugf("Language %s has %d records", lang, len(recs))
 		for _, v := range recs {
-			v[0] = strings.ReplaceAll(v[0], " ", "")
+			for i := range v {
+				v[i] = strings.ReplaceAll(v[i], " ", "")
+			}
 			var src, dst string
 			var tag uint64
 			if len(v) == 2 {
@@ -57,7 +59,6 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 				log.Now().Debugf("Language %s has wrong number of columns: %d", src, len(v))
 				continue
 			}
-			dst = strings.ReplaceAll(dst, " ", "")
 			if (*r.lang_words)[lang][src] == nil {
 				(*r.lang_words)[lang][src] = make(map[uint64]string)
 			}
