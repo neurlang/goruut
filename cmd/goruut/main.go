@@ -23,6 +23,8 @@ func main() {
 
 	conf.ConfigureLogger()
 
+	di.Add((interfaces.IpaFlavor)(conf))
+
 	di.Add(conf)
 
 	var server = app.NewServer(di)

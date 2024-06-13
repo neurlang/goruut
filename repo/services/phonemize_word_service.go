@@ -2,6 +2,7 @@ package services
 
 import (
 	"github.com/neurlang/goruut/repo"
+	"strings"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -15,6 +16,11 @@ type PhonemizeWordService struct {
 }
 
 func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (ret map[uint64]string) {
+
+	word = strings.Trim(word, ".,")
+
+	word = strings.ToLower(word)
+
 	ret = (*p.repo).PhonemizeWord(lang, word)
 	if ret == nil {
 		ret = (*p.ai).PhonemizeWord(lang, word)

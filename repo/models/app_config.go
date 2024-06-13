@@ -23,6 +23,7 @@ type AppConfig struct {
 	}
 
 	BuiltinDictLanguages []string
+	IpaFlavors           map[string]map[string]string
 }
 
 // GetHttpPort returns the HTTP port.
@@ -46,6 +47,11 @@ func (c *AppConfig) GetBuiltinDictLanguages() (ret map[string]struct{}) {
 		ret[lang] = struct{}{}
 	}
 	return
+}
+
+// IpaFlavors returns the builtin ipa flavors languages.
+func (c *AppConfig) GetIpaFlavors() map[string]map[string]string {
+	return c.IpaFlavors
 }
 
 // ConfigureLogger configures the application's logger.

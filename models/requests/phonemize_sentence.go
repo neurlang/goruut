@@ -1,6 +1,7 @@
 package requests
 
 type PhonemizeSentence struct {
-	Language string
-	Sentence string
+	IpaFlavors []string
+	Language   string
+	Sentence   string
 }

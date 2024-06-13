@@ -35,3 +35,15 @@ func (ac *Configs) GetFavIconSite() string {
 	}
 	return ""
 }
+
+// GetIpaFlavors retrieves the ipa flavors from the configurations.
+func (ac *Configs) GetIpaFlavors() map[string]map[string]string {
+	for _, config := range ac.Configs {
+		site := config.GetIpaFlavors()
+
+		if site != nil {
+			return site
+		}
+	}
+	return nil
+}

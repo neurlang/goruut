@@ -1,5 +1,43 @@
 {
   "Port": "18080",
   "AdminPort": "28080",
-  "BuiltinDictLanguages": ["Czech", "Slovak"]
+  "BuiltinDictLanguages": ["Czech", "Slovak"],
+  "IpaFlavors": {
+    "Espeak": {
+      "ː":	":",
+      "ɑ":	"a",
+      "ɛ":	"e",
+      "ɡ":	"g",
+      "ɦ":	"h",
+      "ɪ":	"i",
+      "ɟ":	"J",
+      "ɫ":	"l",
+      "ʎ":	"l^",
+      "ɲ":	"n^",
+      "ɔ":	"o",
+      "r̝":	"R^",
+      "ʃ":	"S",
+      "ʊ":	"u",
+      "ʒ":	"Z"
+    },
+    "antvaset.com": {
+      "ɑ":	"a",
+      "i":	"ɪ",
+      "ʊ":	"u",
+      "ɔ":	"o",
+      "ɫ":	"l",
+      "ɡ":	"g",
+      "h":	"ɦ"
+    },
+    "antvaset.com_Slovak": {
+      "ɛ":	"e",
+      "ɪ":	"i"
+    },
+    "antvaset.com_Czech": {
+      "ɪː": "iː",
+      "e":	"ɛ",
+      "r̝":	"r̝̊"
+
+    }
+  }
 }
