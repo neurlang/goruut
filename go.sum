@@ -76,8 +76,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/mattn/go-runewidth v0.0.4/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=
 github.com/neurlang/classifier v0.0.5 h1:ok0F/tH4ldCiDm7mpilsqIIDsS/yc7Z7Vr8AY4+TnQk=
 github.com/neurlang/classifier v0.0.5/go.mod h1:CMZ9M5CHGQnBw8FNs2b22FuXtycsQ446wveC6hQkKeg=
-github.com/neurlang/levenshtein v0.0.0-20240613032024-43e5338e3cd8 h1:sOHVR+kW+EMM3XafqOwlRF9MkC41LW/7FPG2bSroOGI=
-github.com/neurlang/levenshtein v0.0.0-20240613032024-43e5338e3cd8/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
+github.com/neurlang/levenshtein v0.0.1 h1:5Jviw/1LeA6YnrG3U6o6tr3CpXxKGdNUb3T9VXTkkkY=
+github.com/neurlang/levenshtein v0.0.1/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

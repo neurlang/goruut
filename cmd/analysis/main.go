@@ -1,6 +1,7 @@
 package main
 
 import "github.com/neurlang/levenshtein"
+import "github.com/neurlang/goruut/repo"
 
 import (
 	"bufio"
@@ -97,7 +98,8 @@ func main() {
 	nostress := flag.Bool("nostress", false, "delete stress")
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
-	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode")
+	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode when viewing")
+	normalize := flag.String("normalize", "", "normalize unicode, for instance to NFC")
 	flag.Parse()
 
 	var lang *Language
@@ -194,6 +196,10 @@ func main() {
 
 	loop(*srcFile, func(word1, word2 string) {
 
+		if normalize != nil && *normalize != "" {
+			word1 = repo.NormalizeTo(word1, *normalize)
+		}
+
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "ˈ", "")
 			word2 = strings.ReplaceAll(word2, "ˌ", "")
@@ -239,26 +245,55 @@ func main() {
 		if d == 0 {
 			tsvWriter.AddRow([]string{spacesep(srcslice([]rune(word1))), spacesep(dstslice([]rune(word2)))})
 		}
-		levenshtein.Walk(mat, uint(length), func(x, y uint) {
+		var final_from, final_to string
+		levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
+			} else {
+				return false
+			}
 			if _, ok := dict[w1p[x]+"\x00"+w2p[y]]; ok {
-				return
+				return false
 			}
 			if hints != nil && *hints {
+
+				if prev == this {
+					return false
+				}
+
 				if escapeunicode != nil && *escapeunicode {
+					final_from = ""
 					for _, r := range w1p[x] {
-						fmt.Printf("\\u%04X", r)
+						final_from += fmt.Sprintf("\\u%04X", r)
 					}
 				} else {
-					fmt.Print(w1p[x])
+					final_from = w1p[x]
 				}
-				fmt.Println("", w2p[y])
+				final_to = w2p[y]
 
 			}
+			return false
 		})
+		if hints != nil && *hints && final_from != "" && final_to != "" {
+			var found bool
+			for _, w := range lang.Map[final_from] {
+				if w == final_to {
+					found = true
+					break
+				}
+			}
+			if !found {
+				lang.Map[final_from] = append(lang.Map[final_from], final_to)
+			}
+		}
 		dist += d
 	})
 
 	tsvWriter.Close()
+	if hints != nil && *hints {
+		data, err := json.Marshal(lang.Map)
+
+		fmt.Println(string(data), err)
+	}
 	if loss != nil && *loss {
 		fmt.Println("Edit distance is:", dist)
 	}
