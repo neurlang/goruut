@@ -71,7 +71,7 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(lang string) {
 }
 
 // Function to normalize text to NFC
-func normalizeTo(input, form string) string {
+func NormalizeTo(input, form string) string {
 	// Create a buffer to hold the normalized text
 	buf := make([]byte, 0, len(input))
 
@@ -80,6 +80,12 @@ func normalizeTo(input, form string) string {
 	switch form {
 	case "NFC":
 		format = norm.NFC
+	case "NFD":
+		format = norm.NFD
+	case "NFKC":
+		format = norm.NFKC
+	case "NFKD":
+		format = norm.NFKD
 	default:
 		return input
 	}
@@ -102,7 +108,7 @@ func (s *PrePhonWordStepsRepository) PrePhonemizeWord(lang string, word string) 
 
 	for i := 0; i < steps.Len(lang); i++ {
 		if steps.IsNormalize(lang, i) {
-			word = normalizeTo(word, steps.GetNormalize(lang, i))
+			word = NormalizeTo(word, steps.GetNormalize(lang, i))
 		}
 		if steps.IsTrim(lang, i) {
 			word = strings.Trim(word, steps.GetTrim(lang, i))

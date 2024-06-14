@@ -256,10 +256,13 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map
 		return
 	}
 
+	var backoffs = 100
+
 	srca := r.lang.SrcSlice(lang, []rune(word))
 	dsta := []string{}
 outer:
-	for i, srcv := range srca {
+	for i := 0; i < len(srca); i++ {
+		srcv := srca[i]
 		m := r.lang.Map(lang)[string(srcv)]
 		if len(m) == 0 {
 			dsta = append(dsta, "")
@@ -296,6 +299,12 @@ outer:
 				dsta = append(dsta, option)
 				continue outer
 			}
+		}
+		if backoffs > 0 {
+			i = -1
+			dsta = nil
+			backoffs--
+			continue
 		}
 		for mfirst := range m {
 			dsta = append(dsta, mfirst)

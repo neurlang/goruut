@@ -2,7 +2,6 @@ package services
 
 import (
 	"github.com/neurlang/goruut/repo"
-	"strings"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -13,13 +12,12 @@ type IPhonemizeWordService interface {
 type PhonemizeWordService struct {
 	repo *repo.IDictPhonemizerRepository
 	ai   *repo.IHashtronPhonemizerRepository
+	pre  *repo.IPrePhonWordStepsRepository
 }
 
 func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (ret map[uint64]string) {
 
-	word = strings.Trim(word, ".,")
-
-	word = strings.ToLower(word)
+	word = (*p.pre).PrePhonemizeWord(lang, word)
 
 	ret = (*p.repo).PhonemizeWord(lang, word)
 	if ret == nil {
@@ -33,10 +31,13 @@ func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
 	repoiface := (repo.IDictPhonemizerRepository)(&repository)
 	ai_repo := MustNeed(di, repo.NewHashtronPhonemizerRepository)
 	ai_repo_iface := (repo.IHashtronPhonemizerRepository)(&ai_repo)
+	pre_repo := MustNeed(di, repo.NewPrePhonWordStepsRepository)
+	pre_repo_iface := (repo.IPrePhonWordStepsRepository)(&pre_repo)
 
 	return &PhonemizeWordService{
 		repo: &repoiface,
 		ai:   &ai_repo_iface,
+		pre:  &pre_repo_iface,
 	}
 }
 
