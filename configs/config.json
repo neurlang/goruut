@@ -4,6 +4,15 @@
   "BuiltinDictLanguages": ["Czech", "Slovak"],
   "IpaFlavors": {
     "Espeak": {
+      "ə":      "@",
+      "ɛ":      "E",
+      "ʊ":      "U",
+      "ɪ":      "I",
+      "ɚ":      "3",
+      "ŋ":      "N",
+      "ʌ":      "V",
+      "ɹ":      "r",
+      "ɒ":      "0",
       "ː":	":",
       "ɑ":	"a",
       "ɛ":	"e",
@@ -29,12 +38,20 @@
       "ɡ":	"g",
       "h":	"ɦ"
     },
+    "antvaset.com_English": {
+      "uː":	"u",
+      "au":	"aʊ",
+      "ɦ":	"h",
+      "ɛɪ":	"eɪ",
+      "a":	"ʌ",
+      "ou":	"oʊ"
+    },
     "antvaset.com_Slovak": {
       "ɛ":	"e",
       "ɪ":	"i"
     },
     "antvaset.com_Czech": {
-      "ɪː": "iː",
+      "ɪː":	"iː",
       "e":	"ɛ",
       "r̝":	"r̝̊"
 
