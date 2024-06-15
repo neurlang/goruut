@@ -10,6 +10,7 @@ go install github.com/neurlang/goruut/cmd/goruut@latest
 
 ## Supported Languages
 
+* English
 * Czech
 * Slovak
 
