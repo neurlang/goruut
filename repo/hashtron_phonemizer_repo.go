@@ -41,6 +41,8 @@ type language struct {
 	DstMulti          []string            `json:"DstMulti"`
 	SrcMultiSuffix    []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
+	mapSrcMultiLen    int
+	mapSrcMultiSufLen int
 	mapMapping        map[string]map[string]struct{}
 	mapSrcMulti       map[string]struct{}
 	mapDstMulti       map[string]struct{}
@@ -64,6 +66,16 @@ func (l *language) mapize() {
 	l.mapMapping = make(map[string]map[string]struct{})
 	for k, v := range l.Mapping {
 		l.mapMapping[k] = mapize(v)
+	}
+	for k := range l.mapSrcMulti {
+		if len(k) > l.mapSrcMultiLen {
+			l.mapSrcMultiLen = len(k)
+		}
+	}
+	for k := range l.mapSrcMultiSuffix {
+		if len(k) > l.mapSrcMultiSufLen {
+			l.mapSrcMultiSufLen = len(k)
+		}
 	}
 	l.SrcMulti = nil
 	l.DstMulti = nil
@@ -108,24 +120,34 @@ func (l *languages) SrcSlice(language string, word []rune) (o []string) {
 outer:
 	for i := 0; i < len(word); i++ {
 		if lang != nil {
-			for multi := range lang.mapSrcMulti {
-				if strings.HasPrefix(string(word[i:]), multi) {
-					o = append(o, multi)
-					i += len([]rune(multi)) - 1
-					if i >= len(word) {
-						return
+			for j := lang.mapSrcMultiLen; j > 0; j-- {
+				for multi := range lang.mapSrcMulti {
+					if len(multi) != j {
+						continue
 					}
-					continue outer
+					if strings.HasPrefix(string(word[i:]), multi) {
+						o = append(o, multi)
+						i += len([]rune(multi)) - 1
+						if i >= len(word) {
+							return
+						}
+						continue outer
+					}
 				}
 			}
-			for multi := range lang.mapSrcMultiSuffix {
-				if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
-					o[len(o)-1] += multi
-					i += len([]rune(multi)) - 1
-					if i >= len(word) {
-						return
+			for j := lang.mapSrcMultiSufLen; j > 0; j-- {
+				for multi := range lang.mapSrcMultiSuffix {
+					if len(multi) != j {
+						continue
 					}
-					continue outer
+					if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
+						o[len(o)-1] += multi
+						i += len([]rune(multi)) - 1
+						if i >= len(word) {
+							return
+						}
+						continue outer
+					}
 				}
 			}
 		}
