@@ -6,6 +6,7 @@ import "github.com/neurlang/goruut/repo"
 import (
 	"bufio"
 	"fmt"
+	"math/rand"
 	"os"
 	"strings"
 )
@@ -94,9 +95,12 @@ func main() {
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hints := flag.Bool("hints", false, "display language file improvements hints")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
+	randomize := flag.Int("randomize", 0, "randomize dst word split")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	same := flag.Bool("same", false, "show same matrices")
 	join := flag.Bool("join", false, "join letters")
+	wrong := flag.Bool("wrong", false, "print wrong words")
+	prolong := flag.Bool("prolong", false, "prolong mistaken prefix")
 	nostress := flag.Bool("nostress", false, "delete stress")
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
@@ -136,6 +140,7 @@ func main() {
 	var longDstMulti int
 	var longSrcMultiS int
 	var longDstMultiS int
+	var longDst int
 
 	for _, v := range lang.SrcMulti {
 		if len(v) > longSrcMulti {
@@ -156,6 +161,12 @@ func main() {
 		if len(v) > longDstMultiS {
 			longSrcMultiS = len(v)
 		}
+	}
+
+	if longDstMulti > longDstMultiS {
+		longDst = longDstMulti
+	} else {
+		longDst = longDstMultiS
 	}
 
 	srcslice := func(word []rune) (o []string) {
@@ -244,6 +255,7 @@ func main() {
 
 	var hits = make(map[string]int)
 	var joins = make(map[string]int)
+	var prolongs = make(map[string]int)
 
 	loop(*srcFile, func(word1, word2 string) {
 
@@ -262,7 +274,43 @@ func main() {
 			word1 = strings.ReplaceAll(word1, " ", "")
 		}
 
-		var mat = levenshtein.MatrixTSlices[float32, string](srcslice([]rune(word1)), dstslice([]rune(word2)),
+		srcword := srcslice([]rune(word1))
+
+		var dstwordGreedy []string
+		word2pref := word2
+
+		var tokens = 0
+		if randomize != nil {
+			tokens = *randomize
+		}
+
+	outer:
+		for i := 0; i < len(srcword); i++ {
+			src := srcword[i]
+			var j = 1 + rand.Intn(longDst)
+			if j > len(word2pref) {
+				continue
+			}
+			if _, ok := dict[src+"\x00"+word2pref[:j]]; ok {
+				dstwordGreedy = append(dstwordGreedy, word2pref[:j])
+				//println(src, word2pref[:j])
+				word2pref = word2pref[j:]
+				continue outer
+			}
+			if tokens > 0 {
+				i = -1
+				dstwordGreedy = nil
+				word2pref = word2
+				tokens--
+			} else {
+				break
+			}
+		}
+		dstword := dstslice([]rune(word2))
+		if len(srcword) == len(dstwordGreedy) {
+			dstword = dstwordGreedy
+		}
+		var mat = levenshtein.MatrixTSlices[float32, string](srcword, dstword,
 			nil, nil, func(x *string, y *string) *float32 {
 				if _, ok := dict[*x+"\x00"+*y]; ok {
 					return nil
@@ -276,9 +324,60 @@ func main() {
 
 		var d = *levenshtein.Distance(mat)
 
-		var length = len(srcslice([]rune(word1))) + 1
-		w1p := append(srcslice([]rune(word1)), "")
-		w2p := append(dstslice([]rune(word2)), "")
+		var length = len(srcword) + 1
+		w1p := append(srcword, "")
+		w2p := append(dstword, "")
+
+		if d > 0 && prolong != nil && *prolong {
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+				if x == 0 || y == 0 {
+					return false
+				}
+				prolonged_from := w1p[x-1] + w1p[x]
+				prolonged_to := w2p[y-1]
+				if prev != 0 && this == 0 {
+					var w1after string
+					for _, after := range w1p[x+1:] {
+						w1after += after
+					}
+					var w2after string
+					for _, after := range w2p[y:] {
+						w2after += after
+					}
+
+					srcwordp := srcslice([]rune(w1after))
+					dstwordp := dstslice([]rune(w2after))
+					var matp = levenshtein.MatrixTSlices[float32, string](srcwordp, dstwordp,
+						nil, nil, func(x *string, y *string) *float32 {
+							if _, ok := dict[*x+"\x00"+*y]; ok {
+								return nil
+							}
+
+							//fmt.Println(*x, *y)
+							var n float32
+							n = 1
+							return &n
+						}, nil)
+
+					var dp = *levenshtein.Distance(matp)
+
+					if dp == 0 {
+						for _, w := range lang.Map[prolonged_from] {
+							if w == prolonged_to {
+								return true
+							}
+						}
+						prolongs[prolonged_from+"\x00"+prolonged_to]++
+						if hitscnt != nil && *hitscnt < prolongs[prolonged_from+"\x00"+prolonged_to] {
+							lang.Map[prolonged_from] = append(lang.Map[prolonged_from], prolonged_to)
+						}
+						return true
+					}
+				}
+				return !(prev == 0 && this == 0)
+			})
+		}
+
 		if d > 0 && matrices != nil && *matrices {
 			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
 				if escapeunicode != nil && *escapeunicode {
@@ -301,7 +400,9 @@ func main() {
 			}
 		}
 		if d == 0 {
-			tsvWriter.AddRow([]string{spacesep(srcslice([]rune(word1))), spacesep(dstslice([]rune(word2)))})
+			tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
+		} else if wrong != nil && (*wrong) {
+			fmt.Println(word1, word2)
 		}
 		var final_from, final_to string
 		if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
@@ -330,12 +431,13 @@ func main() {
 			})
 		}
 
-		if (join != nil) && (*join) {
+		if d > 0 && (join != nil) && (*join) {
 			//println(word1, " ", word2)
 			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-				if prev != 0 && this == 0 && uint(len(w1p)) > x+1 && w2p[y] != "" {
+				if prev != 0 && this == 0 && uint(len(w1p)) > x+1 && uint(len(w2p)) > y+1 {
 					joined_from := w1p[x] + w1p[x+1]
-					joined_to := w2p[y]
+					joined_to := w2p[y] + w2p[y+1]
+
 					for _, w := range lang.Map[joined_from] {
 						if w == joined_to {
 							return false
@@ -370,7 +472,7 @@ func main() {
 	})
 
 	tsvWriter.Close()
-	if (hints != nil && *hints) || (join != nil) && (*join) {
+	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) {
 		data, err := json.Marshal(lang.Map)
 
 		fmt.Println(string(data), err)
