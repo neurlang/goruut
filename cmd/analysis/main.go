@@ -93,8 +93,10 @@ func main() {
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hints := flag.Bool("hints", false, "display language file improvements hints")
+	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	same := flag.Bool("same", false, "show same matrices")
+	join := flag.Bool("join", false, "join letters")
 	nostress := flag.Bool("nostress", false, "delete stress")
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
@@ -130,28 +132,64 @@ func main() {
 		}
 	}
 
+	var longSrcMulti int
+	var longDstMulti int
+	var longSrcMultiS int
+	var longDstMultiS int
+
+	for _, v := range lang.SrcMulti {
+		if len(v) > longSrcMulti {
+			longSrcMulti = len(v)
+		}
+	}
+	for _, v := range lang.DstMulti {
+		if len(v) > longDstMulti {
+			longDstMulti = len(v)
+		}
+	}
+	for _, v := range lang.SrcMultiSuffix {
+		if len(v) > longSrcMultiS {
+			longSrcMultiS = len(v)
+		}
+	}
+	for _, v := range lang.DstMultiSuffix {
+		if len(v) > longDstMultiS {
+			longSrcMultiS = len(v)
+		}
+	}
+
 	srcslice := func(word []rune) (o []string) {
 	outer:
 		for i := 0; i < len(word); i++ {
 			if lang != nil {
-				for _, multi := range lang.SrcMulti {
-					if strings.HasPrefix(string(word[i:]), multi) {
-						o = append(o, multi)
-						i += len([]rune(multi)) - 1
-						if i >= len(word) {
-							return
+				for j := longSrcMulti; j > 0; j-- {
+					for _, multi := range lang.SrcMulti {
+						if len(multi) != j {
+							continue
 						}
-						continue outer
+						if strings.HasPrefix(string(word[i:]), multi) {
+							o = append(o, multi)
+							i += len([]rune(multi)) - 1
+							if i >= len(word) {
+								return
+							}
+							continue outer
+						}
 					}
 				}
-				for _, multi := range lang.SrcMultiSuffix {
-					if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
-						o[len(o)-1] += multi
-						i += len([]rune(multi)) - 1
-						if i >= len(word) {
-							return
+				for j := longSrcMultiS; j > 0; j-- {
+					for _, multi := range lang.SrcMultiSuffix {
+						if len(multi) != j {
+							continue
 						}
-						continue outer
+						if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
+							o[len(o)-1] += multi
+							i += len([]rune(multi)) - 1
+							if i >= len(word) {
+								return
+							}
+							continue outer
+						}
 					}
 				}
 			}
@@ -163,24 +201,34 @@ func main() {
 	outer:
 		for i := 0; i < len(word); i++ {
 			if lang != nil {
-				for _, multi := range lang.DstMulti {
-					if strings.HasPrefix(string(word[i:]), multi) {
-						o = append(o, multi)
-						i += len([]rune(multi)) - 1
-						if i >= len(word) {
-							return
+				for j := longDstMulti; j > 0; j-- {
+					for _, multi := range lang.DstMulti {
+						if len(multi) != j {
+							continue
 						}
-						continue outer
+						if strings.HasPrefix(string(word[i:]), multi) {
+							o = append(o, multi)
+							i += len([]rune(multi)) - 1
+							if i >= len(word) {
+								return
+							}
+							continue outer
+						}
 					}
 				}
-				for _, multi := range lang.DstMultiSuffix {
-					if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
-						o[len(o)-1] += multi
-						i += len([]rune(multi)) - 1
-						if i >= len(word) {
-							return
+				for j := longDstMultiS; j > 0; j-- {
+					for _, multi := range lang.DstMultiSuffix {
+						if len(multi) != j {
+							continue
 						}
-						continue outer
+						if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
+							o[len(o)-1] += multi
+							i += len([]rune(multi)) - 1
+							if i >= len(word) {
+								return
+							}
+							continue outer
+						}
 					}
 				}
 			}
@@ -194,6 +242,9 @@ func main() {
 		tsvWriter.Open(*dstFile, nil)
 	}
 
+	var hits = make(map[string]int)
+	var joins = make(map[string]int)
+
 	loop(*srcFile, func(word1, word2 string) {
 
 		if normalize != nil && *normalize != "" {
@@ -202,6 +253,7 @@ func main() {
 
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "ˈ", "")
+			word2 = strings.ReplaceAll(word2, "'", "")
 			word2 = strings.ReplaceAll(word2, "ˌ", "")
 		}
 
@@ -229,11 +281,17 @@ func main() {
 		w2p := append(dstslice([]rune(word2)), "")
 		if d > 0 && matrices != nil && *matrices {
 			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
-				for _, rs := range w1p {
-					for _, r := range rs {
-						fmt.Printf("\\u%04X", r)
+				if escapeunicode != nil && *escapeunicode {
+					for _, rs := range w1p {
+						for _, r := range rs {
+							fmt.Printf("\\u%04X", r)
+						}
+						fmt.Print(" ")
 					}
-					fmt.Print(" ")
+				} else {
+					for _, rs := range w1p {
+						fmt.Printf("%s ", rs)
+					}
 				}
 				fmt.Println()
 				for i := 0; i+length-1 < len(mat); i += length {
@@ -246,33 +304,53 @@ func main() {
 			tsvWriter.AddRow([]string{spacesep(srcslice([]rune(word1))), spacesep(dstslice([]rune(word2)))})
 		}
 		var final_from, final_to string
-		levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
-			} else {
-				return false
-			}
-			if _, ok := dict[w1p[x]+"\x00"+w2p[y]]; ok {
-				return false
-			}
-			if hints != nil && *hints {
-
-				if prev == this {
+		if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+				if _, ok := dict[w1p[x]+"\x00"+w2p[y]]; ok {
 					return false
 				}
+				if hints != nil && *hints {
 
-				if escapeunicode != nil && *escapeunicode {
-					final_from = ""
-					for _, r := range w1p[x] {
-						final_from += fmt.Sprintf("\\u%04X", r)
+					if prev == this {
+						return false
 					}
-				} else {
-					final_from = w1p[x]
-				}
-				final_to = w2p[y]
 
-			}
-			return false
-		})
+					if escapeunicode != nil && *escapeunicode {
+						final_from = ""
+						for _, r := range w1p[x] {
+							final_from += fmt.Sprintf("\\u%04X", r)
+						}
+					} else {
+						final_from = w1p[x]
+					}
+					final_to = w2p[y]
+
+				}
+				return false
+			})
+		}
+
+		if (join != nil) && (*join) {
+			//println(word1, " ", word2)
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+				if prev != 0 && this == 0 && uint(len(w1p)) > x+1 && w2p[y] != "" {
+					joined_from := w1p[x] + w1p[x+1]
+					joined_to := w2p[y]
+					for _, w := range lang.Map[joined_from] {
+						if w == joined_to {
+							return false
+						}
+					}
+					joins[joined_from+"\x00"+joined_to]++
+					if hitscnt != nil && *hitscnt < joins[joined_from+"\x00"+joined_to] {
+						lang.Map[joined_from] = append(lang.Map[joined_from], joined_to)
+					}
+					return true
+				}
+
+				return false
+			})
+		}
 		if hints != nil && *hints && final_from != "" && final_to != "" {
 			var found bool
 			for _, w := range lang.Map[final_from] {
@@ -282,14 +360,17 @@ func main() {
 				}
 			}
 			if !found {
-				lang.Map[final_from] = append(lang.Map[final_from], final_to)
+				hits[final_from+"\x00"+final_to]++
+				if hitscnt != nil && *hitscnt < hits[final_from+"\x00"+final_to] {
+					lang.Map[final_from] = append(lang.Map[final_from], final_to)
+				}
 			}
 		}
 		dist += d
 	})
 
 	tsvWriter.Close()
-	if hints != nil && *hints {
+	if (hints != nil && *hints) || (join != nil) && (*join) {
 		data, err := json.Marshal(lang.Map)
 
 		fmt.Println(string(data), err)
