@@ -1,11 +1,13 @@
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
 <html lang="en">
 <head>
-    <title>Page</title>
+    <title>Convert English,German,Arabic,Czech,Slovak to IPA</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+<h1>Convert English,German,Arabic,Czech,Slovak to IPA</h1>
 
 <div><textarea style="width:90%; height: 20em" id="textt"></textarea></div>
 <select id="language" name="language">
@@ -14,6 +16,11 @@
 	<option value="Arabic">Arabic</option>
 	<option value="Czech">Czech</option>
 	<option value="Slovak">Slovak</option>
+</select>
+<select id="target" name="target">
+	<option value="IPA">IPA</option>
+	<option value="Espeak">Espeak</option>
+	<option value="Antvaset">Antvaset</option>
 </select>
 <button id="phonemizer">Phonemize</button>
 <div id="output"></div>

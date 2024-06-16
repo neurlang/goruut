@@ -13,11 +13,19 @@ document.getElementById('phonemizer').onclick = function() {
     // Extract text from the textarea with id "text"
     const text = document.getElementById('textt').value;
     const lang = document.getElementById('language').value;
+    const targ = document.getElementById('target').value;
+
+    var target = [];
+    if (targ == "Espeak") {
+	target = ["Espeak"];
+    } else if (targ == "Antvaset") {
+	target = ["antvaset.com", "antvaset.com_"+lang];
+    }
 
     // Define the data to be sent in the POST request
     const data = {
         "Language": lang,
-        "IpaFlavors": [],
+        "IpaFlavors": target,
         "Sentence": text
     };
 
@@ -33,8 +41,8 @@ document.getElementById('phonemizer').onclick = function() {
     .then(data => {
     	document.getElementById('output').innerText = '';
     	for (var i in data.Words) {
-    	const word = data.Words[i];
-    	const lang = document.getElementById('output').innerText += " " + word.Phonetic;
+	const word = data.Words[i];
+	const lang = document.getElementById('output').innerText += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
     	}
         console.log('Success:', data);
     })
