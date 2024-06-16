@@ -6,7 +6,7 @@ import "github.com/neurlang/goruut/dicts/arabic"
 import "github.com/neurlang/goruut/dicts/english"
 import "errors"
 
-var ErrUnsupportedLanguage = errors.New("unsupported")
+var ErrUnsupportedLanguage = errors.New("unsupportedLang")
 
 type DictGetter struct{}
 
