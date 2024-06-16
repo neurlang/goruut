@@ -4,6 +4,7 @@ import "github.com/neurlang/goruut/dicts/czech"
 import "github.com/neurlang/goruut/dicts/slovak"
 import "github.com/neurlang/goruut/dicts/arabic"
 import "github.com/neurlang/goruut/dicts/english"
+import "github.com/neurlang/goruut/dicts/german"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -24,6 +25,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return arabic.Language.ReadFile(filename)
 	case "English":
 		return english.Language.ReadFile(filename)
+	case "German":
+		return german.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
