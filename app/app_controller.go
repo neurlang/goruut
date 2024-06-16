@@ -151,12 +151,13 @@ func (app *App) NewAppControllers(di *DependencyInjection) *Controllers {
 		r.PathPrefix("/favicon.ico").HandlerFunc(handler(proxy))
 	}
 
+
 	// Frontend handlers
-	r2.PathPrefix("/static/" + defaultFrontendVersion).Handler(http.StripPrefix("/static/", v))
-	r2.PathPrefix("/static/").Handler(http.StripPrefix("/static/", v))
-	r2.PathPrefix("/" + defaultFrontendVersion).Handler(v)
-	r2.PathPrefix("/index.html").Handler(v)
-	r2.PathPrefix("").Handler(v)
+	r.PathPrefix("/static/" + defaultFrontendVersion).Handler(http.StripPrefix("/static/", v))
+	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", v))
+	r.PathPrefix("/" + defaultFrontendVersion).Handler(v)
+	r.PathPrefix("/index.html").Handler(v)
+	r.PathPrefix("").Handler(v)
 
 	s.httpServerHandler = r
 	s.adminServerHandler = r2
