@@ -1,0 +1,6 @@
+version: '3'
+services:
+  goruut_phonemizer:
+    build:
+      context: .
+      dockerfile: Dockerfile
