@@ -4,13 +4,20 @@
     <title>Page</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
     <link rel="stylesheet" href="style.css" />
-    <script src="script.js"></script>
 </head>
 <body>
 
-<ul>
-    <li><a href="/api/v0/foo/bar">Download foo bar from backend</a></li>
-</ul>
+<div><textarea style="width:90%; height: 20em" id="textt"></textarea></div>
+<select id="language" name="language">
+	<option value="English">English</option>
+	<option value="German">German</option>
+	<option value="Arabic">Arabic</option>
+	<option value="Czech">Czech</option>
+	<option value="Slovak">Slovak</option>
+</select>
+<button id="phonemizer">Phonemize</button>
+<div id="output"></div>
+
 
 <h2><img width="20" height="20" src="image.svg" alt="star" />
     This page - all work</h2>
@@ -24,5 +31,6 @@
     <li><a href="/v0/">Root v0</a></li>
     <li><a href="/v0/index.html">Root v0 index</a></li>
 </ul>
+<script src="script.js"></script>
 </body>
 </html>
