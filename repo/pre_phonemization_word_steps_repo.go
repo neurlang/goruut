@@ -104,7 +104,11 @@ func NormalizeTo(input, form string) string {
 func (s *PrePhonWordStepsRepository) PrePhonemizeWord(lang string, word string) string {
 	s.LoadLanguage(lang)
 
+	if s.steps == nil {
+		return word
+	}
 	steps := *s.steps
+
 
 	for i := 0; i < steps.Len(lang); i++ {
 		if steps.IsNormalize(lang, i) {
