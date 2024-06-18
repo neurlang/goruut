@@ -1,6 +1,7 @@
 package dicts
 
 import "github.com/neurlang/goruut/dicts/czech"
+import "github.com/neurlang/goruut/dicts/spanish"
 import "github.com/neurlang/goruut/dicts/slovak"
 import "github.com/neurlang/goruut/dicts/arabic"
 import "github.com/neurlang/goruut/dicts/english"
@@ -19,6 +20,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 	switch lang {
 	case "Czech":
 		return czech.Language.ReadFile(filename)
+	case "Spanish":
+		return spanish.Language.ReadFile(filename)
 	case "Slovak":
 		return slovak.Language.ReadFile(filename)
 	case "Arabic":
