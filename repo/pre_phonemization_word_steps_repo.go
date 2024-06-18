@@ -31,6 +31,9 @@ type PrePhonWordStep struct {
 }
 
 func (p *prephonlanguages) Len(lang string) int {
+	if p == nil || (*p)[lang] == nil {
+		return 0
+	}
 	return len((*p)[lang].PrePhonWordSteps)
 }
 func (p *prephonlanguages) IsNormalize(lang string, n int) bool {
