@@ -67,16 +67,6 @@ func (l *language) mapize() {
 	for k, v := range l.Mapping {
 		l.mapMapping[k] = mapize(v)
 	}
-	for k := range l.mapSrcMulti {
-		if len(k) > l.mapSrcMultiLen {
-			l.mapSrcMultiLen = len(k)
-		}
-	}
-	for k := range l.mapSrcMultiSuffix {
-		if len(k) > l.mapSrcMultiSufLen {
-			l.mapSrcMultiSufLen = len(k)
-		}
-	}
 	l.SrcMulti = nil
 	l.DstMulti = nil
 	l.SrcMultiSuffix = nil
@@ -93,6 +83,16 @@ func (l *language) srcdst() {
 			if len([]rune(w)) > 1 {
 				l.mapDstMulti[w] = struct{}{}
 			}
+		}
+	}
+	for k := range l.mapSrcMulti {
+		if len([]rune(k)) > l.mapSrcMultiLen {
+			l.mapSrcMultiLen = len([]rune(k))
+		}
+	}
+	for k := range l.mapSrcMultiSuffix {
+		if len([]rune(k)) > l.mapSrcMultiSufLen {
+			l.mapSrcMultiSufLen = len([]rune(k))
 		}
 	}
 }
