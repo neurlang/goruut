@@ -11,22 +11,26 @@ type ISplitWordsService interface {
 }
 
 type SplitWordsService struct {
-	repo repo.ISpaceSplitterRepository
+	repo1 repo.ISpaceSplitterRepository
+	repo2 repo.ISpacerSplitterRepository
 }
 
-func (s *SplitWordsService) SplitWords(lang, sentence string) []string {
-
-	switch lang {
-	default:
-		return s.repo.Split(sentence)
+func (s *SplitWordsService) SplitWords(lang, sentence string) (out []string) {
+	tmp := s.repo1.Split(sentence)
+	for _, subsentence := range tmp {
+		splitted := s.repo2.Split(lang, subsentence)
+		out = append(out, splitted...)
 	}
+	return
 }
 
 func NewSplitWordsService(di *DependencyInjection) *SplitWordsService {
-	repo := MustNeed(di, repo.NewSpaceSplitterRepository)
+	repo1 := MustNeed(di, repo.NewSpaceSplitterRepository)
+	repo2 := MustNeed(di, repo.NewSpacerSplitterRepository)
 
 	return &SplitWordsService{
-		repo: &repo,
+		repo1: &repo1,
+		repo2: &repo2,
 	}
 }
 
