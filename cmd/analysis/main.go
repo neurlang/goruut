@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"regexp"
 	"strings"
 )
 import (
@@ -61,6 +62,12 @@ func spacesep(sli []string) (sep string) {
 	}
 	return sep
 }
+func nosep(sli []string) (sep string) {
+	for _, w := range sli {
+		sep += w
+	}
+	return sep
+}
 
 type Language struct {
 	Map            map[string][]string `json:"Map"`
@@ -88,15 +95,57 @@ func LanguageNewFromFile(file string) (l *Language, err error) {
 	return &lang, nil
 }
 
+type Spacer struct {
+	Spacer []struct {
+		LeftRegexp  string `json:"LeftRegexp"`
+		RightRegexp string `json:"RightRegexp"`
+		left, right *regexp.Regexp
+	}
+	List []string
+}
+
+func SpacerNewFromFile(file string) (l *Spacer, err error) {
+	// Read the JSON file
+	data, err := ioutil.ReadFile(file)
+	if err != nil {
+		fmt.Printf("Error reading file: %v\n", err)
+		return nil, err
+	}
+
+	// Parse the JSON data into the Language struct
+	var spacer Spacer
+	err = json.Unmarshal(data, &spacer)
+	if err != nil {
+		fmt.Printf("Error parsing JSON: %v\n", err)
+		return nil, err
+	}
+	for i := range spacer.Spacer {
+		l, err := regexp.Compile(spacer.Spacer[i].LeftRegexp)
+		if err != nil {
+			fmt.Printf("Error compiling regexp: %v\n", err)
+			return nil, err
+		}
+		r, err := regexp.Compile(spacer.Spacer[i].RightRegexp)
+		if err != nil {
+			fmt.Printf("Error compiling regexp: %v\n", err)
+			return nil, err
+		}
+		spacer.Spacer[i].left, spacer.Spacer[i].right = l, r
+	}
+	return &spacer, nil
+}
+
 func main() {
 
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
+	spacerFile := flag.String("spacerfile", "", "path to the JSON file containing spacer data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hints := flag.Bool("hints", false, "display language file improvements hints")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	randomize := flag.Int("randomize", 0, "randomize dst word split")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
+	spaceBackfit := flag.Bool("spacebackfit", false, "backfit space")
 	same := flag.Bool("same", false, "show same matrices")
 	join := flag.Bool("join", false, "join letters")
 	wrong := flag.Bool("wrong", false, "print wrong words")
@@ -113,6 +162,16 @@ func main() {
 	if *langFile != "" {
 		var err error
 		lang, err = LanguageNewFromFile(*langFile)
+		if err != nil {
+			return
+		}
+
+	}
+
+	var spacer *Spacer
+	if *spacerFile != "" {
+		var err error
+		spacer, err = SpacerNewFromFile(*spacerFile)
 		if err != nil {
 			return
 		}
@@ -399,7 +458,7 @@ func main() {
 				fmt.Println(d)
 			}
 		}
-		if d == 0 {
+		if d == 0 && (spaceBackfit == nil || !*spaceBackfit) {
 			tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
@@ -453,6 +512,67 @@ func main() {
 				return false
 			})
 		}
+
+		if spaceBackfit != nil && *spaceBackfit {
+			var output []string
+			var q = 0
+			for i := range w1p {
+				left, right := string(nosep(w1p[q:i])), string(nosep(w1p[i:]))
+				for j := 0; j < len(spacer.Spacer); j++ {
+					l := spacer.Spacer[j].left
+					r := spacer.Spacer[j].right
+					lmatch := l != nil && l.MatchString(left) || l == nil
+					rmatch := r != nil && r.MatchString(right) || r == nil
+					if lmatch && rmatch {
+						output = append(output, left)
+						q = i
+					}
+				}
+			}
+			output = append(output, string(nosep(w1p[q:])))
+		outerr:
+			for i := 0; i < len(output); i++ {
+				for j := len([]rune(output[i])) - 1; j > 0; j-- {
+					left := string([]rune(output[i])[:j])
+					right := string([]rune(output[i])[j:])
+					for j := range spacer.List {
+						w := strings.Split(spacer.List[j], " ")
+						if left != w[0] {
+							continue
+						}
+						prefix := w[1]
+						if prefix != "" && strings.HasPrefix(right, prefix) {
+							output = append(output[:i+1], output[i:]...)
+							output[i] = left
+							output[i+1] = right
+							i--
+							continue outerr
+						}
+					}
+				}
+			}
+
+			var backx = uint(len(w1p))
+			var backfitted string
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+
+				if x < backx {
+					//println(w1p[x], w2p[y])
+
+					backfitted = w1p[x] + backfitted
+					backx = x
+				}
+
+				if w2p[y] == " " && backfitted != "" && backfitted[0] != ' ' {
+					backfitted = " " + backfitted
+				}
+
+				return false
+			})
+
+			tsvWriter.AddRow([]string{backfitted, spacesep(output)})
+		}
+
 		if hints != nil && *hints && final_from != "" && final_to != "" {
 			var found bool
 			for _, w := range lang.Map[final_from] {
