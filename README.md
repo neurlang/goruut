@@ -2,10 +2,22 @@
 
 A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) phonemizer for several human languages.
 
+## Try it online
+
+It is possible to try this software live at [hashtron.cloud](https://hashtron.cloud/).
+
 ## Installation
 
 ```
 go install github.com/neurlang/goruut/cmd/goruut@latest
+```
+
+## Docker Compose installation
+
+Clone the repo and then run in root directory this command:
+
+```
+sudo docker compose up -d --force-recreate --build
 ```
 
 ## Supported Languages
