@@ -31,6 +31,14 @@ sudo docker compose up -d --force-recreate --build
 
 The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages)
 
+## Listening to the generated speech
+
+There are currently 3 target languages (IPA flavors). They are:
+
+* IPA - Copy the output into [ipa-reader.xyz](http://ipa-reader.xyz/) and pick a correct language voice
+* Espeak - Copy the output into espeak. For example czech: `espeak -v cs "[[ru:Zovi: ku:n^]]"`
+* Antvaset - Copy the output into [antvaset.com](https://www.antvaset.com/ipa-to-speech) and pick a correct language voice
+
 ## Dependencies
 
 See go.mod file for an up-to-date list of depended-on projects. Minimum supported version of golang is go 1.18 (project uses type parameters).
