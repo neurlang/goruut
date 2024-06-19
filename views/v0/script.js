@@ -17,7 +17,7 @@ document.getElementById('phonemizer').onclick = function() {
 
     var target = [];
     if (targ == "Espeak") {
-	target = ["Espeak"];
+	target = ["Espeak", "Espeak_"+lang];
     } else if (targ == "Antvaset") {
 	target = ["antvaset.com", "antvaset.com_"+lang];
     }
