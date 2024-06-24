@@ -16,8 +16,9 @@ import (
 	"flag"
 	"io/ioutil"
 )
+import "sync"
 
-func loop(filename string, do func(string, string)) {
+func loop(filename string, group int, do func(string, string)) {
 	// Open the file
 	file, err := os.Open(filename)
 	if err != nil {
@@ -25,6 +26,9 @@ func loop(filename string, do func(string, string)) {
 		return
 	}
 	defer file.Close()
+
+	wg := sync.WaitGroup{}
+	grp := group
 
 	// Create a new scanner to read the file line by line
 	scanner := bufio.NewScanner(file)
@@ -42,10 +46,26 @@ func loop(filename string, do func(string, string)) {
 		column1 := columns[0]
 		column2 := columns[1]
 
-		// Example: Print the columns
-		do(column1, column2)
+		if grp == 0 {
+			wg.Wait()
+			grp = group		
+		} else {
+			grp--
+		}
+		
+		wg.Add(1)
+		
+		go func(column1, column2 string) {
+		
+			// Example: Print the columns
+			do(column1, column2)
+
+			wg.Done()
+		}(column1, column2)
 
 	}
+
+	wg.Wait()
 
 	// Check for any scanner errors
 	if err := scanner.Err(); err != nil {
@@ -137,6 +157,8 @@ func SpacerNewFromFile(file string) (l *Spacer, err error) {
 
 func main() {
 
+	var mut sync.Mutex
+
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
 	spacerFile := flag.String("spacerfile", "", "path to the JSON file containing spacer data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
@@ -150,7 +172,9 @@ func main() {
 	join := flag.Bool("join", false, "join letters")
 	wrong := flag.Bool("wrong", false, "print wrong words")
 	prolong := flag.Bool("prolong", false, "prolong mistaken prefix")
+	threeway := flag.Bool("threeway", false, "threeway language extension algorithm")
 	nostress := flag.Bool("nostress", false, "delete stress")
+	noipadash := flag.Bool("noipadash", false, "delete dash from ipa")
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
 	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode when viewing")
@@ -315,8 +339,9 @@ func main() {
 	var hits = make(map[string]int)
 	var joins = make(map[string]int)
 	var prolongs = make(map[string]int)
+	var threeways = make(map[string]int)
 
-	loop(*srcFile, func(word1, word2 string) {
+	loop(*srcFile, 100, func(word1, word2 string) {
 
 		if normalize != nil && *normalize != "" {
 			word1 = repo.NormalizeTo(word1, *normalize)
@@ -331,6 +356,10 @@ func main() {
 		if nospaced != nil && *nospaced {
 			word2 = strings.ReplaceAll(word2, " ", "")
 			word1 = strings.ReplaceAll(word1, " ", "")
+		}
+		
+		if noipadash != nil && *noipadash {
+			word2 = strings.ReplaceAll(word2, "-", "")
 		}
 
 		srcword := srcslice([]rune(word1))
@@ -386,6 +415,98 @@ func main() {
 		var length = len(srcword) + 1
 		w1p := append(srcword, "")
 		w2p := append(dstword, "")
+
+		if d == 1 && threeway != nil && *threeway {
+			var lastx, lasty uint
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+
+				if x == 0 || y == 0 {
+					return false
+				}
+				//println(x, y, this,  w1p[x-1],  w2p[y-1])
+				
+				if this == 0 {
+					if lastx == 0 {
+						lastx = x
+					}
+					if lasty == 0 {
+						lasty = y
+					}
+					var threeway_from, threeway_to string
+					var lendiff = 1 + uint(len(srcword)) - uint(len(dstword))
+					code := (lastx - x) | (lasty - y) << 1 | lendiff << 2
+					switch code {
+					// merging ipa
+					case 0:
+						threeway_from = w1p[x-1] + w1p[x]
+						if y >= 2 {
+							threeway_to = w2p[y-2] + w2p[y-1] + w2p[y]
+						} else {
+							threeway_to = w2p[y-1] + w2p[y]
+						}
+					case 1:
+						threeway_from = w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					case 2:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y] + w2p[y+1]
+					case 3:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					// neutral
+					case 4:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					case 5:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					case 6:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					case 7:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					//  merging text
+					case 8:
+						if x >= 2 {
+							threeway_from = w1p[x-2] + w1p[x-1] + w1p[x]
+						} else {
+							threeway_from = w1p[x-1] + w1p[x]
+						}
+						threeway_to = w2p[y-1] + w2p[y]
+					case 9:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					case 10:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1]
+					case 11:
+						threeway_from = w1p[x-1] + w1p[x]
+						threeway_to = w2p[y-1] + w2p[y]
+					}
+				
+
+
+					//fmt.Println(code, word1, word2, "|", spacesep(srcword), "|", spacesep(dstword), "|",  x, y, lastx, lasty, threeway_from, threeway_to)
+
+					
+					for _, w := range lang.Map[threeway_from] {
+						if w == threeway_to {
+							return true
+						}
+					}
+					threeways[threeway_from+"\x00"+threeway_to]++
+					if hitscnt != nil && *hitscnt < threeways[threeway_from+"\x00"+threeway_to] {
+						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
+					}
+				} else {
+					lastx, lasty = x, y
+				}
+
+				
+				return this == 0
+			})
+		}
 
 		if d > 0 && prolong != nil && *prolong {
 			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
@@ -569,8 +690,9 @@ func main() {
 
 				return false
 			})
-
+			mut.Lock()
 			tsvWriter.AddRow([]string{backfitted, spacesep(output)})
+			mut.Unlock()
 		}
 
 		if hints != nil && *hints && final_from != "" && final_to != "" {
@@ -588,11 +710,13 @@ func main() {
 				}
 			}
 		}
+		mut.Lock()
 		dist += d
+		mut.Unlock()
 	})
 
 	tsvWriter.Close()
-	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) {
+	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong)|| (threeway != nil) && (*threeway) {
 		data, err := json.Marshal(lang.Map)
 
 		fmt.Println(string(data), err)
