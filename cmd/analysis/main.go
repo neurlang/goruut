@@ -5,6 +5,7 @@ import "github.com/neurlang/goruut/repo"
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"math/rand"
 	"os"
@@ -48,15 +49,15 @@ func loop(filename string, group int, do func(string, string)) {
 
 		if grp == 0 {
 			wg.Wait()
-			grp = group		
+			grp = group
 		} else {
 			grp--
 		}
-		
+
 		wg.Add(1)
-		
+
 		go func(column1, column2 string) {
-		
+
 			// Example: Print the columns
 			do(column1, column2)
 
@@ -160,6 +161,7 @@ func main() {
 	var mut sync.Mutex
 
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
+	save := flag.Bool("save", false, "write lang file at the end")
 	spacerFile := flag.String("spacerfile", "", "path to the JSON file containing spacer data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
@@ -191,6 +193,8 @@ func main() {
 		}
 
 	}
+	lang_orig_src_multi := lang.SrcMulti
+	lang_orig_dst_multi := lang.DstMulti
 
 	var spacer *Spacer
 	if *spacerFile != "" {
@@ -357,7 +361,7 @@ func main() {
 			word2 = strings.ReplaceAll(word2, " ", "")
 			word1 = strings.ReplaceAll(word1, " ", "")
 		}
-		
+
 		if noipadash != nil && *noipadash {
 			word2 = strings.ReplaceAll(word2, "-", "")
 		}
@@ -424,7 +428,7 @@ func main() {
 					return false
 				}
 				//println(x, y, this,  w1p[x-1],  w2p[y-1])
-				
+
 				if this == 0 {
 					if lastx == 0 {
 						lastx = x
@@ -434,7 +438,7 @@ func main() {
 					}
 					var threeway_from, threeway_to string
 					var lendiff = 1 + uint(len(srcword)) - uint(len(dstword))
-					code := (lastx - x) | (lasty - y) << 1 | lendiff << 2
+					code := (lastx - x) | (lasty-y)<<1 | lendiff<<2
 					switch code {
 					// merging ipa
 					case 0:
@@ -484,14 +488,13 @@ func main() {
 						threeway_from = w1p[x-1] + w1p[x]
 						threeway_to = w2p[y-1] + w2p[y]
 					}
-				
-
 
 					//fmt.Println(code, word1, word2, "|", spacesep(srcword), "|", spacesep(dstword), "|",  x, y, lastx, lasty, threeway_from, threeway_to)
 
-					
+					mut.Lock()
 					for _, w := range lang.Map[threeway_from] {
 						if w == threeway_to {
+							mut.Unlock()
 							return true
 						}
 					}
@@ -499,11 +502,11 @@ func main() {
 					if hitscnt != nil && *hitscnt < threeways[threeway_from+"\x00"+threeway_to] {
 						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
 					}
+					mut.Unlock()
 				} else {
 					lastx, lasty = x, y
 				}
 
-				
 				return this == 0
 			})
 		}
@@ -584,9 +587,13 @@ func main() {
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
 		}
-		var final_from, final_to string
+		var final_froms, final_tos []string
 		if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
 			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+				if x == 0 || y == 0 {
+					return true
+				}
+
 				if _, ok := dict[w1p[x]+"\x00"+w2p[y]]; ok {
 					return false
 				}
@@ -596,15 +603,16 @@ func main() {
 						return false
 					}
 
-					if escapeunicode != nil && *escapeunicode {
-						final_from = ""
-						for _, r := range w1p[x] {
-							final_from += fmt.Sprintf("\\u%04X", r)
-						}
-					} else {
-						final_from = w1p[x]
-					}
-					final_to = w2p[y]
+					// cross add
+
+					final_froms = append(final_froms, w1p[x])
+					final_tos = append(final_tos, w2p[y])
+					final_froms = append(final_froms, w1p[x-1])
+					final_tos = append(final_tos, w2p[y])
+					final_froms = append(final_froms, w1p[x])
+					final_tos = append(final_tos, w2p[y-1])
+					final_froms = append(final_froms, w1p[x-1])
+					final_tos = append(final_tos, w2p[y-1])
 
 				}
 				return false
@@ -695,19 +703,33 @@ func main() {
 			mut.Unlock()
 		}
 
-		if hints != nil && *hints && final_from != "" && final_to != "" {
-			var found bool
-			for _, w := range lang.Map[final_from] {
-				if w == final_to {
-					found = true
-					break
+		if hints != nil && *hints && len(final_froms) != 0 && len(final_tos) != 0 {
+
+			for ff, final_from := range final_froms {
+				final_to := final_tos[ff]
+				if final_from == "" {
+					continue
 				}
-			}
-			if !found {
-				hits[final_from+"\x00"+final_to]++
-				if hitscnt != nil && *hitscnt < hits[final_from+"\x00"+final_to] {
-					lang.Map[final_from] = append(lang.Map[final_from], final_to)
+				if final_to == "" {
+					continue
 				}
+
+				var found bool
+				mut.Lock()
+				for _, w := range lang.Map[final_from] {
+					if w == final_to {
+						found = true
+						break
+					}
+				}
+				if !found {
+					hits[final_from+"\x00"+final_to]++
+					if hitscnt != nil && *hitscnt < hits[final_from+"\x00"+final_to] {
+						lang.Map[final_from] = append(lang.Map[final_from], final_to)
+					}
+				}
+				mut.Unlock()
+
 			}
 		}
 		mut.Lock()
@@ -716,10 +738,35 @@ func main() {
 	})
 
 	tsvWriter.Close()
-	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong)|| (threeway != nil) && (*threeway) {
-		data, err := json.Marshal(lang.Map)
+	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) || (threeway != nil) && (*threeway) {
 
-		fmt.Println(string(data), err)
+		if (save != nil) && *save {
+
+			lang.SrcMulti = lang_orig_src_multi
+			lang.DstMulti = lang_orig_dst_multi
+
+			data, err := json.Marshal(lang)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+			data = bytes.ReplaceAll(data, []byte(`],"`), []byte("],\n\""))
+
+			err = ioutil.WriteFile(*langFile, data, 0755)
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+
+		} else {
+
+			data, err := json.Marshal(lang.Map)
+
+			if err != nil {
+				fmt.Println(err.Error())
+			} else {
+				fmt.Println(string(data))
+			}
+		}
 	}
 	if loss != nil && *loss {
 		fmt.Println("Edit distance is:", dist)
