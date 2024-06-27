@@ -47,3 +47,15 @@ func (ac *Configs) GetIpaFlavors() map[string]map[string]string {
 	}
 	return nil
 }
+
+// GetPolicyMaxWords retrieves the max words per request count policy from the configurations.
+func (ac *Configs) GetPolicyMaxWords() int {
+	for _, config := range ac.Configs {
+		site := config.GetPolicyMaxWords()
+
+		if site != 0 {
+			return site
+		}
+	}
+	return 0
+}

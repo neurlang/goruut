@@ -12,6 +12,7 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"io/ioutil"
 	"strings"
+	"sync"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -21,6 +22,8 @@ type IHashtronPhonemizerRepository interface {
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
 	lang   *languages
+
+	mut    sync.RWMutex
 	phoner *interfaces.Phonemizer
 	nets   *map[string]*feedforward.FeedforwardNetwork
 }
@@ -157,12 +160,20 @@ outer:
 }
 
 func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
-	if r.nets == nil {
-		nets := make(map[string]*feedforward.FeedforwardNetwork)
-		r.nets = &nets
+
+	r.mut.RLock()
+	nets := r.nets
+	r.mut.RUnlock()
+
+	if nets == nil {
+		netss := make(map[string]*feedforward.FeedforwardNetwork)
+		nets = &netss
+		r.mut.Lock()
+		r.nets = &netss
+		r.mut.Unlock()
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
-	if (*r.nets)[lang] == nil {
+	if (*nets)[lang] == nil {
 		var net feedforward.FeedforwardNetwork
 		const fanout1 = 3
 		const fanout2 = 12
@@ -173,7 +184,9 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		net.NewLayerP(fanout1*fanout2, 0, 1<<fanout2)
 		net.NewCombiner(majpool2d.MustNew(fanout2, 1, fanout1, 1, fanout2, 1, 1))
 		net.NewLayer(1, 0)
+		r.mut.Lock()
 		(*r.nets)[lang] = &net
+		r.mut.Unlock()
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
@@ -195,10 +208,13 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		langone.mapize()
 		langone.srcdst()
 		log.Now().Debugf("Language %s loaded: %v", lang, langone)
+
+		r.mut.Lock()
 		(*r.lang)[lang] = &langone
 
 		iface := (interfaces.Phonemizer)(&(*r.lang))
 		r.phoner = &iface
+		r.mut.Unlock()
 	}
 
 	var files = []string{"weights0.json.gz"}
@@ -228,10 +244,12 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 			log.Now().Errorf("Failed to parse JSON data: %v", err)
 			continue
 		}
+		r.mut.Lock()
 		// Load the weights into the network
 		for i, v := range data {
 			*((*r.nets)[lang].GetHashtron(i)) = get_hashtron(hashtron.New(v, 1))
 		}
+		r.mut.Unlock()
 		return
 	}
 }
@@ -278,7 +296,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map
 		return
 	}
 
-	var backoffs = 100
+	var backoffs = 10
 
 	srca := r.lang.SrcSlice(lang, []rune(word))
 	dsta := []string{}
@@ -316,7 +334,15 @@ outer:
 				stringHash(0, option),
 			}
 			var input = sample(buf)
-			var predicted = (*r.nets)[lang].Infer(&input).Feature(0)
+			r.mut.RLock()
+			net := (*r.nets)[lang]
+			r.mut.RUnlock()
+			if net == nil {
+				continue
+			}
+			r.mut.RLock()
+			var predicted = net.Infer(&input).Feature(0)
+			r.mut.RUnlock()
 			if predicted == 1 {
 				dsta = append(dsta, option)
 				continue outer

@@ -24,6 +24,7 @@ func main() {
 	conf.ConfigureLogger()
 
 	di.Add((interfaces.IpaFlavor)(conf))
+	di.Add((interfaces.PolicyMaxWords)(conf))
 
 	di.Add(conf)
 

@@ -4,6 +4,7 @@ import (
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/models/requests"
 	"github.com/neurlang/goruut/models/responses"
+	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/goruut/repo/services"
 )
 import . "github.com/martinarisk/di/dependency_injection"
@@ -17,11 +18,16 @@ type PhonemizeUsecase struct {
 	phon    services.IPhonemizeWordService
 	sel     services.IPartsOfSpeechSelectorService
 	flavor  services.IIpaFlavorService
+	maxwrds int
 }
 
 func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp responses.PhonemizeSentence) {
 
 	splitted := p.service.SplitWords(r.Language, r.Sentence)
+
+	if len(splitted) > p.maxwrds {
+		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
+	}
 
 	var phonemized []map[uint64]string
 
@@ -60,12 +66,14 @@ func NewPhonemizeUsecase(di *DependencyInjection) *PhonemizeUsecase {
 	phon := MustNeed(di, services.NewPhonemizeWordService)
 	sel := MustNeed(di, services.NewPartsOfSpeechSelectorService)
 	flavor := MustNeed(di, services.NewIpaFlavorService)
+	policyMaxWords := MustAny[interfaces.PolicyMaxWords](di)
 
 	return &PhonemizeUsecase{
 		service: &service,
 		phon:    &phon,
 		sel:     &sel,
 		flavor:  &flavor,
+		maxwrds: policyMaxWords.GetPolicyMaxWords(),
 	}
 }
 

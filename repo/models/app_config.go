@@ -24,6 +24,7 @@ type AppConfig struct {
 
 	BuiltinDictLanguages []string
 	IpaFlavors           map[string]map[string]string
+	PolicyMaxWords       int
 }
 
 // GetHttpPort returns the HTTP port.
@@ -52,6 +53,11 @@ func (c *AppConfig) GetBuiltinDictLanguages() (ret map[string]struct{}) {
 // IpaFlavors returns the builtin ipa flavors languages.
 func (c *AppConfig) GetIpaFlavors() map[string]map[string]string {
 	return c.IpaFlavors
+}
+
+// GetPolicyMaxWords returns the policy max word count.
+func (c *AppConfig) GetPolicyMaxWords() int {
+	return c.PolicyMaxWords
 }
 
 // ConfigureLogger configures the application's logger.
