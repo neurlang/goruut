@@ -25,6 +25,7 @@ sudo docker compose up -d --force-recreate --build
 * English
 * Spanish
 * German
+* French
 * Arabic
 * Farsi
 * Czech
