@@ -6,6 +6,7 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"golang.org/x/text/unicode/norm"
 	"strings"
+	"sync"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -14,8 +15,10 @@ type IPrePhonWordStepsRepository interface {
 }
 type PrePhonWordStepsRepository struct {
 	getter *interfaces.DictGetter
-	lang   *prephonlanguages
-	steps  *interfaces.PrePhonemizationSteps
+
+	mut   sync.RWMutex
+	lang  *prephonlanguages
+	steps *interfaces.PrePhonemizationSteps
 }
 
 type prephonlanguages map[string]*prephonlanguage
@@ -52,6 +55,15 @@ func (p *prephonlanguages) GetTrim(lang string, n int) string {
 	return (*p)[lang].PrePhonWordSteps[n].Trim
 }
 func (p *PrePhonWordStepsRepository) LoadLanguage(lang string) {
+
+	p.mut.RLock()
+	existing_lang := (*p.lang)[lang]
+	p.mut.RUnlock()
+
+	if existing_lang != nil {
+		return
+	}
+
 	var language_files = []string{"language.json"}
 	for _, file := range language_files {
 		log.Now().Debugf("Language %s loading file", file)
@@ -64,12 +76,13 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(lang string) {
 			log.Now().Errorf("Error parsing JSON: %v\n", err)
 			continue
 		}
-
+		p.mut.Lock()
 		(*p.lang)[lang] = &langone
 
 		iface := (interfaces.PrePhonemizationSteps)(&(*p.lang))
 
 		p.steps = &iface
+		p.mut.Unlock()
 	}
 }
 
@@ -107,11 +120,13 @@ func NormalizeTo(input, form string) string {
 func (s *PrePhonWordStepsRepository) PrePhonemizeWord(lang string, word string) string {
 	s.LoadLanguage(lang)
 
+	s.mut.RLock()
 	if s.steps == nil {
+		s.mut.RUnlock()
 		return word
 	}
 	steps := *s.steps
-
+	s.mut.RUnlock()
 
 	for i := 0; i < steps.Len(lang); i++ {
 		if steps.IsNormalize(lang, i) {
