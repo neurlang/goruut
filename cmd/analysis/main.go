@@ -583,7 +583,9 @@ func main() {
 			}
 		}
 		if d == 0 && (spaceBackfit == nil || !*spaceBackfit) {
+			mut.Lock()
 			tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
+			mut.Unlock()
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
 		}
