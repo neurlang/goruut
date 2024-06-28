@@ -33,7 +33,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 
 	for _, word := range splitted {
 		phonemized = append(phonemized, p.phon.PhonemizeWord(r.Language, word))
-		log.Now().Debugf("Word: %s %s", word, phonemized)
+		log.Now().Debugf("Word: %s", word)
 	}
 
 	parts_of_speech_selected := p.sel.Select(r.Language, phonemized)
@@ -49,6 +49,8 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	} else {
 		ipa_flavored = parts_of_speech_selected
 	}
+	log.Now().Debugf("Splitted: %d, Phonemized: %d, POS: %d, Flavored: %d",
+		len(splitted), len(phonemized), len(parts_of_speech_selected), len(ipa_flavored))
 
 	for i := range splitted {
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
