@@ -13,17 +13,19 @@ import (
 	"io/ioutil"
 	"strings"
 	"sync"
+	"unicode"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
 	PhonemizeWord(lang, word string) (ret map[uint64]string)
+	CleanWord(lang, word string) string
 }
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
-	lang   *languages
 
 	mut    sync.RWMutex
+	lang   *languages
 	phoner *interfaces.Phonemizer
 	nets   *map[string]*feedforward.FeedforwardNetwork
 }
@@ -51,6 +53,7 @@ type language struct {
 	mapDstMulti       map[string]struct{}
 	mapSrcMultiSuffix map[string]struct{}
 	mapDstMultiSuffix map[string]struct{}
+	mapLetters        map[string]struct{}
 }
 
 func mapize(arr []string) (out map[string]struct{}) {
@@ -99,7 +102,13 @@ func (l *language) srcdst() {
 		}
 	}
 }
+func (l *language) letters() {
+	l.mapLetters = make(map[string]struct{})
+	for k := range l.mapMapping {
+		addLetters(k, l.mapLetters)
+	}
 
+}
 func (l *languages) SrcMulti(lang string) map[string]struct{} {
 	return (*l)[lang].mapSrcMulti
 }
@@ -118,6 +127,14 @@ func (l *languages) Map(lang string) map[string]map[string]struct{} {
 	}
 	return (*l)[lang].mapMapping
 }
+func (l *languages) IsLetter(lang, run string) bool {
+	if (*l)[lang] == nil {
+		return false
+	}
+	_, ok := (*l)[lang].mapLetters[run]
+	return ok
+}
+
 func (l *languages) SrcSlice(language string, word []rune) (o []string) {
 	lang := (*l)[language]
 outer:
@@ -207,6 +224,8 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 
 		langone.mapize()
 		langone.srcdst()
+		langone.letters()
+
 		log.Now().Debugf("Language %s loaded: %v", lang, langone)
 
 		r.mut.Lock()
@@ -287,23 +306,92 @@ func (s *sample) Feature(n int) uint32 {
 	return s[a] /*+ s[b]*/ + s[13]
 }
 
+func isCombining(r uint32) bool {
+	return unicode.Is(unicode.Mn, rune(r)) || unicode.Is(unicode.Mc, rune(r))
+}
+func addLetters(word string, mapping map[string]struct{}) {
+	if mapping == nil {
+		return
+	}
+	var reverse []uint32
+	for _, r := range []rune(word) {
+		reverse = append([]uint32{uint32(r)}, reverse...)
+	}
+	var str string
+	for _, r := range reverse {
+		if isCombining(r) {
+			str += string(rune(r))
+		} else {
+			mapping[string(str)+string(rune(r))] = struct{}{}
+			str = ""
+		}
+	}
+	if str != "" {
+		mapping[string(str)] = struct{}{}
+	}
+}
+
+func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string) {
+	r.LoadLanguage(lang)
+
+	var reverse []uint32
+	for _, r := range []rune(word) {
+		reverse = append([]uint32{uint32(r)}, reverse...)
+	}
+
+	var strings []string
+	var str string
+	for _, r := range reverse {
+		if isCombining(r) {
+			str += string(rune(r))
+		} else {
+			strings = append([]string{string(str) + string(rune(r))}, strings...)
+			str = ""
+		}
+	}
+	if str != "" {
+		strings = append([]string{string(str)}, strings...)
+	}
+	for _, run := range strings {
+		r.mut.RLock()
+		isLanguageLetter := r.lang.IsLetter(lang, run)
+		r.mut.RUnlock()
+
+		if !isLanguageLetter {
+			continue
+		}
+
+		log.Now().Debugf("Allowed run of word: %s", run)
+		for _, r := range run {
+			ret += string(r)
+		}
+	}
+	return
+}
+
 func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
 	r.LoadLanguage(lang)
 
-	if r.lang.Map(lang) == nil {
+	r.mut.RLock()
+	mapLangIsNil := r.lang.Map(lang) == nil
+	r.mut.RUnlock()
+	if mapLangIsNil {
 		ret = make(map[uint64]string)
 		ret[murmur3hash(word+"\x00"+word)] = word
 		return
 	}
 
 	var backoffs = 10
-
+	r.mut.RLock()
 	srca := r.lang.SrcSlice(lang, []rune(word))
+	r.mut.RUnlock()
 	dsta := []string{}
 outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
+		r.mut.RLock()
 		m := r.lang.Map(lang)[string(srcv)]
+		r.mut.RUnlock()
 		if len(m) == 0 {
 			dsta = append(dsta, "")
 			continue

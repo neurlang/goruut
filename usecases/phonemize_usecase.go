@@ -30,10 +30,13 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	}
 
 	var phonemized []map[uint64]string
+	var cleaned []string
 
 	for _, word := range splitted {
-		phonemized = append(phonemized, p.phon.PhonemizeWord(r.Language, word))
-		log.Now().Debugf("Word: %s", word)
+		clean, phon := p.phon.PhonemizeWord(r.Language, word)
+		phonemized = append(phonemized, phon)
+		cleaned = append(cleaned, clean)
+		log.Now().Debugf("Word: %s, Cleaned: %s", word, clean)
 	}
 
 	parts_of_speech_selected := p.sel.Select(r.Language, phonemized)
@@ -56,6 +59,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
 			Phonetic:   ipa_flavored[i],
 			Linguistic: splitted[i],
+			CleanLing:  cleaned[i],
 		})
 		//resp.Whole += ipa_flavored[i]
 	}

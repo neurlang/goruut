@@ -6,7 +6,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWord(string, string) map[uint64]string
+	PhonemizeWord(string, string) (string, map[uint64]string)
 }
 
 type PhonemizeWordService struct {
@@ -16,18 +16,21 @@ type PhonemizeWordService struct {
 	cach *repo.IWordCachingRepository
 }
 
-func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (ret map[uint64]string) {
+func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (wrd string, ret map[uint64]string) {
 
 	word = (*p.pre).PrePhonemizeWord(lang, word)
 
-	ret = (*p.repo).PhonemizeWord(lang, word)
+	wrd = (*p.ai).CleanWord(lang, word)
+	hsh := (*p.cach).HashWord(lang, wrd)
+
+	ret = (*p.repo).PhonemizeWord(lang, wrd)
 	if ret == nil {
-		ret = (*p.cach).LoadWord((*p.cach).HashWord(lang, word))
+		ret = (*p.cach).LoadWord(hsh)
 
 		if ret == nil || len(ret) == 0 {
-			ret = (*p.ai).PhonemizeWord(lang, word)
+			ret = (*p.ai).PhonemizeWord(lang, wrd)
 
-			(*p.cach).StoreWord(ret, (*p.cach).HashWord(lang, word))
+			(*p.cach).StoreWord(ret, hsh)
 		}
 	}
 	return
