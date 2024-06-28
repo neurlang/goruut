@@ -21,11 +21,23 @@ func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (wrd string, ret
 	word = (*p.pre).PrePhonemizeWord(lang, word)
 
 	wrd = (*p.ai).CleanWord(lang, word)
+	if wrd == "" {
+		ret = make(map[uint64]string)
+		ret[0] = ""
+		return
+	}
 	hsh := (*p.cach).HashWord(lang, wrd)
 
 	ret = (*p.repo).PhonemizeWord(lang, wrd)
 	if ret == nil {
 		ret = (*p.cach).LoadWord(hsh)
+		if ret != nil {
+			for k, ipa := range ret {
+				if !(*p.ai).CheckWord(lang, wrd, ipa) {
+					delete(ret, k)
+				}
+			}
+		}
 
 		if ret == nil || len(ret) == 0 {
 			ret = (*p.ai).PhonemizeWord(lang, wrd)

@@ -20,6 +20,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 type IHashtronPhonemizerRepository interface {
 	PhonemizeWord(lang, word string) (ret map[uint64]string)
 	CleanWord(lang, word string) string
+	CheckWord(lang, word, ipa string) bool
 }
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
@@ -368,7 +369,40 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 	}
 	return
 }
+func (r *HashtronPhonemizerRepository) CheckWord(lang, word, ipa string) bool {
+	r.LoadLanguage(lang)
 
+	r.mut.RLock()
+	mapLangIsNil := r.lang.Map(lang) == nil
+	r.mut.RUnlock()
+	if mapLangIsNil {
+		return false
+	}
+	r.mut.RLock()
+	srca := r.lang.SrcSlice(lang, []rune(word))
+	r.mut.RUnlock()
+	if len(srca) == 0 {
+		return false
+	}
+outer:
+	for i := 0; i < len(srca); i++ {
+		srcv := srca[i]
+		r.mut.RLock()
+		m := r.lang.Map(lang)[string(srcv)]
+		r.mut.RUnlock()
+		if len(m) == 0 {
+			return false
+		}
+		for option := range m {
+			if strings.HasPrefix(ipa, option) {
+				ipa = ipa[len(option):]
+				continue outer
+			}
+		}
+		return false
+	}
+	return true
+}
 func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
 	r.LoadLanguage(lang)
 

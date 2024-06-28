@@ -59,7 +59,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
 			Phonetic:   ipa_flavored[i],
 			Linguistic: splitted[i],
-			CleanLing:  cleaned[i],
+			CleanWord:  cleaned[i],
 		})
 		//resp.Whole += ipa_flavored[i]
 	}
