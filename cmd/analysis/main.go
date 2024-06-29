@@ -563,6 +563,7 @@ func main() {
 
 		if d > 0 && matrices != nil && *matrices {
 			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
+				mut.Lock()
 				if escapeunicode != nil && *escapeunicode {
 					for _, rs := range w1p {
 						for _, r := range rs {
@@ -580,6 +581,7 @@ func main() {
 					fmt.Println(w2p[i/length], mat[i:i+length])
 				}
 				fmt.Println(d)
+				mut.Unlock()
 			}
 		}
 		if d == 0 && (spaceBackfit == nil || !*spaceBackfit) {
