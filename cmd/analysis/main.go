@@ -11,6 +11,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"time"
 )
 import (
 	"encoding/json"
@@ -96,6 +97,7 @@ type Language struct {
 	DstMulti       []string            `json:"DstMulti"`
 	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
+	DropLast       []string            `json:"DropLast"`
 }
 
 func LanguageNewFromFile(file string) (l *Language, err error) {
@@ -156,6 +158,10 @@ func SpacerNewFromFile(file string) (l *Spacer, err error) {
 	return &spacer, nil
 }
 
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
+
 func main() {
 
 	var mut sync.Mutex
@@ -181,6 +187,7 @@ func main() {
 	matrices := flag.Bool("matrices", false, "show edit matrices")
 	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode when viewing")
 	normalize := flag.String("normalize", "", "normalize unicode, for instance to NFC")
+	deleteval := flag.Bool("deleteval", false, "delete one value")
 	flag.Parse()
 
 	var lang *Language
@@ -209,8 +216,46 @@ func main() {
 	var dist float32
 
 	var dict = make(map[string]struct{})
+	var droplast = make(map[string]struct{})
 	if lang != nil {
+		var deletedval string
+		if deleteval != nil && *deleteval {
+			var n = rand.Intn(len(lang.Map)+1) / 2
+			for _, v := range lang.Map {
+				n--
+				if n < 0 {
+					n = rand.Intn(len(v)+1) / 2
+					for _, w := range v {
+						n--
+						if n < 0 {
+							deletedval = w
+							break
+						}
+					}
+					break
+				}
+			}
+		}
 		for k, v := range lang.Map {
+
+			for i, w := range v {
+				for deleteval != nil && *deleteval && w == deletedval {
+					if i+1 == len(v) {
+						v = v[:len(v)-1]
+						lang.Map[k] = v
+						break
+					} else {
+						v[i] = v[len(v)-1]
+						v = v[:len(v)-1]
+						w = v[i]
+						lang.Map[k] = v
+					}
+				}
+			}
+			if len(v) == 0 {
+				continue
+			}
+
 			if len([]rune(k)) > 1 {
 				lang.SrcMulti = append(lang.SrcMulti, k)
 			}
@@ -220,6 +265,11 @@ func main() {
 				}
 				dict[k+"\x00"+w] = struct{}{}
 			}
+		}
+
+		for _, v := range lang.DropLast {
+			droplast[v] = struct{}{}
+			dict[v+"\x00"] = struct{}{}
 		}
 	}
 
@@ -399,6 +449,16 @@ func main() {
 			}
 		}
 		dstword := dstslice([]rune(word2))
+		if len(srcword) > 0 {
+			if _, isDropLast := droplast[srcword[len(srcword)-1]]; isDropLast {
+				if len(dstword)+1 == len(srcword) {
+					dstword = append(dstword, "")
+				}
+				if len(dstwordGreedy)+1 == len(srcword) {
+					dstwordGreedy = append(dstwordGreedy, "")
+				}
+			}
+		}
 		if len(srcword) == len(dstwordGreedy) {
 			dstword = dstwordGreedy
 		}
@@ -742,7 +802,8 @@ func main() {
 	})
 
 	tsvWriter.Close()
-	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) || (threeway != nil) && (*threeway) {
+	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) ||
+		(threeway != nil) && (*threeway) || (deleteval != nil) && (*deleteval) {
 
 		if (save != nil) && *save {
 
