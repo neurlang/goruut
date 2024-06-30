@@ -5,8 +5,9 @@ go 1.18
 require (
 	github.com/gorilla/mux v1.8.1
 	github.com/martinarisk/di v0.0.2
-	github.com/neurlang/classifier v0.0.5
-	github.com/neurlang/levenshtein v0.0.1
+	github.com/maypok86/otter v1.2.1
+	github.com/neurlang/classifier v0.0.7
+	github.com/neurlang/levenshtein v0.0.2
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spaolacci/murmur3 v1.1.0
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
@@ -16,6 +17,5 @@ require (
 require (
 	github.com/dolthub/maphash v0.1.0 // indirect
 	github.com/gammazero/deque v0.2.1 // indirect
-	github.com/maypok86/otter v1.2.1 // indirect
 	golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8 // indirect
 )
