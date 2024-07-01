@@ -275,24 +275,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 }
 
 // TODO: move to classifier repo
-func stringsHash(in uint32, strs []string) (out uint32) {
-	out = in
-	for _, str := range strs {
-		out = stringHash(out, str)
-	}
-	return
-}
-
-// TODO: move to classifier repo
-func stringHash(in uint32, str string) (out uint32) {
-	out = in
-	for _, v := range []rune(str) {
-		out = hash.Hash(out, uint32(v), 0xffffffff)
-	}
-	return
-}
-
-// TODO: move to classifier repo
 type sample [14]uint32
 
 // TODO: move to classifier repo
@@ -440,20 +422,20 @@ outer:
 		for option := range m {
 			j := len(srca) - i
 			var buf = [...]uint32{
-				stringsHash(0, srca[1*i/2:i+j/2]),
-				stringsHash(0, srca[2*i/3:i+j/3]),
-				stringsHash(0, srca[4*i/5:i+j/5]),
-				stringsHash(0, srca[6*i/7:i+j/11]),
-				stringsHash(0, srca[10*i/11:i+j/11]),
-				stringsHash(0, dsta[0:i]),
-				stringsHash(0, srca),
-				stringsHash(0, dsta[0:4*i/7]),
-				stringsHash(0, dsta[4*i/7:6*i/7]),
-				stringsHash(0, dsta[6*i/7:i]),
-				stringsHash(0, srca[i:i+j/7]),
-				stringsHash(0, srca[i+j/7:i+3*j/7]),
-				stringsHash(0, srca[i+3*j/7:i+j]),
-				stringHash(0, option),
+				hash.StringsHash(0, srca[1*i/2:i+j/2]),
+				hash.StringsHash(0, srca[2*i/3:i+j/3]),
+				hash.StringsHash(0, srca[4*i/5:i+j/5]),
+				hash.StringsHash(0, srca[6*i/7:i+j/11]),
+				hash.StringsHash(0, srca[10*i/11:i+j/11]),
+				hash.StringsHash(0, dsta[0:i]),
+				hash.StringsHash(0, srca),
+				hash.StringsHash(0, dsta[0:4*i/7]),
+				hash.StringsHash(0, dsta[4*i/7:6*i/7]),
+				hash.StringsHash(0, dsta[6*i/7:i]),
+				hash.StringsHash(0, srca[i:i+j/7]),
+				hash.StringsHash(0, srca[i+j/7:i+3*j/7]),
+				hash.StringsHash(0, srca[i+3*j/7:i+j]),
+				hash.StringHash(0, option),
 			}
 			var input = sample(buf)
 			r.mut.RLock()
