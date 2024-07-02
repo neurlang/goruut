@@ -30,6 +30,7 @@ sudo docker compose up -d --force-recreate --build
 * Arabic
 * Farsi
 * Luxembourgish
+* Dutch
 * Czech
 * Slovak
 
