@@ -220,15 +220,22 @@ func main() {
 	if lang != nil {
 		var deletedval string
 		if deleteval != nil && *deleteval {
+			var onlyone = rand.Intn(1) == 0
 			var n = rand.Intn(len(lang.Map)+1) / 2
-			for _, v := range lang.Map {
+			for k, v := range lang.Map {
 				n--
 				if n < 0 {
 					n = rand.Intn(len(v)+1) / 2
-					for _, w := range v {
+					for i, w := range v {
 						n--
 						if n < 0 {
-							deletedval = w
+							if onlyone {
+								v[i] = v[len(v)-1]
+								v = v[:len(v)-1]
+								lang.Map[k] = v
+							} else {
+								deletedval = w
+							}
 							break
 						}
 					}
@@ -429,7 +436,7 @@ func main() {
 	outer:
 		for i := 0; i < len(srcword); i++ {
 			src := srcword[i]
-			var j = 1 + rand.Intn(longDst)
+			var j = rand.Intn(1 + longDst)
 			if j > len(word2pref) {
 				continue
 			}
