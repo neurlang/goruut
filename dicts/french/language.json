@@ -340,5 +340,13 @@
 "ù":["y"],
 "û":["uː","y","yː"],
 "ü":["o","uː","y","yl"],
-"œu":["ø","œ","œʁ"]},"SrcMulti":[],
-"SrcMultiSuffix":null,"DstMultiSuffix":["ː"]}
+"œu":["ø","œ","œʁ"]},
+	"SrcMulti": [],
+	"DstMulti": [],
+	"SrcMultiSuffix": [],
+	"DstMultiSuffix": ["ː"],
+	"PrePhonWordSteps": [
+		{"Trim": ".,"},
+		{"ToLower": true}
+	]
+}

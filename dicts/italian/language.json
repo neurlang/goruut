@@ -104,5 +104,13 @@
 "ò":["ɔ"],
 "ó":["o"],
 "ù":["u","ʊ"],
-"–i":["i"]},"SrcMulti":[],
-"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"]}
+"–i":["i"]},
+	"SrcMulti": [],
+	"DstMulti": [],
+	"SrcMultiSuffix": [],
+	"DstMultiSuffix": ["ː"],
+	"PrePhonWordSteps": [
+		{"Trim": ".,"},
+		{"ToLower": true}
+	]
+}
