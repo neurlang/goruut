@@ -311,6 +311,7 @@
 "ü":["y","yː"],
 "üh":["yː"],
 "üren":["yːʀən"],
-"üü":["yː"]},"SrcMulti":[],
-"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"üü":["yː"]},
+"SrcMulti":[],
+"DstMulti":[],"SrcMultiSuffix":[],"DstMultiSuffix":["ː"],
 "DropLast":["e","t","s","g","te","m","n","l","x"]}
