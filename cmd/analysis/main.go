@@ -217,6 +217,7 @@ func main() {
 
 	var dict = make(map[string]struct{})
 	var droplast = make(map[string]struct{})
+	var drop = make(map[string]struct{})
 	if lang != nil {
 		var deletedval string
 		if deleteval != nil && *deleteval {
@@ -244,6 +245,11 @@ func main() {
 			}
 		}
 		for k, v := range lang.Map {
+
+			if len(v) == 1 && v[0] == "" {
+				drop[k] = struct{}{}
+				continue
+			}
 
 			for i, w := range v {
 				for deleteval != nil && *deleteval && w == deletedval {
@@ -446,6 +452,10 @@ func main() {
 				word2pref = word2pref[j:]
 				continue outer
 			}
+			if _, ok := drop[src]; ok {
+				dstwordGreedy = append(dstwordGreedy, "")
+				continue outer
+			}
 			if tokens > 0 {
 				i = -1
 				dstwordGreedy = nil
@@ -470,11 +480,24 @@ func main() {
 			dstword = dstwordGreedy
 		}
 		var mat = levenshtein.MatrixTSlices[float32, string](srcword, dstword,
-			nil, nil, func(x *string, y *string) *float32 {
+			func(i uint) *float32 {
+				if len(srcword) > int(i) {
+					if _, ok := drop[srcword[i]]; ok {
+						return nil
+					}
+				}
+				var n float32
+				n = 1
+				return &n
+			}, nil, func(x *string, y *string) *float32 {
 				if _, ok := dict[*x+"\x00"+*y]; ok {
 					return nil
 				}
-
+				if *y == "" {
+					if _, ok := drop[*x]; ok {
+						return nil
+					}
+				}
 				//fmt.Println(*x, *y)
 				var n float32
 				n = 1
@@ -487,6 +510,27 @@ func main() {
 		w1p := append(srcword, "")
 		w2p := append(dstword, "")
 
+		if d == 0 && len(srcword) > len(dstword) {
+			mut.Lock()
+			var lasty uint
+			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+
+				if y == lasty {
+
+					if int(x) >= len(dstword) {
+						dstword = append(dstword, "")
+					} else {
+						dstword = append(dstword[:x+1], dstword[x:]...)
+						dstword[x] = ""
+					}
+				}
+
+				lasty = y
+
+				return false
+			})
+			mut.Unlock()
+		}
 		if d == 1 && threeway != nil && *threeway {
 			var lastx, lasty uint
 			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
