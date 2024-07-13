@@ -98,6 +98,8 @@ type Language struct {
 	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
 	DropLast       []string            `json:"DropLast"`
+
+	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 }
 
 func LanguageNewFromFile(file string) (l *Language, err error) {
@@ -158,6 +160,13 @@ func SpacerNewFromFile(file string) (l *Spacer, err error) {
 	return &spacer, nil
 }
 
+func copyStrings(src []string) (dst []string) {
+	for _, v := range src {
+		dst = append(dst, v)
+	}
+	return
+}
+
 func init() {
 	rand.Seed(time.Now().UTC().UnixNano())
 }
@@ -200,8 +209,10 @@ func main() {
 		}
 
 	}
-	lang_orig_src_multi := lang.SrcMulti
-	lang_orig_dst_multi := lang.DstMulti
+	lang_orig_src_multi := copyStrings(lang.SrcMulti)
+	lang_orig_dst_multi := copyStrings(lang.DstMulti)
+	lang_orig_src_multi_suffix := copyStrings(lang.SrcMultiSuffix)
+	lang_orig_dst_multi_suffix := copyStrings(lang.DstMultiSuffix)
 
 	var spacer *Spacer
 	if *spacerFile != "" {
@@ -511,7 +522,6 @@ func main() {
 		w2p := append(dstword, "")
 
 		if d == 0 && len(srcword) > len(dstword) {
-			mut.Lock()
 			var lasty uint
 			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
 
@@ -529,7 +539,6 @@ func main() {
 
 				return false
 			})
-			mut.Unlock()
 		}
 		if d == 1 && threeway != nil && *threeway {
 			var lastx, lasty uint
@@ -860,6 +869,8 @@ func main() {
 
 			lang.SrcMulti = lang_orig_src_multi
 			lang.DstMulti = lang_orig_dst_multi
+			lang.SrcMultiSuffix = lang_orig_src_multi_suffix
+			lang.DstMultiSuffix = lang_orig_dst_multi_suffix
 
 			data, err := json.Marshal(lang)
 			if err != nil {
