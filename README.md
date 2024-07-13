@@ -33,6 +33,7 @@ sudo docker compose up -d --force-recreate --build
 * Dutch
 * Portuguese
 * Russian
+* Swedish
 * Czech
 * Slovak
 
