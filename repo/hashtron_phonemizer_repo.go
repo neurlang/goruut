@@ -49,7 +49,6 @@ type language struct {
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
-	mapMapping        map[string]map[string]struct{}
 	mapSrcMulti       map[string]struct{}
 	mapDstMulti       map[string]struct{}
 	mapSrcMultiSuffix map[string]struct{}
@@ -70,10 +69,6 @@ func (l *language) mapize() {
 	l.mapDstMulti = mapize(l.DstMulti)
 	l.mapSrcMultiSuffix = mapize(l.SrcMultiSuffix)
 	l.mapDstMultiSuffix = mapize(l.DstMultiSuffix)
-	l.mapMapping = make(map[string]map[string]struct{})
-	for k, v := range l.Mapping {
-		l.mapMapping[k] = mapize(v)
-	}
 	l.SrcMulti = nil
 	l.DstMulti = nil
 	l.SrcMultiSuffix = nil
@@ -81,11 +76,11 @@ func (l *language) mapize() {
 }
 
 func (l *language) srcdst() {
-	for k, v := range l.mapMapping {
+	for k, v := range l.Mapping {
 		if len([]rune(k)) > 1 {
 			l.mapSrcMulti[k] = struct{}{}
 		}
-		for w := range v {
+		for _, w := range v {
 			if len([]rune(w)) > 1 {
 				l.mapDstMulti[w] = struct{}{}
 			}
@@ -104,7 +99,7 @@ func (l *language) srcdst() {
 }
 func (l *language) letters() {
 	l.mapLetters = make(map[string]struct{})
-	for k := range l.mapMapping {
+	for k := range l.Mapping {
 		addLetters(k, l.mapLetters)
 	}
 
@@ -125,7 +120,7 @@ func (l *languages) Map(lang string) map[string]map[string]struct{} {
 	if (*l)[lang] == nil {
 		return nil
 	}
-	return (*l)[lang].mapMapping
+	return nil
 }
 func (l *languages) Slice(lang string) map[string][]string {
 	if (*l)[lang] == nil {
@@ -360,7 +355,7 @@ func (r *HashtronPhonemizerRepository) CheckWord(lang, word, ipa string) bool {
 	r.LoadLanguage(lang)
 
 	r.mut.RLock()
-	mapLangIsNil := r.lang.Map(lang) == nil
+	mapLangIsNil := r.lang.Slice(lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
 		return false
@@ -375,12 +370,12 @@ outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
 		r.mut.RLock()
-		m := r.lang.Map(lang)[string(srcv)]
+		m := r.lang.Slice(lang)[string(srcv)]
 		r.mut.RUnlock()
 		if len(m) == 0 {
 			return false
 		}
-		for option := range m {
+		for _, option := range m {
 			if strings.HasPrefix(ipa, option) {
 				ipa = ipa[len(option):]
 				continue outer
