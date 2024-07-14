@@ -47,6 +47,7 @@ type language struct {
 	DstMulti          []string            `json:"DstMulti"`
 	SrcMultiSuffix    []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
+	DropLast          []string            `json:"DropLast"`
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
 	mapSrcMulti       map[string]struct{}
@@ -54,6 +55,7 @@ type language struct {
 	mapSrcMultiSuffix map[string]struct{}
 	mapDstMultiSuffix map[string]struct{}
 	mapLetters        map[string]struct{}
+	mapDropLast       map[string]struct{}
 }
 
 func mapize(arr []string) (out map[string]struct{}) {
@@ -69,10 +71,12 @@ func (l *language) mapize() {
 	l.mapDstMulti = mapize(l.DstMulti)
 	l.mapSrcMultiSuffix = mapize(l.SrcMultiSuffix)
 	l.mapDstMultiSuffix = mapize(l.DstMultiSuffix)
+	l.mapDropLast = mapize(l.DropLast)
 	l.SrcMulti = nil
 	l.DstMulti = nil
 	l.SrcMultiSuffix = nil
 	l.DstMultiSuffix = nil
+	l.DropLast = nil
 }
 
 func (l *language) srcdst() {
@@ -121,6 +125,13 @@ func (l *languages) Map(lang string) map[string]map[string]struct{} {
 		return nil
 	}
 	return nil
+}
+func (l *languages) DroppedLast(lang, last string) bool {
+	if (*l)[lang] == nil {
+		return false
+	}
+	_, ok := (*l)[lang].mapDropLast[last]
+	return ok
 }
 func (l *languages) Slice(lang string) map[string][]string {
 	if (*l)[lang] == nil {
@@ -407,7 +418,13 @@ outer:
 		srcv := srca[i]
 		r.mut.RLock()
 		m := r.lang.Slice(lang)[string(srcv)]
+		if i == len(srca)-1 {
+			if r.lang.DroppedLast(lang, string(srcv)) {
+				m = append([]string{""}, m...)
+			}
+		}
 		r.mut.RUnlock()
+
 		if len(m) == 0 {
 			dsta = append(dsta, "")
 			continue
