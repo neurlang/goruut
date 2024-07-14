@@ -78,7 +78,6 @@ func (l *language) mapize() {
 	l.DstMulti = nil
 	l.SrcMultiSuffix = nil
 	l.DstMultiSuffix = nil
-	l.Mapping = nil
 }
 
 func (l *language) srcdst() {
@@ -127,6 +126,12 @@ func (l *languages) Map(lang string) map[string]map[string]struct{} {
 		return nil
 	}
 	return (*l)[lang].mapMapping
+}
+func (l *languages) Slice(lang string) map[string][]string {
+	if (*l)[lang] == nil {
+		return nil
+	}
+	return (*l)[lang].Mapping
 }
 func (l *languages) IsLetter(lang, run string) bool {
 	if (*l)[lang] == nil {
@@ -389,7 +394,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map
 	r.LoadLanguage(lang)
 
 	r.mut.RLock()
-	mapLangIsNil := r.lang.Map(lang) == nil
+	mapLangIsNil := r.lang.Slice(lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
 		ret = make(map[uint64]string)
@@ -406,20 +411,20 @@ outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
 		r.mut.RLock()
-		m := r.lang.Map(lang)[string(srcv)]
+		m := r.lang.Slice(lang)[string(srcv)]
 		r.mut.RUnlock()
 		if len(m) == 0 {
 			dsta = append(dsta, "")
 			continue
 		}
 		if len(m) == 1 {
-			for mfirst := range m {
+			for _, mfirst := range m {
 				dsta = append(dsta, mfirst)
 				break
 			}
 			continue
 		}
-		for option := range m {
+		for _, option := range m {
 			j := len(srca) - i
 			var buf = [...]uint32{
 				hash.StringsHash(0, srca[1*i/2:i+j/2]),
@@ -458,7 +463,7 @@ outer:
 			backoffs--
 			continue
 		}
-		for mfirst := range m {
+		for _, mfirst := range m {
 			dsta = append(dsta, mfirst)
 			break
 		}
