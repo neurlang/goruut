@@ -410,8 +410,11 @@ func main() {
 	}
 
 	var tsvWriter TSVWriter
-	if dstFile != nil {
-		tsvWriter.Open(*dstFile, nil)
+	if dstFile != nil && *dstFile != "" {
+		err := tsvWriter.Open(*dstFile)
+		if err != nil {
+			panic(err.Error())
+		}
 	}
 
 	var hits = make(map[string]int)
@@ -705,6 +708,13 @@ func main() {
 			}
 		}
 		if d == 0 && (spaceBackfit == nil || !*spaceBackfit) {
+
+			for _, v := range dstword {
+				if strings.Contains(v, `"`) {
+					panic(v)
+				}
+			}
+
 			mut.Lock()
 			tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
 			mut.Unlock()
@@ -822,6 +832,7 @@ func main() {
 
 				return false
 			})
+
 			mut.Lock()
 			tsvWriter.AddRow([]string{backfitted, spacesep(output)})
 			mut.Unlock()
