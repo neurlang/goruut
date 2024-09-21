@@ -9,7 +9,6 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
-	"regexp"
 	"strings"
 	"time"
 )
@@ -120,46 +119,6 @@ func LanguageNewFromFile(file string) (l *Language, err error) {
 	return &lang, nil
 }
 
-type Spacer struct {
-	Spacer []struct {
-		LeftRegexp  string `json:"LeftRegexp"`
-		RightRegexp string `json:"RightRegexp"`
-		left, right *regexp.Regexp
-	}
-	List []string
-}
-
-func SpacerNewFromFile(file string) (l *Spacer, err error) {
-	// Read the JSON file
-	data, err := ioutil.ReadFile(file)
-	if err != nil {
-		fmt.Printf("Error reading file: %v\n", err)
-		return nil, err
-	}
-
-	// Parse the JSON data into the Language struct
-	var spacer Spacer
-	err = json.Unmarshal(data, &spacer)
-	if err != nil {
-		fmt.Printf("Error parsing JSON: %v\n", err)
-		return nil, err
-	}
-	for i := range spacer.Spacer {
-		l, err := regexp.Compile(spacer.Spacer[i].LeftRegexp)
-		if err != nil {
-			fmt.Printf("Error compiling regexp: %v\n", err)
-			return nil, err
-		}
-		r, err := regexp.Compile(spacer.Spacer[i].RightRegexp)
-		if err != nil {
-			fmt.Printf("Error compiling regexp: %v\n", err)
-			return nil, err
-		}
-		spacer.Spacer[i].left, spacer.Spacer[i].right = l, r
-	}
-	return &spacer, nil
-}
-
 func copyStrings(src []string) (dst []string) {
 	for _, v := range src {
 		dst = append(dst, v)
@@ -177,18 +136,14 @@ func main() {
 
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
 	save := flag.Bool("save", false, "write lang file at the end")
-	spacerFile := flag.String("spacerfile", "", "path to the JSON file containing spacer data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
-	hints := flag.Bool("hints", false, "display language file improvements hints")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	randomize := flag.Int("randomize", 0, "randomize dst word split")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	spaceBackfit := flag.Bool("spacebackfit", false, "backfit space")
 	same := flag.Bool("same", false, "show same matrices")
-	join := flag.Bool("join", false, "join letters")
 	wrong := flag.Bool("wrong", false, "print wrong words")
-	prolong := flag.Bool("prolong", false, "prolong mistaken prefix")
 	threeway := flag.Bool("threeway", false, "threeway language extension algorithm")
 	nostress := flag.Bool("nostress", false, "delete stress")
 	noipadash := flag.Bool("noipadash", false, "delete dash from ipa")
@@ -213,16 +168,6 @@ func main() {
 	lang_orig_dst_multi := copyStrings(lang.DstMulti)
 	lang_orig_src_multi_suffix := copyStrings(lang.SrcMultiSuffix)
 	lang_orig_dst_multi_suffix := copyStrings(lang.DstMultiSuffix)
-
-	var spacer *Spacer
-	if *spacerFile != "" {
-		var err error
-		spacer, err = SpacerNewFromFile(*spacerFile)
-		if err != nil {
-			return
-		}
-
-	}
 
 	var dist float32
 
@@ -417,9 +362,6 @@ func main() {
 		}
 	}
 
-	var hits = make(map[string]int)
-	var joins = make(map[string]int)
-	var prolongs = make(map[string]int)
 	var threeways = make(map[string]int)
 
 	loop(*srcFile, 100, func(word1, word2 string) {
@@ -524,164 +466,78 @@ func main() {
 		w1p := append(srcword, "")
 		w2p := append(dstword, "")
 
-		if d == 0 && len(srcword) > len(dstword) {
-			var lasty uint
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-
-				if y == lasty {
-
-					if int(x) >= len(dstword) {
-						dstword = append(dstword, "")
-					} else {
-						dstword = append(dstword[:x+1], dstword[x:]...)
-						dstword[x] = ""
-					}
-				}
-
-				lasty = y
-
-				return false
-			})
-		}
 		if d == 1 && threeway != nil && *threeway {
-			var lastx, lasty uint
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
+			var bin_length = len(w1p) + 1
+			if len(w2p)+1 > bin_length {
+				bin_length = len(w2p) + 1
+			}
+			var bins = make([][]string, bin_length, bin_length)
+			var dels = make([]bool, len(w1p), len(w1p))
+			var swaps = make([]*string, len(w1p), len(w1p))
+			levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
+				if is_skip {
 
-				if x == 0 || y == 0 {
-					return false
-				}
-				//println(x, y, this,  w1p[x-1],  w2p[y-1])
-
-				if this == 0 {
-					if lastx == 0 {
-						lastx = x
-					}
-					if lasty == 0 {
-						lasty = y
-					}
-					var threeway_from, threeway_to string
-					var lendiff = 1 + uint(len(srcword)) - uint(len(dstword))
-					code := (lastx - x) | (lasty-y)<<1 | lendiff<<2
-					switch code {
-					// merging ipa
-					case 0:
-						threeway_from = w1p[x-1] + w1p[x]
-						if y >= 2 {
-							threeway_to = w2p[y-2] + w2p[y-1] + w2p[y]
-						} else {
-							threeway_to = w2p[y-1] + w2p[y]
-						}
-					case 1:
-						threeway_from = w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					case 2:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y] + w2p[y+1]
-					case 3:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					// neutral
-					case 4:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					case 5:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					case 6:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					case 7:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					//  merging text
-					case 8:
-						if x >= 2 {
-							threeway_from = w1p[x-2] + w1p[x-1] + w1p[x]
-						} else {
-							threeway_from = w1p[x-1] + w1p[x]
-						}
-						threeway_to = w2p[y-1] + w2p[y]
-					case 9:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					case 10:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1]
-					case 11:
-						threeway_from = w1p[x-1] + w1p[x]
-						threeway_to = w2p[y-1] + w2p[y]
-					}
-
-					//fmt.Println(code, word1, word2, "|", spacesep(srcword), "|", spacesep(dstword), "|",  x, y, lastx, lasty, threeway_from, threeway_to)
-
-					mut.Lock()
-					for _, w := range lang.Map[threeway_from] {
-						if w == threeway_to {
-							mut.Unlock()
-							return true
-						}
-					}
-					threeways[threeway_from+"\x00"+threeway_to]++
-					if hitscnt != nil && *hitscnt < threeways[threeway_from+"\x00"+threeway_to] {
-						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
-					}
-					mut.Unlock()
-				} else {
-					lastx, lasty = x, y
+					return true
 				}
 
-				return this == 0
+				if is_replace {
+
+					swaps[x] = &w2p[y]
+				}
+				if is_insert {
+
+					bins[x] = append(bins[x], w2p[y])
+				}
+				if is_delete {
+
+					dels[x] = true
+				}
+
+				return true
 			})
-		}
-
-		if d > 0 && prolong != nil && *prolong {
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-				if x == 0 || y == 0 {
-					return false
-				}
-				prolonged_from := w1p[x-1] + w1p[x]
-				prolonged_to := w2p[y-1]
-				if prev != 0 && this == 0 {
-					var w1after string
-					for _, after := range w1p[x+1:] {
-						w1after += after
-					}
-					var w2after string
-					for _, after := range w2p[y:] {
-						w2after += after
-					}
-
-					srcwordp := srcslice([]rune(w1after))
-					dstwordp := dstslice([]rune(w2after))
-					var matp = levenshtein.MatrixTSlices[float32, string](srcwordp, dstwordp,
-						nil, nil, func(x *string, y *string) *float32 {
-							if _, ok := dict[*x+"\x00"+*y]; ok {
-								return nil
-							}
-
-							//fmt.Println(*x, *y)
-							var n float32
-							n = 1
-							return &n
-						}, nil)
-
-					var dp = *levenshtein.Distance(matp)
-
-					if dp == 0 {
-						for _, w := range lang.Map[prolonged_from] {
-							if w == prolonged_to {
-								return true
-							}
-						}
-						prolongs[prolonged_from+"\x00"+prolonged_to]++
-						if hitscnt != nil && *hitscnt < prolongs[prolonged_from+"\x00"+prolonged_to] {
-							lang.Map[prolonged_from] = append(lang.Map[prolonged_from], prolonged_to)
-						}
-						return true
+			callback := func(threeway_from, threeway_to string) {
+				//println(threeway_from, threeway_to)
+				mut.Lock()
+				for _, w := range lang.Map[threeway_from] {
+					if w == threeway_to {
+						mut.Unlock()
+						return
 					}
 				}
-				return !(prev == 0 && this == 0)
-			})
+				threeways[threeway_from+"\x00"+threeway_to]++
+				if hitscnt != nil && *hitscnt < threeways[threeway_from+"\x00"+threeway_to] {
+					lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
+				}
+				mut.Unlock()
+			}
+			var resultx, resulty string
+			for x := range w1p {
+				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
+					if resultx != "" && resulty != "" {
+						callback(resultx, resulty)
+					}
+					resultx, resulty = "", ""
+				}
+
+				for xx := range bins[x] {
+					resulty += (string(bins[x][xx]))
+				}
+				if swaps[x] != nil {
+					resultx += (string(w1p[x]))
+					resulty += (string(*swaps[x]))
+				} else if dels[x] {
+					resultx += (string(w1p[x]))
+				}
+			}
+			for x := len(w1p); x < bin_length; x++ {
+
+				for xx := range bins[x] {
+					resulty += (string(bins[x][xx]))
+				}
+			}
+			if resultx != "" && resulty != "" {
+				callback(resultx, resulty)
+			}
 		}
 
 		if d > 0 && matrices != nil && *matrices {
@@ -721,160 +577,14 @@ func main() {
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
 		}
-		var final_froms, final_tos []string
-		if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-				if x == 0 || y == 0 {
-					return true
-				}
 
-				if _, ok := dict[w1p[x]+"\x00"+w2p[y]]; ok {
-					return false
-				}
-				if hints != nil && *hints {
-
-					if prev == this {
-						return false
-					}
-
-					// cross add
-
-					final_froms = append(final_froms, w1p[x])
-					final_tos = append(final_tos, w2p[y])
-					final_froms = append(final_froms, w1p[x-1])
-					final_tos = append(final_tos, w2p[y])
-					final_froms = append(final_froms, w1p[x])
-					final_tos = append(final_tos, w2p[y-1])
-					final_froms = append(final_froms, w1p[x-1])
-					final_tos = append(final_tos, w2p[y-1])
-
-				}
-				return false
-			})
-		}
-
-		if d > 0 && (join != nil) && (*join) {
-			//println(word1, " ", word2)
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-				if prev != 0 && this == 0 && uint(len(w1p)) > x+1 && uint(len(w2p)) > y+1 {
-					joined_from := w1p[x] + w1p[x+1]
-					joined_to := w2p[y] + w2p[y+1]
-
-					for _, w := range lang.Map[joined_from] {
-						if w == joined_to {
-							return false
-						}
-					}
-					joins[joined_from+"\x00"+joined_to]++
-					if hitscnt != nil && *hitscnt < joins[joined_from+"\x00"+joined_to] {
-						lang.Map[joined_from] = append(lang.Map[joined_from], joined_to)
-					}
-					return true
-				}
-
-				return false
-			})
-		}
-
-		if spaceBackfit != nil && *spaceBackfit {
-			var output []string
-			var q = 0
-			for i := range w1p {
-				left, right := string(nosep(w1p[q:i])), string(nosep(w1p[i:]))
-				for j := 0; j < len(spacer.Spacer); j++ {
-					l := spacer.Spacer[j].left
-					r := spacer.Spacer[j].right
-					lmatch := l != nil && l.MatchString(left) || l == nil
-					rmatch := r != nil && r.MatchString(right) || r == nil
-					if lmatch && rmatch {
-						output = append(output, left)
-						q = i
-					}
-				}
-			}
-			output = append(output, string(nosep(w1p[q:])))
-		outerr:
-			for i := 0; i < len(output); i++ {
-				for j := len([]rune(output[i])) - 1; j > 0; j-- {
-					left := string([]rune(output[i])[:j])
-					right := string([]rune(output[i])[j:])
-					for j := range spacer.List {
-						w := strings.Split(spacer.List[j], " ")
-						if left != w[0] {
-							continue
-						}
-						prefix := w[1]
-						if prefix != "" && strings.HasPrefix(right, prefix) {
-							output = append(output[:i+1], output[i:]...)
-							output[i] = left
-							output[i+1] = right
-							i--
-							continue outerr
-						}
-					}
-				}
-			}
-
-			var backx = uint(len(w1p))
-			var backfitted string
-			levenshtein.WalkVals(mat, uint(length), func(prev, this float32, x, y uint) bool {
-
-				if x < backx {
-					//println(w1p[x], w2p[y])
-
-					backfitted = w1p[x] + backfitted
-					backx = x
-				}
-
-				if w2p[y] == " " && backfitted != "" && backfitted[0] != ' ' {
-					backfitted = " " + backfitted
-				}
-
-				return false
-			})
-
-			mut.Lock()
-			tsvWriter.AddRow([]string{backfitted, spacesep(output)})
-			mut.Unlock()
-		}
-
-		if hints != nil && *hints && len(final_froms) != 0 && len(final_tos) != 0 {
-
-			for ff, final_from := range final_froms {
-				final_to := final_tos[ff]
-				if final_from == "" {
-					continue
-				}
-				if final_to == "" {
-					continue
-				}
-
-				var found bool
-				mut.Lock()
-				for _, w := range lang.Map[final_from] {
-					if w == final_to {
-						found = true
-						break
-					}
-				}
-				if !found {
-					hits[final_from+"\x00"+final_to]++
-					if hitscnt != nil && *hitscnt < hits[final_from+"\x00"+final_to] {
-						lang.Map[final_from] = append(lang.Map[final_from], final_to)
-					}
-				}
-				mut.Unlock()
-
-			}
-		}
 		mut.Lock()
 		dist += d
 		mut.Unlock()
 	})
 
 	tsvWriter.Close()
-	if (hints != nil && *hints) || (join != nil) && (*join) || (prolong != nil) && (*prolong) ||
-		(threeway != nil) && (*threeway) || (deleteval != nil) && (*deleteval) {
+	if (threeway != nil) && (*threeway) || (deleteval != nil) && (*deleteval) {
 
 		if (save != nil) && *save {
 
