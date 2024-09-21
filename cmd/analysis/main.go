@@ -467,12 +467,12 @@ func main() {
 		w2p := append(dstword, "")
 
 		if d == 1 && threeway != nil && *threeway {
-			var bin_length = len(w1p) + 1
-			if len(w2p)+1 > bin_length {
-				bin_length = len(w2p) + 1
+			var bin_length = len(w1p)
+			if len(w2p) > bin_length {
+				bin_length = len(w2p)
 			}
 			var bins = make([][]string, bin_length, bin_length)
-			var dels = make([]bool, len(w1p), len(w1p))
+			var dels = make([]bool, len(w1p)+1, len(w1p)+1)
 			var swaps = make([]*string, len(w1p), len(w1p))
 			levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
 				if is_skip {
@@ -485,8 +485,9 @@ func main() {
 					swaps[x] = &w2p[y]
 				}
 				if is_insert {
-
-					bins[x] = append(bins[x], w2p[y])
+					if y < uint(len(w2p)) {
+						bins[x] = append(bins[x], w2p[y])
+					}
 				}
 				if is_delete {
 
