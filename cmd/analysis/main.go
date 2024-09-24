@@ -148,6 +148,7 @@ func main() {
 	nostress := flag.Bool("nostress", false, "delete stress")
 	noipadash := flag.Bool("noipadash", false, "delete dash from ipa")
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
+	padspace := flag.Bool("padspace", false, "insert space to the end of target word in case of a spaceless written language")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
 	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode when viewing")
 	normalize := flag.String("normalize", "", "normalize unicode, for instance to NFC")
@@ -364,7 +365,7 @@ func main() {
 
 	var threeways = make(map[string]int)
 
-	loop(*srcFile, 100, func(word1, word2 string) {
+	loop(*srcFile, 200, func(word1, word2 string) {
 
 		if normalize != nil && *normalize != "" {
 			word1 = repo.NormalizeTo(word1, *normalize)
@@ -383,6 +384,10 @@ func main() {
 
 		if noipadash != nil && *noipadash {
 			word2 = strings.ReplaceAll(word2, "-", "")
+		}
+
+		if padspace != nil && *padspace {
+			word2 += " "
 		}
 
 		srcword := srcslice([]rune(word1))
@@ -435,7 +440,7 @@ func main() {
 		if len(srcword) == len(dstwordGreedy) {
 			dstword = dstwordGreedy
 		}
-		var mat = levenshtein.MatrixTSlices[float32, string](srcword, dstword,
+		var mat = levenshtein.MatrixSlices[float32, string](srcword, dstword,
 			func(i uint) *float32 {
 				if len(srcword) > int(i) {
 					if _, ok := drop[srcword[i]]; ok {
@@ -462,18 +467,18 @@ func main() {
 
 		var d = *levenshtein.Distance(mat)
 
-		var length = len(srcword) + 1
+		var length = len(dstword) + 1
 		w1p := append(srcword, "")
 		w2p := append(dstword, "")
 
-		if d == 1 && threeway != nil && *threeway {
+		if threeway != nil && *threeway {
 			var bin_length = len(w1p)
 			if len(w2p) > bin_length {
 				bin_length = len(w2p)
 			}
 			var bins = make([][]string, bin_length, bin_length)
-			var dels = make([]bool, len(w1p)+1, len(w1p)+1)
-			var swaps = make([]*string, len(w1p), len(w1p))
+			var dels = make([]bool, bin_length, bin_length)
+			var swaps = make([]*string, bin_length, bin_length)
 			levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
 				if is_skip {
 
@@ -481,13 +486,10 @@ func main() {
 				}
 
 				if is_replace {
-
 					swaps[x] = &w2p[y]
 				}
 				if is_insert {
-					if y < uint(len(w2p)) {
-						bins[x] = append(bins[x], w2p[y])
-					}
+					bins[x] = append(bins[x], w2p[y])
 				}
 				if is_delete {
 
@@ -586,6 +588,21 @@ func main() {
 
 	tsvWriter.Close()
 	if (threeway != nil) && (*threeway) || (deleteval != nil) && (*deleteval) {
+
+		if hitscnt != nil && *hitscnt > 0 {
+			var maxv int
+			var maxmapping string
+
+			for k, v := range threeways {
+				if v > maxv {
+					maxv = v
+					maxmapping = k
+				}
+			}
+			if maxv < *hitscnt {
+				println("Decrease -hits to:", maxv, "adding best match to language:", maxmapping)
+			}
+		}
 
 		if (save != nil) && *save {
 
