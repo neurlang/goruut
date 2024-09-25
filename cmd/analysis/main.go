@@ -377,6 +377,11 @@ func main() {
 			word2 = strings.ReplaceAll(word2, "ˌ", "")
 		}
 
+		if padspace != nil && *padspace {
+			word2 = strings.ReplaceAll(word2, " ", "_")
+			word2 += "_"
+		}
+
 		if nospaced != nil && *nospaced {
 			word2 = strings.ReplaceAll(word2, " ", "")
 			word1 = strings.ReplaceAll(word1, " ", "")
@@ -384,10 +389,6 @@ func main() {
 
 		if noipadash != nil && *noipadash {
 			word2 = strings.ReplaceAll(word2, "-", "")
-		}
-
-		if padspace != nil && *padspace {
-			word2 += " "
 		}
 
 		srcword := srcslice([]rune(word1))
@@ -591,16 +592,17 @@ func main() {
 
 		if hitscnt != nil && *hitscnt > 0 {
 			var maxv int
-			var maxmapping string
+			//var maxmapping string
 
-			for k, v := range threeways {
+			for _, v := range threeways {
 				if v > maxv {
 					maxv = v
-					maxmapping = k
+					//maxmapping = k
 				}
 			}
 			if maxv < *hitscnt {
-				println("Decrease -hits to:", maxv, "adding best match to language:", maxmapping)
+				//println("Decrease -hits to:", maxv, "adding best match to language:", maxmapping)
+				fmt.Println("Decrease hits to:", maxv)
 			}
 		}
 
