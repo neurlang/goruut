@@ -170,7 +170,7 @@ func main() {
 	lang_orig_src_multi_suffix := copyStrings(lang.SrcMultiSuffix)
 	lang_orig_dst_multi_suffix := copyStrings(lang.DstMultiSuffix)
 
-	var dist float32
+	var dist uint64
 
 	var dict = make(map[string]struct{})
 	var droplast = make(map[string]struct{})
@@ -441,17 +441,17 @@ func main() {
 		if len(srcword) == len(dstwordGreedy) {
 			dstword = dstwordGreedy
 		}
-		var mat = levenshtein.MatrixSlices[float32, string](srcword, dstword,
-			func(i uint) *float32 {
+		var mat = levenshtein.MatrixSlices[uint64, string](srcword, dstword,
+			func(i uint) *uint64 {
 				if len(srcword) > int(i) {
 					if _, ok := drop[srcword[i]]; ok {
 						return nil
 					}
 				}
-				var n float32
+				var n uint64
 				n = 1
 				return &n
-			}, nil, func(x *string, y *string) *float32 {
+			}, nil, func(x *string, y *string) *uint64 {
 				if _, ok := dict[*x+"\x00"+*y]; ok {
 					return nil
 				}
@@ -461,7 +461,7 @@ func main() {
 					}
 				}
 				//fmt.Println(*x, *y)
-				var n float32
+				var n uint64
 				n = 1
 				return &n
 			}, nil)
@@ -500,6 +500,11 @@ func main() {
 				return true
 			})
 			callback := func(threeway_from, threeway_to string) {
+
+				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
+					return
+				}
+
 				//println(threeway_from, threeway_to)
 				mut.Lock()
 				for _, w := range lang.Map[threeway_from] {
