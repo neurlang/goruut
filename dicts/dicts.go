@@ -14,6 +14,7 @@ import "github.com/neurlang/goruut/dicts/dutch"
 import "github.com/neurlang/goruut/dicts/portuguese"
 import "github.com/neurlang/goruut/dicts/russian"
 import "github.com/neurlang/goruut/dicts/swedish"
+import "github.com/neurlang/goruut/dicts/romanian"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -22,6 +23,23 @@ type DictGetter struct{}
 
 func (DictGetter) GetDict(lang, filename string) ([]byte, error) {
 	return GetDict(lang, filename)
+}
+
+func lzw(model string) string {
+	if model == "weights0.json.gz" {
+		return "weights1.json.lzw"
+	}
+	return model
+}
+
+func (DictGetter) IsOldFormat(magic []byte) bool {
+	// GZIP
+	return magic[0] == 0x1F && magic[1] == 0x8B
+}
+
+func (DictGetter) IsNewFormat(magic []byte) bool {
+	// LZW
+	return (magic[0] == 0x1F && magic[1] == 0x9D) || (magic[0] == 0x1F && magic[1] == 0xA0)
 }
 
 func GetDict(lang, filename string) ([]byte, error) {
@@ -54,6 +72,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return russian.Language.ReadFile(filename)
 	case "Swedish":
 		return swedish.Language.ReadFile(filename)
+	case "Romanian":
+		return romanian.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}

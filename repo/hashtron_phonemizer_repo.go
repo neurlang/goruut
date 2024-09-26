@@ -253,35 +253,45 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 	for _, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
 
-		// Step 3: Decompress the data in memory
-		gzipReader, err := gzip.NewReader(bytes.NewReader(compressedData))
-		if err != nil {
-			log.Now().Errorf("Failed to create gzip reader: %v", err)
-			continue
-		}
-		defer gzipReader.Close()
+		if (*r.getter).IsOldFormat(compressedData) {
 
-		// Step 4: Read the decompressed data into memory
-		decompressedData, err := ioutil.ReadAll(gzipReader)
-		if err != nil {
-			log.Now().Errorf("Failed to read decompressed data: %v", err)
-			continue
-		}
+			// Step 3: Decompress the data in memory
+			gzipReader, err := gzip.NewReader(bytes.NewReader(compressedData))
+			if err != nil {
+				log.Now().Errorf("Failed to create gzip reader: %v", err)
+				continue
+			}
+			defer gzipReader.Close()
 
-		// Step 5: Parse the JSON data into the specified type
-		var data [][][2]uint32
-		err = json.Unmarshal(decompressedData, &data)
-		if err != nil {
-			log.Now().Errorf("Failed to parse JSON data: %v", err)
-			continue
+			// Step 4: Read the decompressed data into memory
+			decompressedData, err := ioutil.ReadAll(gzipReader)
+			if err != nil {
+				log.Now().Errorf("Failed to read decompressed data: %v", err)
+				continue
+			}
+
+			// Step 5: Parse the JSON data into the specified type
+			var data [][][2]uint32
+			err = json.Unmarshal(decompressedData, &data)
+			if err != nil {
+				log.Now().Errorf("Failed to parse JSON data: %v", err)
+				continue
+			}
+			r.mut.Lock()
+			// Load the weights into the network
+			for i, v := range data {
+				*((*r.nets)[lang].GetHashtron(i)) = get_hashtron(hashtron.New(v, 1))
+			}
+			r.mut.Unlock()
+			return
+
+		} else {
+			bytesReader := bytes.NewReader(compressedData)
+			r.mut.Lock()
+			(*r.nets)[lang].ReadCompressedWeights(bytesReader)
+			r.mut.Unlock()
+			return
 		}
-		r.mut.Lock()
-		// Load the weights into the network
-		for i, v := range data {
-			*((*r.nets)[lang].GetHashtron(i)) = get_hashtron(hashtron.New(v, 1))
-		}
-		r.mut.Unlock()
-		return
 	}
 }
 
