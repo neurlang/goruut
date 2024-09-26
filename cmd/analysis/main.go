@@ -140,6 +140,7 @@ func main() {
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	randomize := flag.Int("randomize", 0, "randomize dst word split")
+	randadd := flag.Int("randadd", 1, "randomize adding by making it less frequent using this integer")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	spaceBackfit := flag.Bool("spacebackfit", false, "backfit space")
 	same := flag.Bool("same", false, "show same matrices")
@@ -178,7 +179,7 @@ func main() {
 	if lang != nil {
 		var deletedval string
 		if deleteval != nil && *deleteval {
-			var onlyone = rand.Intn(1) == 0
+			var onlyone = rand.Intn(2) == 0
 			var n = rand.Intn(len(lang.Map)+1) / 2
 			for k, v := range lang.Map {
 				n--
@@ -514,8 +515,12 @@ func main() {
 					}
 				}
 				threeways[threeway_from+"\x00"+threeway_to]++
-				if hitscnt != nil && *hitscnt < threeways[threeway_from+"\x00"+threeway_to] {
-					lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
+				if hitscnt != nil && *hitscnt == threeways[threeway_from+"\x00"+threeway_to] {
+					if randadd == nil || rand.Intn(*randadd) == 0 {
+						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
+					} else {
+						delete(threeways, threeway_from+"\x00"+threeway_to)
+					}
 				}
 				mut.Unlock()
 			}
