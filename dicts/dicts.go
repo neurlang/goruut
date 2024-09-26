@@ -16,7 +16,7 @@ import "github.com/neurlang/goruut/dicts/russian"
 import "github.com/neurlang/goruut/dicts/swedish"
 import "github.com/neurlang/goruut/dicts/romanian"
 import "github.com/neurlang/goruut/dicts/finnish"
-import "github.com/neurlang/goruut/dicts/tahitian"
+import "github.com/neurlang/goruut/dicts/isan"
 import "github.com/neurlang/goruut/dicts/swahili"
 import "github.com/neurlang/goruut/dicts/esperanto"
 import "github.com/neurlang/goruut/dicts/icelandic"
@@ -83,8 +83,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return romanian.Language.ReadFile(lzw(filename))
 	case "Finnish":
 		return finnish.Language.ReadFile(lzw(filename))
-	case "Tahitian":
-		return tahitian.Language.ReadFile(lzw(filename))
+	case "Isan":
+		return isan.Language.ReadFile(lzw(filename))
 	case "Swahili":
 		return swahili.Language.ReadFile(lzw(filename))
 	case "Esperanto":

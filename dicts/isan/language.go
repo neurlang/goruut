@@ -1,4 +1,4 @@
-package tahitian
+package isan
 
 import "embed"
 
