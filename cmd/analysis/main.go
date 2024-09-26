@@ -553,20 +553,20 @@ func main() {
 			if (same != nil && *same && len(w1p) == len(w2p)) || (same == nil) || (same != nil && !*same && len(w1p) != len(w2p)) {
 				mut.Lock()
 				if escapeunicode != nil && *escapeunicode {
-					for _, rs := range w1p {
+					for _, rs := range w2p {
 						for _, r := range rs {
 							fmt.Printf("\\u%04X", r)
 						}
 						fmt.Print(" ")
 					}
 				} else {
-					for _, rs := range w1p {
+					for _, rs := range w2p {
 						fmt.Printf("%s ", rs)
 					}
 				}
 				fmt.Println()
-				for i := 0; i+length-1 < len(mat); i += length {
-					fmt.Println(w2p[i/length], mat[i:i+length])
+				for i := 0; i+length <= len(mat); i += length {
+					fmt.Println(w1p[i/length], mat[i:i+length])
 				}
 				fmt.Println(d)
 				mut.Unlock()
