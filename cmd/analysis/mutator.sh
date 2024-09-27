@@ -1,11 +1,11 @@
 #!/bin/bash
 
 # Paths to the files
-mutations_file="../../dicts/french/94.language.json"
-original_json="../../dicts/french/language.json"
+mutations_file="../../dicts/$1/$2.language.json"
+original_json="../../dicts/$1/language.json"
 mutated_json="/tmp/language_mutated.json"
 analysis_script="./analysis"
-srcfile="../../dicts/french/dirty.tsv"
+srcfile="../../dicts/$1/dirty.tsv"
 
 # Function to get a random line from a file
 function get_random_line() {

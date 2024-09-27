@@ -26,7 +26,7 @@ function delete_line_from_file() {
 }
 
 # Run the analysis script
-output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8)
+output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9)
 
 # Extract the edit distance from the output
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
@@ -45,7 +45,7 @@ for i in {1..10000000}; do
     delete_line_from_file "$original_json" "$mutated_json"
     
     # Run the analysis script
-    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8)
+    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9)
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
@@ -67,7 +67,7 @@ for i in {1..10000000}; do
     cp "$original_json" "$mutated_json"
     
     # Run the analysis script
-    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 -deleteval -save)
+    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9 -deleteval -save)
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
