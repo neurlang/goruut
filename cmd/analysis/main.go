@@ -560,20 +560,20 @@ func main() {
 				if escapeunicode != nil && *escapeunicode {
 					for _, rs := range w2p {
 						for _, r := range rs {
-							fmt.Printf("\\u%04X", r)
+							fmt.Fprintf(os.Stderr, "\\u%04X", r)
 						}
-						fmt.Print(" ")
+						fmt.Fprint(os.Stderr, " ")
 					}
 				} else {
 					for _, rs := range w2p {
-						fmt.Printf("%s ", rs)
+						fmt.Fprintf(os.Stderr, "%s ", rs)
 					}
 				}
-				fmt.Println()
+				fmt.Fprintln(os.Stderr)
 				for i := 0; i+length <= len(mat); i += length {
-					fmt.Println(w1p[i/length], mat[i:i+length])
+					fmt.Fprintln(os.Stderr, w1p[i/length], mat[i:i+length])
 				}
-				fmt.Println(d)
+				fmt.Fprintln(os.Stderr, d)
 				mut.Unlock()
 			}
 		}
