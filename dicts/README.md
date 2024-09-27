@@ -1,4 +1,4 @@
-# Adding a langauge to Goruut
+# Adding a language to Goruut
 
 ## Roadmap
 
@@ -99,7 +99,7 @@ The prerequisite for this step is the clean.tsv file.
    `./train_phonemizer -cleantsv ../../../goruut/dicts/romanian/clean.tsv`
 
 The algorithm will run for a while. After each retraining of the hashtron network,
-files with the pattern output.*.json.t.lzw will start appearing.
+files with the pattern `output.*.json.t.lzw` will start appearing.
 The number (`*`) means the percentage of how successful the resulting model is.
 
 I got a number of files:
