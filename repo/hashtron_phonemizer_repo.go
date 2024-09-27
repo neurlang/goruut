@@ -19,6 +19,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
 	PhonemizeWord(lang, word string) (ret map[uint64]string)
+	PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string)
 	CleanWord(lang, word string) string
 	CheckWord(lang, word, ipa string) bool
 }
@@ -407,14 +408,22 @@ outer:
 	return true
 }
 func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
+	ret = make(map[uint64]string)
+	for k, v := range r.PhonemizeWordCJK(lang, word) {
+		ret[k] = v[0]
+	}
+	return
+}
+
+func (r *HashtronPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string) {
 	r.LoadLanguage(lang)
 
 	r.mut.RLock()
 	mapLangIsNil := r.lang.Slice(lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
-		ret = make(map[uint64]string)
-		ret[murmur3hash(word+"\x00"+word)] = word
+		ret = make(map[uint64][2]string)
+		ret[murmur3hash(word+"\x00"+word)] = [2]string{word, word}
 		return
 	}
 
@@ -423,6 +432,9 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map
 	srca := r.lang.SrcSlice(lang, []rune(word))
 	r.mut.RUnlock()
 	dsta := []string{}
+
+	var lastspace = 0
+
 outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
@@ -441,27 +453,36 @@ outer:
 		}
 		if len(m) == 1 {
 			for _, mfirst := range m {
+				if strings.HasPrefix(mfirst, "_") {
+					lastspace = i
+				}
+				if strings.HasSuffix(mfirst, "_") {
+					lastspace = i + 1
+				}
 				dsta = append(dsta, mfirst)
 				break
 			}
 			continue
 		}
 		for _, option := range m {
-			j := len(srca) - i
+			srcaR := srca[lastspace:]
+			dstaR := dsta[lastspace:]
+			i := i - lastspace
+			j := len(srcaR) - i
 			var buf = [...]uint32{
-				hash.StringsHash(0, srca[1*i/2:i+j/2]),
-				hash.StringsHash(0, srca[2*i/3:i+j/3]),
-				hash.StringsHash(0, srca[4*i/5:i+j/5]),
-				hash.StringsHash(0, srca[6*i/7:i+j/11]),
-				hash.StringsHash(0, srca[10*i/11:i+j/11]),
-				hash.StringsHash(0, dsta[0:i]),
-				hash.StringsHash(0, srca),
-				hash.StringsHash(0, dsta[0:4*i/7]),
-				hash.StringsHash(0, dsta[4*i/7:6*i/7]),
-				hash.StringsHash(0, dsta[6*i/7:i]),
-				hash.StringsHash(0, srca[i:i+j/7]),
-				hash.StringsHash(0, srca[i+j/7:i+3*j/7]),
-				hash.StringsHash(0, srca[i+3*j/7:i+j]),
+				hash.StringsHash(0, srcaR[1*i/2:i+j/2]),
+				hash.StringsHash(0, srcaR[2*i/3:i+j/3]),
+				hash.StringsHash(0, srcaR[4*i/5:i+j/5]),
+				hash.StringsHash(0, srcaR[6*i/7:i+j/11]),
+				hash.StringsHash(0, srcaR[10*i/11:i+j/11]),
+				hash.StringsHash(0, dstaR[0:i]),
+				hash.StringsHash(0, srcaR),
+				hash.StringsHash(0, dstaR[0:4*i/7]),
+				hash.StringsHash(0, dstaR[4*i/7:6*i/7]),
+				hash.StringsHash(0, dstaR[6*i/7:i]),
+				hash.StringsHash(0, srcaR[i:i+j/7]),
+				hash.StringsHash(0, srcaR[i+j/7:i+3*j/7]),
+				hash.StringsHash(0, srcaR[i+3*j/7:i+j]),
 				hash.StringHash(0, option),
 			}
 			var input = sample(buf)
@@ -475,28 +496,51 @@ outer:
 			var predicted = net.Infer(&input).Feature(0)
 			r.mut.RUnlock()
 			if predicted == 1 {
+				if strings.HasPrefix(option, "_") {
+					lastspace = i
+				}
+				if strings.HasSuffix(option, "_") {
+					lastspace = i + 1
+				}
 				dsta = append(dsta, option)
 				continue outer
 			}
 		}
 		if backoffs > 0 {
 			i = -1
+			lastspace = 0
 			dsta = nil
 			backoffs--
 			continue
 		}
 		for _, mfirst := range m {
+			if strings.HasPrefix(mfirst, "_") {
+				lastspace = i
+			}
+			if strings.HasSuffix(mfirst, "_") {
+				lastspace = i + 1
+			}
 			dsta = append(dsta, mfirst)
 			break
 		}
 	}
+	var src string
 	var dst string
-	for _, v := range dsta {
+	for i, v := range dsta {
+		if len(srca) > i {
+			if v != "_" && strings.HasPrefix(v, "_") {
+				src += "_"
+			}
+			src += srca[i]
+			if strings.HasSuffix(v, "_") {
+				src += "_"
+			}
+		}
 		dst += v
 	}
 
-	ret = make(map[uint64]string)
-	ret[murmur3hash(word+"\x00"+dst)] = dst
+	ret = make(map[uint64][2]string)
+	ret[murmur3hash(word+"\x00"+dst)] = [2]string{dst, src}
 	return
 }
 

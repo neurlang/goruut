@@ -14,29 +14,42 @@ type IWordCachingRepository interface {
 	HashWord(lang, word string) uint64
 	StoreWord(value map[uint64]string, hash uint64)
 	LoadWord(hash uint64) (word map[uint64]string)
+	StoreWordCJK(value map[uint64][2]string, hash uint64)
+	LoadWordCJK(hash uint64) (word map[uint64][2]string)
 }
 type WordCachingRepository struct {
 	seed  uint32
 	cache otter.Cache[uint64, string]
 }
 
-func (r WordCachingRepository) LoadWord(hash uint64) (word map[uint64]string) {
+func (r WordCachingRepository) LoadWordCJK(hash uint64) (word map[uint64][2]string) {
 	value, _ := r.cache.Get(hash)
 	if value == "" {
 		return nil
 	}
-	word = make(map[uint64]string)
+	word = make(map[uint64][2]string)
 	length := binary.LittleEndian.Uint32([]byte(value[0:4]))
-	end := 4 + length*12
+	end := 4 + length*16
 	for i := uint32(0); i < length; i++ {
 		k := binary.LittleEndian.Uint64([]byte(value[3*i+4 : 3*i+12]))
 		l := binary.LittleEndian.Uint32([]byte(value[3*i+12 : 3*i+16]))
-		word[k] = value[end : end+l]
+		m := binary.LittleEndian.Uint32([]byte(value[3*i+16 : 3*i+20]))
+		dst := value[end : end+l]
 		end += l
+		src := value[end : end+m]
+		end += m
+		word[k] = [2]string{dst, src}
 	}
 	return word
 }
-func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
+func (r WordCachingRepository) LoadWord(hash uint64) (word map[uint64]string) {
+	word = make(map[uint64]string)
+	for k, v := range r.LoadWordCJK(hash) {
+		word[k] = v[0]
+	}
+	return
+}
+func (r WordCachingRepository) StoreWordCJK(value map[uint64][2]string, hash uint64) {
 
 	var buf, data []byte
 	var num4 [4]byte
@@ -47,15 +60,26 @@ func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
 	for k, v := range value {
 		binary.LittleEndian.PutUint64(num8[:], uint64(k))
 		buf = append(buf, num8[:]...)
-		binary.LittleEndian.PutUint32(num4[:], uint32(len(v)))
+		binary.LittleEndian.PutUint32(num4[:], uint32(len(v[0])))
 		buf = append(buf, num4[:]...)
-		data = append(data, []byte(v)...)
+		binary.LittleEndian.PutUint32(num4[:], uint32(len(v[1])))
+		buf = append(buf, num4[:]...)
+		data = append(data, []byte(v[0])...)
+		data = append(data, []byte(v[1])...)
 	}
 
 	val := string(buf) + string(data)
 
 	r.cache.Set(hash, val)
 }
+func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
+	word := make(map[uint64][2]string)
+	for k, v := range value {
+		word[k] = [2]string{v, ""}
+	}
+	r.StoreWordCJK(word, hash)
+}
+
 func (r WordCachingRepository) HashWord(lang, word string) uint64 {
 
 	str := word + "\x00" + lang
