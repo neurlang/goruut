@@ -13,7 +13,7 @@ initial_size=$(stat -c%s "$original_json")
 target_size=$((initial_size * (2 + $1) / (1 + $1)))
 
 # Run the analysis script
-output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits 99999)
+output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits 99999)
 
 # Extract the edit distance from the output
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
@@ -37,12 +37,12 @@ for ((i = $init_hits; i > 0; i--)); do
         break
     fi
 
-    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile"  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits $i --save)
+    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile"  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits $i --save)
     # Extract the hits from the output
     init_hits=$(echo "$output" | grep -oP 'Decrease hits to: \K\d+')
 
     # First analysis
-    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8 $9)
+    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9)
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')

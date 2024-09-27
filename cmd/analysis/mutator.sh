@@ -27,7 +27,7 @@ function insert_line_into_file() {
 }
 
 # Run the analysis script
-output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8)
+output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8)
 
 # Extract the edit distance from the output
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
@@ -43,7 +43,7 @@ for i in {1..10000000}; do
     insert_line_into_file "$mutation" "$original_json" "$mutated_json"
     
     # Run the analysis script
-    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -nostress -noipadash $3 $4 $5 $6 $7 $8)
+    output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8)
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
