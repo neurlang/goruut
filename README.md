@@ -45,7 +45,8 @@ sudo docker compose up -d --force-recreate --build
 * Norwegian
 * Jamaican
 
-The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages)
+The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages).
+Please [Add a language](https://github.com/neurlang/goruut/blob/master/dicts/README.md) if you have the necessary data.
 
 ## Listening to the generated speech
 
