@@ -65,7 +65,7 @@ In Bash, navigate to the `cmd/analysis` folder. Type `go build` to compile the a
 
 Now, you can initiate `study_language.sh`, provided you have both `dirty.tsv` and the initial `language.json` for your language.
 
-Navigate to the `cmd/analysis` folder. Run `./study_language.sh` romanian in Git Bash, replacing "romanian" with your directory name.
+Navigate to the `cmd/analysis` folder. Run `./study_language.sh romanian` in Git Bash, replacing "romanian" with your directory name.
 
 You should see rows like `Improved edit distance to 124482`. This means the algorithm is improving the `language.json`.
 
@@ -76,7 +76,7 @@ If the edit distance is 1 and `language.json` is not improving, then your `langu
 Once you're satisfied with the loss or believe that `study_language.sh` cannot learn any further improvements, it's time to clean the language.
 
 Go to the cmd/analysis folder.
-Run `./clean_language.sh` romanian in Git Bash, replacing "romanian" with your directory name.
+Run `./clean_language.sh romanian` in Git Bash, replacing "romanian" with your directory name.
 
 After this, the `clean.tsv` file will appear in your language folder. Check the number of rows. A significant majority of the rows from the original `dirty.tsv` should be aligned in your `clean.tsv` file:
 
