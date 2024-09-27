@@ -585,9 +585,36 @@ func main() {
 				}
 			}
 
-			mut.Lock()
-			tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
-			mut.Unlock()
+			if padspace != nil && *padspace {
+
+				var lasti = 0
+				for i, w := range dstword {
+					if strings.HasPrefix(w, "_") && i > lasti {
+						mut.Lock()
+						tsvWriter.AddRow([]string{spacesep(srcword[lasti:i]), spacesep(dstword[lasti:i])})
+						mut.Unlock()
+						lasti = i
+					}
+					if strings.HasSuffix(w, "_") && i+1 > lasti {
+						mut.Lock()
+						tsvWriter.AddRow([]string{spacesep(srcword[lasti : i+1]), spacesep(dstword[lasti : i+1])})
+						mut.Unlock()
+						lasti = i + 1
+					}
+				}
+				if lasti != len(dstword) {
+					mut.Lock()
+					tsvWriter.AddRow([]string{spacesep(srcword[lasti:]), spacesep(dstword[lasti:])})
+					mut.Unlock()
+				}
+
+			} else {
+
+				mut.Lock()
+				tsvWriter.AddRow([]string{spacesep(srcword), spacesep(dstword)})
+				mut.Unlock()
+
+			}
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
 		}
