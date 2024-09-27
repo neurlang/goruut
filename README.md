@@ -36,6 +36,14 @@ sudo docker compose up -d --force-recreate --build
 * Swedish
 * Czech
 * Slovak
+* Romanian
+* Finnish
+* Isan
+* Swahili
+* Esperanto
+* Icelandic
+* Norwegian
+* Jamaican
 
 The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages)
 
