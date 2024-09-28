@@ -467,6 +467,7 @@ outer:
 		for _, option := range m {
 			srcaR := srca[lastspace:]
 			dstaR := dsta[lastspace:]
+			origi := i
 			i := i - lastspace
 			j := len(srcaR) - i
 			var buf = [...]uint32{
@@ -497,19 +498,18 @@ outer:
 			r.mut.RUnlock()
 			if predicted == 1 {
 				if strings.HasPrefix(option, "_") {
-					lastspace = i
+					lastspace = origi
 				}
 				if strings.HasSuffix(option, "_") {
-					lastspace = i + 1
+					lastspace = origi + 1
 				}
 				dsta = append(dsta, option)
 				continue outer
 			}
 		}
 		if backoffs > 0 {
-			i = -1
-			lastspace = 0
-			dsta = nil
+			i = lastspace-1
+			dsta = dsta[:lastspace]
 			backoffs--
 			continue
 		}
