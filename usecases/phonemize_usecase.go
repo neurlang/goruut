@@ -43,12 +43,12 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 
 	var ipa_flavored [2][]string
 	if r.IpaFlavors != nil {
-		for _, word := range parts_of_speech_selected {
+		for i, word := range parts_of_speech_selected[0] {
 			for _, flavor := range r.IpaFlavors {
-				word[0] = p.flavor.Apply(flavor, word[0])
+				word = p.flavor.Apply(flavor, word)
 			}
-			ipa_flavored[0] = append(ipa_flavored[0], word[0])
-			ipa_flavored[1] = append(ipa_flavored[1], word[1])
+			ipa_flavored[0] = append(ipa_flavored[0], word)
+			ipa_flavored[1] = append(ipa_flavored[1], parts_of_speech_selected[1][i])
 		}
 	} else {
 		ipa_flavored = parts_of_speech_selected
