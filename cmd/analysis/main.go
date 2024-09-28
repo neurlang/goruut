@@ -98,6 +98,9 @@ type Language struct {
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
 	DropLast       []string            `json:"DropLast"`
 
+	SplitBefore    []string            `json:"SplitBefore"`
+	SplitAfter     []string            `json:"SplitAfter"`
+
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 }
 

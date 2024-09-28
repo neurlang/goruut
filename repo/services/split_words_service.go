@@ -11,15 +11,15 @@ type ISplitWordsService interface {
 }
 
 type SplitWordsService struct {
-	repo1 repo.ISpaceSplitterRepository
+	repo1 *repo.ISpaceSplitterRepository
 }
 
 func (s *SplitWordsService) SplitWords(lang, sentence string) (out []string) {
-	return s.repo1.Split(sentence)
+	return (*s.repo1).SplitLang(lang, sentence)
 }
 
 func NewSplitWordsService(di *DependencyInjection) *SplitWordsService {
-	repo1 := MustNeed(di, repo.NewSpaceSplitterRepository)
+	repo1 := (repo.ISpaceSplitterRepository)(Ptr(MustNeed(di, repo.NewSpaceSplitterRepository)))
 
 	return &SplitWordsService{
 		repo1: &repo1,
