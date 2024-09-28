@@ -325,9 +325,9 @@ func addLetters(word string, mapping map[string]struct{}) {
 	var str string
 	for _, r := range reverse {
 		if isCombining(r) {
-			str += string(rune(r))
+			str = string(rune(r)) + str
 		} else {
-			mapping[string(str)+string(rune(r))] = struct{}{}
+			mapping[string(rune(r))+string(str)] = struct{}{}
 			str = ""
 		}
 	}
@@ -348,9 +348,9 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 	var str string
 	for _, r := range reverse {
 		if isCombining(r) {
-			str += string(rune(r))
+			str = string(rune(r)) + str
 		} else {
-			strings = append([]string{string(str) + string(rune(r))}, strings...)
+			strings = append([]string{string(rune(r)) + string(str)}, strings...)
 			str = ""
 		}
 	}
