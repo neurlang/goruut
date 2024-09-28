@@ -73,8 +73,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
 github.com/leesper/go_rng v0.0.0-20171009123644-5344a9259b21/go.mod h1:N0SVk0uhy+E1PZ3C9ctsPRlvOPAFPkCNlcPBDkt0N3U=
-github.com/martinarisk/di v0.0.2 h1:WhZwgLJkzFZB54zPQRGFaIbe439Hg4lVjUXuB4oQ2uk=
-github.com/martinarisk/di v0.0.2/go.mod h1:022Kk0FZeeE/uIOtGcB55cH79UMsa3YZGWxrwH5LQnA=
+github.com/martinarisk/di v0.0.3 h1:rLMDG9ypmhUR7HbgT5dan1J4OAO54gZHA+VtIBNcCrI=
+github.com/martinarisk/di v0.0.3/go.mod h1:022Kk0FZeeE/uIOtGcB55cH79UMsa3YZGWxrwH5LQnA=
 github.com/mattn/go-colorable v0.1.8/go.mod h1:u6P/XSegPjTcexA+o6vUJrdnUu04hMope9wVRipJSqc=
 github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Kysco4FUpU=
 github.com/mattn/go-runewidth v0.0.4/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=

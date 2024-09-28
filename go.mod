@@ -4,7 +4,7 @@ go 1.18
 
 require (
 	github.com/gorilla/mux v1.8.1
-	github.com/martinarisk/di v0.0.2
+	github.com/martinarisk/di v0.0.3
 	github.com/maypok86/otter v1.2.1
 	github.com/neurlang/classifier v0.0.8
 	github.com/neurlang/levenshtein v0.1.0
