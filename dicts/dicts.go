@@ -22,6 +22,7 @@ import "github.com/neurlang/goruut/dicts/esperanto"
 import "github.com/neurlang/goruut/dicts/icelandic"
 import "github.com/neurlang/goruut/dicts/norwegian"
 import "github.com/neurlang/goruut/dicts/jamaican"
+import "github.com/neurlang/goruut/dicts/japanese"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -40,11 +41,17 @@ func lzw(model string) string {
 }
 
 func (DictGetter) IsOldFormat(magic []byte) bool {
+	if len(magic) < 2 {
+		return false
+	}
 	// GZIP
 	return magic[0] == 0x1F && magic[1] == 0x8B
 }
 
 func (DictGetter) IsNewFormat(magic []byte) bool {
+	if len(magic) < 2 {
+		return false
+	}
 	// LZW
 	return (magic[0] == 0x1F && magic[1] == 0x9D) || (magic[0] == 0x1F && magic[1] == 0xA0)
 }
@@ -95,6 +102,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return norwegian.Language.ReadFile(lzw(filename))
 	case "Jamaican":
 		return jamaican.Language.ReadFile(lzw(filename))
+	case "Japanese":
+		return japanese.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
