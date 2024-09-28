@@ -46,17 +46,15 @@ func (p *PhonemizeWordService) PhonemizeWordCJK(lang, word string) (wrd string, 
 	ret = (*p.repo).PhonemizeWordCJK(lang, wrd)
 	if ret == nil {
 		ret = (*p.cach).LoadWordCJK(hsh)
-		if ret != nil {
-			for k, ipa := range ret {
-				if !(*p.ai).CheckWord(lang, wrd, ipa[0]) {
-					delete(ret, k)
-				}
-			}
-		}
-
 		if ret == nil || len(ret) == 0 {
 			ret = (*p.ai).PhonemizeWordCJK(lang, wrd)
-
+			if ret != nil {
+				for k, ipa := range ret {
+					if !(*p.ai).CheckWord(lang, wrd, ipa[0]) {
+						delete(ret, k)
+					}
+				}
+			}
 			(*p.cach).StoreWordCJK(ret, hsh)
 		}
 	}
