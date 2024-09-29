@@ -28,6 +28,7 @@ import "github.com/neurlang/goruut/dicts/bengali"
 import "github.com/neurlang/goruut/dicts/bengali/dhaka"
 import "github.com/neurlang/goruut/dicts/bengali/rahr"
 import "github.com/neurlang/goruut/dicts/punjabi"
+import "github.com/neurlang/goruut/dicts/telugu"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -119,6 +120,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return rahr.Language.ReadFile(lzw(filename))
 	case "Punjabi":
 		return punjabi.Language.ReadFile(lzw(filename))
+	case "Telugu":
+		return telugu.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
