@@ -33,6 +33,7 @@ import "github.com/neurlang/goruut/dicts/marathi"
 import "github.com/neurlang/goruut/dicts/chinese/mandarin"
 import "github.com/neurlang/goruut/dicts/tamil"
 import "github.com/neurlang/goruut/dicts/gujarati"
+import "github.com/neurlang/goruut/dicts/urdu"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -134,6 +135,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return tamil.Language.ReadFile(lzw(filename))
 	case "Gujarati":
 		return gujarati.Language.ReadFile(lzw(filename))
+	case "Urdu":
+		return urdu.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
