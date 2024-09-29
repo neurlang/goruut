@@ -346,13 +346,18 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 
 	var strings []string
 	var str string
-	for _, r := range reverse {
-		if isCombining(r) {
-			str = string(rune(r)) + str
-		} else {
-			strings = append([]string{string(rune(r)) + string(str)}, strings...)
-			str = ""
+	for _, run := range reverse {
+		if isCombining(run) {
+			r.mut.RLock()
+			isLanguageLetter := r.lang.IsLetter(lang, string(rune(run)))
+			r.mut.RUnlock()
+			if !isLanguageLetter {
+				str = string(rune(run)) + str
+				continue
+			}
 		}
+		strings = append([]string{string(rune(run)) + string(str)}, strings...)
+		str = ""
 	}
 	if str != "" {
 		strings = append([]string{string(str)}, strings...)
@@ -363,13 +368,12 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 		r.mut.RUnlock()
 
 		if !isLanguageLetter {
+			log.Now().Debugf("Not language letter: %s", run)
 			continue
+		} else {
+			log.Now().Debugf("Allowed run of word: %s", run)
 		}
-
-		log.Now().Debugf("Allowed run of word: %s", run)
-		for _, r := range run {
-			ret += string(r)
-		}
+		ret += run
 	}
 	return
 }
@@ -508,7 +512,7 @@ outer:
 			}
 		}
 		if backoffs > 0 {
-			i = lastspace-1
+			i = lastspace - 1
 			dsta = dsta[:lastspace]
 			backoffs--
 			continue
