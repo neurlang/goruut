@@ -38,6 +38,9 @@ import "github.com/neurlang/goruut/dicts/turkish"
 import "github.com/neurlang/goruut/dicts/vietnamese/southern"
 import "github.com/neurlang/goruut/dicts/vietnamese/central"
 import "github.com/neurlang/goruut/dicts/vietnamese/northern"
+import "github.com/neurlang/goruut/dicts/polish"
+import "github.com/neurlang/goruut/dicts/greek"
+import "github.com/neurlang/goruut/dicts/ukrainian"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -149,6 +152,12 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return central.Language.ReadFile(lzw(filename))
 	case "VietnameseNorthern":
 		return northern.Language.ReadFile(lzw(filename))
+	case "Polish":
+		return polish.Language.ReadFile(lzw(filename))
+	case "Greek":
+		return greek.Language.ReadFile(lzw(filename))
+	case "Ukrainian":
+		return ukrainian.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
