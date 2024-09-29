@@ -98,8 +98,8 @@ type Language struct {
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
 	DropLast       []string            `json:"DropLast"`
 
-	SplitBefore    []string            `json:"SplitBefore"`
-	SplitAfter     []string            `json:"SplitAfter"`
+	SplitBefore []string `json:"SplitBefore"`
+	SplitAfter  []string `json:"SplitAfter"`
 
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 }
@@ -212,20 +212,27 @@ func main() {
 				continue
 			}
 
-			for i, w := range v {
+			for i := 0; i < len(v); {
+				w := v[i]
 				for deleteval != nil && *deleteval && w == deletedval {
 					if i+1 == len(v) {
 						v = v[:len(v)-1]
 						lang.Map[k] = v
 						break
 					} else {
+						// Swap with the last item and shrink the slice
 						v[i] = v[len(v)-1]
 						v = v[:len(v)-1]
-						w = v[i]
 						lang.Map[k] = v
+						// Do not increment `i` in this case, as the new value at `v[i]` must be checked
 					}
+					w = v[i] // Update `w` after swapping
+				}
+				if w != deletedval {
+					i++ // Only increment `i` if no deletion happened
 				}
 			}
+
 			if len(v) == 0 {
 				continue
 			}
