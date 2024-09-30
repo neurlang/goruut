@@ -1,29 +1,24 @@
 # Version for this file.
 version: 1
 
-project_name: goruut
+# (Optional) List of env variables used during compilation.
+env:
+  - GO111MODULE=on
 
-builds:
-  - env:
-      - GO111MODULE=on
-      - CGO_ENABLED=0
-    flags:
-      - -trimpath
-    main: ./cmd/goruut/main.go
-    binary: goruut-{{ .Os }}-{{ .Arch }}
-    goos:
-      - darwin
-      - linux
-      - windows
-      - freebsd
-    goarch:
-      - amd64
-      - 386
-      - arm
-      - arm64
-      - riscv64
-    ignore:
-      - goos: darwin
-        goarch: 386
-      - goos: freebsd
-        goarch: arm
+# (Optional) Flags for the compiler.
+flags:
+  - -trimpath
+
+# The OS to compile for. `GOOS` env variable will be set to this value.
+goos: {{ .Os }}
+
+# The architecture to compile for. `GOARCH` env variable will be set to this value.
+goarch: {{ .Arch }}
+
+# Entrypoint to compile.
+main: ./cmd/goruut/main.go
+
+# Binary output name.
+# {{ .Os }} will be replaced by goos field in the config file.
+# {{ .Arch }} will be replaced by goarch field in the config file.
+binary: goruut-{{ .Os }}-{{ .Arch }}
