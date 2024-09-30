@@ -46,8 +46,7 @@ jobs:
     with:
       go-version: '1.23'
       compile-builder: true
-      goos: ${{ matrix.goos }}
-      goarch: ${{ matrix.goarch }}
+      env: GOOS=${{ matrix.goos }} GOARCH=${{ matrix.goarch }}
       main: ./cmd/goruut/main.go
       binary: goruut-${{ matrix.goos }}-${{ matrix.goarch }}
       build_flags: -trimpath
