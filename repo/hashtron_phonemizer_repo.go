@@ -82,6 +82,9 @@ func (l *language) mapize() {
 
 func (l *language) srcdst() {
 	for k, v := range l.Mapping {
+		if v == nil || len(v) == 0 {
+			continue
+		}
 		if len([]rune(k)) > 1 {
 			l.mapSrcMulti[k] = struct{}{}
 		}
