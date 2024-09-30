@@ -9,19 +9,20 @@ env:
 flags:
   - -trimpath
 
-# The OS to compile for. `GOOS` env variable will be set to this value.
-goos: linux
 
-# The architecture to compile for. `GOARCH` env variable will be set to this value.
-goarch: amd64
-
-# (Optional) Entrypoint to compile.
-main: ./cmd/goruut/main.go
-
-# (Optional) Working directory. (default: root of the project)
-# dir: ./relative/path/to/dir
-
-# Binary output name.
-# {{ .Os }} will be replaced by goos field in the config file.
-# {{ .Arch }} will be replaced by goarch field in the config file.
-binary: goruut-{{ .Os }}-{{ .Arch }}
+# Define multiple builds
+builds:
+  - goos:
+      - linux
+      - windows
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+      - arm
+    # Entrypoint to compile.
+    main: ./cmd/goruut/main.go
+    # Binary output name.
+    # {{ .Os }} will be replaced by goos field in the config file.
+    # {{ .Arch }} will be replaced by goarch field in the config file.
+    binary: goruut-{{ .Os }}-{{ .Arch }}
