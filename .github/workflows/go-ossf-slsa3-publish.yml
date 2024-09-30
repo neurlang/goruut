@@ -46,7 +46,7 @@ jobs:
     with:
       go-version: '1.23'
       compile-builder: true
-      evaluated-envs: "MYGOOS:${{ strategy.matrix.goos }}, MYGOARCH:${{ strategy.matrix.goarch }}"
+      config-file: .slsa-goreleaser-${{matrix.os}}-${{matrix.arch}}.yml
       # =============================================================================================================
       #     Optional: For more options, see https://github.com/slsa-framework/slsa-github-generator#golang-projects
       # =============================================================================================================
