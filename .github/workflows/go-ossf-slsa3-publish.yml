@@ -38,12 +38,12 @@ jobs:
           - freebsd
         arch:
           - amd64
-          - 386
+          - '386'
           - arm
           - arm64
           - riscv64
         exclude:
-          - goarch: "386"
+          - goarch: '386'
             goos: darwin
           - goarch: arm
             goos: darwin
