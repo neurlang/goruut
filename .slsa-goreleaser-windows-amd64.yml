@@ -1,0 +1,23 @@
+# Version for this file.
+version: 1
+
+# (Optional) List of env variables used during compilation.
+env:
+  - GO111MODULE=on
+
+# (Optional) Flags for the compiler.
+flags:
+  - -trimpath
+
+# The OS to compile for. `GOOS` env variable will be set to this value.
+goos: windows
+# The architecture to compile for. `GOARCH` env variable will be set to this value.
+goarch: amd64
+
+# Entrypoint to compile.
+main: ./cmd/goruut/main.go
+
+# Binary output name.
+# {{ .Os }} will be replaced by goos field in the config file.
+# {{ .Arch }} will be replaced by goarch field in the config file.
+binary: goruut-windows-amd64
