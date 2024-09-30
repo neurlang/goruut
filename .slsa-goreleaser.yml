@@ -9,14 +9,11 @@ env:
 flags:
   - -trimpath
 
-goos:
-  - linux
-  - windows
-  - darwin
-goarch:
-  - amd64
-  - arm64
-  - arm
+# The OS to compile for. `GOOS` env variable will be set to this value.
+goos: linux
+
+# The architecture to compile for. `GOARCH` env variable will be set to this value.
+goarch: amd64
 
 # Entrypoint to compile.
 main: ./cmd/goruut/main.go
