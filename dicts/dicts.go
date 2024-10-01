@@ -49,6 +49,7 @@ import "github.com/neurlang/goruut/dicts/kazakh"
 import "github.com/neurlang/goruut/dicts/afrikaans"
 import "github.com/neurlang/goruut/dicts/azerbaijani"
 import "github.com/neurlang/goruut/dicts/cebuano"
+import "github.com/neurlang/goruut/dicts/hausa"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -182,6 +183,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return azerbaijani.Language.ReadFile(lzw(filename))
 	case "Cebuano":
 		return cebuano.Language.ReadFile(lzw(filename))
+	case "Hausa":
+		return hausa.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
