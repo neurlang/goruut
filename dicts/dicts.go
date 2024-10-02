@@ -54,6 +54,7 @@ import "github.com/neurlang/goruut/dicts/indonesian"
 import "github.com/neurlang/goruut/dicts/danish"
 import "github.com/neurlang/goruut/dicts/malayalam"
 import "github.com/neurlang/goruut/dicts/javanese"
+import "github.com/neurlang/goruut/dicts/macedonian"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -197,6 +198,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return malayalam.Language.ReadFile(lzw(filename))
 	case "Javanese":
 		return javanese.Language.ReadFile(lzw(filename))
+	case "Macedonian":
+		return macedonian.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
