@@ -62,6 +62,7 @@ import "github.com/neurlang/goruut/dicts/chechen"
 import "github.com/neurlang/goruut/dicts/dzongkha"
 import "github.com/neurlang/goruut/dicts/burmese"
 import "github.com/neurlang/goruut/dicts/maltese"
+import "github.com/neurlang/goruut/dicts/mongolian"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -221,6 +222,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return burmese.Language.ReadFile(lzw(filename))
 	case "Maltese":
 		return maltese.Language.ReadFile(lzw(filename))
+	case "Mongolian":
+		return mongolian.Language.ReadFile(lzw(filename))
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
