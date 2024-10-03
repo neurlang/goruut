@@ -22,50 +22,75 @@ sudo docker compose up -d --force-recreate --build
 
 ## Supported Languages
 
-* English
-* Spanish
-* German
-* French
-* Italian
+* Afrikaans
+* Amharic
 * Arabic
-* Farsi
-* Luxembourgish
-* Dutch
-* Portuguese
-* Russian
-* Swedish
-* Czech
-* Slovak
-* Romanian
-* Finnish
-* Isan
-* Swahili
-* Esperanto
-* Icelandic
-* Norwegian
-* Jamaican
-* Japanese
-* Hindi
+* Azerbaijani
+* Belarusian
 * Bengali
 * Bengali Dhaka
 * Bengali Rahr
-* Punjabi
-* Telugu
-* Marathi
+* Burmese
+* Cebuano
+* Chechen
 * Chinese Mandarin
-* Tamil
-* Gujarati
-* Urdu
-* Turkish
-* Vietnamese Northern
-* Vietnamese Central
-* Vietnamese Southern
-* Polish
+* Czech
+* Danish
+* Dutch
+* Dzongkha
+* English
+* Esperanto
+* Farsi
+* Finnish
+* French
+* German
 * Greek
-* Ukrainian
+* Gujarati
+* Hausa
+* Hebrew
+* Hindi
 * Hungarian
-* Malay Latin
+* Icelandic
+* Indonesian
+* Isan
+* Italian
+* Jamaican
+* Japanese
+* Javanese
+* Kazakh
+* Korean
+* Luxembourgish
+* Macedonian
+* Malayalam
 * Malay Arab
+* Malay Latin
+* Maltese
+* Marathi
+* Mongolian
+* Nepali
+* Norwegian
+* Pashto
+* Polish
+* Portuguese
+* Punjabi
+* Romanian
+* Russian
+* Slovak
+* Spanish
+* Swahili
+* Swedish
+* Tamil
+* Telugu
+* Thai
+* Tibetan
+* Turkish
+* Ukrainian
+* Urdu
+* Uyghur
+* Vietnamese Central
+* Vietnamese Northern
+* Vietnamese Southern
+* Zulu
 
 The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages).
 Please [Add a language](https://github.com/neurlang/goruut/blob/master/dicts/README.md) if you have the necessary data.
