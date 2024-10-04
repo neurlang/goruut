@@ -24284,5 +24284,5 @@
 "𫛞":["tɕɥœ˧˥_"],
 "𫛢":["nɪŋ˧˥_"],
 "𫛶":["ʈʂʰɚ˥˩_"],
-"𫛸":["tʰi˧˥_"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":null,"DropLast":null,"SplitBefore":null,"SplitAfter":["。","？","、"],
-"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
+"𫛸":["tʰi˧˥_"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":null,"DropLast":null,"SplitBefore":["《","（","(","·","“"],"SplitAfter":["》","）",")","。","？","、","，","：","、","；","！","?","!",".","”"],
+"PrePhonWordSteps":[{"Normalize":"NFC"}]}
