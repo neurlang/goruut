@@ -359,8 +359,12 @@ func main() {
 		if lang == nil {
 			return nil
 		}
+		o = append(o, "")
 	outer:
 		for _, srcpre := range srcword {
+			if len(word) == 0 {
+				break
+			}
 			mut.Lock()
 			data := lang.Map[srcpre]
 			mut.Unlock()
@@ -386,9 +390,55 @@ func main() {
 					continue outer
 				}
 			}
-			return nil
+		consume_suf:
+			for len(word) > 0 {
+				for len(word) > 0 && stringStartsWithCombiner(word) {
+					o[len(o)-1] += string([]rune(word)[0])
+					word = string([]rune(word)[1:])
+				}
+				for suf := range multisuffix {
+					for strings.HasPrefix(word, suf) {
+						o[len(o)-1] += suf
+						word = word[len(suf):]
+					}
+				}
+				for suf := range multisuffix {
+					if strings.HasPrefix(word, suf) {
+						continue consume_suf
+					}
+				}
+				break
+			}
+
+			if len(word) == 0 {
+				break
+			}
+			o = append(o, string([]rune(word)[0]))
+			word = string([]rune(word)[1:])
+		consume_pref:
+			for len(word) > 0 {
+				for len(word) > 0 && stringStartsWithCombiner(word) {
+					o[len(o)-1] += string([]rune(word)[0])
+					word = string([]rune(word)[1:])
+				}
+				for pref := range multiprefix {
+					for strings.HasPrefix(word, pref) {
+						o[len(o)-1] += pref
+						word = word[len(pref):]
+					}
+				}
+				for pref := range multiprefix {
+					if strings.HasPrefix(word, pref) {
+						continue consume_pref
+					}
+				}
+				break
+			}
 		}
-		return o
+		if o[0] == "" {
+			o = o[1:]
+		}
+		return
 	}
 
 	dstslice := func(word []rune) (o []string) {
@@ -660,6 +710,9 @@ func main() {
 					if resultx != "" && resulty != "" {
 						//println(word1, word2, resultx, resulty, lookahead)
 						callback(resultx, resulty, lookahead)
+					} else if resultx != "" && lookahead != "" {
+						//println(word1, word2, resultx, resulty, lookahead)
+						callback(resultx, resulty+lookahead, "")
 					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 						if resulty == longresulty {
 							//println(word1, word2, resultx+longresultx, resulty, lookahead)
@@ -670,6 +723,9 @@ func main() {
 					} else if longresultx != "" && longresulty != "" {
 						//println(word1, word2, longresultx, longresulty, lookahead)
 						callback(longresultx, longresulty, lookahead)
+					} else if longresultx != "" && lookahead != "" {
+						//println(word1, word2, longresultx, longresulty, lookahead)
+						callback(longresultx, longresulty+lookahead, "")
 					}
 				}
 
@@ -688,6 +744,9 @@ func main() {
 					if resultx != "" && resulty != "" {
 						//println(word1, word2, resultx, resulty, lookahead)
 						callback(resultx, resulty, lookahead)
+					} else if resultx != "" && lookahead != "" {
+						//println(word1, word2, resultx, resulty, lookahead)
+						callback(resultx, resulty+lookahead, "")
 					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 						if resulty == longresulty {
 							//println(word1, word2, resultx+longresultx, resulty, lookahead)
@@ -698,6 +757,9 @@ func main() {
 					} else if longresultx != "" && longresulty != "" {
 						//println(word1, word2, longresultx, longresulty, lookahead)
 						callback(longresultx, longresulty, lookahead)
+					} else if longresultx != "" && lookahead != "" {
+						//println(word1, word2, longresultx, longresulty, lookahead)
+						callback(longresultx, longresulty+lookahead, "")
 					}
 					resultx, resulty = "", ""
 					longresultx, longresulty = (string(w1p[x])), (bin)
