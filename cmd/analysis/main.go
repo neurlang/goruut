@@ -326,6 +326,40 @@ func main() {
 		}
 		return o
 	}
+
+	dstslice_det := func(srcword []string, word string) (o []string) {
+		if lang == nil {
+			return nil
+		}
+	outer:
+		for _, srcpre := range srcword {
+			mut.Lock()
+			data := lang.Map[srcpre]
+			mut.Unlock()
+			for _, dstpre := range data {
+				if _, ok := dict[srcpre+"\x00"+dstpre]; ok {
+					if strings.HasPrefix(word, dstpre) {
+						word = word[len(dstpre):]
+						o = append(o, dstpre)
+						continue outer
+					}
+				}
+			}
+			for j := longDst; j > 0; j-- {
+				if j > len(word) {
+					j = len(word)
+				}
+				if _, ok := dict[srcpre+"\x00"+word[:j]]; ok {
+					o = append(o, word[:j])
+					word = word[j:]
+					continue outer
+				}
+			}
+			return nil
+		}
+		return o
+	}
+
 	dstslice := func(word []rune) (o []string) {
 	outer:
 		for i := 0; i < len(word); i++ {
@@ -374,7 +408,7 @@ func main() {
 		}
 	}
 
-	var threeways = make(map[string]int)
+	var threeways = make(map[string]uint64)
 
 	loop(*srcFile, 200, func(word1, word2 string) {
 
@@ -438,7 +472,10 @@ func main() {
 				break
 			}
 		}
-		dstword := dstslice([]rune(word2))
+		dstword := dstslice_det(srcword, word2)
+		if len(dstword) == 0 {
+			dstword = dstslice([]rune(word2))
+		}
 		if len(srcword) > 0 {
 			if _, isDropLast := droplast[srcword[len(srcword)-1]]; isDropLast {
 				if len(dstword)+1 == len(srcword) {
@@ -525,7 +562,7 @@ func main() {
 					}
 				}
 				threeways[threeway_from+"\x00"+threeway_to]++
-				if hitscnt != nil && *hitscnt == threeways[threeway_from+"\x00"+threeway_to] {
+				if hitscnt != nil && uint64(*hitscnt) == threeways[threeway_from+"\x00"+threeway_to] {
 					if randadd == nil || rand.Intn(*randadd) == 0 {
 						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
 					} else {
@@ -535,33 +572,71 @@ func main() {
 				mut.Unlock()
 			}
 			var resultx, resulty string
+			var longresultx, longresulty string
 			for x := range w1p {
 				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
 						callback(resultx, resulty)
+					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
+						if resulty == longresulty {
+							callback(resultx+longresultx, resulty)
+						} else {
+							println(resultx+longresultx, resulty+longresulty)
+						}
+					} else if longresultx != "" && longresulty != "" {
+						callback(longresultx, longresulty)
 					}
-					resultx, resulty = "", ""
 				}
-
+				var bin string
 				for xx := range bins[x] {
-					resulty += (string(bins[x][xx]))
+					bin += (string(bins[x][xx]))
 				}
+				resulty += (bin)
+				longresulty += (bin)
 				if swaps[x] != nil {
 					resultx += (string(w1p[x]))
 					resulty += (string(*swaps[x]))
+					longresultx += (string(w1p[x]))
+					longresulty += (string(*swaps[x]))
 				} else if dels[x] {
 					resultx += (string(w1p[x]))
+					longresultx += (string(w1p[x]))
+				}
+				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
+					if resultx != "" && resulty != "" {
+						callback(resultx, resulty)
+					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
+						if resulty == longresulty {
+							callback(resultx+longresultx, resulty)
+						} else {
+							println(resultx+longresultx, resulty+longresulty)
+						}
+					} else if longresultx != "" && longresulty != "" {
+						callback(longresultx, longresulty)
+					}
+					resultx, resulty = "", ""
+					longresultx, longresulty = (string(w1p[x])), (bin)
 				}
 			}
 			for x := len(w1p); x < bin_length; x++ {
 
 				for xx := range bins[x] {
 					resulty += (string(bins[x][xx]))
+					longresulty += (string(bins[x][xx]))
+				}
+				if resultx != "" && resulty != "" {
+					callback(resultx, resulty)
+				} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
+					if resulty == longresulty {
+						callback(resultx+longresultx, resulty)
+					} else {
+						println(resultx+longresultx, resulty+longresulty)
+					}
+				} else if longresultx != "" && longresulty != "" {
+					callback(longresultx, longresulty)
 				}
 			}
-			if resultx != "" && resulty != "" {
-				callback(resultx, resulty)
-			}
+
 		}
 
 		if d > 0 && matrices != nil && *matrices {
@@ -638,7 +713,7 @@ func main() {
 	if (threeway != nil) && (*threeway) || (deleteval != nil) && (*deleteval) {
 
 		if hitscnt != nil && *hitscnt > 0 {
-			var maxv int
+			var maxv uint64
 			//var maxmapping string
 
 			for _, v := range threeways {
@@ -647,7 +722,7 @@ func main() {
 					//maxmapping = k
 				}
 			}
-			if maxv < *hitscnt {
+			if maxv < uint64(*hitscnt) {
 				//println("Decrease -hits to:", maxv, "adding best match to language:", maxmapping)
 				fmt.Println("Decrease hits to:", maxv)
 			}
