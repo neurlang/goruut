@@ -28,15 +28,11 @@ for ((i = $init_hits; i > 0; i--)); do
         i=$init_hits
     else
     if [[ "$i" -gt 1000 ]]; then
-        i=$((i-100))
+        i=$((i-99))
     fi
     if [[ "$i" -gt 100 ]]; then
-        i=$((i-10))
+        i=$((i-9))
     fi
-    if [[ "$i" -gt 10 ]]; then
-        i=$((i-1))
-    fi
-
     fi
 
 
