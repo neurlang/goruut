@@ -163,7 +163,8 @@ func main() {
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	randomize := flag.Int("randomize", 0, "randomize dst word split")
-	randadd := flag.Int("randadd", 1, "randomize adding by making it less frequent using this integer")
+	randinc := flag.Int("randinc", 0, "randomize increasing by making it less frequent using this integer")
+	randsubs := flag.Int("randsubs", 0, "randomize word subset using this integer")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
 	spaceBackfit := flag.Bool("spacebackfit", false, "backfit space")
 	same := flag.Bool("same", false, "show same matrices")
@@ -413,8 +414,13 @@ func main() {
 			if len(word) == 0 {
 				break
 			}
-			o = append(o, string([]rune(word)[0]))
-			word = string([]rune(word)[1:])
+			if _, ok := multiprefix[string([]rune(word)[0])]; ok {
+				o = append(o, string([]rune(word)[0:2]))
+				word = string([]rune(word)[2:])
+			} else {
+				o = append(o, string([]rune(word)[0]))
+				word = string([]rune(word)[1:])
+			}
 		consume_pref:
 			for len(word) > 0 {
 				for len(word) > 0 && stringStartsWithCombiner(word) {
@@ -438,6 +444,7 @@ func main() {
 		if o[0] == "" {
 			o = o[1:]
 		}
+		//println(spacesep(o))
 		return
 	}
 
@@ -498,6 +505,12 @@ func main() {
 	var threeways = make(map[string]uint64)
 
 	loop(*srcFile, 200, func(word1, word2 string) {
+
+		if randsubs != nil && *randsubs != 0 {
+			if rand.Intn(1+*randsubs) != 0 {
+				return
+			}
+		}
 
 		if normalize != nil && *normalize != "" {
 			word1 = repo.NormalizeTo(word1, *normalize)
@@ -667,7 +680,7 @@ func main() {
 				if _, ok := dict[threeway_from+"\x00"+threeway_to]; ok {
 					return
 				}
-				//println(threeway_from, threeway_to, next_to)
+				//
 				mut.Lock()
 				for _, w := range lang.Map[threeway_from] {
 					if w == threeway_to {
@@ -675,12 +688,11 @@ func main() {
 						return
 					}
 				}
-				threeways[threeway_from+"\x00"+threeway_to]++
 				if hitscnt != nil && uint64(*hitscnt) == threeways[threeway_from+"\x00"+threeway_to] {
-					if randadd == nil || rand.Intn(*randadd) == 0 {
-						lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
-					} else {
-						delete(threeways, threeway_from+"\x00"+threeway_to)
+					lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
+				} else if hitscnt != nil && uint64(*hitscnt) > threeways[threeway_from+"\x00"+threeway_to] {
+					if randinc == nil || *randinc == 0 || rand.Intn(*randinc) == 0 {
+						threeways[threeway_from+"\x00"+threeway_to]++
 					}
 				}
 				mut.Unlock()
