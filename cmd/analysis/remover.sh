@@ -30,6 +30,11 @@ output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -n
 
 # Extract the edit distance from the output
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
+unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+
+if [[ "$unknown_words" -gt 0 ]]; then
+    exit 1
+fi
 
 echo "Iteration 0: Initial edit distance is $prev_edit_distance"
 
@@ -37,7 +42,7 @@ j=0
 
 # Main gradient descent loop
 for i in {1..10000000}; do
-    if (( j >= 10 * ($1 + 3) )); then
+    if (( j >= 10 * ($1 + 1) )); then
 	echo "No improvement possible. Switching to the other mode."
 	break
     fi
@@ -49,7 +54,10 @@ for i in {1..10000000}; do
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
-    
+    unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+    if [[ "$unknown_words" -gt 0 ]]; then
+        exit 1
+    fi
     # Check if the edit distance has decreased
     if [ "$edit_distance" -lt "$prev_edit_distance" ]; then
         # Keep the mutation
@@ -71,7 +79,10 @@ for i in {1..10000000}; do
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
-    
+    unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+    if [[ "$unknown_words" -gt 0 ]]; then
+        exit 1
+    fi
     # Check if the edit distance has decreased
     if [ "$edit_distance" -lt "$prev_edit_distance" ]; then
         # Keep the mutation

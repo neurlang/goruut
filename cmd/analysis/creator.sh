@@ -19,6 +19,12 @@ output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -n
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
 # Extract the hits from the output
 init_hits=$(echo "$output" | grep -oP 'Decrease hits to: \K\d+')
+unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+
+if [[ "$unknown_words" -gt 0 ]]; then
+    exit 1
+fi
+
 
 echo "Initial edit distance is $prev_edit_distance and initial hits is $init_hits"
 cp "$original_json" "$mutated_json"
@@ -27,10 +33,13 @@ for ((i = $init_hits; i > 0; i--)); do
     if [[ "$init_hits" -gt 0 ]]; then
         i=$init_hits
     else
-    if [[ "$i" -gt 1000 ]]; then
+    if [[ "$i" -gt 2000 ]]; then
+        i=$((i-999))
+    fi
+    if [[ "$i" -gt 200 ]]; then
         i=$((i-99))
     fi
-    if [[ "$i" -gt 100 ]]; then
+    if [[ "$i" -gt 20 ]]; then
         i=$((i-9))
     fi
     fi
@@ -47,13 +56,20 @@ for ((i = $init_hits; i > 0; i--)); do
     output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile"  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits $i --save)
     # Extract the hits from the output
     init_hits=$(echo "$output" | grep -oP 'Decrease hits to: \K\d+')
-
+    unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+    if [[ "$unknown_words" -gt 0 ]]; then
+        exit 1
+    fi
+    
     # First analysis
     output=$($analysis_script --lang "$mutated_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9)
     
     # Extract the edit distance from the output
     edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
-
+    unknown_words=$(echo "$output" | grep -oP 'Unknown words: \K\d+')
+    if [[ "$unknown_words" -gt 0 ]]; then
+        exit 1
+    fi
     # Check if the edit distance has decreased
     if [ "$edit_distance" -lt "$prev_edit_distance" ]; then
         # Keep the mutation and update the original JSON

@@ -8,9 +8,10 @@ import (
 	"bytes"
 	"fmt"
 	"math/rand"
+	randv2 "math/rand/v2"
 	"os"
 	"strings"
-	"time"
+	//"time"
 )
 import (
 	"encoding/json"
@@ -41,9 +42,9 @@ func loop(filename string, group int, do func(string, string)) {
 		line := scanner.Text()
 		columns := strings.Split(line, "\t")
 
-		// Check if we have exactly two columns
-		if len(columns) != 2 {
-			fmt.Println("Line does not have exactly two columns:", line)
+		// Check if we have exactly two or three columns
+		if len(columns) != 2 && len(columns) != 3 {
+			fmt.Println("Line does not have exactly two or three columns:", line)
 			continue
 		}
 
@@ -150,7 +151,7 @@ func stringStartsWithCombiner(s string) bool {
 }
 
 func init() {
-	rand.Seed(time.Now().UTC().UnixNano())
+	//rand.Seed(time.Now().UTC().UnixNano())
 }
 
 func main() {
@@ -163,6 +164,7 @@ func main() {
 	dstFile := flag.String("dstfile", "", "path to output TSV file containing source and target phone spaced words dictionary")
 	hitscnt := flag.Int("hits", 0, "count of hits to add to map")
 	randomize := flag.Int("randomize", 0, "randomize dst word split")
+	target := flag.Int("target", 0, "unknown words target")
 	randinc := flag.Int("randinc", 0, "randomize increasing by making it less frequent using this integer")
 	randsubs := flag.Int("randsubs", 0, "randomize word subset using this integer")
 	loss := flag.Bool("loss", false, "show edit distance sum (loss, error)")
@@ -195,7 +197,7 @@ func main() {
 	lang_orig_src_multi_suffix := copyStrings(lang.SrcMultiSuffix)
 	lang_orig_dst_multi_suffix := copyStrings(lang.DstMultiSuffix)
 
-	var dist uint64
+	var dist, unknown uint64
 
 	var dict = make(map[string]struct{})
 	var droplast = make(map[string]struct{})
@@ -205,12 +207,12 @@ func main() {
 	if lang != nil {
 		var deletedval string
 		if deleteval != nil && *deleteval {
-			var onlyone = rand.Intn(2) == 0
-			var n = rand.Intn(len(lang.Map)+1) / 2
+			var onlyone = randv2.IntN(2) == 0
+			var n = randv2.IntN(len(lang.Map)+1) / 2
 			for k, v := range lang.Map {
 				n--
 				if n < 0 {
-					n = rand.Intn(len(v)+1) / 2
+					n = randv2.IntN(len(v)+1) / 2
 					for i, w := range v {
 						n--
 						if n < 0 {
@@ -414,7 +416,7 @@ func main() {
 			if len(word) == 0 {
 				break
 			}
-			if _, ok := multiprefix[string([]rune(word)[0])]; ok {
+			if _, ok := multiprefix[string([]rune(word)[0])]; ok && len([]rune(word)) >= 2 {
 				o = append(o, string([]rune(word)[0:2]))
 				word = string([]rune(word)[2:])
 			} else {
@@ -549,7 +551,7 @@ func main() {
 	outer:
 		for i := 0; i < len(srcword); i++ {
 			src := srcword[i]
-			var j = rand.Intn(1 + longDst)
+			var j = randv2.IntN(1 + longDst)
 			if j > len(word2pref) {
 				continue
 			}
@@ -691,7 +693,7 @@ func main() {
 				if hitscnt != nil && uint64(*hitscnt) == threeways[threeway_from+"\x00"+threeway_to] {
 					lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
 				} else if hitscnt != nil && uint64(*hitscnt) > threeways[threeway_from+"\x00"+threeway_to] {
-					if randinc == nil || *randinc == 0 || rand.Intn(*randinc) == 0 {
+					if randinc == nil || *randinc == 0 || randv2.IntN(*randinc) == 0 {
 						threeways[threeway_from+"\x00"+threeway_to]++
 					}
 				}
@@ -861,6 +863,12 @@ func main() {
 			}
 		} else if wrong != nil && (*wrong) {
 			fmt.Println(word1, word2)
+
+		}
+		if d > 0 {
+			mut.Lock()
+			unknown++
+			mut.Unlock()
 		}
 
 		mut.Lock()
@@ -918,6 +926,16 @@ func main() {
 		}
 	}
 	if loss != nil && *loss {
-		fmt.Println("Edit distance is:", dist)
+		if randsubs != nil && *randsubs != 0 {
+			fmt.Println("Edit distance is:", dist * (1+uint64(*randsubs)))
+		} else {
+			fmt.Println("Edit distance is:", dist)
+		}
+	}
+	if target != nil && *target > 0 {
+		unknown *= (1+uint64(*randsubs))
+		if unknown < uint64(*target) {
+			fmt.Println("Unknown words:", unknown)
+		}
 	}
 }
