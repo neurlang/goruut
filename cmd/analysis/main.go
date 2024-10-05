@@ -17,6 +17,10 @@ import (
 	"flag"
 	"io/ioutil"
 )
+import (
+	"unicode"
+	"unicode/utf8"
+)
 import "sync"
 
 func loop(filename string, group int, do func(string, string)) {
@@ -96,6 +100,7 @@ type Language struct {
 	DstMulti       []string            `json:"DstMulti"`
 	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
+	DstMultiPrefix []string            `json:"DstMultiPrefix"`
 	DropLast       []string            `json:"DropLast"`
 
 	SplitBefore []string `json:"SplitBefore"`
@@ -127,6 +132,21 @@ func copyStrings(src []string) (dst []string) {
 		dst = append(dst, v)
 	}
 	return
+}
+
+// isCombiner checks if a rune is a UTF-8 combining character.
+func isCombiner(r rune) bool {
+	return unicode.Is(unicode.Mn, r) || unicode.Is(unicode.Me, r) || unicode.Is(unicode.Mc, r)
+}
+
+// stringStartsWithCombiner checks if the string starts with a UTF-8 combining character.
+func stringStartsWithCombiner(s string) bool {
+	if s == "" {
+		return false
+	}
+
+	r, _ := utf8.DecodeRuneInString(s)
+	return isCombiner(r)
 }
 
 func init() {
@@ -179,6 +199,8 @@ func main() {
 	var dict = make(map[string]struct{})
 	var droplast = make(map[string]struct{})
 	var drop = make(map[string]struct{})
+	var multiprefix = make(map[string]struct{})
+	var multisuffix = make(map[string]struct{})
 	if lang != nil {
 		var deletedval string
 		if deleteval != nil && *deleteval {
@@ -251,6 +273,12 @@ func main() {
 		for _, v := range lang.DropLast {
 			droplast[v] = struct{}{}
 			dict[v+"\x00"] = struct{}{}
+		}
+		for _, v := range lang.DstMultiPrefix {
+			multiprefix[v] = struct{}{}
+		}
+		for _, v := range lang.DstMultiSuffix {
+			multisuffix[v] = struct{}{}
 		}
 	}
 
@@ -349,6 +377,9 @@ func main() {
 				if j > len(word) {
 					j = len(word)
 				}
+				if _, ok := multiprefix[word[:j]]; ok {
+					continue
+				}
 				if _, ok := dict[srcpre+"\x00"+word[:j]]; ok {
 					o = append(o, word[:j])
 					word = word[j:]
@@ -369,6 +400,9 @@ func main() {
 						if len(multi) != j {
 							continue
 						}
+						if _, ok := multiprefix[multi]; ok {
+							continue
+						}
 						if strings.HasPrefix(string(word[i:]), multi) {
 							o = append(o, multi)
 							i += len([]rune(multi)) - 1
@@ -382,6 +416,9 @@ func main() {
 				for j := longDstMultiS; j > 0; j-- {
 					for _, multi := range lang.DstMultiSuffix {
 						if len(multi) != j {
+							continue
+						}
+						if _, ok := multiprefix[multi]; ok {
 							continue
 						}
 						if len(o) > 0 && strings.HasPrefix(string(word[i:]), multi) {
@@ -526,9 +563,21 @@ func main() {
 				bin_length = len(w2p)
 			}
 			var bins = make([][]string, bin_length, bin_length)
+			var miny = make(map[uint]uint)
+			var maxy = make(map[uint]uint)
 			var dels = make([]bool, bin_length, bin_length)
 			var swaps = make([]*string, bin_length, bin_length)
 			levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
+
+				miny[x] = y
+				if _, ok := maxy[x]; ok {
+					if maxy[x] < y {
+						maxy[x] = y
+					}
+				} else {
+					maxy[x] = y
+				}
+
 				if is_skip {
 
 					return true
@@ -547,13 +596,28 @@ func main() {
 
 				return true
 			})
-			callback := func(threeway_from, threeway_to string) {
+			callback := func(threeway_from, threeway_to, next_to string) {
 
 				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
 					return
 				}
-
-				//println(threeway_from, threeway_to)
+				if _, ok := multiprefix[threeway_to]; ok {
+					if next_to == "" {
+						return
+					}
+					if _, ok := multiprefix[next_to]; ok {
+						return
+					}
+					//println(threeway_from, threeway_to, next_to)
+					threeway_to += next_to
+				}
+				if _, ok := multisuffix[threeway_to]; ok || stringStartsWithCombiner(threeway_to) {
+					return
+				}
+				if _, ok := dict[threeway_from+"\x00"+threeway_to]; ok {
+					return
+				}
+				//println(threeway_from, threeway_to, next_to)
 				mut.Lock()
 				for _, w := range lang.Map[threeway_from] {
 					if w == threeway_to {
@@ -574,23 +638,41 @@ func main() {
 			var resultx, resulty string
 			var longresultx, longresulty string
 			for x := range w1p {
-				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
-					if resultx != "" && resulty != "" {
-						callback(resultx, resulty)
-					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
-						if resulty == longresulty {
-							callback(resultx+longresultx, resulty)
-						} else {
-							println(resultx+longresultx, resulty+longresulty)
-						}
-					} else if longresultx != "" && longresulty != "" {
-						callback(longresultx, longresulty)
-					}
-				}
 				var bin string
 				for xx := range bins[x] {
 					bin += (string(bins[x][xx]))
 				}
+
+				lookahead := bin
+				if len(bin) == 0 {
+					minn := miny[uint(x)]
+					maxx := maxy[uint(x)]
+					if minn > 0 {
+						minn--
+					}
+
+					lookahead = (string(nosep(w2p[minn:maxx])))
+					//println(x+1, minn, maxx, lookahead)
+				} else {
+					//println(x, bin)
+				}
+				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
+					if resultx != "" && resulty != "" {
+						//println(word1, word2, resultx, resulty, lookahead)
+						callback(resultx, resulty, lookahead)
+					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
+						if resulty == longresulty {
+							//println(word1, word2, resultx+longresultx, resulty, lookahead)
+							callback(resultx+longresultx, resulty, lookahead)
+						} else {
+							//println(resultx+longresultx, resulty+longresulty, lookahead)
+						}
+					} else if longresultx != "" && longresulty != "" {
+						//println(word1, word2, longresultx, longresulty, lookahead)
+						callback(longresultx, longresulty, lookahead)
+					}
+				}
+
 				resulty += (bin)
 				longresulty += (bin)
 				if swaps[x] != nil {
@@ -604,15 +686,18 @@ func main() {
 				}
 				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
-						callback(resultx, resulty)
+						//println(word1, word2, resultx, resulty, lookahead)
+						callback(resultx, resulty, lookahead)
 					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 						if resulty == longresulty {
-							callback(resultx+longresultx, resulty)
+							//println(word1, word2, resultx+longresultx, resulty, lookahead)
+							callback(resultx+longresultx, resulty, lookahead)
 						} else {
-							println(resultx+longresultx, resulty+longresulty)
+							//println(resultx+longresultx, resulty+longresulty)
 						}
 					} else if longresultx != "" && longresulty != "" {
-						callback(longresultx, longresulty)
+						//println(word1, word2, longresultx, longresulty, lookahead)
+						callback(longresultx, longresulty, lookahead)
 					}
 					resultx, resulty = "", ""
 					longresultx, longresulty = (string(w1p[x])), (bin)
@@ -625,15 +710,15 @@ func main() {
 					longresulty += (string(bins[x][xx]))
 				}
 				if resultx != "" && resulty != "" {
-					callback(resultx, resulty)
+					callback(resultx, resulty, "")
 				} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 					if resulty == longresulty {
-						callback(resultx+longresultx, resulty)
+						callback(resultx+longresultx, resulty, "")
 					} else {
-						println(resultx+longresultx, resulty+longresulty)
+						//println(resultx+longresultx, resulty+longresulty, "")
 					}
 				} else if longresultx != "" && longresulty != "" {
-					callback(longresultx, longresulty)
+					callback(longresultx, longresulty, "")
 				}
 			}
 
