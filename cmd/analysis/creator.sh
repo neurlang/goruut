@@ -13,7 +13,7 @@ initial_size=$(stat -c%s "$original_json")
 target_size=$((initial_size * (2 + $1) / (1 + $1)))
 
 # Run the analysis script
-output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits 99999)
+output=$($analysis_script --lang "$original_json" --srcfile "$srcfile" -loss  -nospaced -noipadash $3 $4 $5 $6 $7 $8 $9 --threeway --hits '999999999')
 
 # Extract the edit distance from the output
 prev_edit_distance=$(echo "$output" | grep -oP 'Edit distance is: \K\d+')
@@ -26,6 +26,17 @@ cp "$original_json" "$mutated_json"
 for ((i = $init_hits; i > 0; i--)); do
     if [[ "$init_hits" -gt 0 ]]; then
         i=$init_hits
+    else
+    if [[ "$i" -gt 1000 ]]; then
+        i=$((i-100))
+    fi
+    if [[ "$i" -gt 100 ]]; then
+        i=$((i-10))
+    fi
+    if [[ "$i" -gt 10 ]]; then
+        i=$((i-1))
+    fi
+
     fi
 
 
