@@ -17,8 +17,6 @@
 "r":["r"],
 "s":["s"],
 "t":["t"],
-"ts":["ts"],
-"tŝ":["tʃ"],
 "u":["u"],
 "v":["v"],
 "z":["z"],
@@ -27,5 +25,6 @@
 "ĥ":["x"],
 "ĵ":["ʒ"],
 "ŝ":["ʃ"],
-"ŭ":["u","ŭ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DropLast":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
+"ŭ":["u"]}
+,"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DropLast":null,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
