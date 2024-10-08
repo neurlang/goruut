@@ -105,7 +105,7 @@ func (DictGetter) IsNewFormat(magic []byte) bool {
 func GetDict(lang, filename string) ([]byte, error) {
 	switch lang {
 	case "Czech":
-		return czech.Language.ReadFile(filename)
+		return czech.Language.ReadFile(lzw(filename))
 	case "Spanish":
 		return spanish.Language.ReadFile(filename)
 	case "Slovak":
