@@ -123,7 +123,7 @@ func GetDict(lang, filename string) ([]byte, error) {
 	case "Italian":
 		return italian.Language.ReadFile(lzw(filename))
 	case "Luxembourgish":
-		return luxembourgish.Language.ReadFile(filename)
+		return luxembourgish.Language.ReadFile(lzw(filename))
 	case "Dutch":
 		return dutch.Language.ReadFile(filename)
 	case "Portuguese":
