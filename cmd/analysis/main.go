@@ -501,7 +501,7 @@ func main() {
 		if o[0] == "" {
 			o = o[1:]
 		}
-		if 1 * len(o) > len(srcword) * 5 {
+		if 1*len(o) > len(srcword)*5 {
 			//println("WARN: ", nosep(srcword), nosep(o), " Significantly longer: ", nosep(aligno))
 			return nil
 		}
@@ -738,6 +738,12 @@ func main() {
 					//println(threeway_from, threeway_to, next_to)
 					threeway_to += next_to
 				}
+
+				if threeway_to == "_" && padspace != nil && *padspace {
+					// spacer character must be in initial grammar
+					return
+				}
+
 				if _, ok := multisuffix[threeway_to]; ok || stringStartsWithCombiner(threeway_to) {
 					return
 				}
@@ -751,8 +757,15 @@ func main() {
 						mut.Unlock()
 						return
 					}
+
+					if strings.Trim(threeway_to, "_") != strings.Trim(w, "_") &&
+						strings.HasSuffix(strings.Trim(threeway_to, "_"), strings.Trim(w, "_")) {
+						mut.Unlock()
+						return
+					}
 				}
 				if hitscnt != nil && uint64(*hitscnt) == threeways[threeway_from+"\x00"+threeway_to] {
+					//println(threeway_from, threeway_to)
 					lang.Map[threeway_from] = append(lang.Map[threeway_from], threeway_to)
 				} else if hitscnt != nil && uint64(*hitscnt) > threeways[threeway_from+"\x00"+threeway_to] {
 					if randinc == nil || *randinc == 0 || randv2.IntN(*randinc) == 0 {
@@ -762,7 +775,6 @@ func main() {
 				mut.Unlock()
 			}
 			var resultx, resulty string
-			var longresultx, longresulty string
 			for x := range w1p {
 				var bin string
 				for xx := range bins[x] {
@@ -778,9 +790,6 @@ func main() {
 					}
 
 					lookahead = (string(nosep(w2p[minn:maxx])))
-					//println(x+1, minn, maxx, lookahead)
-				} else {
-					//println(x, bin)
 				}
 				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
@@ -789,74 +798,34 @@ func main() {
 					} else if resultx != "" && lookahead != "" {
 						//println(word1, word2, resultx, resulty, lookahead)
 						callback(resultx, resulty+lookahead, "")
-					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
-						if resulty == longresulty {
-							//println(word1, word2, resultx+longresultx, resulty, lookahead)
-							//callback(resultx+longresultx, resulty, lookahead)
-						} else {
-							//println(resultx+longresultx, resulty+longresulty, lookahead)
-						}
-					} else if longresultx != "" && longresulty != "" {
-						//println(word1, word2, longresultx, longresulty, lookahead)
-						callback(longresultx, longresulty, lookahead)
-					} else if longresultx != "" && lookahead != "" {
-						//println(word1, word2, longresultx, longresulty, lookahead)
-						callback(longresultx, longresulty+lookahead, "")
 					}
 				}
 
 				resulty += (bin)
-				longresulty += (bin)
+				//longresulty += (bin)
 				if swaps[x] != nil {
 					resultx += (string(w1p[x]))
 					resulty += (string(*swaps[x]))
-					longresultx += (string(w1p[x]))
-					longresulty += (string(*swaps[x]))
 				} else if dels[x] {
 					resultx += (string(w1p[x]))
-					longresultx += (string(w1p[x]))
 				}
 				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
-						//println(word1, word2, resultx, resulty, lookahead)
 						callback(resultx, resulty, lookahead)
 					} else if resultx != "" && lookahead != "" {
 						//println(word1, word2, resultx, resulty, lookahead)
 						callback(resultx, resulty+lookahead, "")
-					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
-						if resulty == longresulty {
-							//println(word1, word2, resultx+longresultx, resulty, lookahead)
-							//callback(resultx+longresultx, resulty, lookahead)
-						} else {
-							//println(resultx+longresultx, resulty+longresulty)
-						}
-					} else if longresultx != "" && longresulty != "" {
-						//println(word1, word2, longresultx, longresulty, lookahead)
-						callback(longresultx, longresulty, lookahead)
-					} else if longresultx != "" && lookahead != "" {
-						//println(word1, word2, longresultx, longresulty, lookahead)
-						callback(longresultx, longresulty+lookahead, "")
 					}
 					resultx, resulty = "", ""
-					longresultx, longresulty = (string(w1p[x])), (bin)
 				}
 			}
 			for x := len(w1p); x < bin_length; x++ {
 
 				for xx := range bins[x] {
 					resulty += (string(bins[x][xx]))
-					longresulty += (string(bins[x][xx]))
 				}
 				if resultx != "" && resulty != "" {
 					callback(resultx, resulty, "")
-				} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
-					if resulty == longresulty {
-						//callback(resultx+longresultx, resulty, "")
-					} else {
-						//println(resultx+longresultx, resulty+longresulty, "")
-					}
-				} else if longresultx != "" && longresulty != "" {
-					callback(longresultx, longresulty, "")
 				}
 			}
 
@@ -989,13 +958,13 @@ func main() {
 	}
 	if loss != nil && *loss {
 		if randsubs != nil && *randsubs != 0 {
-			fmt.Println("Edit distance is:", dist * (1+uint64(*randsubs)))
+			fmt.Println("Edit distance is:", dist*(1+uint64(*randsubs)))
 		} else {
 			fmt.Println("Edit distance is:", dist)
 		}
 	}
 	if target != nil && *target > 0 {
-		unknown *= (1+uint64(*randsubs))
+		unknown *= (1 + uint64(*randsubs))
 		if unknown < uint64(*target) {
 			fmt.Println("Unknown words:", unknown)
 		}
