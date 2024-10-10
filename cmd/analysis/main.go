@@ -443,8 +443,67 @@ func main() {
 				break
 			}
 		}
+		var aligno []string
+		for len(word) > 0 {
+		consume_suf2:
+			for len(word) > 0 {
+				for len(word) > 0 && stringStartsWithCombiner(word) {
+					o[len(o)-1] += string([]rune(word)[0])
+					word = string([]rune(word)[1:])
+				}
+				for suf := range multisuffix {
+					for strings.HasPrefix(word, suf) {
+						o[len(o)-1] += suf
+						word = word[len(suf):]
+					}
+				}
+				for suf := range multisuffix {
+					if strings.HasPrefix(word, suf) {
+						continue consume_suf2
+					}
+				}
+				break
+			}
+			if aligno == nil {
+				aligno = o
+			}
+			if len(word) == 0 {
+				break
+			}
+			if _, ok := multiprefix[string([]rune(word)[0])]; ok && len([]rune(word)) >= 2 {
+				o = append(o, string([]rune(word)[0:2]))
+				word = string([]rune(word)[2:])
+			} else {
+				o = append(o, string([]rune(word)[0]))
+				word = string([]rune(word)[1:])
+			}
+		consume_pref2:
+			for len(word) > 0 {
+				for len(word) > 0 && stringStartsWithCombiner(word) {
+					o[len(o)-1] += string([]rune(word)[0])
+					word = string([]rune(word)[1:])
+				}
+				for pref := range multiprefix {
+					for strings.HasPrefix(word, pref) {
+						o[len(o)-1] += pref
+						word = word[len(pref):]
+					}
+				}
+				for pref := range multiprefix {
+					if strings.HasPrefix(word, pref) {
+						continue consume_pref2
+					}
+				}
+				break
+			}
+		}
+
 		if o[0] == "" {
 			o = o[1:]
+		}
+		if 1 * len(o) > len(srcword) * 5 {
+			//println("WARN: ", nosep(srcword), nosep(o), " Significantly longer: ", nosep(aligno))
+			return nil
 		}
 		//println(spacesep(o))
 		return
@@ -575,6 +634,9 @@ func main() {
 			}
 		}
 		dstword := dstslice_det(srcword, word2)
+		if dstword == nil {
+			return
+		}
 		if len(dstword) == 0 {
 			dstword = dstslice([]rune(word2))
 		}
@@ -682,7 +744,7 @@ func main() {
 				if _, ok := dict[threeway_from+"\x00"+threeway_to]; ok {
 					return
 				}
-				//
+				//println(threeway_from, threeway_to)
 				mut.Lock()
 				for _, w := range lang.Map[threeway_from] {
 					if w == threeway_to {
@@ -730,7 +792,7 @@ func main() {
 					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 						if resulty == longresulty {
 							//println(word1, word2, resultx+longresultx, resulty, lookahead)
-							callback(resultx+longresultx, resulty, lookahead)
+							//callback(resultx+longresultx, resulty, lookahead)
 						} else {
 							//println(resultx+longresultx, resulty+longresulty, lookahead)
 						}
@@ -764,7 +826,7 @@ func main() {
 					} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 						if resulty == longresulty {
 							//println(word1, word2, resultx+longresultx, resulty, lookahead)
-							callback(resultx+longresultx, resulty, lookahead)
+							//callback(resultx+longresultx, resulty, lookahead)
 						} else {
 							//println(resultx+longresultx, resulty+longresulty)
 						}
@@ -789,7 +851,7 @@ func main() {
 					callback(resultx, resulty, "")
 				} else if len(resultx)+len(longresultx) != 0 && len(resulty)+len(longresulty) != 0 {
 					if resulty == longresulty {
-						callback(resultx+longresultx, resulty, "")
+						//callback(resultx+longresultx, resulty, "")
 					} else {
 						//println(resultx+longresultx, resulty+longresulty, "")
 					}
