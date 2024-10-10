@@ -586,6 +586,9 @@ func main() {
 		if padspace != nil && *padspace {
 			word2 = strings.ReplaceAll(word2, " ", "_")
 			word2 += "_"
+			for strings.Contains(word2, "__") {
+				word2 = strings.ReplaceAll(word2, "__", "_")
+			}
 		}
 
 		if nospaced != nil && *nospaced {
