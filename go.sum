@@ -80,8 +80,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/mattn/go-runewidth v0.0.4/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=
 github.com/maypok86/otter v1.2.1 h1:xyvMW+t0vE1sKt/++GTkznLitEl7D/msqXkAbLwiC1M=
 github.com/maypok86/otter v1.2.1/go.mod h1:mKLfoI7v1HOmQMwFgX4QkRk23mX6ge3RDvjdHOWG4R4=
-github.com/neurlang/classifier v0.0.8 h1:w0Cx236vJA4WqP8XOwTKdZQggDKJffWUl99g70Jf4Ko=
-github.com/neurlang/classifier v0.0.8/go.mod h1:CMZ9M5CHGQnBw8FNs2b22FuXtycsQ446wveC6hQkKeg=
+github.com/neurlang/classifier v0.0.9 h1:+JRvrd8A8Zae+kJQNwqWjIJL0nNp64F2Y2N+Vo++MWU=
+github.com/neurlang/classifier v0.0.9/go.mod h1:j37IOPOqnSYC+53EqcVpHQ8AVaoqZZwSVXW+sXj6Mg4=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
@@ -202,7 +202,7 @@ gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c/go.mod h1:K4uyk7z7BCEPqu6E+C
 gopkg.in/yaml.v3 v3.0.1 h1:fxVm/GzAzEWqLHuvctI91KS9hhNmmWOoWu0XTYJS7CA=
 gorgonia.org/cu v0.9.0-beta/go.mod h1:RPEPIfaxxqUmeRe7T1T8a0NER+KxBI2McoLEXhP1Vd8=
 gorgonia.org/cu v0.9.3/go.mod h1:LgyAYDkN7HWhh8orGnCY2R8pP9PYbO44ivEbLMatkVU=
-gorgonia.org/cu v0.9.5-0.20240520013750-498bd6b70d43/go.mod h1:nR6RAm64n9htu6Orv1NVbsMJXHjnsC3SHPfgcxI08e4=
+gorgonia.org/cu v0.9.6/go.mod h1:nR6RAm64n9htu6Orv1NVbsMJXHjnsC3SHPfgcxI08e4=
 gorgonia.org/dawson v1.1.0/go.mod h1:Px1mcziba8YUBIDsbzGwbKJ11uIblv/zkln4jNrZ9Ws=
 gorgonia.org/dawson v1.2.0/go.mod h1:Px1mcziba8YUBIDsbzGwbKJ11uIblv/zkln4jNrZ9Ws=
 gorgonia.org/gorgonia v0.9.2/go.mod h1:ZtOb9f/wM2OMta1ISGspQ4roGDgz9d9dKOaPNvGR+ec=
