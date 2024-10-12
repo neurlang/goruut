@@ -4,21 +4,10 @@ import "strings"
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPartsOfSpeechSelectorService interface {
-	Select(string, []map[uint64]string) []string
 	SelectCJK(string, []map[uint64][2]string) [2][]string
 }
 
 type PartsOfSpeechSelectorService struct {
-}
-
-func (p *PartsOfSpeechSelectorService) Select(lang string, sentence []map[uint64]string) (ret []string) {
-	for _, words := range sentence {
-		for _, word := range words {
-			ret = append(ret, word)
-			break
-		}
-	}
-	return
 }
 
 func (p *PartsOfSpeechSelectorService) SelectCJK(lang string, sentence []map[uint64][2]string) (ret [2][]string) {

@@ -6,7 +6,6 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWord(string, string) (string, map[uint64]string)
 	PhonemizeWordCJK(string, string) (string, map[uint64][2]string)
 	CleanWord(lang, word string) string
 }
@@ -16,15 +15,6 @@ type PhonemizeWordService struct {
 	ai   *repo.IHashtronPhonemizerRepository
 	pre  *repo.IPrePhonWordStepsRepository
 	cach *repo.IWordCachingRepository
-}
-
-func (p *PhonemizeWordService) PhonemizeWord(lang, word string) (wrd string, ret map[uint64]string) {
-	wrd, r := p.PhonemizeWordCJK(lang, word)
-	ret = make(map[uint64]string)
-	for k, v := range r {
-		ret[k] = v[0]
-	}
-	return
 }
 
 func (p *PhonemizeWordService) CleanWord(lang, word string) string {
@@ -48,15 +38,6 @@ func (p *PhonemizeWordService) PhonemizeWordCJK(lang, word string) (wrd string, 
 		ret = (*p.cach).LoadWordCJK(hsh)
 		if ret == nil || len(ret) == 0 {
 			ret = (*p.ai).PhonemizeWordCJK(lang, wrd)
-			/*
-				if ret != nil {
-					for k, ipa := range ret {
-						if !(*p.ai).CheckWord(lang, wrd, ipa[0]) {
-							delete(ret, k)
-						}
-					}
-				}
-			*/
 			(*p.cach).StoreWordCJK(ret, hsh)
 		}
 	}

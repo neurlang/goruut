@@ -11,7 +11,6 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IDictPhonemizerRepository interface {
-	PhonemizeWord(lang, word string) (ret map[uint64]string)
 	PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string)
 }
 type DictPhonemizerRepository struct {
@@ -31,7 +30,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 		return
 	}
 
-	var files = []string{"clean.tsv", "missing.tsv"}
+	var files = []string{"missing.tsv"}
 
 	for _, file := range files {
 		clean := log.Error1((*r.getter).GetDict(lang, file))
@@ -68,23 +67,16 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 	}
 }
 
-func (r *DictPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
-	r.LoadLanguage(lang)
-
-	ret = (*r.lang_words)[lang][word]
-
-	if len(ret) == 0 {
-		return nil
-	}
-
-	return
-}
 
 func (r *DictPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string) {
-	found := r.PhonemizeWord(lang, word)
-	if found == nil {
+	r.LoadLanguage(lang)
+
+	found := (*r.lang_words)[lang][word]
+
+	if len(found) == 0 {
 		return nil
 	}
+
 	ret = make(map[uint64][2]string)
 	for k, v := range found {
 		ret[k] = [2]string{v, word}

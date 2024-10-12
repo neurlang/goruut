@@ -12,8 +12,6 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IWordCachingRepository interface {
 	HashWord(lang, word string) uint64
-	StoreWord(value map[uint64]string, hash uint64)
-	LoadWord(hash uint64) (word map[uint64]string)
 	StoreWordCJK(value map[uint64][2]string, hash uint64)
 	LoadWordCJK(hash uint64) (word map[uint64][2]string)
 }
@@ -42,13 +40,7 @@ func (r WordCachingRepository) LoadWordCJK(hash uint64) (word map[uint64][2]stri
 	}
 	return word
 }
-func (r WordCachingRepository) LoadWord(hash uint64) (word map[uint64]string) {
-	word = make(map[uint64]string)
-	for k, v := range r.LoadWordCJK(hash) {
-		word[k] = v[0]
-	}
-	return
-}
+
 func (r WordCachingRepository) StoreWordCJK(value map[uint64][2]string, hash uint64) {
 
 	var buf, data []byte
@@ -72,13 +64,7 @@ func (r WordCachingRepository) StoreWordCJK(value map[uint64][2]string, hash uin
 
 	r.cache.Set(hash, val)
 }
-func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
-	word := make(map[uint64][2]string)
-	for k, v := range value {
-		word[k] = [2]string{v, ""}
-	}
-	r.StoreWordCJK(word, hash)
-}
+
 
 func (r WordCachingRepository) HashWord(lang, word string) uint64 {
 

@@ -18,7 +18,6 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
-	PhonemizeWord(lang, word string) (ret map[uint64]string)
 	PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string)
 	CleanWord(lang, word string) string
 	CheckWord(lang, word, ipa string) bool
@@ -413,13 +412,6 @@ outer:
 		return false
 	}
 	return true
-}
-func (r *HashtronPhonemizerRepository) PhonemizeWord(lang, word string) (ret map[uint64]string) {
-	ret = make(map[uint64]string)
-	for k, v := range r.PhonemizeWordCJK(lang, word) {
-		ret[k] = v[0]
-	}
-	return
 }
 
 func (r *HashtronPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string) {
