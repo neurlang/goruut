@@ -36,6 +36,7 @@ jobs:
           - windows
           - darwin
           - freebsd
+          - android
         arch:
           - amd64
           - '386'
@@ -53,6 +54,14 @@ jobs:
             os: windows
           - arch: riscv64
             os: freebsd
+          - arch: amd64
+            os: android
+          - arch: '386'
+            os: android
+          - arch: arm
+            os: android
+          - arch: riscv64
+            os: android
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.0.0
     with:
       go-version: '1.23'
