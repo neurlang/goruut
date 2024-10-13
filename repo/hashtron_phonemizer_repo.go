@@ -251,7 +251,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		r.mut.Unlock()
 	}
 
-	var files = []string{"weights0.json.gz"}
+	var files = []string{"weights1.json.lzw"}
 
 	for _, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))

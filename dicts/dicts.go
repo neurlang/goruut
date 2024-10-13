@@ -79,13 +79,6 @@ func (DictGetter) GetDict(lang, filename string) ([]byte, error) {
 	return GetDict(lang, filename)
 }
 
-func lzw(model string) string {
-	if model == "weights0.json.gz" {
-		return "weights1.json.lzw"
-	}
-	return model
-}
-
 func (DictGetter) IsOldFormat(magic []byte) bool {
 	if len(magic) < 2 {
 		return false
@@ -105,143 +98,143 @@ func (DictGetter) IsNewFormat(magic []byte) bool {
 func GetDict(lang, filename string) ([]byte, error) {
 	switch lang {
 	case "Czech":
-		return czech.Language.ReadFile(lzw(filename))
+		return czech.Language.ReadFile(filename)
 	case "Spanish":
-		return spanish.Language.ReadFile(lzw(filename))
+		return spanish.Language.ReadFile(filename)
 	case "Slovak":
-		return slovak.Language.ReadFile(lzw(filename))
+		return slovak.Language.ReadFile(filename)
 	case "Arabic":
-		return arabic.Language.ReadFile(lzw(filename))
+		return arabic.Language.ReadFile(filename)
 	case "Farsi":
-		return farsi.Language.ReadFile(lzw(filename))
+		return farsi.Language.ReadFile(filename)
 	case "English":
-		return english.Language.ReadFile(lzw(filename))
+		return english.Language.ReadFile(filename)
 	case "German":
-		return german.Language.ReadFile(lzw(filename))
+		return german.Language.ReadFile(filename)
 	case "French":
-		return french.Language.ReadFile(lzw(filename))
+		return french.Language.ReadFile(filename)
 	case "Italian":
-		return italian.Language.ReadFile(lzw(filename))
+		return italian.Language.ReadFile(filename)
 	case "Luxembourgish":
-		return luxembourgish.Language.ReadFile(lzw(filename))
+		return luxembourgish.Language.ReadFile(filename)
 	case "Dutch":
-		return dutch.Language.ReadFile(lzw(filename))
+		return dutch.Language.ReadFile(filename)
 	case "Portuguese":
-		return portuguese.Language.ReadFile(lzw(filename))
+		return portuguese.Language.ReadFile(filename)
 	case "Russian":
-		return russian.Language.ReadFile(lzw(filename))
+		return russian.Language.ReadFile(filename)
 	case "Swedish":
-		return swedish.Language.ReadFile(lzw(filename))
+		return swedish.Language.ReadFile(filename)
 	case "Romanian":
-		return romanian.Language.ReadFile(lzw(filename))
+		return romanian.Language.ReadFile(filename)
 	case "Finnish":
-		return finnish.Language.ReadFile(lzw(filename))
+		return finnish.Language.ReadFile(filename)
 	case "Isan":
-		return isan.Language.ReadFile(lzw(filename))
+		return isan.Language.ReadFile(filename)
 	case "Swahili":
-		return swahili.Language.ReadFile(lzw(filename))
+		return swahili.Language.ReadFile(filename)
 	case "Esperanto":
-		return esperanto.Language.ReadFile(lzw(filename))
+		return esperanto.Language.ReadFile(filename)
 	case "Icelandic":
-		return icelandic.Language.ReadFile(lzw(filename))
+		return icelandic.Language.ReadFile(filename)
 	case "Norwegian":
-		return norwegian.Language.ReadFile(lzw(filename))
+		return norwegian.Language.ReadFile(filename)
 	case "Jamaican":
-		return jamaican.Language.ReadFile(lzw(filename))
+		return jamaican.Language.ReadFile(filename)
 	case "Japanese":
-		return japanese.Language.ReadFile(lzw(filename))
+		return japanese.Language.ReadFile(filename)
 	case "Hindi":
-		return hindi.Language.ReadFile(lzw(filename))
+		return hindi.Language.ReadFile(filename)
 	case "Bengali":
-		return bengali.Language.ReadFile(lzw(filename))
+		return bengali.Language.ReadFile(filename)
 	case "BengaliDhaka":
-		return dhaka.Language.ReadFile(lzw(filename))
+		return dhaka.Language.ReadFile(filename)
 	case "BengaliRahr":
-		return rahr.Language.ReadFile(lzw(filename))
+		return rahr.Language.ReadFile(filename)
 	case "Punjabi":
-		return punjabi.Language.ReadFile(lzw(filename))
+		return punjabi.Language.ReadFile(filename)
 	case "Telugu":
-		return telugu.Language.ReadFile(lzw(filename))
+		return telugu.Language.ReadFile(filename)
 	case "Marathi":
-		return marathi.Language.ReadFile(lzw(filename))
+		return marathi.Language.ReadFile(filename)
 	case "ChineseMandarin":
-		return mandarin.Language.ReadFile(lzw(filename))
+		return mandarin.Language.ReadFile(filename)
 	case "Tamil":
-		return tamil.Language.ReadFile(lzw(filename))
+		return tamil.Language.ReadFile(filename)
 	case "Gujarati":
-		return gujarati.Language.ReadFile(lzw(filename))
+		return gujarati.Language.ReadFile(filename)
 	case "Urdu":
-		return urdu.Language.ReadFile(lzw(filename))
+		return urdu.Language.ReadFile(filename)
 	case "Turkish":
-		return turkish.Language.ReadFile(lzw(filename))
+		return turkish.Language.ReadFile(filename)
 	case "VietnameseSouthern":
-		return southern.Language.ReadFile(lzw(filename))
+		return southern.Language.ReadFile(filename)
 	case "VietnameseCentral":
-		return central.Language.ReadFile(lzw(filename))
+		return central.Language.ReadFile(filename)
 	case "VietnameseNorthern":
-		return northern.Language.ReadFile(lzw(filename))
+		return northern.Language.ReadFile(filename)
 	case "Polish":
-		return polish.Language.ReadFile(lzw(filename))
+		return polish.Language.ReadFile(filename)
 	case "Greek":
-		return greek.Language.ReadFile(lzw(filename))
+		return greek.Language.ReadFile(filename)
 	case "Ukrainian":
-		return ukrainian.Language.ReadFile(lzw(filename))
+		return ukrainian.Language.ReadFile(filename)
 	case "Hungarian":
-		return hungarian.Language.ReadFile(lzw(filename))
+		return hungarian.Language.ReadFile(filename)
 	case "MalayLatin":
-		return latin.Language.ReadFile(lzw(filename))
+		return latin.Language.ReadFile(filename)
 	case "MalayArab":
-		return arab.Language.ReadFile(lzw(filename))
+		return arab.Language.ReadFile(filename)
 	case "Korean":
-		return korean.Language.ReadFile(lzw(filename))
+		return korean.Language.ReadFile(filename)
 	case "Kazakh":
-		return kazakh.Language.ReadFile(lzw(filename))
+		return kazakh.Language.ReadFile(filename)
 	case "Afrikaans":
-		return afrikaans.Language.ReadFile(lzw(filename))
+		return afrikaans.Language.ReadFile(filename)
 	case "Azerbaijani":
-		return azerbaijani.Language.ReadFile(lzw(filename))
+		return azerbaijani.Language.ReadFile(filename)
 	case "Cebuano":
-		return cebuano.Language.ReadFile(lzw(filename))
+		return cebuano.Language.ReadFile(filename)
 	case "Hausa":
-		return hausa.Language.ReadFile(lzw(filename))
+		return hausa.Language.ReadFile(filename)
 	case "Indonesian":
-		return indonesian.Language.ReadFile(lzw(filename))
+		return indonesian.Language.ReadFile(filename)
 	case "Danish":
-		return danish.Language.ReadFile(lzw(filename))
+		return danish.Language.ReadFile(filename)
 	case "Malayalam":
-		return malayalam.Language.ReadFile(lzw(filename))
+		return malayalam.Language.ReadFile(filename)
 	case "Javanese":
-		return javanese.Language.ReadFile(lzw(filename))
+		return javanese.Language.ReadFile(filename)
 	case "Macedonian":
-		return macedonian.Language.ReadFile(lzw(filename))
+		return macedonian.Language.ReadFile(filename)
 	case "Hebrew":
-		return hebrew.Language.ReadFile(lzw(filename))
+		return hebrew.Language.ReadFile(filename)
 	case "Amharic":
-		return amharic.Language.ReadFile(lzw(filename))
+		return amharic.Language.ReadFile(filename)
 	case "Belarusian":
-		return belarusian.Language.ReadFile(lzw(filename))
+		return belarusian.Language.ReadFile(filename)
 	case "Chechen":
-		return chechen.Language.ReadFile(lzw(filename))
+		return chechen.Language.ReadFile(filename)
 	case "Dzongkha":
-		return dzongkha.Language.ReadFile(lzw(filename))
+		return dzongkha.Language.ReadFile(filename)
 	case "Burmese":
-		return burmese.Language.ReadFile(lzw(filename))
+		return burmese.Language.ReadFile(filename)
 	case "Maltese":
-		return maltese.Language.ReadFile(lzw(filename))
+		return maltese.Language.ReadFile(filename)
 	case "Mongolian":
-		return mongolian.Language.ReadFile(lzw(filename))
+		return mongolian.Language.ReadFile(filename)
 	case "Nepali":
-		return nepali.Language.ReadFile(lzw(filename))
+		return nepali.Language.ReadFile(filename)
 	case "Pashto":
-		return pashto.Language.ReadFile(lzw(filename))
+		return pashto.Language.ReadFile(filename)
 	case "Tibetan":
-		return tibetan.Language.ReadFile(lzw(filename))
+		return tibetan.Language.ReadFile(filename)
 	case "Uyghur":
-		return uyghur.Language.ReadFile(lzw(filename))
+		return uyghur.Language.ReadFile(filename)
 	case "Thai":
-		return thai.Language.ReadFile(lzw(filename))
+		return thai.Language.ReadFile(filename)
 	case "Zulu":
-		return zulu.Language.ReadFile(lzw(filename))
+		return zulu.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
