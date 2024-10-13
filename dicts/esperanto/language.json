@@ -1,4 +1,5 @@
-{"Map":{"a":["a"],
+{"Map":{"":[],
+"a":["a"],
 "b":["b"],
 "c":["ts"],
 "d":["d"],
@@ -25,6 +26,5 @@
 "ĥ":["x"],
 "ĵ":["ʒ"],
 "ŝ":["ʃ"],
-"ŭ":["u"]}
-,"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DropLast":null,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
+"ŭ":["u","ʌ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DstMultiPrefix":null,"DropLast":null,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
