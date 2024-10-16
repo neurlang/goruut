@@ -13,7 +13,7 @@ function delete_line_from_file() {
 	local output_file="$2"
 
 	# Find lines matching the regex and shuffle them to get a random one
-	LINE_TO_DELETE=$(grep -En '^".+],$' "$input_file" | shuf -n 1 | cut -d: -f1)
+	LINE_TO_DELETE=$(grep -En '^"[^D].+],$' "$input_file" | shuf -n 1 | cut -d: -f1)
 
 	cp "$input_file" "$output_file"
 

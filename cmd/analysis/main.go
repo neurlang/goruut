@@ -196,6 +196,7 @@ func main() {
 	lang_orig_dst_multi := copyStrings(lang.DstMulti)
 	lang_orig_src_multi_suffix := copyStrings(lang.SrcMultiSuffix)
 	lang_orig_dst_multi_suffix := copyStrings(lang.DstMultiSuffix)
+	lang_orig_dst_multi_prefix := copyStrings(lang.DstMultiPrefix)
 
 	var dist, unknown uint64
 
@@ -935,6 +936,7 @@ func main() {
 			lang.DstMulti = lang_orig_dst_multi
 			lang.SrcMultiSuffix = lang_orig_src_multi_suffix
 			lang.DstMultiSuffix = lang_orig_dst_multi_suffix
+			lang.DstMultiPrefix = lang_orig_dst_multi_prefix
 
 			data, err := json.Marshal(lang)
 			if err != nil {
