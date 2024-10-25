@@ -6,6 +6,7 @@ import (
 	"github.com/neurlang/goruut/models/responses"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/goruut/repo/services"
+	"strings"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -29,38 +30,35 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
 	}
 
-	var phonemized []map[uint64][2]string
-	var cleaned []string
+	var phonemized []map[uint64]string
 
 	for _, word := range splitted {
-		clean, phon := p.phon.PhonemizeWordCJK(r.Language, word)
-		phonemized = append(phonemized, phon)
-		cleaned = append(cleaned, clean)
-		log.Now().Debugf("Word: %s, Cleaned: %s", word, clean)
+		words := p.phon.PhonemizeWords(r.Language, word)
+		phonemized = append(phonemized, words...)
+		log.Now().Debugf("Word: %s, Words: %v", word, words)
 	}
 
-	parts_of_speech_selected := p.sel.SelectCJK(r.Language, phonemized)
+	parts_of_speech_selected := p.sel.Select(r.Language, phonemized)
+	log.Now().Debugf("Vector: %v", parts_of_speech_selected)
 
-	var ipa_flavored [2][]string
+	var ipa_flavored [][2]string
 	if r.IpaFlavors != nil {
-		for i, word := range parts_of_speech_selected[0] {
+		for _, word := range parts_of_speech_selected {
 			for _, flavor := range r.IpaFlavors {
-				word = p.flavor.Apply(flavor, word)
+				word[1] = p.flavor.Apply(flavor, word[1])
 			}
-			ipa_flavored[0] = append(ipa_flavored[0], word)
-			ipa_flavored[1] = append(ipa_flavored[1], parts_of_speech_selected[1][i])
+			ipa_flavored = append(ipa_flavored, word)
 		}
 	} else {
 		ipa_flavored = parts_of_speech_selected
 	}
 	log.Now().Debugf("Splitted: %d, Phonemized: %d, POS: %d, Flavored: %d",
-		len(splitted), len(phonemized), len(parts_of_speech_selected), len(ipa_flavored[0]))
+		len(splitted), len(phonemized), len(parts_of_speech_selected), len(ipa_flavored))
 
-	for i := range ipa_flavored[0] {
+	for i := range ipa_flavored {
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
-			Phonetic:   ipa_flavored[0][i],
-			Linguistic: ipa_flavored[1][i],
-			CleanWord:  p.phon.CleanWord(r.Language, ipa_flavored[1][i]),
+			Phonetic:  strings.Trim(ipa_flavored[i][1], "_"),
+			CleanWord: ipa_flavored[i][0],
 		})
 		//resp.Whole += ipa_flavored[i]
 	}

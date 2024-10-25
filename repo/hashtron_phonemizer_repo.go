@@ -18,9 +18,9 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
-	PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string)
 	CleanWord(lang, word string) string
 	CheckWord(lang, word, ipa string) bool
+	PhonemizeWords(lang string, word string) []map[uint64]string
 }
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
@@ -414,15 +414,17 @@ outer:
 	return true
 }
 
-func (r *HashtronPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string) {
+func (r *HashtronPhonemizerRepository) PhonemizeWords(lang string, word string) (ret []map[uint64]string) {
 	r.LoadLanguage(lang)
 
 	r.mut.RLock()
 	mapLangIsNil := r.lang.Slice(lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
-		ret = make(map[uint64][2]string)
-		ret[murmur3hash(word+"\x00"+word)] = [2]string{word, word}
+		m := make(map[uint64]string)
+		m[0] = word
+		m[1] = word
+		ret = append(ret, m)
 		return
 	}
 
@@ -523,23 +525,34 @@ outer:
 			break
 		}
 	}
+
 	var src string
 	var dst string
-	for i, v := range dsta {
-		if len(srca) > i {
-			if v != "_" && strings.HasPrefix(v, "_") {
-				src += "_"
-			}
-			src += srca[i]
-			if strings.HasSuffix(v, "_") {
-				src += "_"
-			}
-		}
-		dst += v
-	}
 
-	ret = make(map[uint64][2]string)
-	ret[murmur3hash(word+"\x00"+dst)] = [2]string{dst, src}
+	push := func() {
+		if len(src)+len(dst) > 0 {
+			m := make(map[uint64]string)
+			hsh := murmur3hash(src + "\x00" + dst)
+			if hsh == 0 {
+				hsh++
+			}
+			m[hsh] = dst
+			m[0] = src
+			ret = append(ret, m)
+			src, dst = "", ""
+		}
+	}
+	for i, v := range dsta {
+		if v != "_" && strings.HasPrefix(v, "_") {
+			push()
+		}
+		src = src + srca[i]
+		dst = dst + v
+		if strings.HasSuffix(v, "_") {
+			push()
+		}
+	}
+	push()
 	return
 }
 

@@ -7,7 +7,6 @@ type PhonemizeSentence struct {
 }
 
 type PhonemizeSentenceWord struct {
-	CleanWord  string
-	Linguistic string
-	Phonetic   string
+	CleanWord string
+	Phonetic  string
 }

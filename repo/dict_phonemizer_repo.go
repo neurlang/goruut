@@ -11,7 +11,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IDictPhonemizerRepository interface {
-	PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string)
+	LookupWords(lang string, word string) []map[uint64]string
 }
 type DictPhonemizerRepository struct {
 	getter     *interfaces.DictGetter
@@ -67,8 +67,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 	}
 }
 
-
-func (r *DictPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[uint64][2]string) {
+func (r *DictPhonemizerRepository) LookupWords(lang, word string) (ret []map[uint64]string) {
 	r.LoadLanguage(lang)
 
 	found := (*r.lang_words)[lang][word]
@@ -77,9 +76,11 @@ func (r *DictPhonemizerRepository) PhonemizeWordCJK(lang, word string) (ret map[
 		return nil
 	}
 
-	ret = make(map[uint64][2]string)
 	for k, v := range found {
-		ret[k] = [2]string{v, word}
+		m := make(map[uint64]string)
+		m[0] = word
+		m[k] = v
+		ret = append(ret, m)
 	}
 	return
 }

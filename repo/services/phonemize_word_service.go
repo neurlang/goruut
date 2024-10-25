@@ -6,7 +6,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWordCJK(string, string) (string, map[uint64][2]string)
+	PhonemizeWords(string, string) []map[uint64]string
 	CleanWord(lang, word string) string
 }
 
@@ -17,42 +17,39 @@ type PhonemizeWordService struct {
 	cach *repo.IWordCachingRepository
 }
 
+func (p *PhonemizeWordService) PhonemizeWords(lang, word string) (ret []map[uint64]string) {
+	word = (*p.pre).PrePhonemizeWord(lang, word)
+
+	word = (*p.ai).CleanWord(lang, word)
+	if word == "" {
+		return nil
+	}
+	ret = (*p.repo).LookupWords(lang, word)
+	if ret == nil {
+		hash := (*p.cach).HashWord(lang, word)
+		r := (*p.cach).LoadWord(hash)
+		if r == nil || len(r) == 0 {
+			ret = (*p.ai).PhonemizeWords(lang, word)
+			for _, one := range ret {
+				(*p.cach).StoreWord(one, hash)
+			}
+		} else {
+			ret = append(ret, r)
+		}
+	}
+	return
+
+}
+
 func (p *PhonemizeWordService) CleanWord(lang, word string) string {
 	return (*p.ai).CleanWord(lang, word)
 }
 
-func (p *PhonemizeWordService) PhonemizeWordCJK(lang, word string) (wrd string, ret map[uint64][2]string) {
-
-	word = (*p.pre).PrePhonemizeWord(lang, word)
-
-	wrd = (*p.ai).CleanWord(lang, word)
-	if wrd == "" {
-		ret = make(map[uint64][2]string)
-		ret[0] = [2]string{"", ""}
-		return
-	}
-	hsh := (*p.cach).HashWord(lang, wrd)
-
-	ret = (*p.repo).PhonemizeWordCJK(lang, wrd)
-	if ret == nil {
-		ret = (*p.cach).LoadWordCJK(hsh)
-		if ret == nil || len(ret) == 0 {
-			ret = (*p.ai).PhonemizeWordCJK(lang, wrd)
-			(*p.cach).StoreWordCJK(ret, hsh)
-		}
-	}
-	return
-}
-
 func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
-	repository := MustNeed(di, repo.NewDictPhonemizerRepository)
-	repoiface := (repo.IDictPhonemizerRepository)(&repository)
-	ai_repo := MustNeed(di, repo.NewHashtronPhonemizerRepository)
-	ai_repo_iface := (repo.IHashtronPhonemizerRepository)(&ai_repo)
-	pre_repo := MustNeed(di, repo.NewPrePhonWordStepsRepository)
-	pre_repo_iface := (repo.IPrePhonWordStepsRepository)(&pre_repo)
-	cach_repo := MustNeed(di, repo.NewWordCachingRepository)
-	cach_repo_iface := (repo.IWordCachingRepository)(&cach_repo)
+	repoiface := (repo.IDictPhonemizerRepository)(Ptr(MustNeed(di, repo.NewDictPhonemizerRepository)))
+	ai_repo_iface := (repo.IHashtronPhonemizerRepository)(Ptr(MustNeed(di, repo.NewHashtronPhonemizerRepository)))
+	pre_repo_iface := (repo.IPrePhonWordStepsRepository)(Ptr(MustNeed(di, repo.NewPrePhonWordStepsRepository)))
+	cach_repo_iface := (repo.IWordCachingRepository)(Ptr(MustNeed(di, repo.NewWordCachingRepository)))
 
 	return &PhonemizeWordService{
 		repo: &repoiface,
