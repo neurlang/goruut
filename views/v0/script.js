@@ -9,11 +9,19 @@ function unicodeEscapeNonLatin(text) {
     }).join('');
 }
 
+document.getElementById('copyit').onclick = function() {
+	const text = document.getElementById('output').value;
+	navigator.clipboard.writeText(text);
+}
+
 document.getElementById('phonemizer').onclick = function() {
     // Extract text from the textarea with id "text"
     const text = document.getElementById('textt').value;
-    const lang = document.getElementById('language').value;
-    const targ = document.getElementById('target').value;
+    const langid = document.getElementById('langsearchInput');
+    const targid = document.getElementById('tgtsearchInput');
+    
+    const lang = langid === null ? "" : langid.value;
+    const targ = targid === null ? "" :  targid.value;
 
     var target = [];
     if (targ == "Espeak") {
