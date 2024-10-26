@@ -3,7 +3,6 @@
 	position: relative;
 	display: inline-block;
 	width: 35%;
-	max-width: 30em;
 }
 
 /* Dropdown list */
@@ -20,7 +19,7 @@
 
 /* Show the dropdown when focused */
 .dropdown-content.show {
-	display: block;
+	display: block !important;
 }
 
 /* List items */
