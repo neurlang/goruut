@@ -47,10 +47,10 @@ document.getElementById('phonemizer').onclick = function() {
     })
     .then(response => response.json())
     .then(data => {
-    	document.getElementById('output').innerText = '';
+    	document.getElementById('output').value = '';
     	for (var i in data.Words) {
 	const word = data.Words[i];
-	const lang = document.getElementById('output').innerText += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
+	const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
     	}
         console.log('Success:', data);
     })
