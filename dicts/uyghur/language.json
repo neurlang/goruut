@@ -1,10 +1,9 @@
-{"Map":{"":[],
-"ئ":["ʔ"],
+{"Map":{"ئ":["ʔ"],
 "ا":["ɑ","a"],
 "ب":["b"],
 "ت":["t","t̚"],
 "ج":["dʒ"],
-"خ":["kʰ","x","χ"],
+"خ":["χ","x","kʰ"],
 "د":["d"],
 "ر":["r"],
 "ز":["z"],
@@ -31,6 +30,7 @@
 "ۈ":["y"],
 "ۋ":["w"],
 "ې":["e"],
-"ە":["ɛ","æ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"ە":["ɛ","æ"]}
+,"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DstMultiPrefix":["ˈ","'","ˌ"],
 "DropLast":null,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
