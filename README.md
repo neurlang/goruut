@@ -34,6 +34,7 @@ sudo docker compose up -d --force-recreate --build
 * Cebuano
 * Chechen
 * Chinese Mandarin
+* Catalan
 * Czech
 * Danish
 * Dutch
