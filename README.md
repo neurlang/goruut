@@ -25,6 +25,7 @@ sudo docker compose up -d --force-recreate --build
 * Afrikaans
 * Amharic
 * Arabic
+* Armenian
 * Azerbaijani
 * Belarusian
 * Bengali
