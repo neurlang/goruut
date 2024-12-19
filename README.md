@@ -36,6 +36,7 @@ sudo docker compose up -d --force-recreate --build
 * Chechen
 * Chinese Mandarin
 * Catalan
+* Croatian
 * Czech
 * Danish
 * Dutch
@@ -77,6 +78,7 @@ sudo docker compose up -d --force-recreate --build
 * Punjabi
 * Romanian
 * Russian
+* Serbian
 * Slovak
 * Spanish
 * Swahili
