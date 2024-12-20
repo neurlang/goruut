@@ -31,6 +31,7 @@ sudo docker compose up -d --force-recreate --build
 * Bengali
 * Bengali Dhaka
 * Bengali Rahr
+* Bulgarian
 * Burmese
 * Cebuano
 * Chechen
