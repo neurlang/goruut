@@ -76,6 +76,7 @@ import "github.com/neurlang/goruut/dicts/serbian"
 import "github.com/neurlang/goruut/dicts/bulgarian"
 import "github.com/neurlang/goruut/dicts/chichewa"
 import "github.com/neurlang/goruut/dicts/estonian"
+import "github.com/neurlang/goruut/dicts/georgian"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -256,6 +257,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return chichewa.Language.ReadFile(filename)
 	case "Estonian":
 		return estonian.Language.ReadFile(filename)
+	case "Georgian":
+		return georgian.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
