@@ -33,10 +33,11 @@ sudo docker compose up -d --force-recreate --build
 * Bengali Rahr
 * Bulgarian
 * Burmese
+* Catalan
 * Cebuano
 * Chechen
+* Chichewa
 * Chinese Mandarin
-* Catalan
 * Croatian
 * Czech
 * Danish
@@ -44,9 +45,11 @@ sudo docker compose up -d --force-recreate --build
 * Dzongkha
 * English
 * Esperanto
+* Estonian
 * Farsi
 * Finnish
 * French
+* Georgian
 * German
 * Greek
 * Gujarati
@@ -63,6 +66,8 @@ sudo docker compose up -d --force-recreate --build
 * Javanese
 * Kazakh
 * Korean
+* Latvian
+* Lithuanian
 * Luxembourgish
 * Macedonian
 * Malayalam
@@ -84,6 +89,7 @@ sudo docker compose up -d --force-recreate --build
 * Spanish
 * Swahili
 * Swedish
+* Tagalog
 * Tamil
 * Telugu
 * Thai
@@ -97,8 +103,8 @@ sudo docker compose up -d --force-recreate --build
 * Vietnamese Southern
 * Zulu
 
-The goal is to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages).
-Please [Add a language](https://github.com/neurlang/goruut/blob/master/dicts/README.md) if you have the necessary data.
+The goal to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages) has been met.
+However, please [add a language](https://github.com/neurlang/goruut/blob/master/dicts/README.md) if you have the necessary data.
 
 ## Listening to the generated speech
 
