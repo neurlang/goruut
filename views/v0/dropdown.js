@@ -56,12 +56,12 @@ function initDropdown(inp, lst, items) {
 
 // Sample data for dropdown items
 const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Belarusian", "Bengali", "Bulgarian",
-"Burmese", "Cebuano", "Chechen", "ChineseMandarin", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Dzongkha",
-"English", "Esperanto", "Farsi", "Finnish", "French", "German", "Greek", "Gujarati", "Hausa",
+"Burmese", "Cebuano", "Chechen", "Chichewa", "ChineseMandarin", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Dzongkha",
+"English", "Esperanto", "Estonian", "Farsi", "Finnish", "French", "Georgian", "German", "Greek", "Gujarati", "Hausa",
 "Hebrew", "Hindi", "Hungarian", "Icelandic", "Indonesian", "Italian", "Jamaican", "Japanese",
-"Javanese", "Kazakh", "Korean", "Luxembourgish", "Macedonian", "Malayalam", "MalayLatin",
+"Javanese", "Kazakh", "Korean", "Latvian", "Lithuanian", "Luxembourgish", "Macedonian", "Malayalam", "MalayLatin",
 "Maltese", "Marathi", "Mongolian", "Nepali", "Norwegian", "Pashto", "Polish", "Portuguese",
-"Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tamil", "Telugu",
+"Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu",
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Zulu",
 "Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern"];
 initDropdown("langsearchInput", "langdropdownList", items);
