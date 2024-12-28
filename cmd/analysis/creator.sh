@@ -1,7 +1,16 @@
 #!/bin/bash
 
+# Initialize a reverse flag
+reverse_flag=""
+for arg in "$@"; do
+  if [[ "$arg" == "--reverse" ]]; then
+    reverse_flag="_reverse"
+    break
+  fi
+done
+
 random=$(shuf -i 1-100000 -n 1)
-original_json="../../dicts/$2/language.json"
+original_json="../../dicts/$2/language$reverse_flag.json"
 mutated_json="/tmp/language_mutated.$random.json"
 analysis_script="./analysis"
 srcfile="../../dicts/$2/dirty.tsv"

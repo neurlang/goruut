@@ -1,8 +1,17 @@
 #!/bin/bash
 
+# Initialize a reverse flag
+reverse_flag=""
+for arg in "$@"; do
+  if [[ "$arg" == "--reverse" ]]; then
+    reverse_flag="_reverse"
+    break
+  fi
+done
+
 # Paths to the files
-mutations_file="../../dicts/$1/$2.language.json"
-original_json="../../dicts/$1/language.json"
+mutations_file="../../dicts/$1/$2.language$reverse_flag.json"
+original_json="../../dicts/$1/language$reverse_flag.json"
 mutated_json="/tmp/language_mutated.json"
 analysis_script="./analysis"
 srcfile="../../dicts/$1/dirty.tsv"

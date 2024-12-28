@@ -177,6 +177,7 @@ func main() {
 	nospaced := flag.Bool("nospaced", false, "delete spacing")
 	padspace := flag.Bool("padspace", false, "insert space to the end of target word in case of a spaceless written language")
 	matrices := flag.Bool("matrices", false, "show edit matrices")
+	reverse := flag.Bool("reverse", false, "reverse translation (swap source and target languages)")
 	escapeunicode := flag.Bool("escapeunicode", false, "escape unicode when viewing")
 	normalize := flag.String("normalize", "", "normalize unicode, for instance to NFC")
 	deleteval := flag.Bool("deleteval", false, "delete one value")
@@ -567,6 +568,10 @@ func main() {
 	var threeways = make(map[string]uint64)
 
 	loop(*srcFile, 200, func(word1, word2 string) {
+	
+		if reverse != nil && *reverse {
+			word1, word2 = word2, word1
+		}
 
 		if randsubs != nil && *randsubs != 0 {
 			if rand.Intn(1+*randsubs) != 0 {
