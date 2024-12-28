@@ -27,6 +27,7 @@ sudo docker compose up -d --force-recreate --build
 * Arabic
 * Armenian
 * Azerbaijani
+* Basque
 * Belarusian
 * Bengali
 * Bengali Dhaka
@@ -49,6 +50,7 @@ sudo docker compose up -d --force-recreate --build
 * Farsi
 * Finnish
 * French
+* Galician
 * Georgian
 * German
 * Greek
@@ -65,7 +67,9 @@ sudo docker compose up -d --force-recreate --build
 * Japanese
 * Javanese
 * Kazakh
+* Khmer Central
 * Korean
+* Lao
 * Latvian
 * Lithuanian
 * Luxembourgish
@@ -101,6 +105,7 @@ sudo docker compose up -d --force-recreate --build
 * Vietnamese Central
 * Vietnamese Northern
 * Vietnamese Southern
+* Yoruba
 * Zulu
 
 The goal to support all of [voice2json's languages](https://github.com/synesthesiam/voice2json-profiles#supported-languages) has been met.
