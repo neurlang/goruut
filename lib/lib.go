@@ -1,4 +1,4 @@
-// Package lib implements IPA g2p phonemizer for 64+ languages
+// Package lib implements g2p IPA phonemizer for 85+ human languages
 package lib
 
 import (
