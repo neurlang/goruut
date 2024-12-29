@@ -18,9 +18,9 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
-	CleanWord(lang, word string) string
-	CheckWord(lang, word, ipa string) bool
-	PhonemizeWords(lang string, word string) []map[uint64]string
+	CleanWord(isReverse bool, lang, word string) string
+	CheckWord(isReverse bool, lang, word, ipa string) bool
+	PhonemizeWords(isReverse bool, lang string, word string) []map[uint64]string
 }
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
@@ -111,47 +111,83 @@ func (l *language) letters() {
 	}
 
 }
-func (l *languages) SrcMulti(lang string) map[string]struct{} {
-	return (*l)[lang].mapSrcMulti
+func (l *languages) SrcMulti(isReverse bool, lang string) map[string]struct{} {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].mapSrcMulti
 }
-func (l *languages) DstMulti(lang string) map[string]struct{} {
-	return (*l)[lang].mapDstMulti
+func (l *languages) DstMulti(isReverse bool, lang string) map[string]struct{} {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].mapDstMulti
 }
-func (l *languages) SrcMultiSuffix(lang string) map[string]struct{} {
-	return (*l)[lang].mapSrcMultiSuffix
+func (l *languages) SrcMultiSuffix(isReverse bool, lang string) map[string]struct{} {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].mapSrcMultiSuffix
 }
-func (l *languages) DstMultiSuffix(lang string) map[string]struct{} {
-	return (*l)[lang].mapDstMultiSuffix
+func (l *languages) DstMultiSuffix(isReverse bool, lang string) map[string]struct{} {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].mapDstMultiSuffix
 }
-func (l *languages) Map(lang string) map[string]map[string]struct{} {
-	if (*l)[lang] == nil {
+func (l *languages) Map(isReverse bool, lang string) map[string]map[string]struct{} {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if (*l)[lang+reverse] == nil {
 		return nil
 	}
 	return nil
 }
-func (l *languages) DroppedLast(lang, last string) bool {
-	if (*l)[lang] == nil {
+func (l *languages) DroppedLast(isReverse bool, lang, last string) bool {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if (*l)[lang+reverse] == nil {
 		return false
 	}
-	_, ok := (*l)[lang].mapDropLast[last]
+	_, ok := (*l)[lang+reverse].mapDropLast[last]
 	return ok
 }
-func (l *languages) Slice(lang string) map[string][]string {
-	if (*l)[lang] == nil {
+func (l *languages) Slice(isReverse bool, lang string) map[string][]string {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if (*l)[lang+reverse] == nil {
 		return nil
 	}
-	return (*l)[lang].Mapping
+	return (*l)[lang+reverse].Mapping
 }
-func (l *languages) IsLetter(lang, run string) bool {
-	if (*l)[lang] == nil {
+func (l *languages) IsLetter(isReverse bool, lang, run string) bool {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if (*l)[lang+reverse] == nil {
 		return false
 	}
-	_, ok := (*l)[lang].mapLetters[run]
+	_, ok := (*l)[lang+reverse].mapLetters[run]
 	return ok
 }
 
-func (l *languages) SrcSlice(language string, word []rune) (o []string) {
-	lang := (*l)[language]
+func (l *languages) SrcSlice(isReverse bool, language string, word []rune) (o []string) {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	lang := (*l)[language+reverse]
 outer:
 	for i := 0; i < len(word); i++ {
 		if lang != nil {
@@ -191,7 +227,11 @@ outer:
 	return o
 }
 
-func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
+func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
 
 	r.mut.RLock()
 	nets := r.nets
@@ -205,7 +245,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		r.mut.Unlock()
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
-	if (*nets)[lang] == nil {
+	if (*nets)[lang+reverse] == nil {
 		var net feedforward.FeedforwardNetwork
 		const fanout1 = 3
 		const fanout2 = 12
@@ -217,14 +257,14 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		net.NewCombiner(majpool2d.MustNew(fanout2, 1, fanout1, 1, fanout2, 1, 1))
 		net.NewLayer(1, 0)
 		r.mut.Lock()
-		(*r.nets)[lang] = &net
+		(*r.nets)[lang+reverse] = &net
 		r.mut.Unlock()
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
 
-	var language_files = []string{"language.json"}
+	var language_files = []string{"language" + reverse + ".json"}
 	for _, file := range language_files {
 		log.Now().Debugf("Language %s loading file", file)
 		data := log.Error1((*r.getter).GetDict(lang, file))
@@ -244,14 +284,14 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		log.Now().Debugf("Language %s loaded: %v", lang, langone)
 
 		r.mut.Lock()
-		(*r.lang)[lang] = &langone
+		(*r.lang)[lang+reverse] = &langone
 
 		iface := (interfaces.Phonemizer)(&(*r.lang))
 		r.phoner = &iface
 		r.mut.Unlock()
 	}
 
-	var files = []string{"weights1.json.lzw"}
+	var files = []string{"weights1" + reverse + ".json.lzw"}
 
 	for _, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
@@ -283,7 +323,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 			r.mut.Lock()
 			// Load the weights into the network
 			for i, v := range data {
-				*((*r.nets)[lang].GetHashtron(i)) = get_hashtron(hashtron.New(v, 1))
+				*((*r.nets)[lang+reverse].GetHashtron(i)) = get_hashtron(hashtron.New(v, 1))
 			}
 			r.mut.Unlock()
 			return
@@ -291,7 +331,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(lang string) {
 		} else {
 			bytesReader := bytes.NewReader(compressedData)
 			r.mut.Lock()
-			(*r.nets)[lang].ReadCompressedWeights(bytesReader)
+			(*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
 			r.mut.Unlock()
 			return
 		}
@@ -338,8 +378,8 @@ func addLetters(word string, mapping map[string]struct{}) {
 	}
 }
 
-func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string) {
-	r.LoadLanguage(lang)
+func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word string) (ret string) {
+	r.LoadLanguage(isReverse, lang)
 
 	var reverse []uint32
 	for _, r := range []rune(word) {
@@ -351,7 +391,7 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 	for _, run := range reverse {
 		if isCombining(run) {
 			r.mut.RLock()
-			isLanguageLetter := r.lang.IsLetter(lang, string(rune(run)))
+			isLanguageLetter := r.lang.IsLetter(isReverse, lang, string(rune(run)))
 			r.mut.RUnlock()
 			if !isLanguageLetter {
 				str = string(rune(run)) + str
@@ -366,7 +406,7 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 	}
 	for _, run := range strings {
 		r.mut.RLock()
-		isLanguageLetter := r.lang.IsLetter(lang, run)
+		isLanguageLetter := r.lang.IsLetter(isReverse, lang, run)
 		r.mut.RUnlock()
 
 		if !isLanguageLetter {
@@ -379,17 +419,17 @@ func (r *HashtronPhonemizerRepository) CleanWord(lang, word string) (ret string)
 	}
 	return
 }
-func (r *HashtronPhonemizerRepository) CheckWord(lang, word, ipa string) bool {
-	r.LoadLanguage(lang)
+func (r *HashtronPhonemizerRepository) CheckWord(isReverse bool, lang, word, ipa string) bool {
+	r.LoadLanguage(isReverse, lang)
 
 	r.mut.RLock()
-	mapLangIsNil := r.lang.Slice(lang) == nil
+	mapLangIsNil := r.lang.Slice(isReverse, lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
 		return false
 	}
 	r.mut.RLock()
-	srca := r.lang.SrcSlice(lang, []rune(word))
+	srca := r.lang.SrcSlice(isReverse, lang, []rune(word))
 	r.mut.RUnlock()
 	if len(srca) == 0 {
 		return false
@@ -398,7 +438,7 @@ outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
 		r.mut.RLock()
-		m := r.lang.Slice(lang)[string(srcv)]
+		m := r.lang.Slice(isReverse, lang)[string(srcv)]
 		r.mut.RUnlock()
 		if len(m) == 0 {
 			return false
@@ -414,11 +454,15 @@ outer:
 	return true
 }
 
-func (r *HashtronPhonemizerRepository) PhonemizeWords(lang string, word string) (ret []map[uint64]string) {
-	r.LoadLanguage(lang)
+func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint64]string) {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	r.LoadLanguage(isReverse, lang)
 
 	r.mut.RLock()
-	mapLangIsNil := r.lang.Slice(lang) == nil
+	mapLangIsNil := r.lang.Slice(isReverse, lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
 		m := make(map[uint64]string)
@@ -430,7 +474,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(lang string, word string) 
 
 	var backoffs = 10
 	r.mut.RLock()
-	srca := r.lang.SrcSlice(lang, []rune(word))
+	srca := r.lang.SrcSlice(isReverse, lang, []rune(word))
 	r.mut.RUnlock()
 	dsta := []string{}
 
@@ -440,9 +484,9 @@ outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
 		r.mut.RLock()
-		m := r.lang.Slice(lang)[string(srcv)]
+		m := r.lang.Slice(isReverse, lang)[string(srcv)]
 		if i == len(srca)-1 {
-			if r.lang.DroppedLast(lang, string(srcv)) {
+			if r.lang.DroppedLast(isReverse, lang, string(srcv)) {
 				m = append([]string{""}, m...)
 			}
 		}
@@ -489,7 +533,7 @@ outer:
 			}
 			var input = sample(buf)
 			r.mut.RLock()
-			net := (*r.nets)[lang]
+			net := (*r.nets)[lang+reverse]
 			r.mut.RUnlock()
 			if net == nil {
 				continue

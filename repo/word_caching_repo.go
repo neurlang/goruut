@@ -11,7 +11,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IWordCachingRepository interface {
-	HashWord(lang, word string) uint64
+	HashWord(isReverse bool, lang, word string) uint64
 	LoadWord(hash uint64) map[uint64]string
 	StoreWord(one map[uint64]string, hash uint64)
 }
@@ -74,9 +74,12 @@ func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
 	r.cache.Set(hash, val)
 }
 
-func (r WordCachingRepository) HashWord(lang, word string) uint64 {
+func (r WordCachingRepository) HashWord(isReverse bool, lang, word string) uint64 {
 
 	str := word + "\x00" + lang
+	if isReverse {
+		str += "_reverse"
+	}
 
 	return murmur3.Sum64WithSeed([]byte(str), r.seed)
 }

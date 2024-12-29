@@ -23,11 +23,16 @@ document.getElementById('phonemizer').onclick = function() {
     const lang = langid === null ? "" : langid.value;
     const targ = targid === null ? "" :  targid.value;
 
+    var singleLookup = false;
     var target = [];
     if (targ == "Espeak") {
 	target = ["Espeak", "Espeak_"+lang];
+	singleLookup = true;
     } else if (targ == "Antvaset") {
 	target = ["antvaset.com", "antvaset.com_"+lang];
+	singleLookup = true;
+    } else if (targ == "IPA") {
+        singleLookup = true;
     }
 
     // Define the data to be sent in the POST request
@@ -47,12 +52,47 @@ document.getElementById('phonemizer').onclick = function() {
     })
     .then(response => response.json())
     .then(data => {
-    	document.getElementById('output').value = '';
-    	for (var i in data.Words) {
-	const word = data.Words[i];
-	const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
-    	}
-        console.log('Success:', data);
+    	if (singleLookup) {
+	    	document.getElementById('output').value = '';
+	    	for (var i in data.Words) {
+		const word = data.Words[i];
+		const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
+	    	}
+		console.log('Success:', data);
+		return
+        }
+            partial = "";
+	    for (var i in data.Words) {
+		const word = data.Words[i];
+		partial += " " + word.Phonetic;
+	    }
+	    // Define the data to be sent in the POST request
+	    const data2 = {
+	    	"IsReverse": true,
+		"Language": targ,
+		"IpaFlavors": [],
+		"Sentence": partial
+	    };
+	    fetch('/tts/phonemize/sentence', {
+		method: 'POST',
+		headers: {
+		    'Content-Type': 'application/json'
+		},
+		body: unicodeEscapeNonLatin(JSON.stringify(data2))
+	    })
+	    .then(response => response.json())
+	    .then(data => {
+	    	document.getElementById('output').value = '';
+	    	for (var i in data.Words) {
+		const word = data.Words[i];
+		const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
+	    	}
+		console.log('Success:', data);
+		return
+	    })
+	    .catch((error) => {
+		console.error('Error:', error);
+	    });
     })
     .catch((error) => {
         console.error('Error:', error);

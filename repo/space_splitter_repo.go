@@ -11,7 +11,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type ISpaceSplitterRepository interface {
 	Split(string) []string
-	SplitLang(string, string) []string
+	SplitLang(bool, string, string) []string
 }
 type SpaceSplitterRepository struct {
 	getter *interfaces.DictGetter
@@ -28,12 +28,16 @@ type spacesplitlanguage struct {
 }
 
 func (s *SpaceSplitterRepository) Split(sentence string) []string {
-	return s.SplitLang("", sentence)
+	return s.SplitLang(false, "", sentence)
 }
-func (s *SpaceSplitterRepository) SplitLang(lang, sentence string) []string {
-	s.LoadLanguage(lang)
+func (s *SpaceSplitterRepository) SplitLang(isReverse bool, lang, sentence string) []string {
+	s.LoadLanguage(isReverse, lang)
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
 	s.mut.RLock()
-	language := (*s.lang)[lang]
+	language := (*s.lang)[lang+reverse]
 	var splitAfter, splitBefore []string
 	if language != nil {
 		splitAfter = language.SplitAfter
@@ -51,17 +55,21 @@ func (s *SpaceSplitterRepository) SplitLang(lang, sentence string) []string {
 	return strings.Fields(sentence)
 }
 
-func (p *SpaceSplitterRepository) LoadLanguage(lang string) {
+func (p *SpaceSplitterRepository) LoadLanguage(isReverse bool, lang string) {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
 
 	p.mut.RLock()
-	existing_lang := (*p.lang)[lang]
+	existing_lang := (*p.lang)[lang+reverse]
 	p.mut.RUnlock()
 
 	if existing_lang != nil {
 		return
 	}
 
-	var language_files = []string{"language.json"}
+	var language_files = []string{"language" + reverse + ".json"}
 	for _, file := range language_files {
 		log.Now().Debugf("Language %s loading file", file)
 		data := log.Error1((*p.getter).GetDict(lang, file))
@@ -74,7 +82,7 @@ func (p *SpaceSplitterRepository) LoadLanguage(lang string) {
 			continue
 		}
 		p.mut.Lock()
-		(*p.lang)[lang] = &langone
+		(*p.lang)[lang+reverse] = &langone
 		p.mut.Unlock()
 	}
 }

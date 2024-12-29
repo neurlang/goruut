@@ -4,4 +4,5 @@ type PhonemizeSentence struct {
 	IpaFlavors []string
 	Language   string
 	Sentence   string
+	IsReverse  bool
 }

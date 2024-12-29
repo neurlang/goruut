@@ -11,7 +11,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPrePhonWordStepsRepository interface {
-	PrePhonemizeWord(string, string) string
+	PrePhonemizeWord(isReverse bool, lang string, word string) string
 }
 type PrePhonWordStepsRepository struct {
 	getter *interfaces.DictGetter
@@ -33,38 +33,67 @@ type PrePhonWordStep struct {
 	ToLower   bool   `json:"ToLower"`
 }
 
-func (p *prephonlanguages) Len(lang string) int {
-	if p == nil || (*p)[lang] == nil {
+func (p *prephonlanguages) Len(isReverse bool, lang string) int {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if p == nil || (*p)[lang+reverse] == nil {
 		return 0
 	}
-	return len((*p)[lang].PrePhonWordSteps)
+	return len((*p)[lang+reverse].PrePhonWordSteps)
 }
-func (p *prephonlanguages) IsNormalize(lang string, n int) bool {
-	return len((*p)[lang].PrePhonWordSteps[n].Normalize) > 0
+func (p *prephonlanguages) IsNormalize(isReverse bool, lang string, n int) bool {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return len((*p)[lang+reverse].PrePhonWordSteps[n].Normalize) > 0
 }
-func (p *prephonlanguages) IsTrim(lang string, n int) bool {
-	return len((*p)[lang].PrePhonWordSteps[n].Trim) > 0
+func (p *prephonlanguages) IsTrim(isReverse bool, lang string, n int) bool {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return len((*p)[lang+reverse].PrePhonWordSteps[n].Trim) > 0
 }
-func (p *prephonlanguages) IsToLower(lang string, n int) bool {
-	return (*p)[lang].PrePhonWordSteps[n].ToLower
+func (p *prephonlanguages) IsToLower(isReverse bool, lang string, n int) bool {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*p)[lang+reverse].PrePhonWordSteps[n].ToLower
 }
-func (p *prephonlanguages) GetNormalize(lang string, n int) string {
-	return (*p)[lang].PrePhonWordSteps[n].Normalize
+func (p *prephonlanguages) GetNormalize(isReverse bool, lang string, n int) string {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*p)[lang+reverse].PrePhonWordSteps[n].Normalize
 }
-func (p *prephonlanguages) GetTrim(lang string, n int) string {
-	return (*p)[lang].PrePhonWordSteps[n].Trim
+func (p *prephonlanguages) GetTrim(isReverse bool, lang string, n int) string {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*p)[lang+reverse].PrePhonWordSteps[n].Trim
 }
-func (p *PrePhonWordStepsRepository) LoadLanguage(lang string) {
+func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
+
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
 
 	p.mut.RLock()
-	existing_lang := (*p.lang)[lang]
+	existing_lang := (*p.lang)[lang+reverse]
 	p.mut.RUnlock()
 
 	if existing_lang != nil {
 		return
 	}
 
-	var language_files = []string{"language.json"}
+	var language_files = []string{"language" + reverse + ".json"}
 	for _, file := range language_files {
 		log.Now().Debugf("Language %s loading file", file)
 		data := log.Error1((*p.getter).GetDict(lang, file))
@@ -77,7 +106,7 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(lang string) {
 			continue
 		}
 		p.mut.Lock()
-		(*p.lang)[lang] = &langone
+		(*p.lang)[lang+reverse] = &langone
 
 		iface := (interfaces.PrePhonemizationSteps)(&(*p.lang))
 
@@ -117,8 +146,8 @@ func NormalizeTo(input, form string) string {
 	return string(buf)
 }
 
-func (s *PrePhonWordStepsRepository) PrePhonemizeWord(lang string, word string) string {
-	s.LoadLanguage(lang)
+func (s *PrePhonWordStepsRepository) PrePhonemizeWord(isReverse bool, lang string, word string) string {
+	s.LoadLanguage(isReverse, lang)
 
 	s.mut.RLock()
 	if s.steps == nil {
@@ -128,14 +157,14 @@ func (s *PrePhonWordStepsRepository) PrePhonemizeWord(lang string, word string) 
 	steps := *s.steps
 	s.mut.RUnlock()
 
-	for i := 0; i < steps.Len(lang); i++ {
-		if steps.IsNormalize(lang, i) {
-			word = NormalizeTo(word, steps.GetNormalize(lang, i))
+	for i := 0; i < steps.Len(isReverse, lang); i++ {
+		if steps.IsNormalize(isReverse, lang, i) {
+			word = NormalizeTo(word, steps.GetNormalize(isReverse, lang, i))
 		}
-		if steps.IsTrim(lang, i) {
-			word = strings.Trim(word, steps.GetTrim(lang, i))
+		if steps.IsTrim(isReverse, lang, i) {
+			word = strings.Trim(word, steps.GetTrim(isReverse, lang, i))
 		}
-		if steps.IsToLower(lang, i) {
+		if steps.IsToLower(isReverse, lang, i) {
 			word = strings.ToLower(word)
 		}
 	}

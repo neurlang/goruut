@@ -11,7 +11,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IDictPhonemizerRepository interface {
-	LookupWords(lang string, word string) []map[uint64]string
+	LookupWords(isReverse bool, lang string, word string) []map[uint64]string
 }
 type DictPhonemizerRepository struct {
 	getter     *interfaces.DictGetter
@@ -22,15 +22,19 @@ func murmur3hash(str string) uint64 {
 	return murmur3.Sum64WithSeed([]byte(str), 0)
 }
 
-func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
-	if (*r.lang_words)[lang] == nil {
-		(*r.lang_words)[lang] = make(map[string]map[uint64]string)
+func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	if (*r.lang_words)[lang+reverse] == nil {
+		(*r.lang_words)[lang+reverse] = make(map[string]map[uint64]string)
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
 
-	var files = []string{"missing.tsv"}
+	var files = []string{"missing" + reverse + ".tsv"}
 
 	for _, file := range files {
 		clean := log.Error1((*r.getter).GetDict(lang, file))
@@ -59,18 +63,21 @@ func (r *DictPhonemizerRepository) LoadLanguage(lang string) {
 				log.Now().Debugf("Language %s has wrong number of columns: %d", src, len(v))
 				continue
 			}
-			if (*r.lang_words)[lang][src] == nil {
-				(*r.lang_words)[lang][src] = make(map[uint64]string)
+			if (*r.lang_words)[lang+reverse][src] == nil {
+				(*r.lang_words)[lang+reverse][src] = make(map[uint64]string)
 			}
-			(*r.lang_words)[lang][src][tag] = dst
+			(*r.lang_words)[lang+reverse][src][tag] = dst
 		}
 	}
 }
 
-func (r *DictPhonemizerRepository) LookupWords(lang, word string) (ret []map[uint64]string) {
-	r.LoadLanguage(lang)
-
-	found := (*r.lang_words)[lang][word]
+func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string) (ret []map[uint64]string) {
+	r.LoadLanguage(isReverse, lang)
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	found := (*r.lang_words)[lang+reverse][word]
 
 	if len(found) == 0 {
 		return nil

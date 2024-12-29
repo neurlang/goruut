@@ -6,8 +6,8 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWords(string, string) []map[uint64]string
-	CleanWord(lang, word string) string
+	PhonemizeWords(isReverse bool, lang, word string) []map[uint64]string
+	CleanWord(isReverse bool, lang, word string) string
 }
 
 type PhonemizeWordService struct {
@@ -17,32 +17,39 @@ type PhonemizeWordService struct {
 	cach *repo.IWordCachingRepository
 }
 
-func (p *PhonemizeWordService) PhonemizeWords(lang, word string) (ret []map[uint64]string) {
-	word = (*p.pre).PrePhonemizeWord(lang, word)
+func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string) (ret []map[uint64]string) {
+	word = (*p.pre).PrePhonemizeWord(isReverse, lang, word)
 
-	word = (*p.ai).CleanWord(lang, word)
+	word = (*p.ai).CleanWord(isReverse, lang, word)
 	if word == "" {
 		return nil
 	}
-	ret = (*p.repo).LookupWords(lang, word)
+	ret = (*p.repo).LookupWords(isReverse, lang, word)
 	if ret == nil {
-		hash := (*p.cach).HashWord(lang, word)
+		hash := (*p.cach).HashWord(isReverse, lang, word)
 		r := (*p.cach).LoadWord(hash)
 		if r == nil || len(r) == 0 {
-			ret = (*p.ai).PhonemizeWords(lang, word)
-			for _, one := range ret {
-				(*p.cach).StoreWord(one, hash)
+			ret = (*p.ai).PhonemizeWords(isReverse, lang, word)
+			for i, one := range ret {
+				(*p.cach).StoreWord(one, hash+uint64(i))
 			}
 		} else {
 			ret = append(ret, r)
+			for i := uint64(1); true; i++ {
+				r = (*p.cach).LoadWord(hash + i)
+				if r == nil || len(r) == 0 {
+					break
+				}
+				ret = append(ret, r)
+			}
 		}
 	}
 	return
 
 }
 
-func (p *PhonemizeWordService) CleanWord(lang, word string) string {
-	return (*p.ai).CleanWord(lang, word)
+func (p *PhonemizeWordService) CleanWord(isReverse bool, lang, word string) string {
+	return (*p.ai).CleanWord(isReverse, lang, word)
 }
 
 func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {

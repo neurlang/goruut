@@ -1,10 +1,10 @@
 package interfaces
 
 type PrePhonemizationSteps interface {
-	Len(lang string) int
-	IsNormalize(lang string, n int) bool
-	IsTrim(lang string, n int) bool
-	IsToLower(lang string, n int) bool
-	GetNormalize(lang string, n int) string
-	GetTrim(lang string, n int) string
+	Len(isReverse bool, lang string) int
+	IsNormalize(isReverse bool, lang string, n int) bool
+	IsTrim(isReverse bool, lang string, n int) bool
+	IsToLower(isReverse bool, lang string, n int) bool
+	GetNormalize(isReverse bool, lang string, n int) string
+	GetTrim(isReverse bool, lang string, n int) string
 }

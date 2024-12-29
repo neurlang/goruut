@@ -65,4 +65,4 @@ const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bas
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Yoruba", "Zulu",
 "Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern"];
 initDropdown("langsearchInput", "langdropdownList", items);
-initDropdown("tgtsearchInput", "tgtdropdownList", ["IPA", "Espeak", "Antvaset"]);
+initDropdown("tgtsearchInput", "tgtdropdownList", ["IPA", "Espeak", "Antvaset", "Slovak"]);

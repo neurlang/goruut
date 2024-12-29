@@ -7,15 +7,15 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type ISplitWordsService interface {
-	SplitWords(string, string) []string
+	SplitWords(bool, string, string) []string
 }
 
 type SplitWordsService struct {
 	repo1 *repo.ISpaceSplitterRepository
 }
 
-func (s *SplitWordsService) SplitWords(lang, sentence string) (out []string) {
-	return (*s.repo1).SplitLang(lang, sentence)
+func (s *SplitWordsService) SplitWords(isReverse bool, lang, sentence string) (out []string) {
+	return (*s.repo1).SplitLang(isReverse, lang, sentence)
 }
 
 func NewSplitWordsService(di *DependencyInjection) *SplitWordsService {

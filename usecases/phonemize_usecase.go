@@ -24,7 +24,7 @@ type PhonemizeUsecase struct {
 
 func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp responses.PhonemizeSentence) {
 
-	splitted := p.service.SplitWords(r.Language, r.Sentence)
+	splitted := p.service.SplitWords(r.IsReverse, r.Language, r.Sentence)
 
 	if len(splitted) > p.maxwrds {
 		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
@@ -33,7 +33,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	var phonemized []map[uint64]string
 
 	for _, word := range splitted {
-		words := p.phon.PhonemizeWords(r.Language, word)
+		words := p.phon.PhonemizeWords(r.IsReverse, r.Language, word)
 		phonemized = append(phonemized, words...)
 		log.Now().Debugf("Word: %s, Words: %v", word, words)
 	}
