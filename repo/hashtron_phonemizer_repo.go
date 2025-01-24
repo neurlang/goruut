@@ -352,7 +352,16 @@ func (s *sample) Feature(n int) uint32 {
 	*/
 	return s[a] /*+ s[b]*/ + s[13]
 }
-
+// TODO: move to classifier repo
+func (s *sample) Output() uint16 {
+	return 0
+}
+// TODO: move to classifier repo
+func (s *sample) Parity() uint16 {
+	return 0
+}
+	
+	
 func isCombining(r uint32) bool {
 	return unicode.Is(unicode.Mn, rune(r)) || unicode.Is(unicode.Mc, rune(r))
 }
@@ -539,7 +548,7 @@ outer:
 				continue
 			}
 			r.mut.RLock()
-			var predicted = net.Infer(&input).Feature(0)
+			var predicted = net.Infer2(&input)
 			r.mut.RUnlock()
 			if predicted == 1 {
 				if strings.HasPrefix(option, "_") {
