@@ -99,16 +99,16 @@ func (DictGetter) IsOldFormat(magic []byte) bool {
 	if len(magic) < 2 {
 		return false
 	}
-	// GZIP
-	return magic[0] == 0x1F && magic[1] == 0x8B
+	// LZW
+	return (magic[0] == 0x1F && magic[1] == 0x9D) || (magic[0] == 0x1F && magic[1] == 0xA0)
 }
 
 func (DictGetter) IsNewFormat(magic []byte) bool {
 	if len(magic) < 2 {
 		return false
 	}
-	// LZW
-	return (magic[0] == 0x1F && magic[1] == 0x9D) || (magic[0] == 0x1F && magic[1] == 0xA0)
+	// ZLIB
+	return (magic[0] == 0x78 && (magic[1] == 0x01 || magic[1] == 0x5E || magic[1] == 0x9C || magic[1] == 0xDA))
 }
 
 func GetDict(lang, filename string) ([]byte, error) {
