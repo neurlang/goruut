@@ -245,12 +245,11 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
 	if (*nets)[lang+reverse] == nil {
-	
+
 		if isReverse {
-			const fanout0 = 5
 			const fanout1 = 1
 			const fanout2 = 5
-			const fanout3 = 1
+			const fanout3 = 3
 			const fanout4 = 5
 			//const fanout5 = 1
 			//const fanout6 = 4
@@ -262,18 +261,18 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			//net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout3*fanout4*fanout5*fanout6*fanout8, 1, fanout7, 1, fanout8, 1, 1, 0))
 			//net.NewLayerP(fanout1*fanout2*fanout3*fanout4*fanout5*fanout6, 0, 1<<(fanout6*fanout6*2/3))
 			//net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout3*fanout4*fanout6, 1, fanout5, 1, fanout6, 1, 1, 0))
-			net.NewLayerP(fanout1*fanout2*fanout3*fanout4, 0, 1<<(fanout4*fanout4*2/3))
+			net.NewLayer(fanout1*fanout2*fanout3*fanout4, 0)
 			net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout4, 1, fanout3, 1, fanout4, 1, 1, 0))
-			net.NewLayerP(fanout1*fanout2, 0, 1<<(fanout2*fanout2*2/3))
+			net.NewLayer(fanout1*fanout2, 0)
 			//net.NewCombiner(full.MustNew(fanout2, 1, 1))
 			net.NewCombiner(majpool2d.MustNew2(fanout2, 1, fanout1, 1, fanout2, 1, 1, 0))
-			net.NewLayerP(1, 0, 1<<(fanout0))
+			net.NewLayer(1, 0)
 			r.mut.Lock()
 			(*r.nets)[lang+reverse] = &net
 			r.mut.Unlock()
-		
+
 		} else {
-	
+
 			var net feedforward.FeedforwardNetwork
 			const fanout1 = 3
 			const fanout2 = 12
@@ -287,7 +286,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			r.mut.Lock()
 			(*r.nets)[lang+reverse] = &net
 			r.mut.Unlock()
-		
+
 		}
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
@@ -322,14 +321,14 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 	}
 
 	var files = []string{"weights1" + reverse + ".json.lzw", "weights1" + reverse + ".json.zlib"}
-	
+
 	if isReverse {
 		files[0], files[1] = files[1], files[0]
 	}
 
 	for _, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
-		
+
 		if compressedData == nil {
 			continue
 		}
@@ -364,16 +363,17 @@ func (s *sample) Feature(n int) uint32 {
 	*/
 	return s[a] /*+ s[b]*/ + s[13]
 }
+
 // TODO: move to classifier repo
 func (s *sample) Output() uint16 {
 	return 0
 }
+
 // TODO: move to classifier repo
 func (s *sample) Parity() uint16 {
 	return 0
 }
-	
-	
+
 func isCombining(r uint32) bool {
 	return unicode.Is(unicode.Mn, rune(r)) || unicode.Is(unicode.Mc, rune(r))
 }
@@ -475,6 +475,12 @@ outer:
 	return true
 }
 
+func copystrings(s []string) (r []string) {
+	r = make([]string, len(s))
+	copy(r, s)
+	return
+}
+
 func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint64]string) {
 	var reverse string
 	if isReverse {
@@ -545,11 +551,11 @@ outer:
 			var predicted bool
 			if isReverse {
 				var input = phonemizer.NewSample{
-					SrcA:   srcaR,
-					DstA:   dstaR[0:i],
-					SrcCut: srcaR[0:i],
-					SrcFut: srcaR[i:],
-					Option: srcaR[i],
+					SrcA:   copystrings(srcaR),
+					DstA:   copystrings(dstaR[0:i]),
+					SrcCut: copystrings(srcaR[0:i]),
+					SrcFut: copystrings(srcaR[i:]),
+					Option: option,
 				}
 				r.mut.RLock()
 				predicted = net.Infer2(&input) != 0
