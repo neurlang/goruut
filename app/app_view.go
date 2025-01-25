@@ -50,6 +50,7 @@ func (av *Views) ContentType(path string) string {
 	css := strings.HasSuffix(path, ".css")
 	js := strings.HasSuffix(path, ".js")
 	svg := strings.HasSuffix(path, ".svg")
+	txt := strings.HasSuffix(path, ".txt")
 	if html {
 		contentType = "text/html"
 	}
@@ -61,6 +62,9 @@ func (av *Views) ContentType(path string) string {
 	}
 	if svg {
 		contentType = "image/svg+xml"
+	}
+	if txt {
+		contentType = "text/plain"
 	}
 	return contentType
 }
