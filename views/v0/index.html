@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-<html>
+<html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Convert Afrikaans, Amharic, Arabic, Armenian, Azerbaijani, Basque, Belarusian, Bengali, Bulgarian, Burmese, Cebuano, Chechen, Chichewa, Chinese Mandarin, Catalan, Croatian, Czech, Danish, Dutch, Dzongkha, English, Esperanto, Estonian, Farsi, Finnish, French, Galician, Georgian, German, Greek, Gujarati, Hausa, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Jamaican, Japanese, Javanese, Kazakh, Khmer Central, Korean, Lao, Latvian, Lithuanian, Luxembourgish, Macedonian, Malayalam, Malay Latin, Maltese, Marathi, Mongolian, Nepali, Norwegian, Pashto, Polish, Portuguese, Punjabi, Romanian, Russian, Serbian, Slovak, Spanish, Swahili, Swedish, Tagalog, Tamil, Telugu, Thai, Tibetan, Turkish, Ukrainian, Urdu, Uyghur, Vietnamese Northern, Yoruba, Zulu, Isan, Bengali Dhaka, Bengali Rahr, Malay Arab, Vietnamese Central, Vietnamese Southern to IPA (International Phonetic Alphabet)</title>
+    <title>Transcribe text to phonetic spelling - Free 85 languages to IPA converter - Free International Phonetic Alphabet translator</title>
     <meta name="description" content="Transcribe Afrikaans, Amharic, Arabic, Armenian, Azerbaijani, Basque, Belarusian, Bengali, Bulgarian, Burmese, Cebuano, Chechen, Chichewa, Chinese Mandarin, Catalan, Croatian, Czech, Danish, Dutch, Dzongkha, English, Esperanto, Estonian, Farsi, Finnish, French, Galician, Georgian, German, Greek, Gujarati, Hausa, Hebrew, Hindi, Hungarian, Icelandic, Indonesian, Italian, Jamaican, Japanese, Javanese, Kazakh, Khmer Central, Korean, Lao, Latvian, Lithuanian, Luxembourgish, Macedonian, Malayalam, Malay Latin, Maltese, Marathi, Mongolian, Nepali, Norwegian, Pashto, Polish, Portuguese, Punjabi, Romanian, Russian, Serbian, Slovak, Spanish, Swahili, Swedish, Tagalog, Tamil, Telugu, Thai, Tibetan, Turkish, Ukrainian, Urdu, Uyghur, Vietnamese Northern, Yoruba, Zulu, Isan, Bengali Dhaka, Bengali Rahr, Malay Arab, Vietnamese Central and Vietnamese Southern text to IPA easily. Free online tool for accurate phonetic transcription.">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎯</text></svg>">
     <link rel="stylesheet" href="w3.css"><link rel="stylesheet" href="dropdown.css">
-</head>
-<body><a href="https://github.com/neurlang/goruut"><img style="float:right;position:absolute;top:0px;right:0px;" decoding="async" width="149" height="149" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png?resize=149%2C149" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy" data-recalc-dims="1"></a>
 
-      <header class = "w3-container w3-teal" style="padding-right: 100px">
+</head>
+<body><a href="https://github.com/neurlang/goruut"><img style="float:right;position:absolute;top:0px;right:0px;" decoding="async" src="https://github.blog/wp-content/uploads/2008/12/forkme_right_darkblue_121621.png" class="attachment-full size-full" alt="Fork me on GitHub" loading="lazy" data-recalc-dims="1"></a>
+
+      <header class = "w3-container w3-teal" style="padding-right: 100px; background-color: #005C5C !important">
          <h2>Free 85 languages to IPA converter</h2>
          <p class = "w3-large">Free International Phonetic Alphabet translator</p>
       </header>
@@ -20,29 +21,29 @@
       <div class="w3-container">
       <div class = "w3-row-padding">
          <div class = "w3-col m6 s12 w3-mobile">
-		<div class="w3-right-align"><textarea style="resize: none; width:95%; height: 20em" id="textt"></textarea></div>
+		<div class="w3-right-align"><div style="width:95%; float:right"><label for="textt" style="float:left">Input text:</label><textarea style="resize: none; width: 100%; height: 20em" id="textt"></textarea></div></div>
 		<div class="w3-right-align">
 
-		  <div class="dropdown">
+		  <div class="dropdown" style="width:35%">
 		    <input type="text" id="langsearchInput" class="w3-input w3-border" placeholder="Search language..." value="">
 		    <div id="langdropdownList" class="dropdown-content w3-card">
 		      <!-- Items will be populated here -->
 		    </div>
 		  </div>
 
-		  <div class="dropdown">
+		  <div class="dropdown" style="width:35%">
 		    <input type="text" id="tgtsearchInput" class="w3-input w3-border" placeholder="Target language..." value="IPA">
 		    <div id="tgtdropdownList" class="dropdown-content w3-card">
 		      <!-- Items will be populated here -->
 		    </div>
 		  </div>
 
-		<button class="w3-btn w3-white w3-border w3-border-grey w3-round" id="phonemizer">Phonemize</button>
+		<button style="width:25%;padding-left:2%" class="w3-btn w3-white w3-border w3-border-grey w3-round" id="phonemizer">Phonemize</button>
 		</div>
          </div>
       
          <div class = "w3-col m6 s12 w3-mobile">
-            <div><textarea style="resize: none; width:95%; height: 20em" id="output"></textarea></div>
+            <div><label for="output">Output text:</label><textarea style="resize: none; width:95%; height: 20em" id="output"></textarea></div>
             <button id="copyit" class="w3-btn w3-white w3-border w3-border-grey w3-round">Copy</button>
          </div>
       </div></div>
@@ -53,76 +54,6 @@
 		<li><a href="https://www.0n0e.com/public/phoneme-synthesis/">Online phoneme speech synthesis</a></li>
 		</ul>
 
-
-		<h3>General Searches</h3>
-		<ul>
-		<li><a href="/">Online IPA transcription tool</a></li>
-		<li><a href="/">Transcribe languages to IPA</a></li>
-		<li><a href="/">Convert text to IPA</a></li>
-		<li><a href="/">Phonetic transcription online</a></li>
-		<li><a href="/">Free IPA converter</a></li>
-		</ul>
-
-		<h3>Specific Language Searches</h3>
-		<ul>
-		<li><a href="/">English to IPA transcription</a></li>
-		<li><a href="/">Spanish to IPA converter</a></li>
-		<li><a href="/">German to IPA transcription tool</a></li>
-		<li><a href="/">French to IPA converter tool</a></li>
-		<li><a href="/">Arabic to IPA transcription</a></li>
-		<li><a href="/">Farsi to IPA converter</a></li>
-		<li><a href="/">Czech to IPA transcription</a></li>
-		<li><a href="/">Slovak to IPA transcription tool</a></li>
-		</ul>
-
-		<h3>Academic/Professional Use</h3>
-
-		<ul>
-		<li><a href="/">IPA transcription for linguistics</a></li>
-		<li><a href="/">Phonetic transcription for language learners</a></li>
-		<li><a href="/">Language pronunciation guide using IPA</a></li>
-		<li><a href="/">IPA transcription for speech therapy</a></li>
-		<li><a href="/">Linguistic research IPA transcription tool</a></li>
-		</ul>
-
-		<h3>Specific Needs</h3>
-
-		<ul>
-		<li><a href="/">How to transcribe English to IPA</a></li>
-		<li><a href="/">Best tool to convert Spanish text to IPA</a></li>
-		<li><a href="/">German text to IPA online converter</a></li>
-		<li><a href="/">French word pronunciation converter</a></li>
-		<li><a href="/">Arabic pronunciation in IPA</a></li>
-		<li><a href="/">Convert Farsi to International Phonetic Alphabet</a></li>
-		<li><a href="/">Transcribe Czech to phonetic alphabet</a></li>
-		<li><a href="/">Slovak pronunciation guide IPA</a></li>
-		</ul>
-
-		<h3>Long-tail Keywords</h3>
-
-		<ul>
-		<li><a href="/">Easy tool for English to IPA transcription</a></li>
-		<li><a href="/">Accurate Spanish to IPA conversion online</a></li>
-		<li><a href="/">German language text to IPA converter</a></li>
-		<li><a href="/">Transcribe French language article to IPA</a></li>
-		<li><a href="/">Online Arabic to IPA transcription tool</a></li>
-		<li><a href="/">Free Farsi to IPA converter for linguists</a></li>
-		<li><a href="/">Czech language to IPA transcription service</a></li>
-		<li><a href="/">Slovak text to phonetic transcription online</a></li>
-		</ul>
-
-		<h3>Educational Content</h3>
-
-		<ul>
-		<li><a href="/">Learn to transcribe English using IPA</a></li>
-		<li><a href="/">Phonetic transcription practice for Spanish</a></li>
-		<li><a href="/">German IPA transcription guide</a></li>
-		<li><a href="/">IPA transcription to French</a></li>
-		<li><a href="/">Studying Arabic phonetics with IPA</a></li>
-		<li><a href="/">Farsi phonetic transcription online tool</a></li>
-		<li><a href="/">Czech language IPA transcription guide</a></li>
-		<li><a href="/">IPA transcription tips for learning Slovak</a></li>
-		</ul>
 
       </div>
 <script src="dropdown.js"></script>
