@@ -65,5 +65,5 @@ const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bas
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Yoruba", "Zulu",
 "Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern"];
 initDropdown("langsearchInput", "langdropdownList", items);
-const reverse_items = ["IPA", "Espeak", "Antvaset", "English", "Slovak", "ChineseMandarin"];
+const reverse_items = ["IPA", "Espeak", "Antvaset"].concat(items);
 initDropdown("tgtsearchInput", "tgtdropdownList", reverse_items);
