@@ -81,16 +81,24 @@ func spacesep(sli []string) (sep string) {
 	return sep
 }
 
+type baseLanguage struct {
+	SrcMulti         interface{}            `json:"SrcMulti"`
+	DstMulti         interface{}            `json:"DstMulti"`
+	SrcMultiSuffix   interface{}            `json:"SrcMultiSuffix"`
+	DstMultiSuffix   interface{}            `json:"DstMultiSuffix"`
+	DropLast         interface{}            `json:"DropLast"`
+	DstMultiPrefix   interface{} `json:"DstMultiPrefix"`
+	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
+	SplitBefore interface{} `json:"SplitBefore"`
+	SplitAfter interface{} `json:"SplitAfter"`
+	
+}
+
 type Language struct {
 	Map            map[string][]string `json:"Map"`
-	SrcMulti       []string            `json:"SrcMulti"`
-	DstMulti       []string            `json:"DstMulti"`
-	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
-	DstMultiSuffix []string            `json:"DstMultiSuffix"`
-	DropLast       []string            `json:"DropLast"`
-
-	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
+	baseLanguage
 }
+
 
 func LanguageNewFromFile(file string) (l *Language, err error) {
 	// Read the JSON file
@@ -124,6 +132,7 @@ func main() {
 	dropFile := flag.String("dropfile", "", "path to input TSV file containing dropped mappings")
 	scanLast := flag.Int("scanlast", 0, "scan N last mappings")
 	nodel := flag.Bool("nodel", false, "no delete rule")
+	writeback := flag.Bool("writeback", false, "write result back to srcfile")
 	flag.Parse()
 
 	var lang *Language
@@ -222,6 +231,25 @@ func main() {
 		println(err.Error())
 		return
 	}
-	str := strings.ReplaceAll(string(bytes), "],", "],\n")
-	fmt.Println(str)
+	
+
+	if writeback != nil && *writeback {
+		var olang = lang
+		olang.Map = data
+		
+		bytes, err := json.Marshal(olang)
+		if err != nil {
+			println(err.Error())
+			return
+		}
+		str := strings.ReplaceAll(string(bytes), "],", "],\n")
+		err = ioutil.WriteFile(*langFile, []byte(str), 0755)
+		if err != nil {
+			println(err.Error())
+			return
+		}
+	} else {
+		str := strings.ReplaceAll(string(bytes), "],", "],\n")
+		fmt.Println(str)
+	}
 }
