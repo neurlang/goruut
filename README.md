@@ -1,6 +1,6 @@
 # Goruut
 
-A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) phonemizer for several human languages.
+A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) phonemizer/dephonemizer/transphonemizer for several human languages.
 
 ## Try it online
 
