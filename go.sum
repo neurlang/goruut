@@ -86,6 +86,8 @@ github.com/neurlang/classifier v0.1.0 h1:Y6WY1C1z/aYmgLsHy0U9l9wjncOQvFffvXDDyWP
 github.com/neurlang/classifier v0.1.0/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
 github.com/neurlang/classifier v0.1.1 h1:hbDVMyrbd3VE6Fi77a62gqROQc/4b6HsU2On3d7kkyc=
 github.com/neurlang/classifier v0.1.1/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
+github.com/neurlang/classifier v0.1.2 h1:89IxNrPbEank9caSL2PDDT98TcX6x0fIhMLHDyZavj4=
+github.com/neurlang/classifier v0.1.2/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
