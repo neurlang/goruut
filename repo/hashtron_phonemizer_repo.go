@@ -333,17 +333,19 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			continue
 		}
 
-		if !isReverse && (*r.getter).IsOldFormat(compressedData) {
+		if !isReverse /* doesnt work: && (*r.getter).IsOldFormat(compressedData)*/ {
 			bytesReader := bytes.NewReader(compressedData)
 			r.mut.Lock()
-			(*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
+			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
 			r.mut.Unlock()
+			log.Error0(err)
 			return
 		} else if isReverse && (*r.getter).IsNewFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
 			r.mut.Lock()
-			(*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
+			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
 			r.mut.Unlock()
+			log.Error0(err)
 			return
 		}
 	}

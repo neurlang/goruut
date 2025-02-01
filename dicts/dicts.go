@@ -95,10 +95,12 @@ func (DictGetter) GetDict(lang, filename string) ([]byte, error) {
 	return GetDict(lang, filename)
 }
 
+// XXX: Doesn't work
 func (DictGetter) IsOldFormat(magic []byte) bool {
 	if len(magic) < 2 {
 		return false
 	}
+	println(magic[0], magic[1])
 	// LZW
 	return (magic[0] == 0x1F && magic[1] == 0x9D) || (magic[0] == 0x1F && magic[1] == 0xA0)
 }
