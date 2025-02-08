@@ -289,3 +289,94 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return nil, ErrUnsupportedLanguage
 	}
 }
+
+func LangName(dir string) string {
+	switch dir {
+	case "afrikaans": return "Afrikaans";
+	case "amharic": return "Amharic";
+	case "arabic": return "Arabic";
+	case "armenian": return "Armenian";
+	case "azerbaijani": return "Azerbaijani";
+	case "basque": return "Basque";
+	case "belarusian": return "Belarusian";
+	case "bengali": return "Bengali";
+	case "bengali/dhaka": return "BengaliDhaka";
+	case "bengali/rahr": return "BengaliRahr";
+	case "bulgarian": return "Bulgarian";
+	case "burmese": return "Burmese";
+	case "catalan": return "Catalan";
+	case "cebuano": return "Cebuano";
+	case "chechen": return "Chechen";
+	case "chichewa": return "Chichewa";
+	case "chinese/mandarin": return "ChineseMandarin";
+	case "croatian": return "Croatian";
+	case "czech": return "Czech";
+	case "danish": return "Danish";
+	case "dutch": return "Dutch";
+	case "dzongkha": return "Dzongkha";
+	case "english": return "English";
+	case "esperanto": return "Esperanto";
+	case "estonian": return "Estonian";
+	case "farsi": return "Farsi";
+	case "finnish": return "Finnish";
+	case "french": return "French";
+	case "galician": return "Galician";
+	case "georgian": return "Georgian";
+	case "german": return "German";
+	case "greek": return "Greek";
+	case "gujarati": return "Gujarati";
+	case "hausa": return "Hausa";
+	case "hebrew": return "Hebrew";
+	case "hindi": return "Hindi";
+	case "hungarian": return "Hungarian";
+	case "icelandic": return "Icelandic";
+	case "indonesian": return "Indonesian";
+	case "isan": return "Isan";
+	case "italian": return "Italian";
+	case "jamaican": return "Jamaican";
+	case "japanese": return "Japanese";
+	case "javanese": return "Javanese";
+	case "kazakh": return "Kazakh";
+	case "khmer/central": return "KhmerCentral";
+	case "korean": return "Korean";
+	case "lao": return "Lao";
+	case "latvian": return "Latvian";
+	case "lithuanian": return "Lithuanian";
+	case "luxembourgish": return "Luxembourgish";
+	case "macedonian": return "Macedonian";
+	case "malay/arab": return "Malayalam";
+	case "malay/latin": return "MalayArab";
+	case "malayalam": return "MalayLatin";
+	case "maltese": return "Maltese";
+	case "marathi": return "Marathi";
+	case "mongolian": return "Mongolian";
+	case "nepali": return "Nepali";
+	case "norwegian": return "Norwegian";
+	case "pashto": return "Pashto";
+	case "polish": return "Polish";
+	case "portuguese": return "Portuguese";
+	case "punjabi": return "Punjabi";
+	case "romanian": return "Romanian";
+	case "russian": return "Russian";
+	case "serbian": return "Serbian";
+	case "slovak": return "Slovak";
+	case "spanish": return "Spanish";
+	case "swahili": return "Swahili";
+	case "swedish": return "Swedish";
+	case "tagalog": return "Tagalog";
+	case "tamil": return "Tamil";
+	case "telugu": return "Telugu";
+	case "thai": return "Thai";
+	case "tibetan": return "Tibetan";
+	case "turkish": return "Turkish";
+	case "ukrainian": return "Ukrainian";
+	case "urdu": return "Urdu";
+	case "uyghur": return "Uyghur";
+	case "vietnamese/central": return "VietnameseCentral";
+	case "vietnamese/northern": return "VietnameseNorthern";
+	case "vietnamese/southern": return "VietnameseSouthern";
+	case "yoruba": return "Yoruba";
+	case "zulu": return "Zulu";
+	default: return "";
+	}
+}
