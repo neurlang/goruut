@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/neurlang/classifier/datasets/phonemizer"
-	"github.com/neurlang/classifier/hash"
 	"github.com/neurlang/classifier/hashtron"
 	"github.com/neurlang/classifier/layer/majpool2d"
 	"github.com/neurlang/classifier/net/feedforward"
@@ -244,9 +243,10 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.mut.Unlock()
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
+	r.mut.Lock()
 	if (*nets)[lang+reverse] == nil {
-
-		if isReverse {
+		r.mut.Unlock()
+		{
 			const fanout1 = 1
 			const fanout2 = 5
 			const fanout3 = 3
@@ -271,24 +271,9 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			(*r.nets)[lang+reverse] = &net
 			r.mut.Unlock()
 
-		} else {
-
-			var net feedforward.FeedforwardNetwork
-			const fanout1 = 3
-			const fanout2 = 12
-			//const fanout3 = 3
-			//const fanout4 = 10
-			//net.NewLayerP(fanout1*fanout2*fanout3*fanout4, 0, 1033)
-			//net.NewCombiner(majpool2d.MustNew(fanout1*fanout2*fanout4, 1, fanout3, 1, fanout4, 1, 1))
-			net.NewLayerP(fanout1*fanout2, 0, 1<<fanout2)
-			net.NewCombiner(majpool2d.MustNew(fanout2, 1, fanout1, 1, fanout2, 1, 1))
-			net.NewLayer(1, 0)
-			r.mut.Lock()
-			(*r.nets)[lang+reverse] = &net
-			r.mut.Unlock()
-
 		}
 	} else {
+		r.mut.Unlock()
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
@@ -320,11 +305,8 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.mut.Unlock()
 	}
 
-	var files = []string{"weights1" + reverse + ".json.lzw", "weights1" + reverse + ".json.zlib"}
+	var files = []string{"weights1" + reverse + ".json.zlib"}
 
-	if isReverse {
-		files[0], files[1] = files[1], files[0]
-	}
 
 	for _, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
@@ -333,48 +315,24 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			continue
 		}
 
-		if !isReverse /* doesnt work: && (*r.getter).IsOldFormat(compressedData)*/ {
-			bytesReader := bytes.NewReader(compressedData)
-			r.mut.Lock()
-			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
-			r.mut.Unlock()
-			log.Error0(err)
-			return
-		} else if isReverse && (*r.getter).IsNewFormat(compressedData) {
+		if (*r.getter).IsNewFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
 			r.mut.Lock()
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
 			r.mut.Unlock()
 			log.Error0(err)
 			return
-		}
+		} /*else if !isReverse  doesnt work: && (*r.getter).IsOldFormat(compressedData) {
+			bytesReader := bytes.NewReader(compressedData)
+			r.mut.Lock()
+			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
+			r.mut.Unlock()
+			log.Error0(err)
+			return
+		}*/
 	}
 }
 
-// TODO: move to classifier repo
-type sample [14]uint32
-
-// TODO: move to classifier repo
-func (s *sample) Feature(n int) uint32 {
-	a := hash.Hash(uint32(n), 0, 13)
-	/*
-		b := n % 28
-		if b >= a {
-			b++
-		}
-	*/
-	return s[a] /*+ s[b]*/ + s[13]
-}
-
-// TODO: move to classifier repo
-func (s *sample) Output() uint16 {
-	return 0
-}
-
-// TODO: move to classifier repo
-func (s *sample) Parity() uint16 {
-	return 0
-}
 
 func isCombining(r uint32) bool {
 	return unicode.Is(unicode.Mn, rune(r)) || unicode.Is(unicode.Mc, rune(r))
@@ -543,7 +501,6 @@ outer:
 			dstaR := dsta[lastspace:]
 			origi := i
 			i := i - lastspace
-			j := len(srcaR) - i
 			r.mut.RLock()
 			net := (*r.nets)[lang+reverse]
 			r.mut.RUnlock()
@@ -551,7 +508,7 @@ outer:
 				continue
 			}
 			var predicted bool
-			if isReverse {
+			if true {
 				var input = phonemizer.NewSample{
 					SrcA:   copystrings(srcaR),
 					DstA:   copystrings(dstaR[0:i]),
@@ -559,27 +516,6 @@ outer:
 					SrcFut: copystrings(srcaR[i:]),
 					Option: option,
 				}
-				r.mut.RLock()
-				predicted = net.Infer2(&input) != 0
-				r.mut.RUnlock()
-			} else {
-				var buf = [...]uint32{
-					hash.StringsHash(0, srcaR[1*i/2:i+j/2]),
-					hash.StringsHash(0, srcaR[2*i/3:i+j/3]),
-					hash.StringsHash(0, srcaR[4*i/5:i+j/5]),
-					hash.StringsHash(0, srcaR[6*i/7:i+j/11]),
-					hash.StringsHash(0, srcaR[10*i/11:i+j/11]),
-					hash.StringsHash(0, dstaR[0:i]),
-					hash.StringsHash(0, srcaR),
-					hash.StringsHash(0, dstaR[0:4*i/7]),
-					hash.StringsHash(0, dstaR[4*i/7:6*i/7]),
-					hash.StringsHash(0, dstaR[6*i/7:i]),
-					hash.StringsHash(0, srcaR[i:i+j/7]),
-					hash.StringsHash(0, srcaR[i+j/7:i+3*j/7]),
-					hash.StringsHash(0, srcaR[i+3*j/7:i+j]),
-					hash.StringHash(0, option),
-				}
-				var input = sample(buf)
 				r.mut.RLock()
 				predicted = net.Infer2(&input) != 0
 				r.mut.RUnlock()
