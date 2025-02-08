@@ -25,7 +25,7 @@
 "ĥ":["x"],
 "ĵ":["ʒ"],
 "ŝ":["ʃ"],
-"ŭ":["u"]}
-,"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DstMultiPrefix":["ˈ","'","ˌ"],
-"DropLast":null,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}]}
+"ŭ":["u","ʌ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
+"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null}
