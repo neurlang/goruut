@@ -155,18 +155,27 @@ func (s *PrePhonWordStepsRepository) PrePhonemizeWord(isReverse bool, lang strin
 		return word
 	}
 	steps := *s.steps
+	length := steps.Len(isReverse, lang)
 	s.mut.RUnlock()
+	withMutexBool := func(f func(isReverse bool, lang string, i int) bool, isReverse bool, lang string, i int) bool {
+		s.mut.RLock()
+		ret := f(isReverse, lang, i)
+		s.mut.RUnlock()
+		return ret
+	}
 
-	for i := 0; i < steps.Len(isReverse, lang); i++ {
-		if steps.IsNormalize(isReverse, lang, i) {
+	for i := 0; i < length; i++ {
+
+		if withMutexBool(steps.IsNormalize, isReverse, lang, i) {
 			word = NormalizeTo(word, steps.GetNormalize(isReverse, lang, i))
 		}
-		if steps.IsTrim(isReverse, lang, i) {
+		if withMutexBool(steps.IsTrim, isReverse, lang, i) {
 			word = strings.Trim(word, steps.GetTrim(isReverse, lang, i))
 		}
-		if steps.IsToLower(isReverse, lang, i) {
+		if withMutexBool(steps.IsToLower, isReverse, lang, i) {
 			word = strings.ToLower(word)
 		}
+
 	}
 
 	return word

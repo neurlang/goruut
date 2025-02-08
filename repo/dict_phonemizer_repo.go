@@ -7,6 +7,7 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/spaolacci/murmur3"
 	"strings"
+	"sync"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -16,6 +17,7 @@ type IDictPhonemizerRepository interface {
 type DictPhonemizerRepository struct {
 	getter     *interfaces.DictGetter
 	lang_words *map[string]map[string]map[uint64]string
+	mut    sync.Mutex
 }
 
 func murmur3hash(str string) uint64 {
@@ -27,10 +29,13 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 	if isReverse {
 		reverse = "_reverse"
 	}
+	r.mut.Lock()
 	if (*r.lang_words)[lang+reverse] == nil {
 		(*r.lang_words)[lang+reverse] = make(map[string]map[uint64]string)
+		r.mut.Unlock()
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
+		r.mut.Unlock()
 		return
 	}
 
@@ -63,10 +68,12 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 				log.Now().Debugf("Language %s has wrong number of columns: %d", src, len(v))
 				continue
 			}
+			r.mut.Lock()
 			if (*r.lang_words)[lang+reverse][src] == nil {
 				(*r.lang_words)[lang+reverse][src] = make(map[uint64]string)
 			}
 			(*r.lang_words)[lang+reverse][src][tag] = dst
+			r.mut.Unlock()
 		}
 	}
 }
@@ -77,7 +84,9 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 	if isReverse {
 		reverse = "_reverse"
 	}
+	r.mut.Lock()
 	found := (*r.lang_words)[lang+reverse][word]
+	r.mut.Unlock()
 
 	if len(found) == 0 {
 		return nil
