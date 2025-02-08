@@ -82,14 +82,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/mattn/go-runewidth v0.0.4/go.mod h1:LwmH8dsx7+W8Uxz3IHJYH5QSwggIsqBzpuz5H//U1FU=
 github.com/maypok86/otter v1.2.1 h1:xyvMW+t0vE1sKt/++GTkznLitEl7D/msqXkAbLwiC1M=
 github.com/maypok86/otter v1.2.1/go.mod h1:mKLfoI7v1HOmQMwFgX4QkRk23mX6ge3RDvjdHOWG4R4=
-github.com/neurlang/classifier v0.1.0 h1:Y6WY1C1z/aYmgLsHy0U9l9wjncOQvFffvXDDyWPmsQk=
-github.com/neurlang/classifier v0.1.0/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
-github.com/neurlang/classifier v0.1.1 h1:hbDVMyrbd3VE6Fi77a62gqROQc/4b6HsU2On3d7kkyc=
-github.com/neurlang/classifier v0.1.1/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
-github.com/neurlang/classifier v0.1.2 h1:89IxNrPbEank9caSL2PDDT98TcX6x0fIhMLHDyZavj4=
-github.com/neurlang/classifier v0.1.2/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
-github.com/neurlang/classifier v0.1.3 h1:/pF7xwdxySszdSNnzD1u4EKiQ920MKWlTHiSsasvclo=
-github.com/neurlang/classifier v0.1.3/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
+github.com/neurlang/classifier v0.1.4 h1:tNyRDpUf8Q/dBu+eBWLJUdxNJB6ZggdoWSnRR4NSTKw=
+github.com/neurlang/classifier v0.1.4/go.mod h1:A9n/KHFHwlWzHjBgO6ILu9UwP2/Cr0LicY+F6j5cgeo=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
