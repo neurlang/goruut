@@ -28,7 +28,7 @@ do
 	echo "$LANG $count $SIZE"
 	grep --only-matching -P $generated_string ../goruut/dicts/$LANG/language.json | grep -P '\xC9\xA1' --invert-match >> ./$LANG/language.json
 	echo '"":[]},' >> ./$LANG/language.json
-	egrep --only-matching '"(SrcMulti|PrePhonWordSteps|DstMultiPrefix|DropLast|SplitAfter)".+$' ../goruut/dicts/$LANG/language.json >> ./$LANG/language.json
+	egrep --only-matching '"(SrcMulti|PrePhonWordSteps|DstMultiSuffix|DstMultiPrefix|DropLast|SplitAfter)".+$' ../goruut/dicts/$LANG/language.json >> ./$LANG/language.json
 	#grep DropLast ../goruut/dicts/$LANG/language.json >> ./$LANG/language.json
 
 
