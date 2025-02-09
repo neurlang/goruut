@@ -231,21 +231,17 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		reverse = "_reverse"
 	}
 
-	r.mut.RLock()
-	nets := r.nets
-	r.mut.RUnlock()
+	r.mut.Lock()
+	defer r.mut.Unlock()
 
+	nets := r.nets
 	if nets == nil {
 		netss := make(map[string]*feedforward.FeedforwardNetwork)
 		nets = &netss
-		r.mut.Lock()
 		r.nets = &netss
-		r.mut.Unlock()
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
-	r.mut.Lock()
 	if (*nets)[lang+reverse] == nil {
-		r.mut.Unlock()
 		{
 			const fanout1 = 1
 			const fanout2 = 5
@@ -267,13 +263,10 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			//net.NewCombiner(full.MustNew(fanout2, 1, 1))
 			net.NewCombiner(majpool2d.MustNew2(fanout2, 1, fanout1, 1, fanout2, 1, 1, 0))
 			net.NewLayer(1, 0)
-			r.mut.Lock()
 			(*r.nets)[lang+reverse] = &net
-			r.mut.Unlock()
 
 		}
 	} else {
-		r.mut.Unlock()
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
@@ -297,12 +290,10 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 		log.Now().Debugf("Language %s loaded: %v", lang, langone)
 
-		r.mut.Lock()
 		(*r.lang)[lang+reverse] = &langone
 
 		iface := (interfaces.Phonemizer)(&(*r.lang))
 		r.phoner = &iface
-		r.mut.Unlock()
 	}
 
 	var files = []string{"weights1" + reverse + ".json.zlib"}
@@ -317,16 +308,12 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 		if (*r.getter).IsNewFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
-			r.mut.Lock()
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
-			r.mut.Unlock()
 			log.Error0(err)
 			return
 		} /*else if !isReverse  doesnt work: && (*r.getter).IsOldFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
-			r.mut.Lock()
 			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
-			r.mut.Unlock()
 			log.Error0(err)
 			return
 		}*/
