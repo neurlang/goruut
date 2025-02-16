@@ -4,6 +4,8 @@ import "github.com/neurlang/levenshtein"
 import "github.com/neurlang/goruut/lib"
 import "github.com/neurlang/goruut/dicts"
 import "github.com/neurlang/goruut/models/requests"
+import di "github.com/martinarisk/di/dependency_injection"
+import "github.com/neurlang/goruut/repo/interfaces"
 import "os"
 import "fmt"
 import "github.com/neurlang/classifier/parallel"
@@ -63,24 +65,81 @@ func loop(filename string, top, group int, do func(string, string)) {
 
 }
 
+type DictGetter struct {
+	getter      dicts.DictGetter
+	coolname    string
+	modelfile   string
+	currentfile []byte
+	bestfile    []byte
+	bestsuccess uint64
+}
+
+func (d *DictGetter) GetDict(lang, filename string) ([]byte, error) {
+	if lang == d.coolname && strings.HasSuffix(d.modelfile, filename) {
+		data, err := os.ReadFile(d.modelfile)
+		if err == nil {
+			d.currentfile = data
+		}
+		return data, err
+	}
+	return d.getter.GetDict(lang, filename)
+}
+func (d *DictGetter) IsNewFormat(magic []byte) bool {
+	return true
+}
+func (d *DictGetter) IsOldFormat(magic []byte) bool {
+	return false
+}
+func (d *DictGetter) Write() {
+	os.WriteFile(d.modelfile+".best", d.bestfile, 0777)
+}
+
+type dummy struct {
+}
+
+func (dummy) GetIpaFlavors() map[string]map[string]string {
+	return make(map[string]map[string]string)
+}
+func (dummy) GetPolicyMaxWords() int {
+	return 99999999999
+}
+
 func main() {
 	langname := flag.String("langname", "", "directory language name")
 	isreverse := flag.Bool("reverse", false, "is reverse")
 	nostress := flag.Bool("nostress", false, "no stress")
+	testing := flag.Bool("testing", false, "keep backtesting and overwriting the model with the best one")
 	flag.Parse()
 
+	var dictgetter DictGetter
 	var coolname string
 	var srcfile string
-
+	var modelfile string
+again:
 	if langname != nil {
 		coolname = dicts.LangName(*langname)
+		dictgetter.coolname = coolname
 		srcfile = "../../dicts/" + *langname + "/dirty.tsv"
+		if testing != nil && *testing {
+			if isreverse != nil && *isreverse {
+				modelfile = "../../dicts/" + *langname + "/weights1_reverse.json.zlib"
+			} else {
+				modelfile = "../../dicts/" + *langname + "/weights1.json.zlib"
+			}
+			dictgetter.modelfile = modelfile
+		}
+	}
+	p := lib.NewPhonemizer(nil)
+	if testing != nil && *testing {
+		di := di.NewDependencyInjection()
+		di.Add((interfaces.DictGetter)(&dictgetter))
+		di.Add((interfaces.IpaFlavor)(dummy{}))
+		di.Add((interfaces.PolicyMaxWords)(dummy{}))
+		p = lib.NewPhonemizer(di)
 	}
 
-	p := lib.NewPhonemizer(nil)
-
 	var percent, errsum, total atomic.Uint64
-	loop(srcfile, 10000, 1000, func(word1, word2 string) {
+	loop(srcfile, 1000, 1000, func(word1, word2 string) {
 		total.Add(1)
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "'", "")
@@ -92,8 +151,8 @@ func main() {
 			word1, word2 = word2, word1
 		}
 		resp := p.Sentence(requests.PhonemizeSentence{
-			Sentence: word1,
-			Language: coolname,
+			Sentence:  word1,
+			Language:  coolname,
 			IsReverse: isreverse != nil && *isreverse,
 		})
 
@@ -117,13 +176,20 @@ func main() {
 			percent.Add(1)
 		}
 
-
-
 		//success := 100 * percent.Load() / total.Load()
 		//println("[success rate]", success, "%", "with", errsum.Load(), "errors", percent.Load(), "successes", "for", *langname)
 	})
-	{
-		success := 100 * percent.Load() / total.Load()
-		println("[success rate]", success, "%", "with", errsum.Load(), "errors", percent.Load(), "successes", "for", *langname)
+	success := 100 * percent.Load() / total.Load()
+	println("[success rate]", success, "%", "with", errsum.Load(), "errors", percent.Load(), "successes", "for", *langname)
+
+	if testing != nil && *testing {
+
+		if success > dictgetter.bestsuccess {
+			dictgetter.bestfile = dictgetter.currentfile
+			dictgetter.bestsuccess = success
+			dictgetter.Write()
+		}
+
+		goto again
 	}
 }
