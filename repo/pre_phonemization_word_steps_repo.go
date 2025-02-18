@@ -21,7 +21,10 @@ type PrePhonWordStepsRepository struct {
 	steps *interfaces.PrePhonemizationSteps
 }
 
-type prephonlanguages map[string]*prephonlanguage
+type prephonlanguages struct {
+	mut  sync.RWMutex
+	lang map[string]*prephonlanguage
+}
 
 type prephonlanguage struct {
 	PrePhonWordSteps []PrePhonWordStep `json:"PrePhonWordSteps"`
@@ -38,45 +41,57 @@ func (p *prephonlanguages) Len(isReverse bool, lang string) int {
 	if isReverse {
 		reverse = "_reverse"
 	}
-	if p == nil || (*p)[lang+reverse] == nil {
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	if p.lang == nil || (p.lang)[lang+reverse] == nil {
 		return 0
 	}
-	return len((*p)[lang+reverse].PrePhonWordSteps)
+	return len((p.lang)[lang+reverse].PrePhonWordSteps)
 }
 func (p *prephonlanguages) IsNormalize(isReverse bool, lang string, n int) bool {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	return len((*p)[lang+reverse].PrePhonWordSteps[n].Normalize) > 0
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return len((p.lang)[lang+reverse].PrePhonWordSteps[n].Normalize) > 0
 }
 func (p *prephonlanguages) IsTrim(isReverse bool, lang string, n int) bool {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	return len((*p)[lang+reverse].PrePhonWordSteps[n].Trim) > 0
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return len((p.lang)[lang+reverse].PrePhonWordSteps[n].Trim) > 0
 }
 func (p *prephonlanguages) IsToLower(isReverse bool, lang string, n int) bool {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	return (*p)[lang+reverse].PrePhonWordSteps[n].ToLower
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return (p.lang)[lang+reverse].PrePhonWordSteps[n].ToLower
 }
 func (p *prephonlanguages) GetNormalize(isReverse bool, lang string, n int) string {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	return (*p)[lang+reverse].PrePhonWordSteps[n].Normalize
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return (p.lang)[lang+reverse].PrePhonWordSteps[n].Normalize
 }
 func (p *prephonlanguages) GetTrim(isReverse bool, lang string, n int) string {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	return (*p)[lang+reverse].PrePhonWordSteps[n].Trim
+	p.mut.RLock()
+	defer p.mut.RUnlock()
+	return (p.lang)[lang+reverse].PrePhonWordSteps[n].Trim
 }
 func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 
@@ -85,9 +100,10 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 		reverse = "_reverse"
 	}
 
-	p.mut.RLock()
-	existing_lang := (*p.lang)[lang+reverse]
-	p.mut.RUnlock()
+	p.mut.Lock()
+	defer p.mut.Unlock()
+
+	existing_lang := (p.lang.lang)[lang+reverse]
 
 	if existing_lang != nil {
 		return
@@ -105,13 +121,12 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 			log.Now().Errorf("Error parsing JSON: %v\n", err)
 			continue
 		}
-		p.mut.Lock()
-		(*p.lang)[lang+reverse] = &langone
+		p.lang.lang = make(map[string]*prephonlanguage)
+		(p.lang.lang)[lang+reverse] = &langone
 
-		iface := (interfaces.PrePhonemizationSteps)(&(*p.lang))
+		iface := (interfaces.PrePhonemizationSteps)((p.lang))
 
 		p.steps = &iface
-		p.mut.Unlock()
 	}
 }
 
@@ -183,7 +198,7 @@ func (s *PrePhonWordStepsRepository) PrePhonemizeWord(isReverse bool, lang strin
 
 func NewPrePhonWordStepsRepository(di *DependencyInjection) *PrePhonWordStepsRepository {
 	getter := MustAny[interfaces.DictGetter](di)
-	langs := make(prephonlanguages)
+	langs := prephonlanguages{}
 
 	return &PrePhonWordStepsRepository{
 		getter: &getter,
