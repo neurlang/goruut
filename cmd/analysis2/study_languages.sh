@@ -4,19 +4,19 @@
  timeout 600 ./study_language.sh	amharic	
  timeout 600 ./study_language.sh	arabic	
  timeout 600 ./study_language.sh	armenian	
- timeout 600 ./study_language.sh	azerbaijani	
+ timeout 600 ./study_language.sh	azerbaijani		--rowlossimportance 6
  timeout 600 ./study_language.sh	basque	
  timeout 600 ./study_language.sh	belarusian	
- timeout 600 ./study_language.sh	bengali	
- timeout 600 ./study_language.sh	bengali/dhaka	
- timeout 600 ./study_language.sh	bengali/rahr	
+ timeout 600 ./study_language.sh	bengali			--rowlossimportance 6
+ timeout 600 ./study_language.sh	bengali/dhaka		--rowlossimportance 6
+ timeout 600 ./study_language.sh	bengali/rahr		--rowlossimportance 6
  timeout 600 ./study_language.sh	bulgarian	
  timeout 600 ./study_language.sh	burmese	
  timeout 600 ./study_language.sh	catalan	
  timeout 600 ./study_language.sh	cebuano	
  timeout 600 ./study_language.sh	chechen	
  timeout 600 ./study_language.sh	chichewa	
- timeout 600 ./study_language.sh	chinese/mandarin	-padspace
+ timeout 600 ./study_language.sh	chinese/mandarin	-padspace	--rowlossimportance 10 --hyperinit 16
  timeout 600 ./study_language.sh	croatian	
  timeout 600 ./study_language.sh	czech	
  timeout 600 ./study_language.sh	danish	
@@ -30,7 +30,7 @@
  timeout 600 ./study_language.sh	french	
  timeout 600 ./study_language.sh	galician	
  timeout 600 ./study_language.sh	georgian	
- timeout 600 ./study_language.sh	german	
+ timeout 600 ./study_language.sh	german	--rowlossimportance 2
  timeout 600 ./study_language.sh	greek	
  timeout 600 ./study_language.sh	gujarati	
  timeout 600 ./study_language.sh	hausa	
@@ -42,7 +42,7 @@
  timeout 600 ./study_language.sh	isan	
  timeout 600 ./study_language.sh	italian	
  timeout 600 ./study_language.sh	jamaican	
- timeout 600 ./study_language.sh	japanese	-padspace
+ timeout 600 ./study_language.sh	japanese	-padspace	--rowlossimportance 10 --hyperinit 16
  timeout 600 ./study_language.sh	javanese	
  timeout 600 ./study_language.sh	kazakh	
  timeout 600 ./study_language.sh	khmer/central	
@@ -65,11 +65,11 @@
  timeout 600 ./study_language.sh	portuguese	
  timeout 600 ./study_language.sh	punjabi	
  timeout 600 ./study_language.sh	romanian	
- timeout 600 ./study_language.sh	russian	
+ timeout 600 ./study_language.sh	russian	--rowlossimportance 2
  timeout 600 ./study_language.sh	serbian	
  timeout 600 ./study_language.sh	slovak	
- timeout 600 ./study_language.sh	spanish	
- timeout 600 ./study_language.sh	swahili	
+ timeout 600 ./study_language.sh	spanish	--rowlossimportance 0
+ timeout 600 ./study_language.sh	swahili	--rowlossimportance 10
  timeout 600 ./study_language.sh	swedish	
  timeout 600 ./study_language.sh	tagalog	
  timeout 600 ./study_language.sh	tamil	

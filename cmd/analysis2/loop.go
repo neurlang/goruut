@@ -7,12 +7,12 @@ import "bufio"
 import "strings"
 import "math/rand"
 
-func loop(filename string, top, group int, do func(string, string)) {
+func load(filename string, top int) [][2]string {
 	// Open the file
 	file, err := os.Open(filename)
 	if err != nil {
 		fmt.Println("Error opening file:", err)
-		return
+		return nil
 	}
 	defer file.Close()
 
@@ -41,12 +41,16 @@ func loop(filename string, top, group int, do func(string, string)) {
 	if err := scanner.Err(); err != nil {
 		fmt.Println("Error reading file:", err)
 	}
-
-	rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
-	if len(slice) > top {
-		slice = slice[:top]
+	if top >= 0 {
+		rand.Shuffle(len(slice), func(i, j int) { slice[i], slice[j] = slice[j], slice[i] })
+		if len(slice) > top {
+			slice = slice[:top]
+		}
 	}
+	return slice
+}
 
+func loop(slice [][2]string, group int, do func(string, string)) {
 	parallel.ForEach(len(slice), group, func(n int) {
 		// Process each column
 		column1 := slice[n][0]
@@ -54,5 +58,4 @@ func loop(filename string, top, group int, do func(string, string)) {
 		// Example: Print the columns
 		do(column1, column2)
 	})
-
 }

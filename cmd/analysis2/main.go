@@ -34,6 +34,20 @@ func nosep(sli []string) (sep string) {
 	return sep
 }
 
+func lambdaLoss(lambda *int, wordLoss, decisionComplexityLoss uint64) uint64 {
+	if lambda == nil || *lambda < -64 || *lambda > 64 {
+		return uint64(wordLoss)
+	}
+	
+	if *lambda < 0 {
+		l := uint64(-*lambda)
+		return (uint64(wordLoss)) + (uint64(decisionComplexityLoss)<<l)
+	} else {
+		l := uint64(*lambda)
+		return (uint64(wordLoss)<<l) + (uint64(decisionComplexityLoss))
+	}
+}
+
 func main() {
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
@@ -43,7 +57,9 @@ func main() {
 	threeway := flag.Bool("threeway", false, "threeway language extension algorithm")
 	save := flag.Bool("save", false, "write lang file at the end")
 	deleting := flag.Bool("deleting", false, "deleting columns / rows")
-	hyper := flag.Int("hyper", 100, "hyperparameter parallelism")
+	hyperinit := flag.Int("hyperinit", 1, "hyperparameter initial parallelism (nonnegative, high values are slower)")
+	hyper := flag.Int("hyper", 100, "hyperparameter parallelism (nonnegative, high values are slower)")
+	lambda := flag.Int("rowlossimportance", 5, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
 	flag.Parse()
 
 	_ = dstFile
@@ -60,6 +76,7 @@ func main() {
 	}
 	var tsvWriter TSVWriter
 	var mut sync.Mutex
+	var written = make(map[[2]string]struct{})
 	if dstFile != nil && *dstFile != "" {
 		err := tsvWriter.Open(*dstFile)
 		if err != nil {
@@ -72,8 +89,12 @@ func main() {
 			strs[0], strs[1] = strs[1], strs[0]
 		}
 		if dstFile != nil && *dstFile != "" {
+			row := [2]string{spacesept(strs[0]), spacesep(strs[1])}
 			mut.Lock()
-			tsvWriter.AddRow([]string{spacesept(strs[0]), spacesep(strs[1])})
+			if _, ok := written[row]; !ok {
+				written[row] = struct{}{}
+				tsvWriter.AddRow(row[:])
+			}
 			mut.Unlock()
 		}
 	}
@@ -81,47 +102,57 @@ func main() {
 	lang_eval := lang.ToEval()
 
 	var threeways map[[2]string]uint64
-	var rowLoss atomic.Uint64
+	var rowLoss, complexityLoss atomic.Uint64
 	var bestLoss uint64
-again:
+	var now_hyper int = *hyperinit
 
-	if bestLoss != 0 && bestLoss == rowLoss.Load() {
-		return
-	}
-	bestLoss = rowLoss.Load()
+	slice := load(*srcFile, 999999999)
+
+again:
 
 	threeways = make(map[[2]string]uint64)
 	rowLoss.Store(0)
+	complexityLoss.Store(0)
 
 	var delete_key = make([]string, 0, len(lang_eval.Map))
 	var delete_langs = make([]*SolutionEval, 0, len(lang_eval.Map))
 	var delete_loss = make([]atomic.Uint64, len(lang_eval.Map))
+	for i := range delete_loss {
+		delete_loss[i].Store(0)
+	}
+	var delete_complexity_loss = make([]atomic.Uint64, len(lang_eval.Map))
+	for i := range delete_complexity_loss {
+		delete_complexity_loss[i].Store(0)
+	}
 	if deleting != nil && *deleting {
 		for k := range lang_eval.Map {
 			delete_langs = append(delete_langs, lang_eval.WithoutKey(k))
 			delete_key = append(delete_key, k)
-			if hyper != nil {
-				if len(delete_key) >= *hyper {
-					break
-				}
+			if len(delete_key) >= now_hyper {
+				break
 			}
 		}
 	}
 
 	var remove_keys = lang_eval.GetValues()
 
-	if hyper != nil {
-		for len(remove_keys) > *hyper {
-			for k := range remove_keys {
-				delete(remove_keys, k)
-				break
-			}
+	for len(remove_keys) > now_hyper {
+		for k := range remove_keys {
+			delete(remove_keys, k)
+			break
 		}
 	}
 
 	var remove_key = make([]string, 0, len(remove_keys))
 	var remove_langs = make([]*SolutionEval, 0, len(remove_keys))
 	var remove_loss = make([]atomic.Uint64, len(remove_keys))
+	for i := range remove_loss {
+		remove_loss[i].Store(0)
+	}
+	var remove_complexity_loss = make([]atomic.Uint64, len(remove_keys))
+	for i := range remove_complexity_loss {
+		remove_complexity_loss[i].Store(0)
+	}
 	if deleting != nil && *deleting {
 		for k := range remove_keys {
 			remove_langs = append(remove_langs, lang_eval.WithoutValue(k))
@@ -129,7 +160,7 @@ again:
 		}
 	}
 
-	loop(*srcFile, 999999999, 1000, func(word1, word2 string) {
+	loop(slice, 1000, func(word1, word2 string) {
 
 		if padspace != nil && *padspace {
 			word2 = strings.ReplaceAll(word2, " ", "_")
@@ -144,25 +175,30 @@ again:
 
 		// evaluate key deletion languages
 		for i, lang_single := range delete_langs {
-			aligned := lang_single.Align(word1, word2, padspace != nil && *padspace)
+			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace)
 			if aligned != nil {
-				continue
+				delete_complexity_loss[i].Add(cplxloss)
+			} else {
+				delete_loss[i].Add(1)
 			}
-			delete_loss[i].Add(1)
 		}
 		// evaluate value removal languages
 		for i, lang_single := range remove_langs {
-			aligned := lang_single.Align(word1, word2, padspace != nil && *padspace)
+			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace)
 			if aligned != nil {
-				continue
+				remove_complexity_loss[i].Add(cplxloss)
+			} else {
+				remove_loss[i].Add(1)
 			}
-			remove_loss[i].Add(1)
 		}
 
 		// do export alignment
-		aligned := lang_eval.Align(word1, word2, padspace != nil && *padspace)
+		aligned, cplxloss := lang_eval.Align(word1, word2, padspace != nil && *padspace)
 		if aligned != nil {
+			complexityLoss.Add(cplxloss)
+
 			if padspace != nil && *padspace {
+
 				var j = 0
 				var k = 0
 				if reverse != nil && *reverse {
@@ -176,6 +212,7 @@ again:
 					} else if i+1 < len((*aligned)[k]) && i+1 < len((*aligned)[1-k]) && strings.HasSuffix(val, "_") {
 						toprint := [2][]string{(*aligned)[k][j:i+1], (*aligned)[1-k][j:i+1]}
 						j = i+1
+
 						tsvWrite(toprint)
 					}
 				}
@@ -186,8 +223,6 @@ again:
 					} else {
 						toprint[0] = toprint[0][:len(toprint[1])]
 					}
-
-
 					tsvWrite(toprint)
 				}
 				//if len((*aligned)[0]) == len((*aligned)[1]) {
@@ -207,12 +242,27 @@ again:
 		aligned2 := lang_eval.AlignHybrid(word1, word2)
 
 		var mat = levenshtein.MatrixSlices[uint64, string](aligned2[0], aligned2[1],
-			nil, nil, func(x *string, y *string) *uint64 {
+			func(i uint) *uint64 {
+				if len(aligned2[1]) > int(i) {
+					if aligned2[1][i] == "" {
+						return nil
+					}
+				}
+				if len(aligned2[0]) > int(i) {
+					if ok := lang_eval.IsDrop(aligned2[0][i]); ok {
+						return nil
+					}
+				}
+				//fmt.Println(*x, *y)
+				var n uint64
+				n = 1
+				return &n
+			}, nil, func(x *string, y *string) *uint64 {
 				if ok := lang_eval.IsEdge(*x,*y); ok {
 					return nil
 				}
 				if *y == "" {
-					if ok := lang_eval.IsDropLast(*x); ok {
+					if ok := lang_eval.IsDrop(*x); ok {
 						return nil
 					}
 				}
@@ -223,6 +273,8 @@ again:
 			}, nil)
 
 		//var d = *levenshtein.Distance(mat)
+
+		//fmt.Println(d, aligned2[0], aligned2[1])
 
 		var length = len(aligned2[1]) + 1
 		w1p := append(aligned2[0], "")
@@ -274,14 +326,12 @@ again:
 					return
 				}
 				if ok := lang_eval.IsDstMultiPrefix(threeway_to); ok {
-					if next_to == "" {
-						return
+					if next_to != "" {
+						if ok := lang_eval.IsDstMultiPrefix(next_to); !ok {
+							//println(threeway_from, threeway_to, next_to)
+							threeway_to += next_to
+						}
 					}
-					if ok := lang_eval.IsDstMultiPrefix(next_to); ok {
-						return
-					}
-					//println(threeway_from, threeway_to, next_to)
-					threeway_to += next_to
 				}
 
 				if threeway_to == "_" && padspace != nil && *padspace {
@@ -289,7 +339,7 @@ again:
 					return
 				}
 
-				if ok := lang_eval.IsDstMultiSuffix(threeway_to); ok || stringStartsWithCombiner(threeway_to) {
+				if ok := lang_eval.IsDstMultiSuffix(threeway_to); ok || lang_eval.StringStartsWithCombiner(threeway_to) {
 					return
 				}
 				if ok := lang_eval.IsEdge(threeway_from, threeway_to); ok {
@@ -371,25 +421,29 @@ again:
 	})
 
 	if threeway == nil || false == *threeway {
+
+		fmt.Println("row loss: ",rowLoss.Load(),", complexity loss: ",complexityLoss.Load())
+
 		return
 	}
+	var minKey, minValue string
+	var maxLoss = lambdaLoss(lambda, rowLoss.Load(), complexityLoss.Load()) // we can't beat the loss, but we can meet it.
 
-	var maxLoss = rowLoss.Load() // we can't beat the loss, but we can meet it.
+	fmt.Println(maxLoss, "[", rowLoss.Load(), complexityLoss.Load(), "]", now_hyper)
+
 	if deleting != nil && *deleting {
 		for i := range delete_langs {
-			if delete_loss[i].Load() == maxLoss {
-				var minKey = delete_key[i]
-				lang_eval = lang_eval.WithoutKey(minKey)
-				lang.WithoutKey(minKey)
-				fmt.Println("removing key", minKey, maxLoss)
+			if lambdaLoss(lambda, delete_loss[i].Load(), delete_complexity_loss[i].Load()) <= maxLoss {
+				maxLoss = lambdaLoss(lambda, delete_loss[i].Load(), delete_complexity_loss[i].Load())
+				minKey = delete_key[i]
+				minValue = ""
 			}
 		}
 		for i := range remove_loss {
-			if remove_loss[i].Load() == maxLoss {
-				var minValue = remove_key[i]
-				lang_eval = lang_eval.WithoutValue(minValue)
-				lang.WithoutValue(minValue)
-				fmt.Println("removing value", minValue, maxLoss)
+			if lambdaLoss(lambda, remove_loss[i].Load(), remove_complexity_loss[i].Load()) <= maxLoss {
+				maxLoss = lambdaLoss(lambda, remove_loss[i].Load(), remove_complexity_loss[i].Load())
+				minValue = remove_key[i]
+				minKey = ""
 			}
 		}
 
@@ -421,27 +475,45 @@ again:
 			return len(threewayz[i][2]) > len(threewayz[j][2])
 		})
 		
-		if hyper != nil {
-			if len(threewayz) > *hyper {
-				threewayz = threewayz[:*hyper]
-			}
+		if len(threewayz) > now_hyper {
+			threewayz = threewayz[:now_hyper]
 		}
-
-		var threway_langs = make([]*SolutionEval, len(threewayz), 2*len(threewayz))
+		const individual = false
+		var threway_langs = make([]*SolutionEval, 2*len(threewayz), 2*len(threewayz))
 		for i := range threewayz {
 			if i == 0 {
 				threway_langs[i] = lang_eval.With(threewayz[i][0], threewayz[i][1])
-			} else if false {
+
+				l_del := lang_eval
+
+				if minKey != "" {
+					l_del = l_del.WithoutKey(minKey)
+					//fmt.Println("removing key", minKey, maxLoss)
+				}
+				if minValue != "" {
+					l_del = l_del.WithoutValue(minValue)
+					//fmt.Println("removing value", minValue, maxLoss)
+				}
+
+				threway_langs[i+len(threewayz)] = l_del.With(threewayz[i][0], threewayz[i][1])
+			} else if individual {
 				threway_langs[i] = lang_eval.With(threewayz[i][0], threewayz[i][1])
+				threway_langs[len(threewayz)+i] = lang_eval.With(threewayz[i][0], threewayz[i][1])
 			} else {
 				threway_langs[i] = threway_langs[i-1].With(threewayz[i][0], threewayz[i][1])
-				threway_langs = append(threway_langs, lang_eval.With(threewayz[i][0], threewayz[i][1]))
+				threway_langs[len(threewayz)+i] = lang_eval.With(threewayz[i][0], threewayz[i][1])
 			}
 		}
-
 		var threeway_loss = make([]atomic.Uint64, len(threway_langs), len(threway_langs))
+		var threeway_complexity_loss = make([]atomic.Uint64, len(threway_langs), len(threway_langs))
+		for i := range threeway_loss {
+			threeway_loss[i].Store(0)
+		}
+		for i := range threeway_complexity_loss {
+			threeway_complexity_loss[i].Store(0)
+		}
 
-		loop(*srcFile, 999999999, 1000, func(word1, word2 string) {
+		loop(slice, 1000, func(word1, word2 string) {
 
 			if padspace != nil && *padspace {
 				word2 = strings.ReplaceAll(word2, " ", "_")
@@ -454,44 +526,93 @@ again:
 				word1, word2 = word2, word1
 			}
 			for i, lang_single := range threway_langs {
-				aligned := lang_single.Align(word1, word2, padspace != nil && *padspace)
-				if aligned != nil {
+				if lang_single == nil {
 					continue
 				}
-				threeway_loss[i].Add(1)
+
+				aligned, cplxLoss := lang_single.Align(word1, word2, padspace != nil && *padspace)
+				if aligned != nil {
+					threeway_complexity_loss[i].Add(cplxLoss)
+				} else {
+					threeway_loss[i].Add(1)
+				}
 			}
 		})
 
-		var minLoss = threeway_loss[0].Load()
-		var minI int
-		for i := range threeway_loss {
-			if threeway_loss[i].Load() < minLoss {
-				minLoss = threeway_loss[i].Load()
+		var minLoss = maxLoss
+
+		var minI = -1
+		for i := range threway_langs {
+			if threway_langs[i] == nil {
+				continue
+			}
+			if lambdaLoss(lambda, threeway_loss[i].Load(), threeway_complexity_loss[i].Load()) < minLoss {
+				minLoss = lambdaLoss(lambda, threeway_loss[i].Load(), threeway_complexity_loss[i].Load())
 				minI = i
 			}
 		}
-
-
-		if minI < len(threewayz) {
-			fmt.Println(maxLoss, threewayz[:(minI+1)], minLoss)
-			for i := 0; i <= minI; i++ {
-				lang_eval = lang_eval.With(threewayz[i][0], threewayz[i][1])
-				if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
-					lang.With(threewayz[i][0], threewayz[i][1])
+		//fmt.Println(minLoss, minI)
+		if minI != -1 {
+			if minI < len(threewayz) {
+				fmt.Println(maxLoss, threewayz[:(minI+1)], minLoss)
+				for i := 0; i <= minI; i++ {
+					if individual {
+						i = minI
+					}
+					lang_eval = lang_eval.With(threewayz[i][0], threewayz[i][1])
+					if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+						lang.With(threewayz[i][0], threewayz[i][1])
+					}
 				}
-			}
-		} else {
-			minI -= len(threewayz)
-			fmt.Println(maxLoss, threewayz[minI], minLoss)
-			lang_eval = lang_eval.With(threewayz[minI][0], threewayz[minI][1])
-			if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
-				lang.With(threewayz[minI][0], threewayz[minI][1])
+			} else {
+				if minI == len(threewayz) {
+
+					if minKey != "" {
+						lang_eval = lang_eval.WithoutKey(minKey)
+						if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+							lang.WithoutKey(minKey)
+							fmt.Println(maxLoss, "removing key:", minKey)
+						}
+					}
+					if minValue != "" {
+						lang_eval = lang_eval.WithoutValue(minValue)
+						if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+							lang.WithoutValue(minValue)
+							fmt.Println(maxLoss, "removing value:", minValue)
+						}
+					}
+				}
+				//fmt.Println(maxLoss, minLoss, lambdaLoss(lambda,
+				//	threeway_loss[minI].Load(),
+				//	threeway_complexity_loss[minI].Load()))
+				minI -= len(threewayz)
+				fmt.Println(maxLoss, threewayz[minI], minLoss)
+				lang_eval = lang_eval.With(threewayz[minI][0], threewayz[minI][1])
+				if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+					lang.With(threewayz[minI][0], threewayz[minI][1])
+				}
 			}
 		}
 
 		if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
 			lang.SaveToJson(*langFile)
 		}
+
+		if (bestLoss != 0 && bestLoss == minLoss) || minI == -1 {
+
+			if hyper != nil {
+				if now_hyper < *hyper {
+					now_hyper <<= 1
+				} else {
+					return
+				}
+			} else {
+				return
+			}
+		} else if minI != -1 && now_hyper > *hyperinit {
+			now_hyper--
+		}
+		bestLoss = minLoss
 	}
 	goto again
 }

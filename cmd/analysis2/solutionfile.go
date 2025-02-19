@@ -20,12 +20,16 @@ type SolutionFile struct {
 	SplitAfter  []string `json:"SplitAfter"`
 
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
+
+	UseCombining  bool `json:"UseCombining"`
 }
 
 func (s *SolutionFile) WithoutKey(key string) {
+	//fmt.Println("WITHOUT KEY", key)
 	delete(s.Map, key)
 }
 func (s *SolutionFile) WithoutValue(value string) {
+	//fmt.Println("WITHOUT VALUE", value)
 	for k, v := range s.Map {
 		for i, val := range v {
 			if val == value {
@@ -37,6 +41,7 @@ func (s *SolutionFile) WithoutValue(value string) {
 	}
 }
 func (s *SolutionFile) With(src, dst string) {
+	//fmt.Println("WITH", src, dst)
 	if arr, ok := s.Map[src]; ok {
 		for _, val := range arr {
 			if val == dst {
@@ -83,9 +88,11 @@ func (s *SolutionFile) SaveToJson(file string) error {
 func (s *SolutionFile) ToEval() (e *SolutionEval) {
 	e = &SolutionEval{
 		Map: make(map[string]map[int]map[string]struct{}),
+		Drop: make(map[string]struct{}),
 		DstMultiPrefix: make(map[string]struct{}),
 		DstMultiSuffix: make(map[string]struct{}),
 		DropLast: make(map[string]struct{}),
+		UseCombining: s.UseCombining,
 	}
 	for k, val := range s.Map {
 		if k == "" {
@@ -94,8 +101,16 @@ func (s *SolutionFile) ToEval() (e *SolutionEval) {
 		if len(val) == 0 {
 			continue
 		}
+		if len(val) == 1 && val[0] == "" {
+			e.Drop[k] = struct{}{}
+			continue
+		}
 		e.Map[k] = make(map[int]map[string]struct{})
 		for _, v := range val {
+			if v == "" {
+				e.Drop[k] = struct{}{}
+				continue
+			}
 			if e.Map[k][len(v)] == nil {
 				e.Map[k][len(v)] = make(map[string]struct{})
 			}
