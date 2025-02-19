@@ -14,6 +14,7 @@ import "flag"
 import "strings"
 import "sync/atomic"
 import "math/rand"
+import "time"
 
 func loop(filename string, top, group int, do func(string, string)) {
 	// Open the file
@@ -94,6 +95,28 @@ func (d *DictGetter) Write() {
 	os.WriteFile(d.modelfile+".best", d.bestfile, 0777)
 }
 
+func watchFile(filePath string) error {
+    initialStat, err := os.Stat(filePath)
+    if err != nil {
+        return err
+    }
+
+    for {
+        stat, err := os.Stat(filePath)
+        if err != nil {
+            return err
+        }
+
+        if stat.Size() != initialStat.Size() || stat.ModTime() != initialStat.ModTime() {
+            break
+        }
+
+        time.Sleep(1 * time.Millisecond)
+    }
+
+    return nil
+}
+
 type dummy struct {
 }
 
@@ -109,6 +132,7 @@ func main() {
 	isreverse := flag.Bool("reverse", false, "is reverse")
 	nostress := flag.Bool("nostress", false, "no stress")
 	testing := flag.Bool("testing", false, "keep backtesting and overwriting the model with the best one")
+	resume := flag.Bool("resume", false, "test old model initially")
 	flag.Parse()
 
 	var dictgetter DictGetter
@@ -127,6 +151,9 @@ again:
 				modelfile = "../../dicts/" + *langname + "/weights1.json.zlib"
 			}
 			dictgetter.modelfile = modelfile
+			if resume != nil && *resume {
+				dictgetter.modelfile += ".best"
+			}
 		}
 	}
 	p := lib.NewPhonemizer(nil)
@@ -139,7 +166,7 @@ again:
 	}
 
 	var percent, errsum, total atomic.Uint64
-	loop(srcfile, 1000, 1000, func(word1, word2 string) {
+	loop(srcfile, 10000, 1000, func(word1, word2 string) {
 		total.Add(1)
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "'", "")
@@ -188,8 +215,10 @@ again:
 			dictgetter.bestfile = dictgetter.currentfile
 			dictgetter.bestsuccess = success
 			dictgetter.Write()
-		}
 
+			watchFile(dictgetter.modelfile)
+		}
+		dictgetter.modelfile = modelfile
 		goto again
 	}
 }
