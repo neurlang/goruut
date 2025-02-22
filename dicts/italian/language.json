@@ -38,8 +38,7 @@
 "zi":["tsiˈ","tsjˈ","tsi","tsj"],
 "zz":["tsː"],
 "zza":["dzːˈa","tsːˈa"],
-"zzazi":["dzːatsiˈ"],
-"à":["ˈa"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"zzazi":["dzːatsiˈ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null}
