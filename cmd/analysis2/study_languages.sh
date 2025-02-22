@@ -3,7 +3,7 @@
  timeout 600 ./study_language.sh	afrikaans	
  timeout 600 ./study_language.sh	amharic	
  timeout 600 ./study_language.sh	arabic	
- timeout 600 ./study_language.sh	armenian	
+ timeout 600 ./study_language.sh	armenian		--rowlossimportance 10
  timeout 600 ./study_language.sh	azerbaijani		--rowlossimportance 6
  timeout 600 ./study_language.sh	basque	
  timeout 600 ./study_language.sh	belarusian	
