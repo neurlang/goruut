@@ -85,9 +85,6 @@ func main() {
 	}
 
 	tsvWrite := func(strs [2][]string) {
-		if reverse != nil && *reverse {
-			strs[0], strs[1] = strs[1], strs[0]
-		}
 		if dstFile != nil && *dstFile != "" {
 			row := [2]string{spacesept(strs[0]), spacesep(strs[1])}
 			mut.Lock()
