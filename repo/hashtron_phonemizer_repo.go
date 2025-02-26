@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"github.com/neurlang/classifier/datasets/phonemizer"
 	"github.com/neurlang/classifier/hashtron"
+	//"github.com/neurlang/classifier/layer/full"
+	//"github.com/neurlang/classifier/layer/sochastic"
+	"github.com/neurlang/classifier/layer/parity"
 	"github.com/neurlang/classifier/layer/majpool2d"
 	"github.com/neurlang/classifier/net/feedforward"
 	"github.com/neurlang/goruut/helpers/log"
@@ -13,6 +16,7 @@ import (
 	"sync"
 	"unicode"
 )
+//import "fmt"
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
@@ -46,6 +50,7 @@ type language struct {
 	SrcMultiSuffix    []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
 	DropLast          []string            `json:"DropLast"`
+	version           int
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
 	mapSrcMulti       map[string]struct{}
@@ -115,6 +120,13 @@ func (l *languages) SrcMulti(isReverse bool, lang string) map[string]struct{} {
 		reverse = "_reverse"
 	}
 	return (*l)[lang+reverse].mapSrcMulti
+}
+func (l *languages) Version(isReverse bool, lang string) int {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].version
 }
 func (l *languages) DstMulti(isReverse bool, lang string) map[string]struct{} {
 	var reverse string
@@ -241,32 +253,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.nets = &netss
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
-	if (*nets)[lang+reverse] == nil {
-		{
-			const fanout1 = 1
-			const fanout2 = 5
-			const fanout3 = 3
-			const fanout4 = 5
-			//const fanout5 = 1
-			//const fanout6 = 4
-			//const fanout7 = 1
-			//const fanout8 = 5
-
-			var net feedforward.FeedforwardNetwork
-			//net.NewLayerP(fanout1*fanout2*fanout3*fanout4*fanout5*fanout6*fanout7*fanout8, 0, 1<<fanout8)
-			//net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout3*fanout4*fanout5*fanout6*fanout8, 1, fanout7, 1, fanout8, 1, 1, 0))
-			//net.NewLayerP(fanout1*fanout2*fanout3*fanout4*fanout5*fanout6, 0, 1<<(fanout6*fanout6*2/3))
-			//net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout3*fanout4*fanout6, 1, fanout5, 1, fanout6, 1, 1, 0))
-			net.NewLayerP(fanout1*fanout2*fanout3*fanout4, 0, 1<<13)
-			net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout4, 1, fanout3, 1, fanout4, 1, 1, 0))
-			net.NewLayer(fanout1*fanout2, 0)
-			//net.NewCombiner(full.MustNew(fanout2, 1, 1))
-			net.NewCombiner(majpool2d.MustNew2(fanout2, 1, fanout1, 1, fanout2, 1, 1, 0))
-			net.NewLayer(1, 0)
-			(*r.nets)[lang+reverse] = &net
-
-		}
-	} else {
+	if (*nets)[lang+reverse] != nil {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
@@ -296,10 +283,10 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.phoner = &iface
 	}
 
-	var files = []string{"weights1" + reverse + ".json.zlib"}
+	var files = []string{"weights2" + reverse + ".json.zlib", "weights1" + reverse + ".json.zlib"}
 
 
-	for _, file := range files {
+	for i, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
 
 		if compressedData == nil {
@@ -308,8 +295,40 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 		if (*r.getter).IsNewFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
+
+			switch i {
+			case 1:
+				const fanout1 = 1
+				const fanout2 = 5
+				const fanout3 = 3
+				const fanout4 = 5
+
+				var net feedforward.FeedforwardNetwork
+				net.NewLayerP(fanout1*fanout2*fanout3*fanout4, 0, 1<<13)
+				net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout4, 1, fanout3, 1, fanout4, 1, 1, 0))
+				net.NewLayer(fanout1*fanout2, 0)
+				net.NewCombiner(majpool2d.MustNew2(fanout2, 1, fanout1, 1, fanout2, 1, 1, 0))
+				net.NewLayer(1, 0)
+				
+				(*r.nets)[lang+reverse] = &net
+			case 0:
+			
+				const fanout1 = 5
+				var net feedforward.FeedforwardNetwork
+				//net.NewLayer(fanout1, 0)
+				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
+				net.NewLayer(fanout1, 0)
+				net.NewCombiner(parity.MustNew(fanout1))
+				net.NewLayer(1, 0)
+
+				(*r.nets)[lang+reverse] = &net
+				
+				(*r.lang)[lang+reverse].version = 1
+
+			}
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
-			log.Error0(err)
+			log.Error0(err)			
+	
 			return
 		} /*else if !isReverse  doesnt work: && (*r.getter).IsOldFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
@@ -453,7 +472,6 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 	dsta := []string{}
 
 	var lastspace = 0
-
 outer:
 	for i := 0; i < len(srca); i++ {
 		srcv := srca[i]
@@ -472,10 +490,11 @@ outer:
 		}
 		if len(m) == 1 {
 			for _, mfirst := range m {
-				if strings.HasPrefix(mfirst, "_") {
+				if mfirst == "_" {
+					mfirst = ""
+				} else if strings.HasPrefix(mfirst, "_") {
 					lastspace = i
-				}
-				if strings.HasSuffix(mfirst, "_") {
+				} else if strings.HasSuffix(mfirst, "_") {
 					lastspace = i + 1
 				}
 				dsta = append(dsta, mfirst)
@@ -490,28 +509,35 @@ outer:
 			i := i - lastspace
 			r.mut.RLock()
 			net := (*r.nets)[lang+reverse]
+			version := r.lang.Version(isReverse, lang)
 			r.mut.RUnlock()
 			if net == nil {
 				continue
 			}
-			var predicted bool
-			if true {
+			var predicted int
+			for q := 0; (version == 0 && q == 0) || (version == 1 && q < len(srcaR)-i); q++ {
 				var input = phonemizer.NewSample{
-					SrcA:   copystrings(srcaR),
+					SrcA:   copystrings(srcaR[:len(srcaR)-q]),
 					DstA:   copystrings(dstaR[0:i]),
 					SrcCut: copystrings(srcaR[0:i]),
-					SrcFut: copystrings(srcaR[i:]),
+					SrcFut: copystrings(srcaR[i:len(srcaR)-q]),
 					Option: option,
 				}
 				r.mut.RLock()
-				predicted = net.Infer2(&input) != 0
-				r.mut.RUnlock()
-			}
-			if predicted {
-				if strings.HasPrefix(option, "_") {
-					lastspace = origi
+				if version == 1 {
+					predicted += int(net.Infer2(input.V1()))
+				} else {
+					predicted += int(net.Infer2(&input))
 				}
-				if strings.HasSuffix(option, "_") {
+				r.mut.RUnlock()
+				//fmt.Println(input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, predicted)
+			}
+			if (version == 0 && predicted == 1) || (version == 1 && 2*predicted > len(srcaR)) {
+				if option == "_" {
+					option = ""
+				} else if strings.HasPrefix(option, "_") {
+					lastspace = origi
+				} else if strings.HasSuffix(option, "_") {
 					lastspace = origi + 1
 				}
 				dsta = append(dsta, option)
@@ -525,19 +551,18 @@ outer:
 			continue
 		}
 		for _, mfirst := range m {
-			if strings.HasPrefix(mfirst, "_") {
+			if mfirst == "_" {
+				mfirst = ""
+			} else if strings.HasPrefix(mfirst, "_") {
 				lastspace = i
-			}
-			if strings.HasSuffix(mfirst, "_") {
+			} else if strings.HasSuffix(mfirst, "_") {
 				lastspace = i + 1
 			}
 			dsta = append(dsta, mfirst)
 			break
 		}
 	}
-
-	var src string
-	var dst string
+	var src, dst string
 
 	push := func() {
 		if len(src)+len(dst) > 0 {
@@ -556,8 +581,8 @@ outer:
 		if v != "_" && strings.HasPrefix(v, "_") {
 			push()
 		}
-		src = src + srca[i]
-		dst = dst + v
+		src += srca[i]
+		dst += v
 		if strings.HasSuffix(v, "_") {
 			push()
 		}
