@@ -4,12 +4,14 @@ import (
 	"encoding/csv"
 	"fmt"
 	"os"
+	"sync"
 )
 
 // TSVWriter struct to manage file and writer state
 type TSVWriter struct {
 	file   *os.File
 	writer *csv.Writer
+	mutex  sync.Mutex
 }
 
 // Open method to create and open the TSV file
@@ -41,6 +43,8 @@ func (t *TSVWriter) Open(fileName string, headers []string) error {
 
 // AddRow method to add a row to the TSV file
 func (t *TSVWriter) AddRow(row []string) error {
+	t.mutex.Lock()
+	defer t.mutex.Unlock()
 	if t.writer == nil {
 		return fmt.Errorf("TSVWriter not opened")
 	}

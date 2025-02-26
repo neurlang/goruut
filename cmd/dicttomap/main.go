@@ -1,10 +1,8 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"math/rand"
-	"os"
 	"sort"
 	"strings"
 	"time"
@@ -16,61 +14,12 @@ import (
 )
 import "sync"
 
-func loop(filename string, group int, do func(string, string)) {
-	// Open the file
-	file, err := os.Open(filename)
-	if err != nil {
-		fmt.Println("Error opening file:", err)
-		return
+func nosep(sli []string) (sep string) {
+	for _, w := range sli {
+		sep += w
 	}
-	defer file.Close()
-
-	wg := sync.WaitGroup{}
-	grp := group
-
-	// Create a new scanner to read the file line by line
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		columns := strings.Split(line, "\t")
-
-		// Check if we have exactly two columns
-		if len(columns) != 2 {
-			fmt.Println("Line does not have exactly two columns:", line)
-			continue
-		}
-
-		// Process each column
-		column1 := columns[0]
-		column2 := columns[1]
-
-		if grp == 0 {
-			wg.Wait()
-			grp = group
-		} else {
-			grp--
-		}
-
-		wg.Add(1)
-
-		go func(column1, column2 string) {
-
-			// Example: Print the columns
-			do(column1, column2)
-
-			wg.Done()
-		}(column1, column2)
-
-	}
-
-	wg.Wait()
-
-	// Check for any scanner errors
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading file:", err)
-	}
+	return sep
 }
-
 func spacesep(sli []string) (sep string) {
 	for i, w := range sli {
 		if i > 0 {
@@ -82,23 +31,23 @@ func spacesep(sli []string) (sep string) {
 }
 
 type baseLanguage struct {
-	SrcMulti         interface{}            `json:"SrcMulti"`
-	DstMulti         interface{}            `json:"DstMulti"`
-	SrcMultiSuffix   interface{}            `json:"SrcMultiSuffix"`
-	DstMultiSuffix   interface{}            `json:"DstMultiSuffix"`
-	DropLast         interface{}            `json:"DropLast"`
+	SrcMulti         interface{} `json:"SrcMulti"`
+	DstMulti         interface{} `json:"DstMulti"`
+	SrcMultiSuffix   interface{} `json:"SrcMultiSuffix"`
+	DstMultiSuffix   interface{} `json:"DstMultiSuffix"`
+	DropLast         interface{} `json:"DropLast"`
 	DstMultiPrefix   interface{} `json:"DstMultiPrefix"`
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
-	SplitBefore interface{} `json:"SplitBefore"`
-	SplitAfter interface{} `json:"SplitAfter"`
-	
+	SplitBefore      interface{} `json:"SplitBefore"`
+	SplitAfter       interface{} `json:"SplitAfter"`
+	IsDuplex         interface{} `json:"IsDuplex"`
+	IsSrcSurround    interface{} `json:"IsSrcSurround"`
 }
 
 type Language struct {
-	Map            map[string][]string `json:"Map"`
+	Map map[string][]string `json:"Map"`
 	baseLanguage
 }
-
 
 func LanguageNewFromFile(file string) (l *Language, err error) {
 	// Read the JSON file
@@ -149,26 +98,51 @@ func main() {
 
 	var histogram = make(map[[2]string]int)
 
-	loop(*srcFile, 100, func(word1, word2 string) {
+	var srcData = load(*srcFile, 99999999)
+
+	var writer TSVWriter
+	writer.Open(*srcFile, nil)
+
+	loop(srcData, 100, func(word1, word2 string) {
 		sword1 := strings.Split(word1, " ")
 		sword2 := strings.Split(word2, " ")
+
+		var osword [2]string
 
 		if len(sword1) != len(sword2) {
 			return
 		}
 
-		for i := range sword1 {
-			if nodel != nil && *nodel && sword2[i] == "" {
-				continue
+		for i := 1; i < len(sword1); i++ {
+			key := nosep(sword1[:len(sword1)-i])
+			val := nosep(sword2[:len(sword2)-i])
+			if _, ok := lang.Map[key]; ok {
+
+				if nodel != nil && *nodel && val == "" {
+					continue
+				}
+				mut.Lock()
+				histogram[[2]string{key, val}]++
+				mut.Unlock()
+
+				osword[0] += " " + key
+				osword[1] += " " + val
+
+				//println(key, val, nosep(sword1), nosep(sword2))
+				sword1 = sword1[len(sword1)-i:]
+				sword2 = sword2[len(sword2)-i:]
+				i = 0
 			}
-			mut.Lock()
-			histogram[[2]string{sword1[i], sword2[i]}]++
-			mut.Unlock()
+		}
+		if len(osword[0]) > 0 && len(osword[1]) > 0 {
+			osword[0] = osword[0][1:]
+			osword[1] = osword[1][1:]
+			writer.AddRow(osword[:])
 		}
 	})
-
+	writer.Close()
 	if dropFile != nil && *dropFile != "" {
-		loop(*dropFile, 100, func(word1, word2 string) {
+		loop(load(*dropFile, 99999999), 100, func(word1, word2 string) {
 			mut.Lock()
 			delete(histogram, [2]string{word1, word2})
 			mut.Unlock()
@@ -194,7 +168,7 @@ func main() {
 			println(lowsrc + " (mapped to) " + lowdst)
 			println()
 
-			loop(*srcFile, 100, func(word1, word2 string) {
+			loop(srcData, 100, func(word1, word2 string) {
 				sword1 := strings.Split(word1, " ")
 				sword2 := strings.Split(word2, " ")
 
@@ -231,12 +205,11 @@ func main() {
 		println(err.Error())
 		return
 	}
-	
 
 	if writeback != nil && *writeback {
 		var olang = lang
 		olang.Map = data
-		
+
 		bytes, err := json.Marshal(olang)
 		if err != nil {
 			println(err.Error())
