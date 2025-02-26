@@ -2,5 +2,5 @@ package amharic
 
 import "embed"
 
-//go:embed *.tsv language.json weights1.json.zlib language_reverse.json weights1_reverse.json.zlib
+//go:embed *.tsv language.json weights*.json.zlib language_reverse.json weights*_reverse.json.zlib
 var Language embed.FS
