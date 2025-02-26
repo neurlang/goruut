@@ -15,6 +15,8 @@ import "strings"
 import "sync/atomic"
 import "math/rand"
 import "time"
+import "compress/zlib"
+import "io"
 
 func loop(filename string, top, group int, do func(string, string)) {
 	// Open the file
@@ -68,6 +70,7 @@ func loop(filename string, top, group int, do func(string, string)) {
 
 type DictGetter struct {
 	getter      dicts.DictGetter
+	dumpwrong   bool
 	coolname    string
 	modelfile   string
 	currentfile []byte
@@ -76,6 +79,10 @@ type DictGetter struct {
 }
 
 func (d *DictGetter) GetDict(lang, filename string) ([]byte, error) {
+	if d.dumpwrong && filename == "missing.all.zlib" {
+		println("intentional error:")
+		return nil, fmt.Errorf("generating missing all zlib intentional error")
+	}
 	if lang == d.coolname && strings.HasSuffix(d.modelfile, filename) {
 		data, err := os.ReadFile(d.modelfile)
 		if err == nil {
@@ -130,18 +137,53 @@ func (dummy) GetPolicyMaxWords() int {
 	return 99999999999
 }
 
+
+func recompress(langname string) {
+	// Open the input file
+	inputFile, err := os.Open("../../dicts/" + langname + "/missing.all.tsv")
+	if err != nil {
+		panic(err)
+	}
+	defer inputFile.Close()
+
+	// Create the output file
+	outputFile, err := os.Create("../../dicts/" + langname + "/missing.all.zlib")
+	if err != nil {
+		panic(err)
+	}
+	defer outputFile.Close()
+
+	// Create a zlib writer with the best compression level
+	zlibWriter, err := zlib.NewWriterLevel(outputFile, zlib.BestCompression)
+	if err != nil {
+		panic(err)
+	}
+	defer zlibWriter.Close()
+
+	// Copy the contents of the input file to the zlib writer
+	_, err = io.Copy(zlibWriter, inputFile)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
 	langname := flag.String("langname", "", "directory language name")
 	isreverse := flag.Bool("reverse", false, "is reverse")
 	nostress := flag.Bool("nostress", false, "no stress")
 	testing := flag.Bool("testing", false, "keep backtesting and overwriting the model with the best one")
 	resume := flag.Bool("resume", false, "test old model initially")
+	dumpwrong := flag.Bool("dumpwrong", false, "dump wrong answers to dictionary")
+	dumpcompress := flag.Bool("dumpcompress", false, "compress after dumping")
 	flag.Parse()
 
 	var dictgetter DictGetter
 	var coolname string
 	var srcfile string
 	var modelfile string
+
+	dictgetter.dumpwrong = dumpwrong != nil && *dumpwrong
+
 again:
 	if langname != nil {
 		coolname = dicts.LangName(*langname)
@@ -160,9 +202,30 @@ again:
 		}
 	}
 	var batch = 10000
+	var dump func(string, string)
+	var writer TSVWriter
+	if dumpwrong != nil && *dumpwrong {
+		err := writer.Open("../../dicts/" + *langname + "/missing.all.tsv", nil)
+		if err != nil {
+			println(err.Error())
+		}
+		dump = func(w1 string, w2 string) {
+			if isreverse != nil && *isreverse {
+				writer.AddRow([]string{w2, w1})
+			} else {
+				writer.AddRow([]string{w1, w2})
+			}
+		}
+	} else {
+		dump = func(w1 string, w2 string) {}
+	}
 	p := lib.NewPhonemizer(nil)
-	if testing != nil && *testing {
-		batch = 1000
+	if testing != nil && *testing || dumpwrong != nil && *dumpwrong {
+		if dumpwrong != nil && *dumpwrong {
+			batch = 99999999
+		} else {
+			batch = 1000
+		}
 		di := di.NewDependencyInjection()
 		di.Add((interfaces.DictGetter)(&dictgetter))
 		di.Add((interfaces.IpaFlavor)(dummy{}))
@@ -208,11 +271,19 @@ again:
 		errsum.Add(dist)
 		if target == word2 {
 			percent.Add(1)
+		} else {
+			dump(word1, word2)
 		}
 
 		//success := 100 * percent.Load() / total.Load()
 		//println("[success rate]", success, "%", "with", errsum.Load(), "errors", percent.Load(), "successes", "for", *langname)
 	})
+	if dumpwrong != nil && *dumpwrong {
+		writer.Close()
+	}
+	if dumpcompress != nil && *dumpcompress {
+		recompress(*langname)
+	}
 	success := 100 * percent.Load() / total.Load()
 	println("[success rate]", success, "%", "with", errsum.Load(), "errors", percent.Load(), "successes", "for", *langname)
 

@@ -8,6 +8,7 @@ import (
 	"github.com/spaolacci/murmur3"
 	"strings"
 	"sync"
+	"compress/zlib"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -30,21 +31,29 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 		reverse = "_reverse"
 	}
 	r.mut.Lock()
+	defer r.mut.Unlock()
 	if (*r.lang_words)[lang+reverse] == nil {
 		(*r.lang_words)[lang+reverse] = make(map[string]map[uint64]string)
-		r.mut.Unlock()
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
-		r.mut.Unlock()
 		return
 	}
 
-	var files = []string{"missing" + reverse + ".tsv"}
+	var files = []string{"missing" + reverse + ".tsv", "missing.all.zlib"}
 
 	for _, file := range files {
 		clean := log.Error1((*r.getter).GetDict(lang, file))
+		var reader *csv.Reader
 
-		reader := csv.NewReader(bytes.NewReader(clean))
+		if len(clean) == 0 {
+			continue
+		}
+
+		if strings.HasSuffix(file, ".zlib") {
+			reader = csv.NewReader(log.Error1(zlib.NewReader(bytes.NewReader(clean))))
+		} else {
+			reader = csv.NewReader(bytes.NewReader(clean))
+		}
 
 		reader.Comma = '\t'
 
@@ -57,8 +66,13 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 			var src, dst string
 			var tag uint64
 			if len(v) == 2 {
-				src = v[0]
-				dst = v[1]
+				if file == "missing.all.zlib" && isReverse {
+					src = v[1]
+					dst = v[0]
+				} else {
+					src = v[0]
+					dst = v[1]
+				}
 				tag = murmur3hash(src + "\x00" + dst)
 			} else if len(v) == 3 {
 				src = v[0]
@@ -68,12 +82,10 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 				log.Now().Debugf("Language %s has wrong number of columns: %d", src, len(v))
 				continue
 			}
-			r.mut.Lock()
 			if (*r.lang_words)[lang+reverse][src] == nil {
 				(*r.lang_words)[lang+reverse][src] = make(map[uint64]string)
 			}
 			(*r.lang_words)[lang+reverse][src][tag] = dst
-			r.mut.Unlock()
 		}
 	}
 }
@@ -91,13 +103,12 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 	if len(found) == 0 {
 		return nil
 	}
-
+	var m = make(map[uint64]string)
 	for k, v := range found {
-		m := make(map[uint64]string)
-		m[0] = word
 		m[k] = v
-		ret = append(ret, m)
 	}
+	m[0] = word
+	ret = append(ret, m)
 	return
 }
 
