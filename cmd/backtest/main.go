@@ -98,20 +98,23 @@ func (d *DictGetter) Write() {
 func watchFile(filePath string) error {
     initialStat, err := os.Stat(filePath)
     if err != nil {
+    	println(err.Error())
         return err
     }
 
     for {
         stat, err := os.Stat(filePath)
         if err != nil {
+    	    println(err.Error())
             return err
         }
 
         if stat.Size() != initialStat.Size() || stat.ModTime() != initialStat.ModTime() {
+        	println("changed")
             break
         }
 
-        time.Sleep(1 * time.Millisecond)
+        time.Sleep(100 * time.Millisecond)
     }
 
     return nil
@@ -146,9 +149,9 @@ again:
 		srcfile = "../../dicts/" + *langname + "/dirty.tsv"
 		if testing != nil && *testing {
 			if isreverse != nil && *isreverse {
-				modelfile = "../../dicts/" + *langname + "/weights1_reverse.json.zlib"
+				modelfile = "../../dicts/" + *langname + "/weights2_reverse.json.zlib"
 			} else {
-				modelfile = "../../dicts/" + *langname + "/weights1.json.zlib"
+				modelfile = "../../dicts/" + *langname + "/weights2.json.zlib"
 			}
 			dictgetter.modelfile = modelfile
 			if resume != nil && *resume {
@@ -156,8 +159,10 @@ again:
 			}
 		}
 	}
+	var batch = 10000
 	p := lib.NewPhonemizer(nil)
 	if testing != nil && *testing {
+		batch = 1000
 		di := di.NewDependencyInjection()
 		di.Add((interfaces.DictGetter)(&dictgetter))
 		di.Add((interfaces.IpaFlavor)(dummy{}))
@@ -166,7 +171,7 @@ again:
 	}
 
 	var percent, errsum, total atomic.Uint64
-	loop(srcfile, 10000, 1000, func(word1, word2 string) {
+	loop(srcfile, batch, 1000, func(word1, word2 string) {
 		total.Add(1)
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "'", "")
@@ -193,6 +198,8 @@ again:
 			target = strings.ReplaceAll(target, "ˈ", "")
 			target = strings.ReplaceAll(target, "ˌ", "")
 		}
+		target = strings.ToLower(target)
+		word2 = strings.ToLower(word2)
 
 		var mat = levenshtein.Matrix[uint64](uint(len([]rune(target))), uint(len([]rune(word2))),
 			nil, nil,
@@ -215,9 +222,10 @@ again:
 			dictgetter.bestfile = dictgetter.currentfile
 			dictgetter.bestsuccess = success
 			dictgetter.Write()
-
-			watchFile(dictgetter.modelfile)
 		}
+		watchFile(dictgetter.modelfile)
+		time.Sleep(time.Second)
+		
 		dictgetter.modelfile = modelfile
 		goto again
 	}
