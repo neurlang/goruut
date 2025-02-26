@@ -134,7 +134,22 @@ func main() {
 				i = 0
 			}
 		}
+		if len(sword1) > 0 {
+			for i := range sword1 {
+				if nodel != nil && *nodel && sword2[i] == "" {
+					continue
+				}
+				mut.Lock()
+				histogram[[2]string{sword1[i], sword2[i]}]++
+				mut.Unlock()
+			}
+			osword[0] += " " + spacesep(sword1)
+			osword[1] += " " + spacesep(sword2)
+		}
+
+
 		if len(osword[0]) > 0 && len(osword[1]) > 0 {
+			//println(word1, word2, osword[0][1:], osword[1][1:])
 			osword[0] = osword[0][1:]
 			osword[1] = osword[1][1:]
 			writer.AddRow(osword[:])

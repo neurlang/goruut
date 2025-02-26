@@ -50,7 +50,6 @@ type language struct {
 	SrcMultiSuffix    []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
 	DropLast          []string            `json:"DropLast"`
-	version           int
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
 	mapSrcMulti       map[string]struct{}
@@ -121,13 +120,7 @@ func (l *languages) SrcMulti(isReverse bool, lang string) map[string]struct{} {
 	}
 	return (*l)[lang+reverse].mapSrcMulti
 }
-func (l *languages) Version(isReverse bool, lang string) int {
-	var reverse string
-	if isReverse {
-		reverse = "_reverse"
-	}
-	return (*l)[lang+reverse].version
-}
+
 func (l *languages) DstMulti(isReverse bool, lang string) map[string]struct{} {
 	var reverse string
 	if isReverse {
@@ -322,8 +315,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				net.NewLayer(1, 0)
 
 				(*r.nets)[lang+reverse] = &net
-				
-				(*r.lang)[lang+reverse].version = 1
 
 			}
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
@@ -509,13 +500,13 @@ outer:
 			i := i - lastspace
 			r.mut.RLock()
 			net := (*r.nets)[lang+reverse]
-			version := r.lang.Version(isReverse, lang)
 			r.mut.RUnlock()
+			var multiword = lastspace > 0
 			if net == nil {
 				continue
 			}
 			var predicted int
-			for q := 0; (version == 0 && q == 0) || (version == 1 && q < len(srcaR)-i); q++ {
+			for q := 0; (!multiword && q == 0) || (multiword && q < len(srcaR)-i); q++ {
 				var input = phonemizer.NewSample{
 					SrcA:   copystrings(srcaR[:len(srcaR)-q]),
 					DstA:   copystrings(dstaR[0:i]),
@@ -523,16 +514,18 @@ outer:
 					SrcFut: copystrings(srcaR[i:len(srcaR)-q]),
 					Option: option,
 				}
+				var pred int
 				r.mut.RLock()
-				if version == 1 {
-					predicted += int(net.Infer2(input.V1()))
-				} else {
-					predicted += int(net.Infer2(&input))
+				if net.LenLayers() == 3 {
+					pred = int(net.Infer2(input.V1()))
+				} else { // 5 layers, old model
+					pred = int(net.Infer2(&input))
 				}
 				r.mut.RUnlock()
-				//fmt.Println(input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, predicted)
+				predicted += pred
+				//fmt.Println(input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, pred)
 			}
-			if (version == 0 && predicted == 1) || (version == 1 && 2*predicted > len(srcaR)) {
+			if (!multiword && predicted == 1) || (multiword && 2*predicted > len(srcaR)) {
 				if option == "_" {
 					option = ""
 				} else if strings.HasPrefix(option, "_") {
