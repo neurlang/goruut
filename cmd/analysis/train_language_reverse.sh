@@ -22,4 +22,5 @@ PID1=$!
 PID2=$!
 
 # Wait for both processes to finish
-wait $PID1 $PID2
+wait $PID1
+cleanup
