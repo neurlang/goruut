@@ -7,6 +7,7 @@ import "sync"
 import "sync/atomic"
 import "github.com/neurlang/levenshtein"
 import "sort"
+import "os"
 
 func spacesep(sli []string) (sep string) {
 	for i, w := range sli {
@@ -48,6 +49,27 @@ func lambdaLoss(lambda *int, wordLoss, decisionComplexityLoss uint64) uint64 {
 	}
 }
 
+func duplicateRunesIf(input string, when bool) string {
+	if !when {
+		return input	
+	}
+	var result strings.Builder
+
+	for _, r := range []rune(input) {
+		result.WriteRune(r)
+		result.WriteRune(r)
+	}
+
+	return result.String()
+}
+
+func surroundIf(input string, when bool) string {
+	if !when {
+		return input
+	}
+	return "[" + input + "]"
+}
+
 func main() {
 	langFile := flag.String("lang", "", "path to the JSON file containing language data")
 	srcFile := flag.String("srcfile", "", "path to input TSV file containing source and target words dictionary")
@@ -60,6 +82,9 @@ func main() {
 	hyperinit := flag.Int("hyperinit", 1, "hyperparameter initial parallelism (nonnegative, high values are slower)")
 	hyper := flag.Int("hyper", 100, "hyperparameter parallelism (nonnegative, high values are slower)")
 	lambda := flag.Int("rowlossimportance", 5, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
+	duplex := flag.Bool("duplex", false, "duplicate input runes")
+	srcsurround := flag.Bool("srcsurround", false, "src surround with _")
+	matrices := flag.Bool("matrices", false, "print matrices")
 	flag.Parse()
 
 	_ = dstFile
@@ -97,6 +122,10 @@ func main() {
 	}
 
 	lang_eval := lang.ToEval()
+	
+	if srcsurround != nil && *srcsurround {
+		lang_eval = lang_eval.With("[", "").With("]", "")
+	}
 
 	var threeways map[[2]string]uint64
 	var rowLoss, complexityLoss atomic.Uint64
@@ -156,8 +185,17 @@ again:
 			remove_key = append(remove_key, k)
 		}
 	}
+	
+	var mutex sync.Mutex
+	var slowmutex sync.Mutex
+	var slow1, slow2 string
 
 	loop(slice, 1000, func(word1, word2 string) {
+		defer func() {
+			slowmutex.Lock()
+			slow1, slow2 = word1, word2
+			slowmutex.Unlock()
+		}()
 
 		if padspace != nil && *padspace {
 			word2 = strings.ReplaceAll(word2, " ", "_")
@@ -170,31 +208,62 @@ again:
 			word1, word2 = word2, word1
 		}
 
+		word1 = duplicateRunesIf(word1, duplex != nil && *duplex)
+		word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
+
+
+		var totalRowLoss uint64 = 1
+		if padspace != nil && *padspace {
+			totalRowLoss = uint64(strings.Count(word2, "_"))
+		}
+
 		// evaluate key deletion languages
 		for i, lang_single := range delete_langs {
-			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace)
+			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 			if aligned != nil {
+					if padspace != nil && *padspace {
+						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[1] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
+						delete_loss[i].Add(totalRowLossTry)
+					}
 				delete_complexity_loss[i].Add(cplxloss)
 			} else {
-				delete_loss[i].Add(1)
+				delete_loss[i].Add(totalRowLoss)
 			}
 		}
 		// evaluate value removal languages
 		for i, lang_single := range remove_langs {
-			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace)
+			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 			if aligned != nil {
+					if padspace != nil && *padspace {
+						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[1] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
+						remove_loss[i].Add(totalRowLossTry)
+					}
 				remove_complexity_loss[i].Add(cplxloss)
 			} else {
-				remove_loss[i].Add(1)
+				remove_loss[i].Add(totalRowLoss)
 			}
 		}
 
+
 		// do export alignment
-		aligned, cplxloss := lang_eval.Align(word1, word2, padspace != nil && *padspace)
+		aligned, cplxloss := lang_eval.Align(word1, word2, padspace != nil && *padspace, false)
 		if aligned != nil {
 			complexityLoss.Add(cplxloss)
 
 			if padspace != nil && *padspace {
+			
+				for _, v := range aligned[1] {
+					totalRowLoss -= uint64(strings.Count(v, "_"))
+				}
+				//rowLoss.Add(totalRowLoss)
+
+				//fmt.Println(word1, word2, aligned[0], aligned[1])
 
 				var j = 0
 				var k = 0
@@ -222,19 +291,25 @@ again:
 					}
 					tsvWrite(toprint)
 				}
-				//if len((*aligned)[0]) == len((*aligned)[1]) {
-				return
+				//if len((*aligned)[0]) != len((*aligned)[1]) {
+				///	fmt.Println(len((*aligned)[0]), len((*aligned)[1]))
 				//}
-				//fmt.Println(len((*aligned)[0]), len((*aligned)[1]))
+				//return
+				//}
+				//
+				if dstFile != nil && *dstFile != "" {
+					rowLoss.Add(totalRowLoss)
+					return
+				}
 
 			} else {
 				tsvWrite(*aligned)
 				return
 			}
 		}
-
+		
 		// count error
-		rowLoss.Add(1)
+		rowLoss.Add(totalRowLoss)
 		//analyze it
 		aligned2 := lang_eval.AlignHybrid(word1, word2)
 
@@ -268,10 +343,38 @@ again:
 				n = 1
 				return &n
 			}, nil)
+			
+			
+		if matrices != nil && *matrices {
+			var d = *levenshtein.Distance(mat)
 
-		//var d = *levenshtein.Distance(mat)
+			w1p := aligned2[0]
+			w2p := aligned2[1]
+			length := len(aligned2[1])+1
+			{
+				mutex.Lock()
+				if false {
+					for _, rs := range w2p {
+						for _, r := range rs {
+							fmt.Fprintf(os.Stderr, "\\u%04X", r)
+						}
+						fmt.Fprint(os.Stderr, " ")
+					}
+				} else {
+					for _, rs := range w2p {
+						fmt.Fprintf(os.Stderr, "%s ", rs)
+					}
+				}
+				fmt.Fprintln(os.Stderr)
+				for i := 0; i+length < len(mat); i += length {
+					fmt.Fprintln(os.Stderr, w1p[i/length], mat[i:i+length])
+				}
+				fmt.Fprintln(os.Stderr, d)
+				mutex.Unlock()
+			}
+		}
 
-		//fmt.Println(d, aligned2[0], aligned2[1])
+
 
 		var length = len(aligned2[1]) + 1
 		w1p := append(aligned2[0], "")
@@ -317,11 +420,17 @@ again:
 
 				return true
 			})
-			callback := func(threeway_from, threeway_to, next_to string) {
-
-				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
-					return
+			var callback func(threeway_from, threeway_to, next_to string)
+			callback = func(threeway_from, threeway_to, next_to string) {
+				if strings.HasPrefix(threeway_from, "[") {
+					callback(strings.TrimLeft(threeway_from, "["), threeway_to, next_to)
 				}
+				if strings.HasPrefix(threeway_from, "]") {
+					callback(strings.TrimRight(threeway_from, "]"), threeway_to, next_to)
+				}
+
+
+
 				if ok := lang_eval.IsDstMultiPrefix(threeway_to); ok {
 					if next_to != "" {
 						if ok := lang_eval.IsDstMultiPrefix(next_to); !ok {
@@ -330,9 +439,10 @@ again:
 						}
 					}
 				}
-
-				if threeway_to == "_" && padspace != nil && *padspace {
-					// spacer character must be in initial grammar
+				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
+					return
+				}
+				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_from, "_"), "_") {
 					return
 				}
 
@@ -344,6 +454,7 @@ again:
 				}
 				//println(threeway_from, threeway_to)
 				mut.Lock()
+				/*
 				for _, w := range lang.Map[threeway_from] {
 					if w == threeway_to {
 						mut.Unlock()
@@ -356,6 +467,7 @@ again:
 						return
 					}
 				}
+				*/
 				threeways[[2]string{threeway_from,threeway_to}]++
 				mut.Unlock()
 			}
@@ -385,7 +497,13 @@ again:
 						callback(resultx, resulty+lookahead, "")
 					}
 				}
-
+			
+				if padspace != nil && *padspace && strings.Contains(resultx, "_") {
+					resultx, resulty = "", ""
+				}
+				if padspace != nil && *padspace && strings.Contains(resulty, "_") {
+					resultx, resulty = "", ""
+				}
 				resulty += (bin)
 				//longresulty += (bin)
 				if swaps[x] != nil {
@@ -416,7 +534,7 @@ again:
 
 		}
 	})
-
+	println(slow1, slow2)
 	if threeway == nil || false == *threeway {
 
 		fmt.Println("row loss: ",rowLoss.Load(),", complexity loss: ",complexityLoss.Load())
@@ -448,6 +566,8 @@ again:
 
 	if len(threeways) == 0 {
 		if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+			lang.IsDuplex = duplex != nil && *duplex
+			lang.IsSrcSurround = srcsurround != nil && *srcsurround
 			lang.SaveToJson(*langFile)
 		}
 		return
@@ -522,16 +642,35 @@ again:
 			if reverse != nil && *reverse {
 				word1, word2 = word2, word1
 			}
+			
+			word1 = duplicateRunesIf(word1, duplex != nil && *duplex)
+			word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
+
+			var totalRowLoss uint64 = 1
+			if padspace != nil && *padspace {
+				totalRowLoss = uint64(strings.Count(word2, "_"))
+			}
+
 			for i, lang_single := range threway_langs {
 				if lang_single == nil {
 					continue
 				}
 
-				aligned, cplxLoss := lang_single.Align(word1, word2, padspace != nil && *padspace)
+
+
+				aligned, cplxLoss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 				if aligned != nil {
+				
+					if padspace != nil && *padspace {
+						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[1] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
+						threeway_loss[i].Add(totalRowLossTry)
+					}
 					threeway_complexity_loss[i].Add(cplxLoss)
 				} else {
-					threeway_loss[i].Add(1)
+					threeway_loss[i].Add(totalRowLoss)
 				}
 			}
 		})
@@ -592,6 +731,8 @@ again:
 		}
 
 		if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+			lang.IsDuplex = duplex != nil && *duplex
+			lang.IsSrcSurround = srcsurround != nil && *srcsurround
 			lang.SaveToJson(*langFile)
 		}
 

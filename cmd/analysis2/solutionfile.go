@@ -16,6 +16,9 @@ type SolutionFile struct {
 	DstMultiPrefix []string            `json:"DstMultiPrefix"`
 	DropLast       []string            `json:"DropLast"`
 
+	IsDuplex    bool  `json:"IsDuplex"`
+	IsSrcSurround    bool  `json:"IsSrcSurround"`
+
 	SplitBefore []string `json:"SplitBefore"`
 	SplitAfter  []string `json:"SplitAfter"`
 
@@ -75,7 +78,6 @@ func (s *SolutionFile) SaveToJson(file string) error {
 	if err != nil {
 		return err
 	}
-
 	data = bytes.ReplaceAll(data, []byte(`],"`), []byte("],\n\""))
 
 	err = ioutil.WriteFile(file, data, 0755)

@@ -182,18 +182,18 @@ func (s *SolutionEval) ComplexityLoss(aligned1 []string) (ret uint64) {
 	ret -= uint64(len(aligned1))
 	return
 }
-func (s *SolutionEval) Align(word1, word2 string, asymmetric bool) (ret *[2][]string, cplxLoss uint64) {
+func (s *SolutionEval) Align(word1, word2 string, asymmetric, isCleaning bool) (ret *[2][]string, cplxLoss uint64) {
 	if asymmetric {
-		ret = s.AlignAsymmetric(word1, word2)
+		ret = s.AlignAsymmetric(word1, word2, isCleaning)
 	} else {
-		ret = s.AlignSymmetric(word1, word2)
+		ret = s.AlignSymmetric(word1, word2, isCleaning)
 	}
 	if ret != nil {
 		cplxLoss = s.ComplexityLoss(ret[0])
 	}
 	return
 }
-func (s *SolutionEval) AlignSymmetric(word1, word2 string) (ret *[2][]string) {
+func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret *[2][]string) {
 	if len(word1) == 0 && len(word2) == 0 {
 		return &[2][]string{}
 	}
@@ -218,7 +218,7 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string) (ret *[2][]string) {
 				}
 				word2p := word2[:j]
 				if _, ok := counts[j][word2p]; ok {
-					ret = s.AlignSymmetric(word1[len(word1)-i:], word2[j:])
+					ret = s.AlignSymmetric(word1[len(word1)-i:], word2[j:], isCleaning)
 					if ret != nil {
 						ret[0] = append([]string{word1k}, ret[0]...)
 						ret[1] = append([]string{word2p}, ret[1]...)
@@ -226,12 +226,15 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string) (ret *[2][]string) {
 					}
 				}
 			}
+			if isCleaning {
+				break
+			}
 		}
 	}
 	return
 }
 
-func (s *SolutionEval) AlignAsymmetric(word1, word2 string) *[2][]string {
+func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool) (ret *[2][]string) {
 	for i := range word1 {
 		word1k := word1[:len(word1)-i]
 		key := strings.Trim(word1k, "_")
@@ -244,7 +247,7 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string) *[2][]string {
 			if s.IsDrop(key) {
 				lengths = append(lengths, 0)
 			}
-			sort.Sort(sort.IntSlice(lengths)) // Sort from big to small
+			sort.Sort(sort.Reverse(sort.IntSlice(lengths))) // Sort from big to small
 
 			// Iterate over sorted lengths
 			for _, j := range lengths {
@@ -253,24 +256,36 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string) *[2][]string {
 				}
 				word2p := word2[:j]
 				if _, exists := counts[j][word2p]; exists {
-					// Allow partial alignment (not requiring full string processing)
-					ret := &[2][]string{
+					retok := &[2][]string{
 						{word1k},
 						{word2p},
 					}
-
-					// Try continuing alignment on the remaining substrings
-					if next := s.AlignAsymmetric(word1[len(word1)-i:], word2[j:]); next != nil {
-						ret[0] = append(ret[0], next[0]...)
-						ret[1] = append(ret[1], next[1]...)
+					// Allow partial alignment (not requiring full string processing)
+					if i == 0 || len(word2) == j {
+						return retok // return end match
 					}
-
-					return ret // Return the first valid alignment found
+					// Try continuing alignment on the remaining substrings
+					if next := s.AlignAsymmetric(word1[len(word1)-i:], word2[j:], isCleaning); next != nil {
+						
+						retok[0] = append(retok[0], next[0]...)
+						retok[1] = append(retok[1], next[1]...)
+						if ret == nil {
+							ret = retok
+						} else if len(ret[0]) < len(retok[0]) {
+							ret = retok
+						}
+					}
+					if ret == nil {
+						ret = retok
+					}
 				}
+			}
+			if isCleaning {
+				break
 			}
 		}
 	}
-	return nil // Allow partial matches; returning nil means no valid alignment found
+	return ret // Allow partial matches; returning nil means no valid alignment found
 }
 
 
@@ -299,7 +314,7 @@ func (s *SolutionEval) StringStartsWithCombiner(str string) bool {
 	return isCombiner(r)
 }
 func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
-    // Base case: if both words are empty, return nil
+    // Base case: if some words are empty, return nil
     if len(word1) == 0 && len(word2) == 0 {
         return nil
     }
@@ -308,35 +323,37 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
     runes1 := []rune(word1)
     runes2 := []rune(word2)
 
-    // Try to find the longest prefix in word1 that exists in s.Map
-    for i := len(runes1); i > 0; i-- {
-        prefix1 := string(runes1[:i])
-        key1 := strings.Trim(prefix1, "_")
-        if counts, ok := s.Map[key1]; ok {
-            // Try to find the corresponding prefix in word2
-            for j := 1; j <= len(runes2); j++ {
-                prefix2 := string(runes2[:j])
-		if (s.IsDstMultiSuffix(prefix2) || s.IsDstMultiPrefix(prefix2)) {
-			continue
+    if len(word2) != 0 || len(word1) != 0 {
+	    // Try to find the longest prefix in word1 that exists in s.Map
+	    for i := len(runes1); i > 0; i-- {
+		prefix1 := string(runes1[:i])
+		key1 := strings.Trim(prefix1, "_")
+		if counts, ok := s.Map[key1]; ok {
+		    // Try to find the corresponding prefix in word2
+		    for j := 1; j <= len(runes2); j++ {
+		        prefix2 := string(runes2[:j])
+			if (s.IsDstMultiSuffix(prefix2) || s.IsDstMultiPrefix(prefix2)) {
+				continue
+			}
+		        if _, exists := counts[len(prefix2)][prefix2]; exists {
+		            // Found a valid pair, recursively align the remaining parts
+		            remaining := s.AlignHybrid(string(runes1[i:]), string(runes2[j:]))
+		            if remaining == nil {
+		                return &[2][]string{
+		                    {prefix1},
+		                    {prefix2},
+		                }
+		            }
+		            return &[2][]string{
+		                append([]string{prefix1}, remaining[0]...),
+		                append([]string{prefix2}, remaining[1]...),
+		            }
+		        }
+		    }
 		}
-                if _, exists := counts[len(prefix2)][prefix2]; exists {
-                    // Found a valid pair, recursively align the remaining parts
-                    remaining := s.AlignHybrid(string(runes1[i:]), string(runes2[j:]))
-                    if remaining == nil {
-                        return &[2][]string{
-                            {prefix1},
-                            {prefix2},
-                        }
-                    }
-                    return &[2][]string{
-                        append([]string{prefix1}, remaining[0]...),
-                        append([]string{prefix2}, remaining[1]...),
-                    }
-                }
-            }
-        }
+	    }
     }
-
+    
     // If no valid prefix pair is found, fall back to single-rune processing
     // Ensure synchronization by processing both strings in a way that maintains alignment
     rune1 := s.firstRuneWithCombining(runes1, true)
