@@ -205,7 +205,12 @@ again:
 	var dump func(string, string)
 	var writer TSVWriter
 	if dumpwrong != nil && *dumpwrong {
-		err := writer.Open("../../dicts/" + *langname + "/missing.all.tsv", nil)
+		var err error
+		if isreverse != nil && *isreverse {
+			err = writer.Open("../../dicts/" + *langname + "/learn_reverse.tsv", nil)
+		} else {
+			err = writer.Open("../../dicts/" + *langname + "/learn.tsv", nil)
+		}
 		if err != nil {
 			println(err.Error())
 		}
