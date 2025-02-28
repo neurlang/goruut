@@ -79,7 +79,9 @@ type DictGetter struct {
 }
 
 func (d *DictGetter) GetDict(lang, filename string) ([]byte, error) {
-	if d.dumpwrong && filename == "missing.all.zlib" {
+	if d.dumpwrong && (filename == "missing.all.zlib" ||
+				filename == "weights3.json.zlib" ||
+				filename == "weights3_reverse.json.zlib") {
 		println("intentional error:")
 		return nil, fmt.Errorf("generating missing all zlib intentional error")
 	}
@@ -276,7 +278,7 @@ again:
 		errsum.Add(dist)
 		if target == word2 {
 			percent.Add(1)
-		} else {
+		} else if !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
 			dump(word1, word2)
 		}
 
