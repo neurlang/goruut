@@ -31,11 +31,11 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string)
 		if r == nil || len(r) == 0 {
 			ret = (*p.ai).PhonemizeWords(isReverse, lang, word)
 			for i, one := range ret {
-				rett := (*p.ai).PhonemizeWord(isReverse, lang, one[0])
-				if len(rett) > 0 {
-					one = rett
-					ret[i] = rett
-				}
+				//rett := (*p.ai).PhonemizeWord(isReverse, lang, one[0])
+				//if len(rett) > 0 {
+				//	one = rett
+				//	ret[i] = rett
+				//}
 				(*p.cach).StoreWord(one, hash+uint64(i))
 			}
 		} else {

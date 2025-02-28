@@ -16,14 +16,14 @@ import (
 	"sync"
 	"unicode"
 )
-import "fmt"
+//import "fmt"
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
 	CleanWord(isReverse bool, lang, word string) string
 	CheckWord(isReverse bool, lang, word, ipa string) bool
 	PhonemizeWords(isReverse bool, lang string, word string) []map[uint64]string
-	PhonemizeWord(isReverse bool, lang string, word string) map[uint64]string
+	//PhonemizeWord(isReverse bool, lang string, word string) map[uint64]string
 }
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
@@ -53,7 +53,7 @@ type language struct {
 	SrcMultiSuffix    []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix    []string            `json:"DstMultiSuffix"`
 	DropLast          []string            `json:"DropLast"`
-	Histogram         []string            `json:"Histogram"`
+	//Histogram         []string            `json:"Histogram"`
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
 	mapSrcMulti       map[string]struct{}
@@ -117,6 +117,7 @@ func (l *language) letters() {
 	}
 
 }
+/*
 func (l *languages) Histogram(isReverse bool, lang string) []string {
 	var reverse string
 	if isReverse {
@@ -127,6 +128,7 @@ func (l *languages) Histogram(isReverse bool, lang string) []string {
 	}
 	return (*l)[lang+reverse].Histogram
 }
+*/
 func (l *languages) SrcMulti(isReverse bool, lang string) map[string]struct{} {
 	var reverse string
 	if isReverse {
@@ -260,6 +262,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.nets = &netss
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
+/*
 	aregnets := r.aregnets
 	if aregnets == nil {
 		aregnetss := make(map[string]*feedforward.FeedforwardNetwork)
@@ -267,6 +270,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.aregnets = &aregnetss
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
+*/
 	if (*nets)[lang+reverse] != nil {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
@@ -340,7 +344,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
 			log.Error0(err)
 
-			break
+			return
 		} /*else if !isReverse  doesnt work: && (*r.getter).IsOldFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
 			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
@@ -348,7 +352,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			return
 		}*/
 	}
-
+/*
 	var aregfiles = []string{"weights3" + reverse + ".json.zlib"}
 	for _, file := range aregfiles {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
@@ -375,6 +379,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			break
 		}
 	}
+*/
 }
 
 func isCombining(r uint32) bool {
@@ -443,6 +448,7 @@ func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word stri
 	}
 	return
 }
+
 func (r *HashtronPhonemizerRepository) CheckWord(isReverse bool, lang, word, ipa string) bool {
 	r.LoadLanguage(isReverse, lang)
 
@@ -483,7 +489,7 @@ func copystrings(s []string) (r []string) {
 	copy(r, s)
 	return
 }
-
+/*
 func (r *HashtronPhonemizerRepository) PhonemizeWord(isReverse bool, lang string, word string) (ret map[uint64]string) {
 	var reverse string
 	if isReverse {
@@ -551,7 +557,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(isReverse bool, lang string
 	m[0] = word
 	return m
 }
-
+*/
 func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint64]string) {
 	var reverse string
 	if isReverse {
@@ -596,7 +602,7 @@ outer:
 		if len(m) == 1 {
 			for _, mfirst := range m {
 				if mfirst == "_" {
-					mfirst = ""
+					lastspace = i + 1
 				} else if strings.HasPrefix(mfirst, "_") {
 					lastspace = i
 				} else if strings.HasSuffix(mfirst, "_") {
@@ -617,6 +623,7 @@ outer:
 			r.mut.RUnlock()
 			var multiword = lastspace > 0
 			if net == nil {
+				println("net is nil")
 				continue
 			}
 			var predicted int
@@ -641,7 +648,7 @@ outer:
 			}
 			if (!multiword && predicted == 1) || (multiword && 2*predicted > len(srcaR)) {
 				if option == "_" {
-					option = ""
+					lastspace = origi + 1
 				} else if strings.HasPrefix(option, "_") {
 					lastspace = origi
 				} else if strings.HasSuffix(option, "_") {
@@ -659,7 +666,7 @@ outer:
 		}
 		for _, mfirst := range m {
 			if mfirst == "_" {
-				mfirst = ""
+				lastspace = i + 1
 			} else if strings.HasPrefix(mfirst, "_") {
 				lastspace = i
 			} else if strings.HasSuffix(mfirst, "_") {
