@@ -1,31 +1,153 @@
-{"Map":{"a":["a"],
-"b":["b"],
-"c":["ts"],
-"d":["d"],
-"e":["e"],
-"f":["f"],
-"g":["g"],
-"h":["h"],
-"i":["i"],
-"j":["i","j"],
-"k":["k"],
-"l":["l"],
-"m":["m"],
-"n":["n"],
-"o":["o"],
-"p":["p"],
-"r":["r"],
-"s":["s"],
-"t":["t"],
-"u":["u"],
-"v":["v"],
-"z":["z"],
-"ĉ":["tʃ"],
-"ĝ":["dʒ"],
-"ĥ":["x"],
-"ĵ":["ʒ"],
-"ŝ":["ʃ"],
-"ŭ":["u","ʌ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null}
+{
+  "DropLast": null,
+  "DstMulti": null,
+  "DstMultiPrefix": [
+    "ˈ",
+    "'",
+    "ˌ"
+  ],
+  "DstMultiSuffix": [
+    "ː"
+  ],
+  "Histogram": [
+    "a",
+    "i",
+    "o",
+    "d",
+    "e",
+    "t",
+    "u",
+    "r",
+    "n",
+    "ʒ",
+    "s",
+    "m",
+    "k",
+    "l",
+    "p",
+    "j",
+    "ʃ",
+    "g",
+    "f",
+    "v",
+    "b",
+    "ʌ",
+    "x",
+    "z"
+  ],
+  "IsDuplex": false,
+  "IsSrcSurround": false,
+  "Map": {
+    "-ĉ": [
+      "tʃ"
+    ],
+    "a": [
+      "a"
+    ],
+    "akompa": [
+      "akompa"
+    ],
+    "b": [
+      "b"
+    ],
+    "c": [
+      "ts"
+    ],
+    "d": [
+      "d"
+    ],
+    "de": [
+      "de",
+      "akompano"
+    ],
+    "e": [
+      "e"
+    ],
+    "f": [
+      "f"
+    ],
+    "g": [
+      "g"
+    ],
+    "h": [
+      "h"
+    ],
+    "i": [
+      "i"
+    ],
+    "j": [
+      "i",
+      "j"
+    ],
+    "k": [
+      "k"
+    ],
+    "l": [
+      "l"
+    ],
+    "m": [
+      "m"
+    ],
+    "n": [
+      "n"
+    ],
+    "o": [
+      "o"
+    ],
+    "p": [
+      "p"
+    ],
+    "r": [
+      "r"
+    ],
+    "s": [
+      "s"
+    ],
+    "t": [
+      "t"
+    ],
+    "u": [
+      "u"
+    ],
+    "v": [
+      "v"
+    ],
+    "z": [
+      "z"
+    ],
+    "ĉ": [
+      "tʃ"
+    ],
+    "ĝ": [
+      "dʒ"
+    ],
+    "ĥ": [
+      "x"
+    ],
+    "Ĵ": [
+      "ʒ"
+    ],
+    "ĵ": [
+      "ʒ"
+    ],
+    "ŝ": [
+      "ʃ"
+    ],
+    "ŭ": [
+      "u",
+      "ʌ"
+    ]
+  },
+  "PrePhonWordSteps": [
+    {
+      "Trim": ".,"
+    },
+    {
+      "ToLower": true
+    }
+  ],
+  "SplitAfter": null,
+  "SplitBefore": null,
+  "SrcMulti": null,
+  "SrcMultiSuffix": null
+}

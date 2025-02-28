@@ -1,34 +1,186 @@
-{"Map":{"a":["a"],
-"b":["b"],
-"dʒ":["j"],
-"dʒʊ":["gayo"],
-"d̪":["d"],
-"g":["g"],
-"h":["h"],
-"i":["i"],
-"itsɪ":["etse"],
-"j":["y","l"],
-"k":["k"],
-"lɔsɐ":["lusa"],
-"l̪":["l"],
-"m":["m"],
-"n̪":["n"],
-"o":["o"],
-"p":["p"],
-"s̪":["s"],
-"t̪":["t"],
-"u":["u"],
-"w":["w","l"],
-"ŋ":["ng"],
-"ŋh":["nj"],
-"ɔ":["o"],
-"ɪ":["i"],
-"ɾ̪":["r"],
-"ʊ":["u"],
-"ʌ":["a"],
-"ʔaŋ":["ang"],
-"ʔuŋ":["ung"],
-"ʔʊ":["uw"],
-"ʔʌŋ":["ang"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
-"DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null}
+{
+  "DropLast": null,
+  "DstMulti": null,
+  "DstMultiPrefix": null,
+  "DstMultiSuffix": null,
+  "Histogram": [
+    "a",
+    "o",
+    "n",
+    "i",
+    "l",
+    "s",
+    "t",
+    "g",
+    "u",
+    "e",
+    "b",
+    "y",
+    "k",
+    "r",
+    "d",
+    "m",
+    "p",
+    "h",
+    "w",
+    "c",
+    "z",
+    "j",
+    "v",
+    "ñ",
+    "f",
+    "q"
+  ],
+  "IsDuplex": false,
+  "IsSrcSurround": false,
+  "Map": {
+    "a": [
+      "a"
+    ],
+    "aʔ": [
+      "ga"
+    ],
+    "b": [
+      "b"
+    ],
+    "dʒʊ": [
+      "ju",
+      "gayo"
+    ],
+    "d̪": [
+      "d"
+    ],
+    "g": [
+      "g"
+    ],
+    "h": [
+      "h",
+      "j"
+    ],
+    "i": [
+      "i"
+    ],
+    "is̪": [
+      "s"
+    ],
+    "it̪": [
+      "t"
+    ],
+    "iɔ": [
+      "eo"
+    ],
+    "j": [
+      "y",
+      "l"
+    ],
+    "k": [
+      "k"
+    ],
+    "l": [
+      "l"
+    ],
+    "lɔsɐ": [
+      "lusa"
+    ],
+    "l̪": [
+      "l"
+    ],
+    "m": [
+      "m"
+    ],
+    "n̪": [
+      "n"
+    ],
+    "o": [
+      "o"
+    ],
+    "on̪": [
+      "n"
+    ],
+    "ot̪": [
+      "t"
+    ],
+    "p": [
+      "p"
+    ],
+    "pwi": [
+      "fue"
+    ],
+    "sɐ": [
+      "sa"
+    ],
+    "s̪": [
+      "s"
+    ],
+    "t̪": [
+      "t"
+    ],
+    "u": [
+      "u"
+    ],
+    "w": [
+      "w",
+      "l"
+    ],
+    "ŋ": [
+      "ng",
+      "n"
+    ],
+    "ɔt̪": [
+      "ot"
+    ],
+    "ɔʔ": [
+      "o"
+    ],
+    "ɪ": [
+      "i",
+      "e"
+    ],
+    "ɪn̪": [
+      "n",
+      "in"
+    ],
+    "ɪŋ": [
+      "ing",
+      "in"
+    ],
+    "ɾ̪": [
+      "r"
+    ],
+    "ʊ": [
+      "u"
+    ],
+    "ʌ": [
+      "a"
+    ],
+    "ʌʔ": [
+      "ao",
+      "ai",
+      "ga"
+    ],
+    "ʔ": [
+      "i",
+      "o"
+    ],
+    "ʔʊ": [
+      "uw"
+    ],
+    "ʔʌŋ": [
+      "ang"
+    ]
+  },
+  "PrePhonWordSteps": [
+    {
+      "Trim": ".,"
+    },
+    {
+      "ToLower": true
+    }
+  ],
+  "SplitAfter": null,
+  "SplitBefore": null,
+  "SrcMulti": null,
+  "SrcMultiSuffix": [
+    "ː"
+  ]
+}
