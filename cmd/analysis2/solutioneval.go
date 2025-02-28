@@ -175,11 +175,13 @@ func (s *SolutionEval) IsDstMultiSuffix(str string) bool {
 }
 func (s *SolutionEval) ComplexityLoss(aligned1 []string) (ret uint64) {
 	for _, v := range aligned1 {
-		for _, v2 := range s.Map[v] {
-			ret += uint64(len(v2))
-		}
+		ret += uint64(len(s.Map[v]))
 	}
-	ret -= uint64(len(aligned1))
+	if ret > uint64(len(aligned1)) {
+		ret -= uint64(len(aligned1))
+	} else {
+		return 0
+	}
 	return
 }
 func (s *SolutionEval) Align(word1, word2 string, asymmetric, isCleaning bool) (ret *[2][]string, cplxLoss uint64) {
@@ -322,6 +324,7 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
     // Convert strings to rune slices for rune-safe manipulation
     runes1 := []rune(word1)
     runes2 := []rune(word2)
+    var possibleprefix string
 
     if len(word2) != 0 || len(word1) != 0 {
 	    // Try to find the longest prefix in word1 that exists in s.Map
@@ -350,9 +353,15 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
 		            }
 		        }
 		    }
+		    // cjt mode
+		    possibleprefix = prefix1
+   		   // println(prefix1, word1, word2)
 		}
 	    }
     }
+
+
+
     
     // If no valid prefix pair is found, fall back to single-rune processing
     // Ensure synchronization by processing both strings in a way that maintains alignment
@@ -372,14 +381,22 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
             nil,
         }
     }
-
+    
     // Recursively align the remaining parts
     remaining := s.AlignHybrid(string(runes1[len(rune1):]), string(runes2[len(rune2):]))
     if remaining == nil {
-        return &[2][]string{
-            {string(rune1)},
-            {string(rune2)},
+
+        remaining = s.AlignHybrid(word1[len(possibleprefix):], string(runes2[len(rune2):]))
+        if remaining == nil {
+		return &[2][]string{
+		    {string(rune1)},
+		    {string(rune2)},
+		}
         }
+        return &[2][]string{
+		append([]string{possibleprefix}, remaining[0]...),
+		append([]string{string(rune2)}, remaining[1]...),
+	}
     }
     return &[2][]string{
         append([]string{string(rune1)}, remaining[0]...),

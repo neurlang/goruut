@@ -81,7 +81,7 @@ func main() {
 	deleting := flag.Bool("deleting", false, "deleting columns / rows")
 	hyperinit := flag.Int("hyperinit", 1, "hyperparameter initial parallelism (nonnegative, high values are slower)")
 	hyper := flag.Int("hyper", 100, "hyperparameter parallelism (nonnegative, high values are slower)")
-	lambda := flag.Int("rowlossimportance", 5, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
+	lambda := flag.Int("rowlossimportance", 10, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
 	duplex := flag.Bool("duplex", false, "duplicate input runes")
 	srcsurround := flag.Bool("srcsurround", false, "src surround with _")
 	matrices := flag.Bool("matrices", false, "print matrices")
@@ -185,7 +185,7 @@ again:
 			remove_key = append(remove_key, k)
 		}
 	}
-	
+
 	var mutex sync.Mutex
 	var slowmutex sync.Mutex
 	var slow1, slow2 string
@@ -204,6 +204,12 @@ again:
 				word2 = strings.ReplaceAll(word2, "__", "_")
 			}
 		}
+
+		var totalRowLoss uint64 = 1
+		if padspace != nil && *padspace {
+			totalRowLoss = uint64(strings.Count(word2, "_"))
+		}
+
 		if reverse != nil && *reverse {
 			word1, word2 = word2, word1
 		}
@@ -212,10 +218,6 @@ again:
 		word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
 
 
-		var totalRowLoss uint64 = 1
-		if padspace != nil && *padspace {
-			totalRowLoss = uint64(strings.Count(word2, "_"))
-		}
 
 		// evaluate key deletion languages
 		for i, lang_single := range delete_langs {
@@ -224,7 +226,12 @@ again:
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
 						for _, v := range aligned[1] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
+							cnt := uint64(strings.Count(v, "_"))
+							if totalRowLossTry < cnt {
+								totalRowLossTry = 0
+							} else {
+								totalRowLossTry -= cnt
+							}
 						}
 						delete_loss[i].Add(totalRowLossTry)
 					}
@@ -240,7 +247,12 @@ again:
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
 						for _, v := range aligned[1] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
+							cnt := uint64(strings.Count(v, "_"))
+							if totalRowLossTry < cnt {
+								totalRowLossTry = 0
+							} else {
+								totalRowLossTry -= cnt
+							}
 						}
 						remove_loss[i].Add(totalRowLossTry)
 					}
@@ -639,17 +651,18 @@ again:
 					word2 = strings.ReplaceAll(word2, "__", "_")
 				}
 			}
+
+			var totalRowLoss uint64 = 1
+			if padspace != nil && *padspace {
+				totalRowLoss = uint64(strings.Count(word2, "_"))
+			}
+
 			if reverse != nil && *reverse {
 				word1, word2 = word2, word1
 			}
 			
 			word1 = duplicateRunesIf(word1, duplex != nil && *duplex)
 			word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
-
-			var totalRowLoss uint64 = 1
-			if padspace != nil && *padspace {
-				totalRowLoss = uint64(strings.Count(word2, "_"))
-			}
 
 			for i, lang_single := range threway_langs {
 				if lang_single == nil {
@@ -664,7 +677,12 @@ again:
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
 						for _, v := range aligned[1] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
+							cnt := uint64(strings.Count(v, "_"))
+							if totalRowLossTry < cnt {
+								totalRowLossTry = 0
+							} else {
+								totalRowLossTry -= cnt
+							}
 						}
 						threeway_loss[i].Add(totalRowLossTry)
 					}
