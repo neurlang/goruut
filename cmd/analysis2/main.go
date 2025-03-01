@@ -225,13 +225,11 @@ again:
 			if aligned != nil {
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[0] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
 						for _, v := range aligned[1] {
-							cnt := uint64(strings.Count(v, "_"))
-							if totalRowLossTry < cnt {
-								totalRowLossTry = 0
-							} else {
-								totalRowLossTry -= cnt
-							}
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
 						}
 						delete_loss[i].Add(totalRowLossTry)
 					}
@@ -246,13 +244,11 @@ again:
 			if aligned != nil {
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[0] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
 						for _, v := range aligned[1] {
-							cnt := uint64(strings.Count(v, "_"))
-							if totalRowLossTry < cnt {
-								totalRowLossTry = 0
-							} else {
-								totalRowLossTry -= cnt
-							}
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
 						}
 						remove_loss[i].Add(totalRowLossTry)
 					}
@@ -270,12 +266,15 @@ again:
 
 			if padspace != nil && *padspace {
 			
+				for _, v := range aligned[0] {
+					totalRowLoss -= uint64(strings.Count(v, "_"))
+				}
 				for _, v := range aligned[1] {
 					totalRowLoss -= uint64(strings.Count(v, "_"))
 				}
 				//rowLoss.Add(totalRowLoss)
 
-				//fmt.Println(word1, word2, aligned[0], aligned[1])
+				//fmt.Println(totalRowLoss, word1, word2, aligned[0], aligned[1])
 
 				var j = 0
 				var k = 0
@@ -323,7 +322,22 @@ again:
 		// count error
 		rowLoss.Add(totalRowLoss)
 		//analyze it
-		aligned2 := lang_eval.AlignHybrid(word1, word2)
+		aligned2 := lang_eval.AlignHybridLeft(word1, word2)
+
+		for q := 0; q < 3; q++ {
+
+		if q == 1 && len(aligned2[1]) > len(aligned2[0]) {
+			aligned2[1] = lang_eval.Merge(word1, aligned2[1], len(aligned2[0]), false)
+		} else if q == 1 {
+			break
+		}
+		if q == 2 && len(aligned2[0]) > len(aligned2[1]) {
+			aligned2[0] = lang_eval.Merge(word1, aligned2[0], len(aligned2[1]), true)
+		} else if q == 2 {
+			break
+		}
+
+		//fmt.Println(aligned2[0], aligned2[1])
 
 		var mat = levenshtein.MatrixSlices[uint64, string](aligned2[0], aligned2[1],
 			func(i uint) *uint64 {
@@ -434,14 +448,13 @@ again:
 			})
 			var callback func(threeway_from, threeway_to, next_to string)
 			callback = func(threeway_from, threeway_to, next_to string) {
+
 				if strings.HasPrefix(threeway_from, "[") {
 					callback(strings.TrimLeft(threeway_from, "["), threeway_to, next_to)
 				}
 				if strings.HasPrefix(threeway_from, "]") {
 					callback(strings.TrimRight(threeway_from, "]"), threeway_to, next_to)
 				}
-
-
 
 				if ok := lang_eval.IsDstMultiPrefix(threeway_to); ok {
 					if next_to != "" {
@@ -451,11 +464,15 @@ again:
 						}
 					}
 				}
+
 				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
 					return
 				}
 				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_from, "_"), "_") {
 					return
+				}
+				if padspace != nil && *padspace {
+					threeway_from = strings.Trim(threeway_from, "_")
 				}
 
 				if ok := lang_eval.IsDstMultiSuffix(threeway_to); ok || lang_eval.StringStartsWithCombiner(threeway_to) {
@@ -464,6 +481,8 @@ again:
 				if ok := lang_eval.IsEdge(threeway_from, threeway_to); ok {
 					return
 				}
+
+
 				//println(threeway_from, threeway_to)
 				mut.Lock()
 				/*
@@ -509,13 +528,14 @@ again:
 						callback(resultx, resulty+lookahead, "")
 					}
 				}
-			
+
 				if padspace != nil && *padspace && strings.Contains(resultx, "_") {
 					resultx, resulty = "", ""
 				}
 				if padspace != nil && *padspace && strings.Contains(resulty, "_") {
 					resultx, resulty = "", ""
 				}
+			
 				resulty += (bin)
 				//longresulty += (bin)
 				if swaps[x] != nil {
@@ -524,6 +544,7 @@ again:
 				} else if dels[x] {
 					resultx += (string(w1p[x]))
 				}
+
 				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
 						callback(resultx, resulty, lookahead)
@@ -543,7 +564,7 @@ again:
 					callback(resultx, resulty, "")
 				}
 			}
-
+		}
 		}
 	})
 	println(slow1, slow2)
@@ -607,6 +628,7 @@ again:
 		if len(threewayz) > now_hyper {
 			threewayz = threewayz[:now_hyper]
 		}
+
 		const individual = false
 		var threway_langs = make([]*SolutionEval, 2*len(threewayz), 2*len(threewayz))
 		for i := range threewayz {
@@ -676,13 +698,11 @@ again:
 				
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
+						for _, v := range aligned[0] {
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
+						}
 						for _, v := range aligned[1] {
-							cnt := uint64(strings.Count(v, "_"))
-							if totalRowLossTry < cnt {
-								totalRowLossTry = 0
-							} else {
-								totalRowLossTry -= cnt
-							}
+							totalRowLossTry -= uint64(strings.Count(v, "_"))
 						}
 						threeway_loss[i].Add(totalRowLossTry)
 					}
@@ -705,7 +725,6 @@ again:
 				minI = i
 			}
 		}
-		//fmt.Println(minLoss, minI)
 		if minI != -1 {
 			if minI < len(threewayz) {
 				fmt.Println(maxLoss, threewayz[:(minI+1)], minLoss)

@@ -315,7 +315,7 @@ func (s *SolutionEval) StringStartsWithCombiner(str string) bool {
 
 	return isCombiner(r)
 }
-func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
+func (s *SolutionEval) AlignHybridLeft(word1, word2 string) *[2][]string {
     // Base case: if some words are empty, return nil
     if len(word1) == 0 && len(word2) == 0 {
         return nil
@@ -340,7 +340,7 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
 			}
 		        if _, exists := counts[len(prefix2)][prefix2]; exists {
 		            // Found a valid pair, recursively align the remaining parts
-		            remaining := s.AlignHybrid(string(runes1[i:]), string(runes2[j:]))
+		            remaining := s.AlignHybridRight(string(runes1[i:]), string(runes2[j:]))
 		            if remaining == nil {
 		                return &[2][]string{
 		                    {prefix1},
@@ -383,10 +383,10 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
     }
     
     // Recursively align the remaining parts
-    remaining := s.AlignHybrid(string(runes1[len(rune1):]), string(runes2[len(rune2):]))
+    remaining := s.AlignHybridRight(string(runes1[len(rune1):]), string(runes2[len(rune2):]))
     if remaining == nil {
 
-        remaining = s.AlignHybrid(word1[len(possibleprefix):], string(runes2[len(rune2):]))
+        remaining = s.AlignHybridRight(word1[len(possibleprefix):], string(runes2[len(rune2):]))
         if remaining == nil {
 		return &[2][]string{
 		    {string(rune1)},
@@ -402,6 +402,132 @@ func (s *SolutionEval) AlignHybrid(word1, word2 string) *[2][]string {
         append([]string{string(rune1)}, remaining[0]...),
         append([]string{string(rune2)}, remaining[1]...),
     }
+}
+
+func (s *SolutionEval) AlignHybridRight(word1, word2 string) *[2][]string {
+    if len(word1) == 0 && len(word2) == 0 {
+        return nil
+    }
+
+    runes1 := []rune(word1)
+    runes2 := []rune(word2)
+    var possibleSuffix string
+
+    if len(word1) != 0 || len(word2) != 0 {
+        // Try to find the longest suffix in word1 that exists in s.Map
+        for i := len(runes1); i >= 1; i-- {
+            suffix1 := string(runes1[len(runes1)-i:])
+            key1 := strings.Trim(suffix1, "_")
+            if counts, ok := s.Map[key1]; ok {
+                // Try to find the corresponding suffix in word2, checking longest first
+                for j := len(runes2); j >= 1; j-- {
+                    suffix2 := string(runes2[len(runes2)-j:])
+                    if s.IsDstMultiSuffix(suffix2) || s.IsDstMultiPrefix(suffix2) {
+                        continue
+                    }
+                    if _, exists := counts[len(suffix2)][suffix2]; exists {
+                        // Found a valid pair, recursively align the left parts
+                        left1 := string(runes1[:len(runes1)-i])
+                        left2 := string(runes2[:len(runes2)-j])
+                        remaining := s.AlignHybridLeft(left1, left2)
+                        if remaining != nil {
+		                // Append the suffix pair to the end of the remaining result
+		                return &[2][]string{
+		                    append(remaining[0], suffix1),
+		                    append(remaining[1], suffix2),
+		                }
+                        }
+
+                    }
+                }
+                // Record the longest possible suffix found in word1
+                possibleSuffix = suffix1
+            }
+        }
+    }
+
+
+    // Fallback to processing the last rune (including combining characters)
+    rune1 := s.lastRuneWithCombining(runes1, true)
+    rune2 := s.lastRuneWithCombining(runes2, false)
+
+    // Handle cases where one of the words is empty after splitting
+    if len(rune1) == 0 {
+        return &[2][]string{
+            nil,
+            s.splitIntoRunesWithCombiningRight(runes2, false),
+        }
+    }
+    if len(rune2) == 0 {
+        return &[2][]string{
+            s.splitIntoRunesWithCombiningRight(runes1, true),
+            nil,
+        }
+    }
+
+
+    // Recursively process the left parts after removing the last rune
+    left1 := string(runes1[:len(runes1)-len(rune1)])
+    left2 := string(runes2[:len(runes2)-len(rune2)])
+    remaining := s.AlignHybridLeft(left1, left2)
+
+    // If no remaining parts, check if a possibleSuffix can be used
+    if remaining == nil {
+        if possibleSuffix != "" {
+            left1Possible := string(runes1[:len(runes1)-len([]rune(possibleSuffix))])
+            remainingPossible := s.AlignHybridLeft(left1Possible, left2)
+            if remainingPossible == nil {
+                return &[2][]string{
+                    {possibleSuffix},
+                    {string(rune2)},
+                }
+            }
+            return &[2][]string{
+                append(remainingPossible[0], possibleSuffix),
+                append(remainingPossible[1], string(rune2)),
+            }
+        }
+        return &[2][]string{
+            {string(rune1)},
+            {string(rune2)},
+        }
+    }
+
+    // Append the last runes to the results from remaining parts
+    return &[2][]string{
+        append(remaining[0], string(rune1)),
+        append(remaining[1], string(rune2)),
+    }
+}
+
+func (s *SolutionEval) lastRuneWithCombining(runes []rune, is_src bool) []rune {
+    if len(runes) == 0 {
+        return nil
+    }
+    i := len(runes) - 1
+    for i >= 0 {
+        r := runes[i]
+        isCombining := s.StringStartsWithCombiner(string(r))
+        if !is_src {
+            isCombining = isCombining || s.IsDstMultiSuffix(string(r)) || s.IsDstMultiPrefix(string(r))
+        }
+        if !isCombining {
+            return runes[i:]
+        }
+        i--
+    }
+    return runes
+}
+
+func (s *SolutionEval) splitIntoRunesWithCombiningRight(runes []rune, is_src bool) []string {
+    var result []string
+    current := runes
+    for len(current) > 0 {
+        last := s.lastRuneWithCombining(current, is_src)
+        result = append([]string{string(last)}, result...)
+        current = current[:len(current)-len(last)]
+    }
+    return result
 }
 
 // Helper function to get the first rune (including combining characters) from a rune slice
@@ -433,4 +559,49 @@ func (s *SolutionEval) splitIntoRunesWithCombining(runes []rune, is_src bool) []
         i = j
     }
     return result
+}
+
+func mergeStrings(strings []string, callback func(string) bool) []string {
+    result := make([]string, len(strings))
+    copy(result, strings)
+    for i := 0; i < len(result)-1; {
+        if callback(result[i] + result[i+1]) {
+            merged := result[i] + result[i+1]
+            // Remove the current and next element, insert merged string
+            result = append(result[:i], append([]string{merged}, result[i+2:]...)...)
+            // Backtrack to check if the previous element can now merge with the new string
+            if i > 0 {
+                i--
+            }
+        } else {
+            i++
+        }
+    }
+    return result
+}
+
+func (s *SolutionEval) Merge(word string, strs []string, limit int, direction bool) (ret []string) {
+	callback := func(merged string) bool {
+		if direction {
+			if _, ok := s.Map[merged]; ok {
+				return true
+			}
+		} else {
+			for k, m := range s.Map {
+				if !strings.Contains(word, k) {continue;}
+				if _, ok := m[len(merged)][merged]; ok {
+					return true
+				}
+			}
+		}
+		return false
+	}
+	ret = mergeStrings(strs, callback)
+	//println(word, len(strs), len(ret), limit)
+	for len(ret) > limit && len(strs) != len(ret) {
+		strs = ret
+		//println(word, len(strs), len(ret), limit)
+		ret = mergeStrings(ret, callback)
+	}
+	return
 }
