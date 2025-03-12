@@ -58,6 +58,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	log.Now().Debugf("Splitted: %d, Phonemized: %d, POS: %d, Flavored: %d",
 		len(splitted), len(phonemized), len(parts_of_speech_selected), len(ipa_flavored))
 
+	resp.Init()
 	for i := range ipa_flavored {
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
 			Phonetic:  strings.Trim(ipa_flavored[i][1], "_"),

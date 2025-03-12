@@ -8,6 +8,10 @@ type PhonemizeSentence struct {
 	ErrorWordLimitExceeded bool `json:"ErrorWordLimitExceeded,omitempty"`
 }
 
+func (p *PhonemizeSentence) Init() {
+	p.Words = []PhonemizeSentenceWord{}
+}
+
 type PhonemizeSentenceWord struct {
 	CleanWord string
 	Phonetic  string
