@@ -4,10 +4,18 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IAutoTaggerRepository interface {
 	TagWord(isReverse bool, lang, word1, word2 string) []string
+	IsCrossDictWord(isReverse bool, lang, word string) bool
 }
 type AutoTaggerRepository struct {
 	english_consonants *map[rune]struct{}
 	english_vowels     *map[rune]struct{}
+}
+
+func (r *AutoTaggerRepository) IsCrossDictWord(isReverse bool, lang, word string) bool {
+	if !isReverse && lang == "English" {
+		return word == "the"
+	}
+	return false
 }
 
 func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string) []string {

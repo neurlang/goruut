@@ -15,6 +15,7 @@ type PhonemizeWordService struct {
 	ai   *repo.IHashtronPhonemizerRepository
 	pre  *repo.IPrePhonWordStepsRepository
 	cach *repo.IWordCachingRepository
+	tag  *repo.IAutoTaggerRepository
 }
 
 func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string) (ret []map[uint32]string, punct [][2]string) {
@@ -48,7 +49,7 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string)
 				ret = append(ret, r)
 			}
 		}
-	} else {
+	} else if (*p.tag).IsCrossDictWord(isReverse, lang, word) {
 		ret2 := (*p.ai).PhonemizeWords(isReverse, lang, word)
 		for i, r := range ret2 {
 			for k, v := range r {
@@ -76,12 +77,14 @@ func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
 	ai_repo_iface := (repo.IHashtronPhonemizerRepository)(Ptr(MustNeed(di, repo.NewHashtronPhonemizerRepository)))
 	pre_repo_iface := (repo.IPrePhonWordStepsRepository)(Ptr(MustNeed(di, repo.NewPrePhonWordStepsRepository)))
 	cach_repo_iface := (repo.IWordCachingRepository)(Ptr(MustNeed(di, repo.NewWordCachingRepository)))
+	tag_repo_iface := (repo.IAutoTaggerRepository)(Ptr(MustNeed(di, repo.NewAutoTaggerRepository)))
 
 	return &PhonemizeWordService{
 		repo: &repoiface,
 		ai:   &ai_repo_iface,
 		pre:  &pre_repo_iface,
 		cach: &cach_repo_iface,
+		tag:  &tag_repo_iface,
 	}
 }
 
