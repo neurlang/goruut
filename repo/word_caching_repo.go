@@ -11,21 +11,21 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IWordCachingRepository interface {
-	HashWord(isReverse bool, lang, word string) uint64
-	LoadWord(hash uint64) map[uint64]string
-	StoreWord(one map[uint64]string, hash uint64)
+	HashWord(isReverse bool, lang, word string) uint32
+	LoadWord(hash uint32) map[uint32]string
+	StoreWord(one map[uint32]string, hash uint32)
 }
 type WordCachingRepository struct {
 	seed  uint32
-	cache otter.Cache[uint64, string]
+	cache otter.Cache[uint32, string]
 }
 
-func (r WordCachingRepository) LoadWord(hash uint64) (word map[uint64]string) {
+func (r WordCachingRepository) LoadWord(hash uint32) (word map[uint32]string) {
 	value, _ := r.cache.Get(hash)
 	if value == "" {
 		return nil
 	}
-	word = make(map[uint64]string)
+	word = make(map[uint32]string)
 	length := binary.LittleEndian.Uint32([]byte(value[0:4]))
 	end := 4 + length*16
 	for i := uint32(0); i < length; i++ {
@@ -37,12 +37,12 @@ func (r WordCachingRepository) LoadWord(hash uint64) (word map[uint64]string) {
 		dst := value[end : end+m]
 		end += m
 		word[0] = src
-		word[k] = dst
+		word[uint32(k)] = dst
 	}
 	return word
 }
 
-func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
+func (r WordCachingRepository) StoreWord(value map[uint32]string, hash uint32) {
 
 	var buf, data []byte
 	var num4 [4]byte
@@ -74,14 +74,14 @@ func (r WordCachingRepository) StoreWord(value map[uint64]string, hash uint64) {
 	r.cache.Set(hash, val)
 }
 
-func (r WordCachingRepository) HashWord(isReverse bool, lang, word string) uint64 {
+func (r WordCachingRepository) HashWord(isReverse bool, lang, word string) uint32 {
 
 	str := word + "\x00" + lang
 	if isReverse {
 		str += "_reverse"
 	}
 
-	return murmur3.Sum64WithSeed([]byte(str), r.seed)
+	return murmur3.Sum32WithSeed([]byte(str), r.seed)
 }
 
 func NewWordCachingRepository(di *DependencyInjection) *WordCachingRepository {
@@ -91,9 +91,9 @@ func NewWordCachingRepository(di *DependencyInjection) *WordCachingRepository {
 	seed := binary.LittleEndian.Uint32(buf[:])
 
 	// create a cache with capacity equal to 10000 elements
-	cache := log.Error1(otter.MustBuilder[uint64, string](10_000).
+	cache := log.Error1(otter.MustBuilder[uint32, string](10_000).
 		CollectStats().
-		Cost(func(key uint64, value string) uint32 {
+		Cost(func(key uint32, value string) uint32 {
 			return 1
 		}).
 		WithTTL(time.Hour).

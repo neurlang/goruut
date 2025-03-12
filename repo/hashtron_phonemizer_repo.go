@@ -6,9 +6,11 @@ import (
 	"github.com/neurlang/classifier/datasets/phonemizer"
 	"github.com/neurlang/classifier/hashtron"
 	//"github.com/neurlang/classifier/layer/full"
-	//"github.com/neurlang/classifier/layer/sochastic"
+	"github.com/neurlang/classifier/layer/sochastic"
 	"github.com/neurlang/classifier/layer/majpool2d"
+	"github.com/neurlang/classifier/layer/crossattention"
 	"github.com/neurlang/classifier/layer/parity"
+	"github.com/neurlang/classifier/layer/sum"
 	"github.com/neurlang/classifier/net/feedforward"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
@@ -20,9 +22,9 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IHashtronPhonemizerRepository interface {
-	CleanWord(isReverse bool, lang, word string) string
+	CleanWord(isReverse bool, lang, word string) (ret string, lpunct string, rpunct string)
 	CheckWord(isReverse bool, lang, word, ipa string) bool
-	PhonemizeWords(isReverse bool, lang string, word string) []map[uint64]string
+	PhonemizeWords(isReverse bool, lang string, word string) []map[uint32]string
 	//PhonemizeWord(isReverse bool, lang string, word string) map[uint64]string
 }
 type HashtronPhonemizerRepository struct {
@@ -301,7 +303,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.phoner = &iface
 	}
 
-	var files = []string{"weights2" + reverse + ".json.zlib", "weights1" + reverse + ".json.zlib"}
+	var files = []string{"weights4" + reverse + ".json.zlib", "weights2" + reverse + ".json.zlib", "weights1" + reverse + ".json.zlib"}
 
 	for i, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
@@ -314,7 +316,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			bytesReader := bytes.NewReader(compressedData)
 
 			switch i {
-			case 1:
+			case 2:
 				const fanout1 = 1
 				const fanout2 = 5
 				const fanout3 = 3
@@ -328,7 +330,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				net.NewLayer(1, 0)
 
 				(*r.nets)[lang+reverse] = &net
-			case 0:
+			case 1:
 
 				const fanout1 = 5
 				var net feedforward.FeedforwardNetwork
@@ -336,6 +338,29 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
 				net.NewLayer(fanout1, 0)
 				net.NewCombiner(parity.MustNew(fanout1))
+				net.NewLayer(1, 0)
+
+				(*r.nets)[lang+reverse] = &net
+
+			case 0:
+
+				const fanout1 = 32
+				const fanout2 = 4
+				const fanout3 = 3
+				
+				var net feedforward.FeedforwardNetwork
+				//net.NewLayer(fanout1, 0)
+				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
+				net.NewLayer(fanout1*fanout2, 0)
+				for i := 0; i < fanout3; i++ {
+					net.NewCombiner(crossattention.MustNew(fanout1, fanout2))
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 8*byte(i), uint32(i)))
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+				}
+				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 32, fanout3))
+				net.NewLayer(fanout1*fanout2, 0)
+				net.NewCombiner(sum.MustNew([]uint{fanout1*fanout2}, 0))
 				net.NewLayer(1, 0)
 
 				(*r.nets)[lang+reverse] = &net
@@ -407,7 +432,8 @@ func addLetters(word string, mapping map[string]struct{}) {
 	}
 }
 
-func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word string) (ret string) {
+// CleanWord returns cleaned word, left punct, right punct
+func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word string) (ret string, lpunct string, rpunct string) {
 	r.LoadLanguage(isReverse, lang)
 
 	var reverse []uint32
@@ -433,12 +459,17 @@ func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word stri
 	if str != "" {
 		strings = append([]string{string(str)}, strings...)
 	}
-	for _, run := range strings {
+	for i, run := range strings {
 		r.mut.RLock()
 		isLanguageLetter := r.lang.IsLetter(isReverse, lang, run)
 		r.mut.RUnlock()
 
 		if !isLanguageLetter {
+			if 2*i < len(strings) {
+				lpunct += run
+			} else {
+				rpunct += run
+			}
 			log.Now().Debugf("Not language letter: %s", run)
 			continue
 		} else {
@@ -558,7 +589,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWord(isReverse bool, lang string
 	return m
 }
 */
-func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint64]string) {
+func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint32]string) {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
@@ -569,11 +600,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 	mapLangIsNil := r.lang.Slice(isReverse, lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
-		m := make(map[uint64]string)
-		m[0] = word
-		m[1] = word
-		ret = append(ret, m)
-		return
+		return []map[uint32]string{}
 	}
 
 	var backoffs = 10
@@ -623,7 +650,7 @@ outer:
 			r.mut.RUnlock()
 			var multiword = lastspace > 0
 			if net == nil {
-				println("net is nil")
+				log.Now().Errorf("Net is nil")
 				continue
 			}
 			var predicted int
@@ -639,8 +666,11 @@ outer:
 				r.mut.RLock()
 				if net.LenLayers() == 3 {
 					pred = int(net.Infer2(input.V1()))
-				} else { // 5 layers, old model
+				} else if net.LenLayers() == 5 {
 					pred = int(net.Infer2(&input))
+				} else { // newest model
+					const fanout1 = 32
+					pred = int(net.Infer2(input.V2(fanout1)))
 				}
 				r.mut.RUnlock()
 				predicted += pred
@@ -680,12 +710,12 @@ outer:
 
 	push := func() {
 		if len(src)+len(dst) > 0 {
-			m := make(map[uint64]string)
+			m := make(map[uint32]string)
 			hsh := murmur3hash(src + "\x00" + dst)
 			if hsh == 0 {
 				hsh++
 			}
-			m[hsh] = dst
+			m[uint32(hsh)] = dst
 			m[0] = src
 			ret = append(ret, m)
 			src, dst = "", ""

@@ -18,7 +18,7 @@ import "time"
 import "compress/zlib"
 import "io"
 
-func loop(filename string, top, group int, do func(string, string)) {
+func loop(filename string, top, group int, do func(string, string, string)) {
 	// Open the file
 	file, err := os.Open(filename)
 	if err != nil {
@@ -27,7 +27,7 @@ func loop(filename string, top, group int, do func(string, string)) {
 	}
 	defer file.Close()
 
-	var slice [][2]string
+	var slice [][3]string
 
 	// Create a new scanner to read the file line by line
 	scanner := bufio.NewScanner(file)
@@ -44,8 +44,12 @@ func loop(filename string, top, group int, do func(string, string)) {
 		// Process each column
 		column1 := columns[0]
 		column2 := columns[1]
+		var column3 string
+		if len(columns) == 3 {
+			column3 = columns[2]
+		}
 
-		slice = append(slice, [2]string{column1, column2})
+		slice = append(slice, [3]string{column1, column2, column3})
 	}
 
 	// Check for any scanner errors
@@ -62,8 +66,9 @@ func loop(filename string, top, group int, do func(string, string)) {
 		// Process each column
 		column1 := slice[n][0]
 		column2 := slice[n][1]
+		column3 := slice[n][2]
 		// Example: Print the columns
-		do(column1, column2)
+		do(column1, column2, column3)
 	})
 
 }
@@ -174,6 +179,7 @@ func main() {
 	isreverse := flag.Bool("reverse", false, "is reverse")
 	nostress := flag.Bool("nostress", false, "no stress")
 	testing := flag.Bool("testing", false, "keep backtesting and overwriting the model with the best one")
+	weightsfile := flag.Int("weightsfile", 4, "weights file number")
 	resume := flag.Bool("resume", false, "test old model initially")
 	dumpwrong := flag.Bool("dumpwrong", false, "dump wrong answers to dictionary")
 	dumpcompress := flag.Bool("dumpcompress", false, "compress after dumping")
@@ -191,11 +197,11 @@ again:
 		coolname = dicts.LangName(*langname)
 		dictgetter.coolname = coolname
 		srcfile = "../../dicts/" + *langname + "/dirty.tsv"
-		if testing != nil && *testing {
+		if testing != nil && *testing || dumpwrong != nil && *dumpwrong {
 			if isreverse != nil && *isreverse {
-				modelfile = "../../dicts/" + *langname + "/weights2_reverse.json.zlib"
+				modelfile = "../../dicts/" + *langname + "/weights" + fmt.Sprint(*weightsfile) + "_reverse.json.zlib"
 			} else {
-				modelfile = "../../dicts/" + *langname + "/weights2.json.zlib"
+				modelfile = "../../dicts/" + *langname + "/weights" + fmt.Sprint(*weightsfile) + ".json.zlib"
 			}
 			dictgetter.modelfile = modelfile
 			if resume != nil && *resume {
@@ -204,7 +210,7 @@ again:
 		}
 	}
 	var batch = 10000
-	var dump func(string, string)
+	var dump func(string, string, string)
 	var writer TSVWriter
 	if dumpwrong != nil && *dumpwrong {
 		var err error
@@ -216,15 +222,15 @@ again:
 		if err != nil {
 			println(err.Error())
 		}
-		dump = func(w1 string, w2 string) {
+		dump = func(w1 string, w2 string, w3 string) {
 			if isreverse != nil && *isreverse {
-				writer.AddRow([]string{w2, w1})
+				writer.AddRow([]string{w2, w1, w3})
 			} else {
-				writer.AddRow([]string{w1, w2})
+				writer.AddRow([]string{w1, w2, w3})
 			}
 		}
 	} else {
-		dump = func(w1 string, w2 string) {}
+		dump = func(w1 string, w2 string, w3 string) {}
 	}
 	p := lib.NewPhonemizer(nil)
 	if testing != nil && *testing || dumpwrong != nil && *dumpwrong {
@@ -241,7 +247,7 @@ again:
 	}
 
 	var percent, errsum, total atomic.Uint64
-	loop(srcfile, batch, 1000, func(word1, word2 string) {
+	loop(srcfile, batch, 1000, func(word1, word2, word3 string) {
 		total.Add(1)
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "'", "")
@@ -279,7 +285,7 @@ again:
 		if target == word2 {
 			percent.Add(1)
 		} else if !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
-			dump(word1, word2)
+			dump(word1, word2, word3)
 		}
 
 		//success := 100 * percent.Load() / total.Load()

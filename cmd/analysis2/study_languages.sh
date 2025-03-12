@@ -16,7 +16,7 @@
  timeout 600 ./study_language.sh	cebuano	
  timeout 600 ./study_language.sh	chechen	
  timeout 600 ./study_language.sh	chichewa	
- timeout 600 ./study_language.sh	chinese/mandarin	-padspace	 --hyperinit 16
+ timeout 600 ./study_language.sh	chinese/mandarin	-padspace	 --hyperinit 16  --rowlossimportance 10
  timeout 600 ./study_language.sh	croatian	
  timeout 600 ./study_language.sh	czech	
  timeout 600 ./study_language.sh	danish	
@@ -42,7 +42,7 @@
  timeout 600 ./study_language.sh	isan	
  timeout 600 ./study_language.sh	italian	
  timeout 600 ./study_language.sh	jamaican	
- timeout 600 ./study_language.sh	japanese	-padspace --hyperinit 16
+ timeout 600 ./study_language.sh	japanese	-padspace --hyperinit 16  --rowlossimportance 10
  timeout 600 ./study_language.sh	javanese	
  timeout 600 ./study_language.sh	kazakh	
  timeout 600 ./study_language.sh	khmer/central	

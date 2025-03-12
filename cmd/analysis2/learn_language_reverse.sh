@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "I will corrupt language.json"
+
 # Function to handle the SIGINT signal (Ctrl+C)
 cleanup() {
     echo "Caught SIGINT, killing both processes..."
@@ -17,7 +19,8 @@ trap cleanup SIGINT
 --langjson ../../dicts/$1/language_reverse.json \
 --dirtytsv ../../dicts/$1/dirty.tsv \
 --learntsv ../../dicts/$1/learn_reverse.tsv \
---dstmodel ../../dicts/$1/weights3_reverse.json.zlib $2 $3 $4 $5 $6 & # > /dev/null 2>&1 &
+--weightsfile 3 \
+--dstmodel ../../dicts/$1/weights3_reverse.json.zlib $2 $3 $4 $5 $6 $7 $8 $9 & # > /dev/null 2>&1 &
 PID1=$!
 
 # Start the second process in the background

@@ -7,6 +7,7 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/goruut/repo/services"
 	"strings"
+	"encoding/json"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -30,18 +31,20 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
 	}
 
-	var phonemized []map[uint64]string
+	var phonemized []map[uint32]string
+	var punctuation [][2]string
 
 	for _, word := range splitted {
-		words := p.phon.PhonemizeWords(r.IsReverse, r.Language, word)
+		words, punct := p.phon.PhonemizeWords(r.IsReverse, r.Language, word)
 		phonemized = append(phonemized, words...)
+		punctuation = append(punctuation, punct...)
 		log.Now().Debugf("Word: %s, Words: %v", word, words)
 	}
 
-	parts_of_speech_selected := p.sel.Select(r.Language, phonemized)
+	parts_of_speech_selected := p.sel.Select(r.IsReverse, r.Language, phonemized)
 	log.Now().Debugf("Vector: %v", parts_of_speech_selected)
 
-	var ipa_flavored [][2]string
+	var ipa_flavored [][3]string
 	if r.IpaFlavors != nil {
 		for _, word := range parts_of_speech_selected {
 			for _, flavor := range r.IpaFlavors {
@@ -59,6 +62,9 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
 			Phonetic:  strings.Trim(ipa_flavored[i][1], "_"),
 			CleanWord: ipa_flavored[i][0],
+			PosTags:   json.RawMessage(ipa_flavored[i][2]),
+			PrePunct:  punctuation[i][0],
+			PostPunct: punctuation[i][1],
 		})
 		//resp.Whole += ipa_flavored[i]
 	}

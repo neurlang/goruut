@@ -81,10 +81,11 @@ func main() {
 	deleting := flag.Bool("deleting", false, "deleting columns / rows")
 	hyperinit := flag.Int("hyperinit", 1, "hyperparameter initial parallelism (nonnegative, high values are slower)")
 	hyper := flag.Int("hyper", 100, "hyperparameter parallelism (nonnegative, high values are slower)")
-	lambda := flag.Int("rowlossimportance", 10, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
+	lambda := flag.Int("rowlossimportance", 5, "hyperparameter row loss importance to reduce decision complexity loss (binary exponent, -64 - 64)")
 	duplex := flag.Bool("duplex", false, "duplicate input runes")
 	srcsurround := flag.Bool("srcsurround", false, "src surround with _")
 	matrices := flag.Bool("matrices", false, "print matrices")
+	forcedecision := flag.Int("forcedecision", 0, "forcedecision till this row loss is reached")
 	flag.Parse()
 
 	_ = dstFile
@@ -283,18 +284,18 @@ again:
 				}
 				for i, val := range (*aligned)[1-k] {
 					if i < len((*aligned)[k]) && i < len((*aligned)[1-k]) && strings.HasPrefix(val, "_") {
-						toprint := [2][]string{(*aligned)[k][j:i], (*aligned)[1-k][j:i]}
+						toprint := [2][]string{(*aligned)[0][j:i], (*aligned)[1][j:i]}
 						j = i
 						tsvWrite(toprint)
 					} else if i+1 < len((*aligned)[k]) && i+1 < len((*aligned)[1-k]) && strings.HasSuffix(val, "_") {
-						toprint := [2][]string{(*aligned)[k][j:i+1], (*aligned)[1-k][j:i+1]}
+						toprint := [2][]string{(*aligned)[0][j:i+1], (*aligned)[1][j:i+1]}
 						j = i+1
 
 						tsvWrite(toprint)
 					}
 				}
 				if j < len((*aligned)[k]) && j < len((*aligned)[1-k]) {
-					toprint := [2][]string{(*aligned)[k][j:], (*aligned)[1-k][j:]}
+					toprint := [2][]string{(*aligned)[0][j:], (*aligned)[1][j:]}
 					if len(toprint[0]) < len(toprint[1]) {
 						toprint[1] = toprint[1][:len(toprint[0])]
 					} else {
@@ -483,8 +484,9 @@ again:
 				}
 
 
-				//println(threeway_from, threeway_to)
+
 				mut.Lock()
+				//println(threeway_from, threeway_to)
 				/*
 				for _, w := range lang.Map[threeway_from] {
 					if w == threeway_to {
@@ -529,10 +531,10 @@ again:
 					}
 				}
 
-				if padspace != nil && *padspace && strings.Contains(resultx, "_") {
+				if padspace != nil && *padspace && strings.Contains(strings.Trim(resultx, "_"), "_") {
 					resultx, resulty = "", ""
 				}
-				if padspace != nil && *padspace && strings.Contains(resulty, "_") {
+				if padspace != nil && *padspace && strings.Contains(strings.Trim(resulty, "_"), "_") {
 					resultx, resulty = "", ""
 				}
 			
@@ -714,6 +716,10 @@ again:
 		})
 
 		var minLoss = maxLoss
+		if forcedecision != nil && 0 != *forcedecision && rowLoss.Load() > uint64(*forcedecision) {
+			minLoss = 999999999999999999
+		}
+
 
 		var minI = -1
 		for i := range threway_langs {

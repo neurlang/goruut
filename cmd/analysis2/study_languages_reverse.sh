@@ -42,7 +42,7 @@
  timeout 600 ./study_language_reverse.sh	isan	
  timeout 600 ./study_language_reverse.sh	italian	
  timeout 600 ./study_language_reverse.sh	jamaican	
- timeout 600 ./study_language_reverse.sh	japanese	-padspace
+ timeout 600 ./study_language_reverse.sh	japanese	-padspace --hyperinit 16 --rowlossimportance 10
  timeout 600 ./study_language_reverse.sh	javanese	
  timeout 600 ./study_language_reverse.sh	kazakh	
  timeout 600 ./study_language_reverse.sh	khmer/central	
