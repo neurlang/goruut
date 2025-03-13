@@ -108,6 +108,7 @@ func main() {
 		sword2 := strings.Split(word2, " ")
 
 		var osword [2]string
+		var histogram_current = make(map[[2]string]int)
 
 		if len(sword1) != len(sword2) {
 			return
@@ -121,10 +122,7 @@ func main() {
 				if nodel != nil && *nodel && val == "" {
 					continue
 				}
-				mut.Lock()
-				histogram[[2]string{key, val}]++
-				mut.Unlock()
-
+				histogram_current[[2]string{key, val}]++
 				osword[0] += " " + key
 				osword[1] += " " + val
 
@@ -135,6 +133,11 @@ func main() {
 			}
 		}
 		if len(sword1) > 0 {
+			mut.Lock()
+			for k, v := range histogram_current {
+				histogram[k] += v
+			}
+			mut.Unlock()
 			for i := range sword1 {
 				if nodel != nil && *nodel && sword2[i] == "" {
 					continue
