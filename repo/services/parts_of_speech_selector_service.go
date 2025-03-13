@@ -93,6 +93,8 @@ outer:
 			ret = append(ret, [3]string{orig, dest, string(log.Error1(helpers.SerializeJson(tags)))})
 			continue outer
 		}
+		// in case of other bug push an empty word to keep punctuation algined
+		ret = append(ret, [3]string{"", "", "[]"})
 	}
 	return
 }
