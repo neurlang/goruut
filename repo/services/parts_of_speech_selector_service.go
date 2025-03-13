@@ -4,6 +4,7 @@ import (
 	"github.com/neurlang/goruut/helpers"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo"
+	"strings"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -17,10 +18,10 @@ type PartsOfSpeechSelectorService struct {
 }
 
 func next_continue_english(lang string, isReverse bool, my_tags, next_tags map[string]bool) bool {
-	if lang != "English" {
+	if isReverse {
 		return false
 	}
-	if isReverse {
+	if !strings.HasPrefix(lang, "English") {
 		return false
 	}
 	if my_tags["thi"] && next_tags["consonant1st"] {

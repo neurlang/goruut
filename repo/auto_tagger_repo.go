@@ -1,5 +1,6 @@
 package repo
 
+import "strings"
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IAutoTaggerRepository interface {
@@ -12,19 +13,19 @@ type AutoTaggerRepository struct {
 }
 
 func (r *AutoTaggerRepository) IsCrossDictWord(isReverse bool, lang, word string) bool {
-	if !isReverse && lang == "English" {
+	if !isReverse && strings.HasPrefix(lang, "English") {
 		return word == "the"
 	}
 	return false
 }
 
 func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string) []string {
-	if !isReverse && lang == "English" {
+	if !isReverse && strings.HasPrefix(lang, "English") {
 		if word1 == "the" {
-			if word2 == "ðə" {
+			if word2 == "ðə" || word2 == "ðˌɛ" {
 				return []string{"the"}
 			}
-			if word2 == "ðɪ" || word2 == "ðˈi" {
+			if word2 == "ðɪ" || word2 == "ðˈi" || word2 == "ði" {
 				return []string{"thi"}
 			}
 		}

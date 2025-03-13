@@ -29,7 +29,7 @@ timeout 200 ./train_language_reverse.sh	farsi	-maxpremodulo	955715	 -resume
 timeout 200 ./train_language_reverse.sh	finnish	-maxpremodulo	4454690	 -resume
 timeout 200 ./train_language_reverse.sh	french	-maxpremodulo	4245270	 -resume
 timeout 200 ./train_language_reverse.sh	galician	-maxpremodulo	1920	 -resume
-timeout 200 ./train_language_reverse.sh	georgian	-maxpremodulo	0	 -resume
+timeout 200 ./train_language_reverse.sh	georgian	-maxpremodulo	10	 -resume
 timeout 200 ./train_language_reverse.sh	german	-maxpremodulo	2672030	 -resume
 timeout 200 ./train_language_reverse.sh	greek	-maxpremodulo	1579160	 -resume
 timeout 200 ./train_language_reverse.sh	gujarati	-maxpremodulo	164360	 -resume
@@ -85,5 +85,7 @@ timeout 200 ./train_language_reverse.sh	vietnamese/northern	-maxpremodulo	2365	 
 timeout 200 ./train_language_reverse.sh	vietnamese/southern	-maxpremodulo	5545	 -resume
 timeout 200 ./train_language_reverse.sh	yoruba	-maxpremodulo	3590	 -resume
 timeout 200 ./train_language_reverse.sh	zulu	-maxpremodulo	470	 -resume
+timeout 200 ./train_language_reverse.sh	english/british	-maxpremodulo	2973725	 -resume
+timeout 200 ./train_language_reverse.sh	english/american	-maxpremodulo	688520	 -resume
 
 
