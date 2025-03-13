@@ -9,7 +9,9 @@ type PhonemizeSentence struct {
 }
 
 func (p *PhonemizeSentence) Init() {
-	p.Words = []PhonemizeSentenceWord{}
+	if len(p.Words) == 0 {
+		p.Words = []PhonemizeSentenceWord{}
+	}
 }
 
 type PhonemizeSentenceWord struct {

@@ -24,6 +24,7 @@ type PhonemizeUsecase struct {
 }
 
 func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp responses.PhonemizeSentence) {
+	r.Init()
 
 	splitted := p.service.SplitWords(r.IsReverse, r.Language, r.Sentence)
 
@@ -35,7 +36,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	var punctuation [][2]string
 
 	for _, word := range splitted {
-		words, punct := p.phon.PhonemizeWords(r.IsReverse, r.Language, word)
+		words, punct := p.phon.PhonemizeWords(r.IsReverse, r.Language, word, r.Languages)
 		phonemized = append(phonemized, words...)
 		punctuation = append(punctuation, punct...)
 		log.Now().Debugf("Word: %s, Words: %v", word, words)

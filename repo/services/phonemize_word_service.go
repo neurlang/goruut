@@ -6,7 +6,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWords(isReverse bool, lang, word string) (ret []map[uint32]string, punct [][2]string)
+	PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string)
 	//CleanWord(isReverse bool, lang, word string) string
 }
 
@@ -18,7 +18,7 @@ type PhonemizeWordService struct {
 	tag  *repo.IAutoTaggerRepository
 }
 
-func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string) (ret []map[uint32]string, punct [][2]string) {
+func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string) {
 	word = (*p.pre).PrePhonemizeWord(isReverse, lang, word)
 
 	word, lpunct, rpunct := (*p.ai).CleanWord(isReverse, lang, word)
@@ -26,6 +26,12 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string)
 		return nil, nil
 	}
 	ret = (*p.repo).LookupWords(isReverse, lang, word)
+	for _, lang := range languages {
+		if ret != nil {
+			break
+		}
+		ret = (*p.repo).LookupWords(isReverse, lang, word)
+	}
 	if ret == nil {
 		hash := (*p.cach).HashWord(isReverse, lang, word)
 		r := (*p.cach).LoadWord(hash)
