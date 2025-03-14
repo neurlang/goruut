@@ -188,7 +188,7 @@ func (s *SolutionEval) Align(word1, word2 string, asymmetric, isCleaning bool) (
 	if asymmetric {
 		ret = s.AlignAsymmetric(word1, word2, isCleaning)
 	} else {
-		ret = s.AlignSymmetric(word1, word2, isCleaning)
+		ret = s.AlignSymmetric(word1, word2, false)
 	}
 	if ret != nil {
 		cplxLoss = s.ComplexityLoss(ret[0])

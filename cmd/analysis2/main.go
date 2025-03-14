@@ -259,9 +259,8 @@ again:
 			}
 		}
 
-
 		// do export alignment
-		aligned, cplxloss := lang_eval.Align(word1, word2, padspace != nil && *padspace, false)
+		aligned, cplxloss := lang_eval.Align(word1, word2, padspace != nil && *padspace, dstFile != nil && *dstFile != "")
 		if aligned != nil {
 			complexityLoss.Add(cplxloss)
 
