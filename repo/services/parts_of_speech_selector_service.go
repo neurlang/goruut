@@ -9,7 +9,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPartsOfSpeechSelectorService interface {
-	Select(isReverse bool, lang string, sentence []map[uint32]string) (ret [][3]string)
+	Select(isReverse bool, lang string, sentence []map[uint32]string, languages []string) (ret [][3]string)
 }
 
 type PartsOfSpeechSelectorService struct {
@@ -33,7 +33,7 @@ func next_continue_english(lang string, isReverse bool, my_tags, next_tags map[s
 	return false
 }
 
-func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sentence []map[uint32]string) (ret [][3]string) {
+func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sentence []map[uint32]string, languages []string) (ret [][3]string) {
 	var intermediate []map[[2]string][]string
 	for _, words := range sentence {
 		var orig = words[0]
@@ -48,6 +48,14 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 			var tags_parsed = (*p.repoa).TagWord(isReverse, lang, orig, word)
 			if tags != "" && tags != "[]" {
 				tags_parsed = append(tags_parsed, log.Error1(helpers.ParseJson[[]string]([]byte(tags)))...)
+			}
+			for _, lang := range languages {
+				var tags = (*p.repo).LookupTags(isReverse, lang, orig, word)
+				log.Now().Debugf("Orig: %s, Word: %s, WordsTags: %s", orig, word, tags)
+				tags_parsed = append(tags_parsed, (*p.repoa).TagWord(isReverse, lang, orig, word)...)
+				if tags != "" && tags != "[]" {
+					tags_parsed = append(tags_parsed, log.Error1(helpers.ParseJson[[]string]([]byte(tags)))...)
+				}
 			}
 			log.Now().Debugf("Orig: %v, Dest: %v, Tags: %v", orig, word, tags_parsed)
 			wordstags[[2]string{orig, word}] = tags_parsed

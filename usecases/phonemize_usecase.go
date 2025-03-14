@@ -42,7 +42,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		log.Now().Debugf("Word: %s, Words: %v", word, words)
 	}
 
-	parts_of_speech_selected := p.sel.Select(r.IsReverse, r.Language, phonemized)
+	parts_of_speech_selected := p.sel.Select(r.IsReverse, r.Language, phonemized, r.Languages)
 	log.Now().Debugf("Vector: %v", parts_of_speech_selected)
 
 	var ipa_flavored [][3]string
