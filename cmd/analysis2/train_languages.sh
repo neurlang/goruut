@@ -30,7 +30,7 @@ timeout 200 ./train_language.sh	finnish	-maxpremodulo	1437785	 -resume
 timeout 200 ./train_language.sh	french	-maxpremodulo	5313785	 -resume
 timeout 200 ./train_language.sh	galician	-maxpremodulo	213690	 -resume
 timeout 200 ./train_language.sh	georgian	-maxpremodulo	100660	 -resume
-timeout 200 ./train_language.sh	german	-maxpremodulo	28608185	 -resume
+timeout 200 ./train_language.sh german -minpremodulo 10000      -maxpremodulo   28608185         -resume
 timeout 200 ./train_language.sh	greek	-maxpremodulo	6055395	 -resume
 timeout 200 ./train_language.sh	gujarati	-maxpremodulo	5296775	 -resume
 timeout 200 ./train_language.sh	hausa	-maxpremodulo	38785	 -resume
@@ -65,10 +65,10 @@ timeout 200 ./train_language.sh	polish	-maxpremodulo	1860860	 -resume
 timeout 200 ./train_language.sh	portuguese	-maxpremodulo	5307220	 -resume
 timeout 200 ./train_language.sh	punjabi	-maxpremodulo	1934585	 -resume
 timeout 200 ./train_language.sh	romanian	-maxpremodulo	7150480	 -resume
-timeout 200 ./train_language.sh	russian	-maxpremodulo	35700125	 -resume
+timeout 200 ./train_language.sh        russian -minpremodulo 10000     -maxpremodulo   35700125         -resume
 timeout 200 ./train_language.sh	serbian	-maxpremodulo	1293135	 -resume
 timeout 200 ./train_language.sh	slovak	-maxpremodulo	402700	 -resume
-timeout 200 ./train_language.sh	spanish	-maxpremodulo	51129080	 -resume
+timeout 200 ./train_language.sh	spanish -minpremodulo 10000     -maxpremodulo   51129080         -resume
 timeout 200 ./train_language.sh	swahili	-maxpremodulo	4524845	 -resume
 timeout 200 ./train_language.sh	swedish	-maxpremodulo	3156080	 -resume
 timeout 200 ./train_language.sh	tagalog	-maxpremodulo	1081545	 -resume
