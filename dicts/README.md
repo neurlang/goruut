@@ -120,6 +120,8 @@ file with the name `weights4.json.lzw` will start appearing in your language's f
 
 To resume training later, use `train_language.sh romanian -resume -maxpremodulo <value>` 
 
+**Padspace languages** must use the `-padspace` parameter to `./train_language.sh <name>` script.
+
 **Note**: If training a brand new language, backtesting may not work unless you add the glue code, then compile `backtest`, then train language.
 
 ## Adding the glue code (language.go)
