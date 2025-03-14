@@ -1,282 +1,251 @@
-{
-  "DropLast": null,
-  "DstMulti": null,
-  "DstMultiPrefix": [
-    "ˈ",
-    "'",
-    "ˌ"
-  ],
-  "DstMultiSuffix": [
-    "ː"
-  ],
-  "Histogram": [
-    "a",
-    "i",
-    "t",
-    "á",
-    "ɽ",
-    "w",
-    "ᵝ",
-    "m",
-    "e",
-    "o",
-    "ɡ",
-    "k",
-    "ʃ",
-    "u",
-    "ᵑ",
-    "s",
-    "í",
-    "ɓ",
-    "ⁿ",
-    "ó",
-    "d",
-    "ʰ",
-    "ú",
-    "é",
-    "j",
-    "n",
-    "ʷ",
-    "b",
-    "z",
-    "ᵐ",
-    "p",
-    "ɲ",
-    "f",
-    "ʒ",
-    "h",
-    "ʲ",
-    "ɗ",
-    "v",
-    "ᶬ"
-  ],
-  "IsDuplex": false,
-  "IsSrcSurround": false,
-  "Map": {
-    "a": [
-      "a",
-      "á"
-    ],
-    "abale": [
-      "aɓaɽé"
-    ],
-    "ayi": [
-      "ají",
-      "áji"
-    ],
-    "b": [
-      "ɓ",
-      "b"
-    ],
-    "bala": [
-      "ɓaɽa",
-      "ɓaɽá",
-      "ɓáɽá"
-    ],
-    "ch": [
-      "tʃ",
-      "ʃʰ"
-    ],
-    "chibwana": [
-      "tʃiɓʷána"
-    ],
-    "chishango": [
-      "tʃíʃaᵑɡo"
-    ],
-    "d": [
-      "d",
-      "ɗ"
-    ],
-    "dzanja": [
-      "dzaⁿdʒa"
-    ],
-    "e": [
-      "e",
-      "é",
-      "í",
-      "i"
-    ],
-    "f": [
-      "f"
-    ],
-    "funsa": [
-      "fuⁿsa"
-    ],
-    "g": [
-      "ɡ"
-    ],
-    "gondwa": [
-      "ɡóⁿdʷa"
-    ],
-    "h": [
-      "ʰ",
-      "h"
-    ],
-    "hw": [
-      "ʷʰ"
-    ],
-    "hy": [
-      "ʲʰ"
-    ],
-    "i": [
-      "i",
-      "í"
-    ],
-    "imvi": [
-      "iᶬví"
-    ],
-    "j": [
-      "dʒ"
-    ],
-    "k": [
-      "k"
-    ],
-    "kampani": [
-      "káḿpani"
-    ],
-    "khonje": [
-      "kʰóⁿdʒe"
-    ],
-    "kunja": [
-      "kuⁿdʒá"
-    ],
-    "l": [
-      "ɽ"
-    ],
-    "likuni": [
-      "ɽikuní"
-    ],
-    "lizulu": [
-      "ɽizuɽu"
-    ],
-    "lusaka": [
-      "ɽusaka"
-    ],
-    "m": [
-      "m",
-      "ᵐ",
-      "ᶬ"
-    ],
-    "masiye": [
-      "masíje"
-    ],
-    "mb": [
-      "ᵐb",
-      "mɓ"
-    ],
-    "mbira": [
-      "ᵐbíɽa"
-    ],
-    "mchombo": [
-      "mtʃóᵐbo"
-    ],
-    "moto": [
-      "móto"
-    ],
-    "mphaka": [
-      "ᵐpʰaká"
-    ],
-    "mphoyo": [
-      "ᵐpʰojo"
-    ],
-    "msana": [
-      "msána"
-    ],
-    "mulungu": [
-      "muɽuᵑɡu"
-    ],
-    "mzinda": [
-      "mziⁿda"
-    ],
-    "n": [
-      "ⁿ",
-      "ᵑ",
-      "n"
-    ],
-    "namitete": [
-      "namitéte"
-    ],
-    "ng'": [
-      "ŋ"
-    ],
-    "nthenga": [
-      "ⁿtʰeᵑɡa"
-    ],
-    "nthochi": [
-      "ⁿtʰotʃí"
-    ],
-    "ny": [
-      "ɲ"
-    ],
-    "o": [
-      "o",
-      "ó"
-    ],
-    "p": [
-      "p"
-    ],
-    "pereka": [
-      "peɽeka"
-    ],
-    "phingo": [
-      "pʰíᵑɡo"
-    ],
-    "que": [
-      "ki"
-    ],
-    "r": [
-      "ɽ"
-    ],
-    "s": [
-      "s"
-    ],
-    "sh": [
-      "ʃ"
-    ],
-    "sumbulere": [
-      "súᵐbúɽeɽe"
-    ],
-    "t": [
-      "t"
-    ],
-    "thindwa": [
-      "tʰíⁿdʷa"
-    ],
-    "tsoka": [
-      "tsoka"
-    ],
-    "u": [
-      "u",
-      "ú"
-    ],
-    "v": [
-      "v"
-    ],
-    "w": [
-      "ʷ",
-      "w"
-    ],
-    "y": [
-      "j",
-      "ʲ"
-    ],
-    "z": [
-      "z"
-    ],
-    "ŵ": [
-      "β̞"
-    ]
-  },
-  "PrePhonWordSteps": [
-    {
-      "Trim": ".,"
-    },
-    {
-      "ToLower": true
-    }
-  ],
-  "SplitAfter": null,
-  "SplitBefore": null,
-  "SrcMulti": null,
-  "SrcMultiSuffix": null
-}
+{"Map":{"a":["a","á"],
+"achewa":["atʃewᵝá"],
+"afirika":["áfiɽika"],
+"afisi":["afisi","afísi"],
+"agogo":["aɡoɡo"],
+"akatundu":["akatúⁿdu"],
+"akavalo":["akaváɽo"],
+"amalawi":["amaɽáwᵝi"],
+"ambulera":["aᵐbúɽeɽa"],
+"azungu":["azuᵑɡu"],
+"b":["ɓ","b"],
+"balala":["ɓáɽáɽá"],
+"bango":["ɓaᵑɡó"],
+"bangula":["ɓaᵑɡúɽa"],
+"banja":["ɓáⁿdʒa"],
+"bata":["ɓáta"],
+"beza":["ɓéza"],
+"bowa":["ɓowa"],
+"bukhu":["ɓúkʰu"],
+"bvumbulula":["bvuᵐbuɽuɽa"],
+"bvumbulutsa":["bvuᵐbuɽutsa"],
+"bvumbwe":["bvúᵐbʷe"],
+"bwana":["ɓʷána","ɓʷana","ɓʷaná"],
+"bwereka":["ɓʷeɽeká"],
+"ch":["tʃ","ʃʰ"],
+"che":["tʃe","ʃʰe","ʃʰé","tʃí","tʃé"],
+"chi":["tʃi","tʃí","ʃʰi","ʃʰí"],
+"chichewa":["tʃitʃewᵝá"],
+"chimanga":["tʃímaᵑɡa"],
+"chingancheke":["tʃiᵑɡáⁿtʃeke"],
+"chinganga":["tʃiᵑɡaᵑɡa"],
+"chinji":["tʃíⁿdʒi"],
+"chinthu":["tʃiⁿtʰu"],
+"chipwitikizi":["tʃipʷitikízi"],
+"chiuno":["tʃiúno"],
+"chiwemba":["tʃiwᵝeᵐbá"],
+"chiwengo":["tʃiwᵝéᵑɡo"],
+"chiwindi":["tʃíwᵝiⁿdi"],
+"d":["d","ɗ"],
+"dza":["dza"],
+"dzalanyama":["dzaɽaɲama"],
+"dzanja":["dzaⁿdʒa"],
+"dzaye":["dzaje"],
+"dziwe":["dziwᵝe"],
+"dzuwa":["dzúwᵝa"],
+"e":["e","é","i"],
+"epulo":["épuɽo"],
+"f":["f"],
+"fumbi":["fuᵐbí"],
+"g":["ɡ"],
+"galimoto":["ɡáɽímoto"],
+"ganizo":["ɡanizo"],
+"gawa":["ɡawᵝa"],
+"gawo":["ɡawᵝo"],
+"gongono":["ɡóᵑɡono"],
+"gunde":["ɡúⁿde"],
+"gwengwe":["ɡʷéᵑɡʷe"],
+"h":["ʰ","h"],
+"harawa":["haɽáwa"],
+"hw":["ʷʰ"],
+"hy":["ʲʰ"],
+"i":["i","í"],
+"ife":["ife"],
+"impso":["iᵐpsʲó"],
+"inu":["inu"],
+"itana":["itana"],
+"itawa":["itawᵝa"],
+"iyayi":["íjají"],
+"j":["dʒ"],
+"januwale":["dʒánuwaɽe"],
+"jekete":["dʒékete"],
+"jere":["dʒéɽe"],
+"jombo":["dʒóᵐbo"],
+"julaye":["dʒuɽáje"],
+"juni":["dʒúni"],
+"k":["k"],
+"ka":["ka","ká"],
+"kabawi":["kaɓawᵝí"],
+"kadzitche":["kadzítʃʰe"],
+"kakowa":["kakówᵝa"],
+"kaloti":["káɽoti"],
+"kalulu":["kaɽuɽú"],
+"kambuku":["kaᵐbukú"],
+"kaomba":["kaoᵐba"],
+"katawa":["katawᵝá"],
+"khadabo":["kʰáɗaɓo"],
+"khonje":["kʰóⁿdʒe"],
+"khungu":["kʰúᵑɡu"],
+"kumanja":["kumaⁿdʒá"],
+"kunja":["kuⁿdʒá"],
+"kuti":["kutí"],
+"kwawa":["kʷáwa"],
+"l":["ɽ"],
+"la":["ɽa","ɽá"],
+"lachitatu":["ɽátʃítátu"],
+"lachiwiri":["ɽátʃíwᵝíɽi"],
+"lasabata":["ɽásaɓatá"],
+"lawi":["ɽawᵝí"],
+"lemba":["ɽeᵐba"],
+"likuni":["ɽikuní"],
+"lima":["ɽima"],
+"lipaine":["ɽipáine"],
+"liwonde":["ɽiwóⁿde"],
+"loweruka":["ɽówᵝéɽuka"],
+"luchenza":["ɽutʃéⁿza"],
+"m":["m","ᵐ","ᶬ","ḿ"],
+"machinga":["mátʃiᵑɡa"],
+"madzi":["madzí"],
+"mafuta":["mafúta"],
+"malawi":["maɽáwᵝi"],
+"manda":["maⁿda"],
+"mankhwala":["maᵑkʷʰáɽa"],
+"mapira":["mapiɽa"],
+"masiye":["masíje"],
+"mawa":["máwᵝa"],
+"mawu":["mawú"],
+"mb":["ᵐb","mɓ"],
+"mbewa":["ᵐbewᵝa"],
+"mbumba":["ᵐbúᵐba"],
+"mchewa":["mtʃewᵝá"],
+"mchinji":["mtʃiⁿdʒí"],
+"mchombo":["mtʃóᵐbo"],
+"meyi":["méji"],
+"mimba":["míᵐba"],
+"mkandawire":["mkaⁿdawíɽe"],
+"mkango":["mkáᵑɡo"],
+"mkodzo":["mkodzo"],
+"mkuwa":["mkúwa"],
+"mlendo":["mɽeⁿdó"],
+"mloma":["mɽóma"],
+"mlomo":["mɽomo"],
+"mmalawi":["mmaɽáwᵝi"],
+"mmwenye":["mmʷeɲe"],
+"mnyamata":["mɲamatá"],
+"moto":["móto"],
+"mowa":["mowᵝa"],
+"mozambique":["mozaᵐbíki"],
+"mphesa":["ᵐpʰesa"],
+"mphezi":["ᵐpʰezi"],
+"mphunzitsi":["mpʰuⁿzitsi"],
+"msika":["msika"],
+"mtenje":["mteⁿdʒe"],
+"mtochi":["mtʰotʃí"],
+"mtsempha":["mtséᵐpʰa"],
+"mtsinje":["mtsíⁿdʒe"],
+"mulanje":["múɽaⁿdʒe"],
+"mulungu":["muɽuᵑɡu"],
+"mutu":["mutú"],
+"muula":["muúɽa"],
+"mwa":["mʷa","mʷá"],
+"mwanza":["mʷaⁿzá"],
+"mwawi":["mʷawᵝi"],
+"mwazi":["mʷazí"],
+"mwini":["mʷiní"],
+"mzimba":["mziᵐba"],
+"mzimu":["mzímu"],
+"mzuzu":["mzúzu"],
+"n":["ⁿ","n","ᵑ"],
+"nathenje":["natʰeⁿdʒé"],
+"nazombe":["nazoᵐbe"],
+"ng":["ᵑɡ"],
+"ng'":["ŋ"],
+"ng'anga":["ŋaᵑɡa"],
+"ngoni":["ᵑɡoní"],
+"nguluwe":["ᵑɡuɽuwᵝe"],
+"ngwee":["ᵑɡʷee"],
+"njala":["ⁿdʒaɽa"],
+"njati":["ⁿdʒáti"],
+"njerwa":["ⁿdʒéɽʷa"],
+"njinga":["ⁿdʒiᵑɡá"],
+"njira":["ⁿdʒiɽa"],
+"njiwa":["ⁿdʒiwᵝa"],
+"njobvu":["ⁿdʒobvu"],
+"njoka":["ⁿdʒóka"],
+"njovu":["ⁿdʒovu"],
+"njuchi":["ⁿdʒútʃi"],
+"nkhata":["ᵑkʰáta"],
+"nkhwangwa":["ᵑkʷʰáᵑɡʷa"],
+"nsanje":["ⁿsaⁿdʒe","ⁿsáⁿdʒe"],
+"nsanza":["ⁿsaⁿza"],
+"nsawawa":["ⁿsáwawa"],
+"nsenjere":["ⁿseⁿdʒeɽe"],
+"nsidze":["ⁿsídze"],
+"ntcheu":["ⁿtʃʰewú"],
+"nthawi":["ⁿtʰáwᵝi"],
+"nthenga":["ⁿtʰeᵑɡa"],
+"nthochi":["ⁿtʰotʃí"],
+"nthowitowi":["ⁿtʰowᵝitowᵝi"],
+"ny":["ɲ"],
+"nyalugwe":["ɲaɽuɡʷe"],
+"nyanja":["ɲaⁿdʒá"],
+"nyasalande":["ɲásaɽaⁿde"],
+"nyenyezi":["ɲéɲezi"],
+"nzeru":["ⁿzeɽú"],
+"o":["o","ó"],
+"p":["p"],
+"pansi":["paⁿsí"],
+"pfupa":["pfúpa"],
+"phala":["pʰaɽa"],
+"phalombe":["pʰaɽoᵐbé"],
+"phwetekere":["pʷʰetekeɽe"],
+"r":["ɽ"],
+"rumphi":["ɽúᵐpʰi"],
+"s":["s"],
+"sabata":["sáɓata"],
+"sadulo":["sáɗuɽo"],
+"sale":["saɽe"],
+"seka":["seka"],
+"sh":["ʃ"],
+"singano":["siᵑɡáno"],
+"songwe":["sóᵑɡʷe"],
+"sopo":["sópo"],
+"sutu":["sútu"],
+"t":["t"],
+"tanzania":["taⁿzánia"],
+"tchipa":["tʃʰipa"],
+"theba":["tʰéɓa"],
+"tomato":["tomáto"],
+"u":["u","ú"],
+"ubatizo":["uɓatizo"],
+"ula":["úɽa","uɽá"],
+"ulaya":["uɽajá"],
+"ulendo":["uɽeⁿdó"],
+"umba":["uᵐba"],
+"utsi":["utsí"],
+"v":["v"],
+"vuto":["vúto"],
+"w":["ʷ","w"],
+"wakuba":["wákúɓá"],
+"wayilesi":["wájiɽesi"],
+"weruka":["wᵝeɽuka"],
+"wira":["wᵝiɽa"],
+"wiritsa":["wᵝiɽitsa"],
+"y":["j","ʲ"],
+"yani":["jáni"],
+"yankho":["jaᵑkʰo"],
+"yera":["jeɽa"],
+"z":["z"],
+"zaka":["zaká"],
+"zana":["zána"],
+"zidindo":["zidiⁿdo"],
+"zifuwa":["zifúwa"],
+"zipatso":["zipátso"],
+"zitamba":["zitáᵐba"],
+"zitsiru":["zitsíɽu"],
+"zomera":["zómeɽa"],
+"zulu":["zúɽu"],
+"ŵ":["β̞"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
+"PrePhonWordSteps":[{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

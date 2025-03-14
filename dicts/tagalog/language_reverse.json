@@ -1,384 +1,262 @@
-{
-  "DropLast": null,
-  "DstMulti": null,
-  "DstMultiPrefix": null,
-  "DstMultiSuffix": null,
-  "Histogram": [
-    "a",
-    "i",
-    "n",
-    "s",
-    "l",
-    "o",
-    "t",
-    "g",
-    "u",
-    "e",
-    "k",
-    "m",
-    "r",
-    "b",
-    "y",
-    "p",
-    "d",
-    "h",
-    "w",
-    "c",
-    "v",
-    "z",
-    "f",
-    "j",
-    "ñ",
-    "q",
-    "'",
-    "x",
-    "ë",
-    "̃"
-  ],
-  "IsDuplex": false,
-  "IsSrcSurround": false,
-  "Map": {
-    "a": [
-      "a"
-    ],
-    "aɪ̯": [
-      "ay",
-      "ai",
-      "igh"
-    ],
-    "aʊ̯": [
-      "au",
-      "aw",
-      "ao",
-      "gaw"
-    ],
-    "aʔ": [
-      "ga",
-      "ya",
-      "wa"
-    ],
-    "b": [
-      "b",
-      "v"
-    ],
-    "ba": [
-      "ba",
-      "va",
-      "bu",
-      "ab"
-    ],
-    "d": [
-      "d",
-      "y"
-    ],
-    "doboljʊ": [
-      "w"
-    ],
-    "dʒ": [
-      "dy",
-      "j",
-      "di",
-      "g"
-    ],
-    "f": [
-      "f"
-    ],
-    "h": [
-      "h",
-      "j",
-      "g",
-      "x"
-    ],
-    "i": [
-      "i",
-      "e",
-      "y"
-    ],
-    "in": [
-      "in",
-      "yn",
-      "ng"
-    ],
-    "is": [
-      "is",
-      "iz",
-      "ys",
-      "si"
-    ],
-    "isɪ": [
-      "isi"
-    ],
-    "it": [
-      "it",
-      "ti"
-    ],
-    "itɪ": [
-      "iti"
-    ],
-    "iŋ": [
-      "ing",
-      "in",
-      "ng"
-    ],
-    "j": [
-      "y",
-      "i",
-      "l",
-      "e"
-    ],
-    "jo": [
-      "yo",
-      "lo",
-      "eo"
-    ],
-    "joŋ": [
-      "yong"
-    ],
-    "k": [
-      "k",
-      "c",
-      "qu",
-      "j",
-      "q"
-    ],
-    "kju": [
-      "kyu",
-      "q"
-    ],
-    "ks": [
-      "ks",
-      "cs",
-      "x",
-      "cz"
-    ],
-    "ku": [
-      "ku",
-      "q"
-    ],
-    "kw": [
-      "kw",
-      "cu",
-      "q"
-    ],
-    "l": [
-      "l"
-    ],
-    "m": [
-      "m",
-      "n"
-    ],
-    "n": [
-      "n"
-    ],
-    "nd": [
-      "nd",
-      "di",
-      "ng"
-    ],
-    "o": [
-      "o"
-    ],
-    "p": [
-      "p",
-      "f"
-    ],
-    "s": [
-      "s",
-      "z",
-      "c",
-      "g",
-      "j"
-    ],
-    "t": [
-      "t"
-    ],
-    "ts": [
-      "ts",
-      "ch"
-    ],
-    "tʃ": [
-      "ts",
-      "tiy",
-      "ch",
-      "ti",
-      "tch"
-    ],
-    "u": [
-      "u",
-      "oo",
-      "yo",
-      "hoo",
-      "ew"
-    ],
-    "v": [
-      "v"
-    ],
-    "w": [
-      "w",
-      "u"
-    ],
-    "x": [
-      "k",
-      "c",
-      "qu"
-    ],
-    "z": [
-      "z"
-    ],
-    "ŋ": [
-      "ng",
-      "n",
-      "g̃"
-    ],
-    "ɐ": [
-      "a"
-    ],
-    "ɐba": [
-      "aba"
-    ],
-    "ɐj": [
-      "ay",
-      "ga"
-    ],
-    "ɐw": [
-      "aw",
-      "ga"
-    ],
-    "ɐʔ": [
-      "ga",
-      "ya",
-      "wa",
-      "da"
-    ],
-    "ə": [
-      "ë"
-    ],
-    "ɛ": [
-      "e",
-      "a"
-    ],
-    "ɡ": [
-      "g"
-    ],
-    "ɣ": [
-      "g"
-    ],
-    "ɪ": [
-      "i",
-      "y",
-      "n",
-      "e"
-    ],
-    "ɪl": [
-      "il",
-      "li"
-    ],
-    "ɪli": [
-      "ili"
-    ],
-    "ɪlɪ": [
-      "ili"
-    ],
-    "ɪŋ": [
-      "ing",
-      "ng"
-    ],
-    "ɪ̯": [
-      "y",
-      "i"
-    ],
-    "ɲ": [
-      "ny",
-      "ñ",
-      "ni"
-    ],
-    "ɹ": [
-      "r"
-    ],
-    "ɾ": [
-      "r"
-    ],
-    "ʃ": [
-      "sy",
-      "ci",
-      "i"
-    ],
-    "ʊ": [
-      "u",
-      "o"
-    ],
-    "ʊj": [
-      "uy",
-      "gu"
-    ],
-    "ʊ̯": [
-      "w",
-      "o"
-    ],
-    "ʊ̯p": [
-      "pe"
-    ],
-    "ʒ": [
-      "y"
-    ],
-    "ʔ": [
-      "i",
-      "g",
-      "y",
-      "h"
-    ],
-    "ʔaɲ": [
-      "any",
-      "aniy"
-    ],
-    "ʔo": [
-      "aw",
-      "ho",
-      "oh"
-    ],
-    "ʔɐ": [
-      "ac"
-    ],
-    "ʔə": [
-      "a"
-    ],
-    "ʔəʔə": [
-      "oo"
-    ],
-    "ʔɛ": [
-      "ay"
-    ],
-    "ʔɛks": [
-      "x"
-    ],
-    "ʔɛxɪs": [
-      "x"
-    ],
-    "ʔɛɲ": [
-      "eny"
-    ],
-    "ʔʊ": [
-      "uw"
-    ],
-    "ʔʊɲ": [
-      "uny"
-    ],
-    "̯n": [
-      "n"
-    ]
-  },
-  "PrePhonWordSteps": [
-    {
-      "Trim": ".,"
-    },
-    {
-      "ToLower": true
-    }
-  ],
-  "SplitAfter": null,
-  "SplitBefore": null,
-  "SrcMulti": null,
-  "SrcMultiSuffix": [
-    "ː"
-  ]
-}
+{"Map":{"a":["a","y","h","s","ay","'","al","an","i","ga"],
+"ab":["ab","bi","abi","av"],
+"ad":["ad","rad"],
+"al":["l","al","ali","la","ala","alu"],
+"alɐ":["la","ala"],
+"an":["n","an","ani","ni","ran","nu","ana","anu","ans"],
+"antʃ":["nts"],
+"anɐn":["nan","anan"],
+"ap":["p","ap","apa","pa","api"],
+"apɐ":["pa","pag","apa","pal","pasy"],
+"at":["at","ati","ata","wat"],
+"aw":["wa","aw","w","wi","au"],
+"ax":["k","ak","ka","ac","aca","aka","aki"],
+"axɪ":["aki"],
+"aŋ":["ng","ang","g","an"],
+"aŋɐ":["anga"],
+"aŋɐʔ":["anga"],
+"aɡ":["ag","gs","agu"],
+"aɣ":["ag","g","gi","ga"],
+"aɣɐ":["ga"],
+"aɣɐp":["agap"],
+"aɣʊ":["gu"],
+"aɪ̯":["y","ai","ay","igh"],
+"aɪ̯ŋ":["in"],
+"aɾ":["ar","r"],
+"aɾt":["art"],
+"aʊ̯":["aw","au","o","ao"],
+"aʔ":["a","i","au","ya"],
+"b":["b","bi","v","i"],
+"ba":["ba","bay","va","ban","bag","bal","ar","ab","bu"],
+"bɪ":["bi","bin","big","vil","vi","bil","bir","id"],
+"bɪb":["bib"],
+"d":["d","e","a","di","y"],
+"di":["di","diy","dil","din"],
+"diʔ":["di","'di"],
+"doboljʊ":["w"],
+"du":["du","uw","doo"],
+"dɛʔ":["'di"],
+"dɪ":["di","dil","dib","diy","ding"],
+"dɪŋ":["ding"],
+"dʒ":["j","dy","diy","di","ge"],
+"f":["f"],
+"h":["h","ha","a","i","j","g","x"],
+"hiŋ":["hing"],
+"hɪxa":["hika","ika"],
+"i":["i","h","l","n","il","y","w","e","in","ri","g"],
+"ib":["ib","iv"],
+"idʒ":["idy"],
+"is":["is","iz","yis","si","wis","sa"],
+"it":["it","ti","ta","iti"],
+"iŋ":["ng","ing","in"],
+"iɾ":["ir"],
+"iʔ":["i"],
+"j":["y","ya","i","a","l","iy","la","e","u","ri"],
+"jo":["yo","io","lo","iyo","rio","eo","'yo"],
+"jolo":["yolo"],
+"jɐ":["ya","a","la","ia","yas","ha"],
+"jɐb":["yab","ab"],
+"jɐm":["yam","yama"],
+"jɐŋ":["yang","ang"],
+"jɐʔ":["ya","aa"],
+"k":["k","c","ki","ka","qu","q"],
+"ka":["ka","ca","kaw","kay","kan","kah"],
+"kaʔ":["ka","kai","'ka"],
+"ki":["ki","qui","kin","ke","kil"],
+"kin":["quin"],
+"kiʔ":["ki"],
+"ks":["ks","cs","x","ksi","cz"],
+"kw":["kuw","kw","kuwa","cu","q","kuwi"],
+"kɐ":["ka","ca","kal","kap","kas","kar","kah","cal","kan","kama","ja"],
+"l":["l","a","la","i","li","u","al"],
+"la":["la","lay","lar","law","as","ah","lal","las","lan","ay","aw"],
+"lap":["lap","ap","lapa"],
+"ljɐ":["la","ya","lya","lia","liya"],
+"lo":["lo"],
+"loʔ":["lo"],
+"lt":["lt","ta","lti","lta"],
+"ltɐ":["ltah","lta"],
+"lɐ":["la","las","lal","aw","lap","ag","ay","law","lam","lan","lac","as","ah","lay"],
+"lɐnd":["land","and","landa"],
+"lɪ":["li","lin","lih","lir","lib","is","le","ig","in","ir","lit","lis","ih"],
+"m":["m","ma","mi","n","a","g","ng"],
+"maɾt":["mart"],
+"mi":["mi","mil","mih"],
+"mɐʔ":["ma","maa","mau"],
+"n":["n","na","a","i","ns","t","u","an","ng","ni","e"],
+"naxɪʔ":["aki"],
+"naɣ":["nag","ag"],
+"nd":["nd","da","di","nda","ndi","ngd"],
+"ndaj":["nday"],
+"ndi":["ndi"],
+"ndiŋ":["nding"],
+"ni":["ni","niy","niw"],
+"nlo":["nglo"],
+"ns":["ns","nsa","nsi","ngs","gs","nz","nsu","ngsi","ce","ngz"],
+"nsi":["nsi","nci"],
+"nɐnɐ":["nana"],
+"nɪ":["ni","is"],
+"o":["o","l","al","w"],
+"oʔ":["o"],
+"p":["p","pa","a","f","i","u"],
+"s":["s","a","z","i","si","u","n","ns","j","g","h","c"],
+"si":["si","sin","ci","sy","in","is","il","ih"],
+"sil":["sil","cil","sili"],
+"siʔ":["si"],
+"sɛ":["se","ce","sen","ses","sens","seg","tse"],
+"sɪ":["si","siy","sig","ci","sib","sit","se","ig","sid","isi","sir","ir"],
+"sɪs":["sis","sisi"],
+"t":["t","ti","ta","a","i","e","u","at","c","th"],
+"tw":["tuw","tw","tu","uw"],
+"twa":["tuwa","tua","tuw"],
+"tɐ":["ta","tal","tas","tag","tan","taw","tam","ah"],
+"tɐʔ":["ta","taa","aa"],
+"tʃ":["ts","ch","tiy","ti","cha","iy","tsi","zh","tch","tia"],
+"tʃi":["tsi","chi"],
+"tʃɪ":["tsi"],
+"u":["u","n","l","oo","yo","ew"],
+"us":["us","uz"],
+"ut":["ut","uti","ta"],
+"uŋ":["ung","ng","unga"],
+"v":["v"],
+"w":["w","uw","a","u","i","j","o"],
+"wɐt":["wat","wata","wati"],
+"x":["k","c","ki","ka","ca","qu","qui"],
+"xa":["ka","ca","kaw","kas","eca","kan"],
+"xɐ":["ka","kas","kar"],
+"xɐʔ":["ka"],
+"z":["z"],
+"ŋ":["ng","n","g̃"],
+"ŋɡ":["ngg","ng","ngga","nggu"],
+"ŋɡɐ":["ngga","nggap"],
+"ɐ":["a","g","s","h","ap","d","sy","y","c","ag"],
+"ɐb":["ab","abi","av"],
+"ɐbaɣ":["abag"],
+"ɐdʒ":["dy","adi","ady"],
+"ɐj":["ay","ya","aya","ga"],
+"ɐl":["al","l","la","ala","li","ali","lu","alu","yal"],
+"ɐlɐt":["alat","lat"],
+"ɐm":["m","am","ma","ama"],
+"ɐmaʔ":["maa"],
+"ɐmb":["mb","amb","amba","anb"],
+"ɐmba":["mba","amba","angbay"],
+"ɐn":["n","an","na","ni","nt","nu","ant","ns","ana","ani","a","ang","ng","ans"],
+"ɐna":["na","ana","anay","ah"],
+"ɐnap":["nap","ap"],
+"ɐnd":["nd","and"],
+"ɐndi":["ndi","andi"],
+"ɐnsi":["nsi","ansi"],
+"ɐntʃ":["nch","ntiy","nts"],
+"ɐnɐ":["na","ana"],
+"ɐnɐn":["nana","nan"],
+"ɐnɐna":["nana"],
+"ɐnɐnɐ":["nana","ana"],
+"ɐsi":["asi","si","aci"],
+"ɐt":["t","at","ata","ati","ti","ac","ga","sat"],
+"ɐti":["ti","ati","tih"],
+"ɐw":["aw","wa","awa","wi"],
+"ɐx":["ak","aka","ac","ki","ca","aki","aqu","aca","oaqu"],
+"ɐxɪ":["ki","aki","kir"],
+"ɐŋ":["ng","ang","anga","an","g"],
+"ɐŋaɪ̯":["angai"],
+"ɐŋɐŋ":["nganga","angang"],
+"ɐɡk":["gk","gka","agk","agc","agka"],
+"ɐɡkw":["gkw","gkuw"],
+"ɐɣ":["g","ag","ga","gi","aga","agi","agu","gu","a"],
+"ɐɣan":["agan","gan"],
+"ɐɣɐl":["gal","agal"],
+"ɐɲ":["any","ny","ani","ña"],
+"ɐɾ":["ar","ra","ari","ara","ri","ru"],
+"ɐɾo":["aro"],
+"ɐɾɐ":["ara","ras","arap","arah"],
+"ɐʔ":["a","aa","ai","u","e","au","aan"],
+"ɐʔɐnd":["and"],
+"ə":["ë"],
+"ɛ":["e","r","i","n","g","ns","a","l","m"],
+"ɛnd":["end","enda","nd","endi"],
+"ɛx":["ek","ec","eka","eca"],
+"ɛʔ":["e","i"],
+"ɡ":["g","ga","gu","h","gi","s","l","y","n","u"],
+"ɡaɣ":["gag"],
+"ɡk":["k","ka"],
+"ɡt":["gt","ta","ti","gta","gc"],
+"ɡɐ":["ga","gan","gah","gas","gap"],
+"ɡɐɣ":["gaga","gag"],
+"ɡɐɣa":["gaga"],
+"ɣ":["g","a","ga","u","i","gu","gi"],
+"ɣa":["ga","al"],
+"ɣɐ":["ga","gas","as","gay","gag"],
+"ɪ":["i","g","h","y","r","n","iy","d","ir","il","e","ni","b","l"],
+"ɪb":["b","ib","bi","iv"],
+"ɪbɪ":["ibi","big","ivi"],
+"ɪl":["l","il","la","li","lu","le","uil"],
+"ɪla":["la","ila","ilap"],
+"ɪlɪ":["li","ili","lit"],
+"ɪn":["n","in","na","ina","ni","ini","ing","ng"],
+"ɪnɐʔ":["na"],
+"ɪp":["p","ip","pa","pi","ipa","if"],
+"ɪs":["is","iz","sa","si","ce","ic","isi","sn"],
+"ɪt":["it","ta","ti","ita","tu","iti"],
+"ɪx":["ik","k","ka","ic","iqu","ica","ika"],
+"ɪxaɾt":["cart"],
+"ɪxaʔ":["ika"],
+"ɪxɐ":["ka","ikas","icac","ika","icar"],
+"ɪŋ":["ng","ing"],
+"ɪʃ":["sy","isy"],
+"ɪʔ":["i","ii"],
+"ɪ̯":["y","i","h"],
+"ɪ̯l":["yl"],
+"ɪ̯p":["yp"],
+"ɪ̯s":["ys"],
+"ɪ̯ɾ":["yr"],
+"ɲ":["y","ñ","ny","niy","ni","ña"],
+"ɹ":["r"],
+"ɾ":["r","ra","ri","a","i","d","e"],
+"ɾap":["rap","ap","raf"],
+"ɾo":["ro","rro"],
+"ɾɐ":["ra","ras","as","rra","rah","ah","rap","ag"],
+"ɾɐŋ":["rang","ang"],
+"ɾɪŋ":["ring"],
+"ʃ":["y","sy","siy","iy","ci","sh","s","i","a","si","h","e"],
+"ʊ":["u","l","s","g","n","r","w","y","t"],
+"ʊj":["uy","uya"],
+"ʊm":["um","uma","ma","umi","mi","omi","om"],
+"ʊmi":["umi"],
+"ʊmɐʔ":["uma","umai"],
+"ʊn":["un","n","na","ung","uns","on","nu"],
+"ʊnd":["und","nd","unda","nda"],
+"ʊt":["ut","uta","ta","uti","utu","tu","ota"],
+"ʊŋ":["ung","ng"],
+"ʊ̯":["w","o","u"],
+"ʊ̯l":["le"],
+"ʊ̯p":["pe"],
+"ʊ̯ɣ":["wg"],
+"ʔ":["i","a","u","an","'","h"],
+"ʔa":["al","an","aw","ga"],
+"ʔaɾ":["ar","ara"],
+"ʔo":["o","aw","ho","oh","uo"],
+"ʔu":["uw","o"],
+"ʔɐ":["a","an","as","ag","ad","asy","aw","al","ay","ac","ar","ans"],
+"ʔɐb":["ab"],
+"ʔɐl":["al","ali","ala","alu","ale"],
+"ʔɐlm":["alm","alme"],
+"ʔɐm":["am","ami","ama"],
+"ʔɐmb":["amb"],
+"ʔɐmbɪʃ":["ambisy"],
+"ʔɐp":["ap"],
+"ʔɐt":["at","ata","atan"],
+"ʔɐx":["ak","ac","aqu"],
+"ʔɐŋ":["ang"],
+"ʔɐɲ":["any"],
+"ʔɐɾ":["ar","ara","arr","ari","are"],
+"ʔɐɾɐ":["ara"],
+"ʔə":["a"],
+"ʔəʔə":["oo"],
+"ʔɛ":["e","ay","he","'e"],
+"ʔɛks":["eks","x","eksi"],
+"ʔɛxɪs":["x"],
+"ʔɪn":["in","ina","ini","int","inu","inan"],
+"ʔɪs":["is","isa","isi"],
+"ʔʊ":["uw","ul","us","un","ut","ug","ur"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
+"DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
