@@ -4,7 +4,20 @@ A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International
 
 ## Try it online
 
-It is possible to try this software live at [hashtron.cloud](https://hashtron.cloud/).
+It is possible to try this software live at [hashtron.cloud](https://hashtron.cloud/) or at [hugging face](https://huggingface.co/spaces/neurlang/pygoruut).
+
+## Features
+
+* Phone set: IPA
+* Supported languages: 87
+* Processing speed: fast
+* Phone tokens: yes
+* Syllable tokens: no
+* Word tokens: yes
+* Punctuation preservation: yes
+* Stressed phones: yes
+* Tonal phones: yes, 5 tones (˥ ˦ ˧ ˨ ˩)
+* Tie: no
 
 ## Installation
 
@@ -45,6 +58,8 @@ sudo docker compose up -d --force-recreate --build
 * Dutch
 * Dzongkha
 * English
+* English American
+* English British
 * Esperanto
 * Estonian
 * Farsi
@@ -121,7 +136,7 @@ There are currently 3 target languages (IPA flavors). They are:
 
 ## Dependencies
 
-See go.mod file for an up-to-date list of depended-on projects. Minimum supported version of golang is go 1.18 (project uses type parameters).
+See go.mod file for an up-to-date list of depended-on projects. Minimum supported version of golang is go 1.19 (project uses type parameters).
 
 ## Numbers, Dates, and More
 
@@ -165,7 +180,4 @@ Output should be:
 
 goruut is useful for transforming raw text into phonetic pronunciations, similar to [phonemizer](https://github.com/bootphon/phonemizer).
 Unlike phonemizer, goruut looks up words in a pre-built lexicon (pronunciation dictionary) or guesses word pronunciations with a pre-trained
-grapheme-to-phoneme model.
-
-
-
+transformer-based grapheme-to-phoneme model.
