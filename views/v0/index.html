@@ -43,8 +43,13 @@
          </div>
       
          <div class = "w3-col m6 s12 w3-mobile">
-            <div><label for="output">Output text:</label><textarea style="resize: none; width:95%; height: 20em" id="output"></textarea></div>
+            <div><label for="output">Output text:</label><div 
+		    contenteditable="true" 
+		    style="resize: none; width: 95%; height: 20em; border: 1px solid #ccc; padding: 2px; white-space: pre-wrap; overflow: auto;"
+		    id="output"
+		></div></div>
             <button id="copyit" class="w3-btn w3-white w3-border w3-border-grey w3-round">Copy</button>
+            <input id="toggleCheckbox" type="checkbox" checked> Punctuation
          </div>
       </div></div>
       <div class = "w3-container w3-row">

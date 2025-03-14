@@ -1,4 +1,22 @@
-function initDropdown(inp, lst, items) {
+const checkbox = document.getElementById('toggleCheckbox');
+// Add an event listener to the checkbox
+checkbox.addEventListener('change', function() {
+  // Get references to the checkbox and the div with the ID 'output'
+  const outputDiv = document.getElementById('output');
+  // Get the <b> tag inside the output div
+  const boldTags = outputDiv.querySelectorAll('b');
+  
+  // Loop through all <b> tags and toggle their visibility
+  boldTags.forEach(boldTag => {
+    if (this.checked) {
+      boldTag.style.display = 'inline';
+    } else {
+      boldTag.style.display = 'none';
+    }
+  });
+});
+
+function initDropdown(inp, lst, items, multiple) {
 
   // Get the dropdown elements
   const searchInput = document.getElementById(inp);
@@ -13,7 +31,11 @@ function initDropdown(inp, lst, items) {
         const itemDiv = document.createElement("div");
         itemDiv.textContent = item;
         itemDiv.addEventListener("click", () => {
-          searchInput.value = item;
+          if (multiple) {
+            searchInput.value += item + ",";
+          } else {
+            searchInput.value = item;
+          }
           dropdownList.classList.remove("show");
         });
         dropdownList.appendChild(itemDiv);
@@ -23,7 +45,11 @@ function initDropdown(inp, lst, items) {
 
   // Event listener for input changes
   searchInput.addEventListener("input", function () {
-    const filter = searchInput.value.toLowerCase();
+    var filter = searchInput.value.toLowerCase();
+    if (multiple && filter.includes(',')) {
+      const spl = filter.split(',');
+      filter = spl[spl.length-1];
+    }
     dropdownList.innerHTML = ""; // Clear the list
 
     // Filter items based on input and update dropdown
@@ -35,7 +61,14 @@ function initDropdown(inp, lst, items) {
         const itemDiv = document.createElement("div");
         itemDiv.textContent = item;
         itemDiv.addEventListener("click", () => {
-          searchInput.value = item;
+          if (multiple) {
+		if (searchInput.value.endsWith(filter)) {
+		    searchInput.value = searchInput.value.slice(0, -filter.length);
+		}
+            searchInput.value += item + ",";
+          } else {
+            searchInput.value = item;
+          }
           dropdownList.classList.remove("show");
         });
         dropdownList.appendChild(itemDiv);
@@ -64,6 +97,6 @@ const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bas
 "Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu",
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Yoruba", "Zulu",
 "Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern"];
-initDropdown("langsearchInput", "langdropdownList", items);
+initDropdown("langsearchInput", "langdropdownList", items, true);
 const reverse_items = ["IPA", "Espeak", "Antvaset"].concat(items);
-initDropdown("tgtsearchInput", "tgtdropdownList", reverse_items);
+initDropdown("tgtsearchInput", "tgtdropdownList", reverse_items, false);

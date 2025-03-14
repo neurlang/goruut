@@ -37,7 +37,8 @@ document.getElementById('phonemizer').onclick = function() {
 
     // Define the data to be sent in the POST request
     const data = {
-        "Language": lang,
+        "Language": lang.includes(',') ? "" : lang,
+        "Languages": lang.includes(',') ? lang.replace(/^,+|,+$/g, '').split(',') : [],
         "IpaFlavors": target,
         "Sentence": text
     };
@@ -53,18 +54,25 @@ document.getElementById('phonemizer').onclick = function() {
     .then(response => response.json())
     .then(data => {
     	if (singleLookup) {
-	    	document.getElementById('output').value = '';
+	    	document.getElementById('output').innerHTML = '';
 	    	for (var i in data.Words) {
 		const word = data.Words[i];
-		const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
+		const not_dict = !word.PosTags?.includes("dict");
+		const ubegin = not_dict ? "<u>" : "";
+		const uend = not_dict ? "</u>" : "";
+		const lang = document.getElementById('output').innerHTML +=
+			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>";
 	    	}
 		console.log('Success:', data);
+		const checkbox = document.getElementById('toggleCheckbox');
+		checkbox.click();
+		checkbox.click();
 		return
         }
             partial = "";
 	    for (var i in data.Words) {
 		const word = data.Words[i];
-		partial += " " + word.Phonetic;
+		partial += " " + word.PrePunct + word.Phonetic + word.PostPunct;
 	    }
 	    // Define the data to be sent in the POST request
 	    const data2 = {
@@ -82,12 +90,19 @@ document.getElementById('phonemizer').onclick = function() {
 	    })
 	    .then(response => response.json())
 	    .then(data => {
-	    	document.getElementById('output').value = '';
+	    	document.getElementById('output').innerHTML = '';
 	    	for (var i in data.Words) {
 		const word = data.Words[i];
-		const lang = document.getElementById('output').value += ((targ == "Antvaset") ? "" : " ") + word.Phonetic;
+		const not_dict = !word.PosTags?.includes("dict");
+		const ubegin = not_dict ? "<u>" : "";
+		const uend = not_dict ? "</u>" : "";
+		const lang = document.getElementById('output').innerHTML +=
+			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>";
 	    	}
 		console.log('Success:', data);
+		const checkbox = document.getElementById('toggleCheckbox');
+		checkbox.click();
+		checkbox.click();
 		return
 	    })
 	    .catch((error) => {
