@@ -36,9 +36,10 @@ document.getElementById('phonemizer').onclick = function() {
     }
 
     // Define the data to be sent in the POST request
+    const lng = lang.replace(/^,+|,+$/g, '');
     const data = {
-        "Language": lang.includes(',') ? "" : lang,
-        "Languages": lang.includes(',') ? lang.replace(/^,+|,+$/g, '').split(',') : [],
+        "Language": lng.includes(',') ? "" : lng,
+        "Languages": lng.includes(',') ? lng.split(',') : [],
         "IpaFlavors": target,
         "Sentence": text
     };
