@@ -64,4 +64,4 @@
 "ze":["ɪz","zə","zɪ","zˈ","zˈɛ","ˈɛ","zˈa","zɛ","sə","zˈi","ʊz","nz","tz","ʃɛ","ts","zi","zˈeɪ","ˈz","zˌɛ","sɪ","uz","zˌ","sˈ","æz","zeɪ","ʃˌɛ","ze","ˈi","ɑz","ˈeɪ","ʃˈ","zˌe","sˈeɪ","zəˈ","ziː","ɪl","zb","ɪm","zˈe","ˈa","sɛ","nl","zw","ʃɪ","ɪv","ʒˈɛ","ʒɪ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"Trim":"'"},{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

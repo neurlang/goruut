@@ -65,4 +65,4 @@
 "ze":["ɪz","zə","zɪ","ɪzə","zᵻ","zˈɛ","zˈ","ɪzᵻ","ɪzɪ","sə","zˈi","sɪ","sᵻ","zˌɛ","zɛ","zˈɪ","zjˈ","zˈɜ","za","zˌi","zj","zˌ","sɛ","ziː"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"Trim":"'"},{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
