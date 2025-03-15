@@ -75,4 +75,4 @@
 "ût":["uː"],
 "ü":["y","yː","ˈ","ʀ","l","f","eː","k","ˌ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":null,"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"PrePhonWordSteps":["-"],"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

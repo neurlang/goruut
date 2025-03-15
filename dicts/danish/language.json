@@ -140,4 +140,4 @@
 "ørg":["ɶɐ̯","ɶːɐ","ɶwˀ","œɒ̯̽","ɶɐ̯ˀw"],
 "ü":["ø"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

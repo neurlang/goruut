@@ -244,4 +244,4 @@
 "DropLast":["f","p","d","e","t","s","g","te","m","n","l","x"],
 "DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

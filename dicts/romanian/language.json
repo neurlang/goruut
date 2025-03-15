@@ -56,4 +56,4 @@
 "ți":["tsi","ts","tsʲ","tsj","si","ʃʲ","tʃiˈ","ti","tsiˈ","tsi̯","tse̯","tʃi","siˈ","tsa","ʃi̯","ʃi","tʃ","te","te̯"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

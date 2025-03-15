@@ -41,4 +41,4 @@
 "ñ":["ɲ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
