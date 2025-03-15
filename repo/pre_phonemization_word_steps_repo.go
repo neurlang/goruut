@@ -132,9 +132,6 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 
 // Function to normalize text to NFC
 func NormalizeTo(input, form string) string {
-	// Create a buffer to hold the normalized text
-	buf := make([]byte, 0, len(input))
-
 	var format norm.Form
 
 	switch form {
@@ -150,15 +147,7 @@ func NormalizeTo(input, form string) string {
 		return input
 	}
 
-	// Use the norm.NFC transformer to normalize the input text
-	for i, r := range input {
-		if format.QuickSpan([]byte(input[i:])) == len(input[i:]) {
-			return input // Already NFC
-		}
-		buf = format.Append(buf, byte(r))
-	}
-
-	return string(buf)
+	return format.String(input)
 }
 
 func (s *PrePhonWordStepsRepository) PrePhonemizeWord(isReverse bool, lang string, word string) string {
