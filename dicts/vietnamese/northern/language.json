@@ -365,5 +365,5 @@
 "ực":["ɯk˨ˀ˩"],
 "ỳnh":["iŋ˧˨"],
 "ỷ":["i˧˩˨"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
+"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
