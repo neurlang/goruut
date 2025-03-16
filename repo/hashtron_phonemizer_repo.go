@@ -676,7 +676,7 @@ outer:
 				}
 				r.mut.RUnlock()
 				predicted += pred
-				log.Now().Debugf("Model predicted: %v %v %v %v %v -> %d\n"input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, pred)
+				log.Now().Debugf("Model predicted: %v %v %v %v %v -> %d", input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, pred)
 			}
 			if (!multiword && predicted == 1) || (multiword && 2*predicted > len(srcaR)) {
 				if option == "_" {
