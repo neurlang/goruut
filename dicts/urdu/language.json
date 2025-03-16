@@ -309,5 +309,5 @@
 "۱۲۰۰":["ɪɾɑː"],
 "۴۰":["ɾoː"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"Trim":".,!"},{"Normalize":"NFC"}],
+"PrePhonWordSteps":[{"Normalize":"NFC"}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

@@ -346,5 +346,5 @@
 "ൽ":["l","ɭ","l̪","j","i","ɛː","ʎ","ɭː","ɳ","ɪ"],
 "ൾ":["ɭ","l","ɛ","ə","eː","ɨ","e","ɯ","ɐ","ɛː","ɭ̩","ʌ","l̪","u","gə","ḷ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

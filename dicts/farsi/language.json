@@ -80,5 +80,5 @@
 "یم":["iːm","m","mɒː","e̞jm","mæ","im","miː","æm","eːm","diːm","ɪm","iːˈm","iːmæ","ˈm","iːˈ","iːmuː","imæ","iˈm","eˈm","ˈmiː","mi","jˈm","imˈ","ɪmæ","eːˈm","ʃiː","ʔiː","jæ","læˈ","iˈmæ","e̞jmæ","æˈm","eːmˈ","iːh"],
 "یچ":["tʃ","iːtʃ","iːtʃæ","iːtʃɒː","iːtʃo","iːtʃæs","iːtʃos","iːtʃæɾ","iˈtʃ","iːtʃiː","itʃ","iːtʃoɾ","iːtʃe̞k","etʃ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

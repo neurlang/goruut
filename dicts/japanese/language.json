@@ -2407,7 +2407,7 @@
 "ｗ":["dabɯɾjɯː"],
 "ｘ":["ekːɯsɯ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":["《","（","(","·","“"],
 "SplitAfter":["》","）",")","。","？","、","，","：","、","；","！","?","!",".","”"],
 "IsDuplex":false,"IsSrcSurround":false}

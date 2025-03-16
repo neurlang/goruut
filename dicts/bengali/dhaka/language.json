@@ -454,5 +454,5 @@
 "‌সা":["aˑ"],
 "‍্":["ɔe̯"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"Trim":".,"},{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

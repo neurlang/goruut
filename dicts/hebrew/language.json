@@ -118,5 +118,5 @@
 "שק":["ʃk","eʃˈk","ʃa","ʃaˈ","ʃɛ","ʃq","aʃˈq","aʃˈk","ʃə","ɛsk","eʃˈq","aʃ","ʃɛr","ˈχɛs","ʃɛˈ","ʃɑ","ke","tʃ","ʃˈk","mʃ","ʃɪ"],
 "ת":["t","θ","it","e","a","s","aθ","o","ʃ","ɛ","i","tˈ","ts","n","ets","etˈ","χ","ʁ","atˈ","ɑ","ʔ","ð","l","d","f","ɛs","j","u","ʕ","aˈ","ɔ","r","ˈt","aχ","m","ma","tæ","ə","ɪ","ɛr","ˈ","k","eː","mi","x","iː","ʦ","χa","ats","ɛʁ","uː","eˈ","ʈ","v","ɾ","oˈ","ˈθ","aː","ɛl","ˈb","q","le","ˈk","oː","eʔ","ʰ","tː","χo","p","h","ħ","ʌ","əˌ","e̞","z","g","its","sˈ","ṣ","ɛː","oʕ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

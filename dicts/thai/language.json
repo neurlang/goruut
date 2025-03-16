@@ -375,5 +375,5 @@
 "้":["ʰ","a","ɔ̀ː","ɛː","aː","ɛ̂ː","j","âː","o","e","j˥˩","ɛ̄ː","ɑ"],
 "๊":["a"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

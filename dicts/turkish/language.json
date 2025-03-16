@@ -99,5 +99,5 @@
 "şm":["ʃm","m","sm","ʃˈm","s","ɯʃ","u","ˈm","ʃɯ","ʏʃ","ʃ'","ʉʃ","ʃˈ","sl","iʃ","lɛ","ɫˈm"],
 "şt":["ʃt","t","ʃˈt","st","ʃtʰ","tɯ","sˈt","tʰ","ti","ʃt̪","ɯʃ","s̪t̪","iɾ","iʈ","s̪t","tʃ","ʃˈtʰ","uʃ","ɯɾ","it","sd","ir","iʃ","lɛ","ˈʃ","ʃi","ʃtˈ","us","sˈtʰ","şt"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
