@@ -414,20 +414,22 @@ func addLetters(word string, mapping map[string]struct{}) {
 	if mapping == nil {
 		return
 	}
-	var reverse []uint32
-	for _, r := range []rune(word) {
-		reverse = append([]uint32{uint32(r)}, reverse...)
+	reverse := make([]uint32, len([]rune(word)))
+	for i, r := range []rune(word) {
+		reverse[len(reverse)-1-i] = uint32(r)
 	}
 	var str string
 	for _, r := range reverse {
 		if isCombining(r) {
 			str = string(rune(r)) + str
 		} else {
+			log.Now().Debugf("Adding to letters: %x", string(rune(r))+string(str))
 			mapping[string(rune(r))+string(str)] = struct{}{}
 			str = ""
 		}
 	}
 	if str != "" {
+		log.Now().Debugf("Adding to letters: %x", str)
 		mapping[string(str)] = struct{}{}
 	}
 }
@@ -436,29 +438,29 @@ func addLetters(word string, mapping map[string]struct{}) {
 func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word string) (ret string, lpunct string, rpunct string) {
 	r.LoadLanguage(isReverse, lang)
 
-	var reverse []uint32
-	for _, r := range []rune(word) {
-		reverse = append([]uint32{uint32(r)}, reverse...)
+	reverse := make([]uint32, len([]rune(word)))
+	for i, r := range []rune(word) {
+		reverse[len(reverse)-1-i] = uint32(r)
 	}
 
 	var strings []string
 	var str string
 	for _, run := range reverse {
 		if isCombining(run) {
-			r.mut.RLock()
-			isLanguageLetter := r.lang.IsLetter(isReverse, lang, string(rune(run)))
-			r.mut.RUnlock()
-			if !isLanguageLetter {
-				str = string(rune(run)) + str
-				continue
-			}
+			// Always attach combining marks to the accumulating sequence
+			str = string(rune(run)) + str
+			continue
 		}
-		strings = append([]string{string(rune(run)) + string(str)}, strings...)
-		str = ""
+
+		// Attach previous combining characters to this base letter
+		fullGrapheme := string(rune(run)) + str
+		strings = append([]string{fullGrapheme}, strings...)
+		str = "" // Reset accumulator
 	}
 	if str != "" {
 		strings = append([]string{string(str)}, strings...)
 	}
+	log.Now().Debugf("strings: %v, len: %v", strings, len(strings))
 	for i, run := range strings {
 		r.mut.RLock()
 		isLanguageLetter := r.lang.IsLetter(isReverse, lang, run)
