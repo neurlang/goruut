@@ -414,25 +414,40 @@ func addLetters(word string, mapping map[string]struct{}) {
 	if mapping == nil {
 		return
 	}
-	reverse := make([]uint32, len([]rune(word)))
-	for i, r := range []rune(word) {
-		reverse[len(reverse)-1-i] = uint32(r)
-	}
+
+	runes := []rune(word)
+	n := len(runes)
 	var str string
-	for _, r := range reverse {
-		if isCombining(r) {
-			str = string(rune(r)) + str
+	var baseLetterFound bool
+
+	// Process characters in reverse order
+	for i := n - 1; i >= 0; i-- {
+		r := runes[i]
+
+		if isCombining(uint32(r)) {
+			// Accumulate combining characters
+			str = string(r) + str
 		} else {
-			log.Now().Debugf("Adding to letters: %x", string(rune(r))+string(str))
-			mapping[string(rune(r))+string(str)] = struct{}{}
+			// Found a base letter, prepend accumulated combiners
+			fullLetter := string(r) + str
+			log.Now().Debugf("Adding to letters: %s", fullLetter)
+			mapping[fullLetter] = struct{}{}
+
+			// Reset for next letter
 			str = ""
+			baseLetterFound = true
 		}
 	}
-	if str != "" {
-		log.Now().Debugf("Adding to letters: %x", str)
-		mapping[string(str)] = struct{}{}
+
+	// Edge case: if only combiners were present at the start
+	if str != "" && !baseLetterFound {
+		log.Now().Debugf("Adding standalone combiners: %s", str)
+		mapping[str] = struct{}{}
 	}
 }
+
+
+
 
 // CleanWord returns cleaned word, left punct, right punct
 func (r *HashtronPhonemizerRepository) CleanWord(isReverse bool, lang, word string) (ret string, lpunct string, rpunct string) {
