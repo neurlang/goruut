@@ -1,5 +1,58 @@
 #!/bin/bash
 
+timeout 200 ./train_language.sh 	albanian	-maxpremodulo	11575	-resume
+timeout 200 ./train_language.sh 	aragonese	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	assamese	-maxpremodulo	24885	-resume
+timeout 200 ./train_language.sh 	bashkir	-maxpremodulo	15200	-resume
+timeout 200 ./train_language.sh 	bishnupriyamanipuri	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	bosnian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	cherokee	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	chuvash	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	gaelic/irish	-maxpremodulo	248365	-resume
+timeout 200 ./train_language.sh 	gaelic/scottish	-maxpremodulo	55075	-resume
+timeout 200 ./train_language.sh 	greenlandic	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	guarani	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	haitiancreole	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	hawaiian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	ido	-maxpremodulo	101725	-resume
+timeout 200 ./train_language.sh 	interlingua	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	kannada	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	kiche	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	konkani	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	kurdish	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	kyrgyz	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	langbelta	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	latgalian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	latin/classical	-maxpremodulo	371940	-resume
+timeout 200 ./train_language.sh 	latin/ecclesiastical	-maxpremodulo	95680	-resume
+timeout 200 ./train_language.sh 	linguafrancanova	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	lojban	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	lulesaami	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	maori	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	nahuatl/central	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	nahuatl/classical	-maxpremodulo	70555	-resume
+timeout 200 ./train_language.sh 	nahuatl/mecayapan	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	nahuatl/tetelcingo	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	nogai	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	oromo	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	papiamento	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	quechua	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	quenya	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	setswana	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	shantaiyai	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	sindarin	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	sindhi	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	sinhala	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	slovenian	-maxpremodulo	99300	-resume
+timeout 200 ./train_language.sh 	tatar	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	turkmen	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	uzbek	-maxpremodulo	10000	-resume
+timeout 200 ./train_language.sh 	welsh/north	-maxpremodulo	163965	-resume
+timeout 200 ./train_language.sh 	welsh/south	-maxpremodulo	272725	-resume
+
+
+exit
+
 timeout 200 ./train_language.sh	afrikaans	-maxpremodulo	1956210	 -resume
 timeout 200 ./train_language.sh	amharic	-maxpremodulo	5235	 -resume
 timeout 200 ./train_language.sh	arabic	-maxpremodulo	4293630	 -resume

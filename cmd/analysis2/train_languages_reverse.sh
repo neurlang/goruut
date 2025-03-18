@@ -1,5 +1,58 @@
 #!/bin/bash
 
+timeout 200 ./train_language_reverse.sh 	albanian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	aragonese	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	assamese	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	bashkir	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	bishnupriyamanipuri	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	bosnian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	cherokee	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	chuvash	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	gaelic/irish	-maxpremodulo	78150	-resume
+timeout 200 ./train_language_reverse.sh 	gaelic/scottish	-maxpremodulo	12350	-resume
+timeout 200 ./train_language_reverse.sh 	greenlandic	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	guarani	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	haitiancreole	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	hawaiian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	ido	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	interlingua	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	kannada	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	kiche	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	konkani	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	kurdish	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	kyrgyz	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	langbelta	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	latgalian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	latin/classical	-maxpremodulo	84015	-resume
+timeout 200 ./train_language_reverse.sh 	latin/ecclesiastical	-maxpremodulo	585335	-resume
+timeout 200 ./train_language_reverse.sh 	linguafrancanova	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	lojban	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	lulesaami	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	maori	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	nahuatl/central	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	nahuatl/classical	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	nahuatl/mecayapan	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	nahuatl/tetelcingo	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	nogai	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	oromo	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	papiamento	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	quechua	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	quenya	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	setswana	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	shantaiyai	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	sindarin	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	sindhi	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	sinhala	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	slovenian	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	tatar	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	turkmen	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	uzbek	-maxpremodulo	10000	-resume
+timeout 200 ./train_language_reverse.sh 	welsh/north	-maxpremodulo	13270	-resume
+timeout 200 ./train_language_reverse.sh 	welsh/south	-maxpremodulo	10000	-resume
+
+
+exit
+
 timeout 200 ./train_language_reverse.sh	afrikaans	-maxpremodulo	114410	 -resume
 timeout 200 ./train_language_reverse.sh	amharic	-maxpremodulo	45	 -resume
 timeout 200 ./train_language_reverse.sh	arabic	-maxpremodulo	1637900	 -resume
