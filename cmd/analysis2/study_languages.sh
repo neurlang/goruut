@@ -1,5 +1,56 @@
 #!/bin/bash
 
+ timeout 600 ./study_language.sh	albanian	
+ timeout 600 ./study_language.sh	aragonese	
+ timeout 600 ./study_language.sh	assamese	
+ timeout 600 ./study_language.sh	bashkir	
+ timeout 600 ./study_language.sh	bishnupriyamanipuri	
+ timeout 600 ./study_language.sh	bosnian	
+ timeout 600 ./study_language.sh	cherokee	
+ timeout 600 ./study_language.sh	chuvash	
+ timeout 600 ./study_language.sh	gaelic/irish	
+ timeout 600 ./study_language.sh	gaelic/scottish	
+ timeout 600 ./study_language.sh	greenlandic	
+ timeout 600 ./study_language.sh	guarani	
+ timeout 600 ./study_language.sh	haitiancreole	
+ timeout 600 ./study_language.sh	hawaiian	
+ timeout 600 ./study_language.sh	ido	
+ timeout 600 ./study_language.sh	interlingua	
+ timeout 600 ./study_language.sh	kannada	
+ timeout 600 ./study_language.sh	kiche	
+ timeout 600 ./study_language.sh	konkani	
+ timeout 600 ./study_language.sh	kurdish	
+ timeout 600 ./study_language.sh	kyrgyz	
+ timeout 600 ./study_language.sh	langbelta	
+ timeout 600 ./study_language.sh	latgalian	
+ timeout 600 ./study_language.sh	latin/classical	
+ timeout 600 ./study_language.sh	latin/ecclesiastical	
+ timeout 600 ./study_language.sh	linguafrancanova	
+ timeout 600 ./study_language.sh	lojban	
+ timeout 600 ./study_language.sh	lulesaami	
+ timeout 600 ./study_language.sh	maori	
+ timeout 600 ./study_language.sh	nahuatl/central	
+ timeout 600 ./study_language.sh	nahuatl/classical	
+ timeout 600 ./study_language.sh	nahuatl/mecayapan	
+ timeout 600 ./study_language.sh	nahuatl/tetelcingo	
+ timeout 600 ./study_language.sh	nogai	
+ timeout 600 ./study_language.sh	oromo	
+ timeout 600 ./study_language.sh	papiamento	
+ timeout 600 ./study_language.sh	quechua	
+ timeout 600 ./study_language.sh	quenya	
+ timeout 600 ./study_language.sh	setswana	
+ timeout 600 ./study_language.sh	shantaiyai	
+ timeout 600 ./study_language.sh	sindarin	
+ timeout 600 ./study_language.sh	sindhi	
+ timeout 600 ./study_language.sh	sinhala	
+ timeout 600 ./study_language.sh	slovenian	
+ timeout 600 ./study_language.sh	tatar	
+ timeout 600 ./study_language.sh	turkmen	
+ timeout 600 ./study_language.sh	uzbek	
+ timeout 600 ./study_language.sh	welsh/north	
+ timeout 600 ./study_language.sh	welsh/south
+exit
+
  timeout 600 ./study_language.sh	afrikaans	
  timeout 600 ./study_language.sh	amharic	
  timeout 600 ./study_language.sh	arabic	

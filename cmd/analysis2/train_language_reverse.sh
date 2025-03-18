@@ -13,6 +13,7 @@ trap cleanup SIGINT
 #train
 
 ../../../classifier/cmd/train_phonemizer/train_phonemizer \
+--maxdepth 9999 \
 --cleantsv ../../dicts/$1/clean_reverse.tsv \
 --dstmodel ../../dicts/$1/weights1_reverse.json.zlib $2 $3 $4 $5 $6 $7 $8 $9 & # > /dev/null 2>&1 &
 PID1=$!

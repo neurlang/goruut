@@ -1,5 +1,56 @@
 #!/bin/bash
-
+ timeout 600 ./study_language_reverse.sh	albanian	
+ timeout 600 ./study_language_reverse.sh	aragonese	
+ timeout 600 ./study_language_reverse.sh	assamese	
+ timeout 600 ./study_language_reverse.sh	bashkir	
+ timeout 600 ./study_language_reverse.sh	bishnupriyamanipuri	
+ timeout 600 ./study_language_reverse.sh	bosnian	
+ timeout 600 ./study_language_reverse.sh	cherokee	
+ timeout 600 ./study_language_reverse.sh	chuvash	
+ timeout 600 ./study_language_reverse.sh	gaelic/irish	
+ timeout 600 ./study_language_reverse.sh	gaelic/scottish	
+ timeout 600 ./study_language_reverse.sh	greenlandic	
+ timeout 600 ./study_language_reverse.sh	guarani	
+ timeout 600 ./study_language_reverse.sh	haitiancreole	
+ timeout 600 ./study_language_reverse.sh	hawaiian	
+ timeout 600 ./study_language_reverse.sh	ido	
+ timeout 600 ./study_language_reverse.sh	interlingua	
+ timeout 600 ./study_language_reverse.sh	kannada	
+ timeout 600 ./study_language_reverse.sh	kiche	
+ timeout 600 ./study_language_reverse.sh	konkani	
+ timeout 600 ./study_language_reverse.sh	kurdish	
+ timeout 600 ./study_language_reverse.sh	kyrgyz	
+ timeout 600 ./study_language_reverse.sh	langbelta	
+ timeout 600 ./study_language_reverse.sh	latgalian	
+ timeout 600 ./study_language_reverse.sh	latin/classical	
+ timeout 600 ./study_language_reverse.sh	latin/ecclesiastical	
+ timeout 600 ./study_language_reverse.sh	linguafrancanova	
+ timeout 600 ./study_language_reverse.sh	lojban	
+ timeout 600 ./study_language_reverse.sh	lulesaami	
+ timeout 600 ./study_language_reverse.sh	maori	
+ timeout 600 ./study_language_reverse.sh	nahuatl/central	
+ timeout 600 ./study_language_reverse.sh	nahuatl/classical	
+ timeout 600 ./study_language_reverse.sh	nahuatl/mecayapan	
+ timeout 600 ./study_language_reverse.sh	nahuatl/tetelcingo	
+ timeout 600 ./study_language_reverse.sh	nogai	
+ timeout 600 ./study_language_reverse.sh	oromo	
+ timeout 600 ./study_language_reverse.sh	papiamento	
+ timeout 600 ./study_language_reverse.sh	quechua	
+ timeout 600 ./study_language_reverse.sh	quenya	
+ timeout 600 ./study_language_reverse.sh	setswana	
+ timeout 600 ./study_language_reverse.sh	shantaiyai	
+ timeout 600 ./study_language_reverse.sh	sindarin	
+ timeout 600 ./study_language_reverse.sh	sindhi	
+ timeout 600 ./study_language_reverse.sh	sinhala	
+ timeout 600 ./study_language_reverse.sh	slovenian	
+ timeout 600 ./study_language_reverse.sh	tatar	
+ timeout 600 ./study_language_reverse.sh	turkmen	
+ timeout 600 ./study_language_reverse.sh	uzbek	
+ timeout 600 ./study_language_reverse.sh	welsh/north	
+ timeout 600 ./study_language_reverse.sh	welsh/south
+ 
+exit
+ 
  timeout 600 ./study_language_reverse.sh	afrikaans	
  timeout 600 ./study_language_reverse.sh	amharic	
  timeout 600 ./study_language_reverse.sh	arabic	

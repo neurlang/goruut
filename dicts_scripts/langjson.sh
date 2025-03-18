@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Declare an array of strings
-string_array=("afrikaans" "amharic" "arabic" "armenian" "azerbaijani" "basque" "belarusian" "bengali" "bulgarian" "burmese" "catalan" "cebuano" "chechen" "chichewa" "croatian" "czech" "danish" "dutch" "dzongkha" "english" "esperanto" "estonian" "farsi" "finnish" "french" "galician" "georgian" "german" "greek" "gujarati" "hausa" "hebrew" "hindi" "hungarian" "icelandic" "indonesian" "isan" "italian" "jamaican" "japanese" "javanese" "kazakh" "khmer/central" "korean" "lao" "latvian" "lithuanian" "luxembourgish" "macedonian" "malay/latin" "malay/arab" "malayalam" "maltese" "marathi" "mongolian" "nepali" "norwegian" "pashto" "polish" "portuguese" "punjabi" "romanian" "russian" "serbian" "slovak" "spanish" "swahili" "swedish" "tagalog" "tamil" "telugu" "thai" "tibetan" "turkish" "ukrainian" "urdu" "uyghur" "vietnamese/northern" "vietnamese/central" "vietnamese/southern" "yoruba" "zulu" "chinese/mandarin" "bengali/dhaka" "bengali/rahr" "english/american" "english/british")
+string_array=("afrikaans" "amharic" "arabic" "armenian" "azerbaijani" "basque" "belarusian" "bengali" "bulgarian" "burmese" "catalan" "cebuano" "chechen" "chichewa" "croatian" "czech" "danish" "dutch" "dzongkha" "english" "esperanto" "estonian" "farsi" "finnish" "french" "galician" "georgian" "german" "greek" "gujarati" "hausa" "hebrew" "hindi" "hungarian" "icelandic" "indonesian" "isan" "italian" "jamaican" "japanese" "javanese" "kazakh" "khmer/central" "korean" "lao" "latvian" "lithuanian" "luxembourgish" "macedonian" "malay/latin" "malay/arab" "malayalam" "maltese" "marathi" "mongolian" "nepali" "norwegian" "pashto" "polish" "portuguese" "punjabi" "romanian" "russian" "serbian" "slovak" "spanish" "swahili" "swedish" "tagalog" "tamil" "telugu" "thai" "tibetan" "turkish" "ukrainian" "urdu" "uyghur" "vietnamese/northern" "vietnamese/central" "vietnamese/southern" "yoruba" "zulu" "chinese/mandarin" "bengali/dhaka" "bengali/rahr" "english/american" "english/british" "albanian" "aragonese" "assamese" "bashkir" "bishnupriyamanipuri" "bosnian" "cherokee" "chuvash" "gaelic/irish" "gaelic/scottish" "greenlandic" "guarani" "haitiancreole" "hawaiian" "ido" "interlingua" "kannada" "kiche" "konkani" "kurdish" "kyrgyz" "langbelta" "latgalian" "latin/classical" "latin/ecclesiastical" "linguafrancanova" "lojban" "lulesaami" "maori" "nahuatl/central" "nahuatl/classical" "nahuatl/mecayapan" "nahuatl/tetelcingo" "nogai" "oromo" "papiamento" "quechua" "quenya" "setswana" "shantaiyai" "sindarin" "sindhi" "sinhala" "slovenian" "tatar" "turkmen" "uzbek" "welsh/north" "welsh/south")
 
 LANGFILE='language.json'
 
@@ -33,5 +33,14 @@ do
 	egrep --only-matching '"(SrcMulti|PrePhonWordSteps|DstMultiSuffix|DstMultiPrefix|DropLast|SplitAfter|SplitBefore|IsDuplex|IsSrcSurround)".+$' ../goruut/dicts/$LANG/$LANGFILE >> ./$LANG/$LANGFILE
 	#grep DropLast ../goruut/dicts/$LANG/$LANGFILE >> ./$LANG/$LANGFILE
 
-
+	# Check if the last character is a comma
+	# Read the last character (ignoring newlines and whitespace)
+	last_char=$(tail -n 1 "./$LANG/$LANGFILE" | tr -d '\n\r' | tail -c 1)
+	if [[ "$last_char" == "," ]]; then
+	    # Replace the last character with '}'
+	    sed -i '$ s/,$/}/' "./$LANG/$LANGFILE"
+	    echo "Replaced last comma with '}'."
+	else
+	    echo "Last character is not a comma but $last_char. No changes made."
+	fi
 done
