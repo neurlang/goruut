@@ -1,0 +1,13 @@
+{"Map":{"খানা":["kʰana"],
+"গাছ":["ɡatʃ"],
+"ঘর":["ɡʱor"],
+"চকু":["tʃoku"],
+"পানি":["pani"],
+"বাবা":["baba"],
+"বেল":["bel"],
+"মা":["ma"],
+"মানুহ":["manuh"],
+"হাত":["hat"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}

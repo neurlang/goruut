@@ -1,0 +1,13 @@
+{"Map":{"çурт":["t͡ʃurt"],
+"çын":["t͡ʃɯn"],
+"алă":["alə"],
+"анне":["anːe"],
+"апат":["apat"],
+"ашшĕ":["aʃːɘ"],
+"вăхăт":["vəxət"],
+"йывăç":["jɯvət͡ʃ"],
+"куç":["kut͡ʃ"],
+"шыв":["ʃɯv"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
+"PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
