@@ -9,7 +9,7 @@ It is possible to try this software live at [hashtron.cloud](https://hashtron.cl
 ## Features
 
 * Phone set: IPA
-* Supported languages: 87
+* Supported languages: 136
 * Processing speed: fast
 * Phone tokens: yes
 * Syllable tokens: no
@@ -36,22 +36,30 @@ sudo docker compose up -d --force-recreate --build
 ## Supported Languages
 
 * Afrikaans
+* Albanian
 * Amharic
 * Arabic
+* Aragonese
 * Armenian
+* Assamese
 * Azerbaijani
+* Bashkir
 * Basque
 * Belarusian
 * Bengali
 * Bengali Dhaka
 * Bengali Rahr
+* Bishnupriya Manipuri
+* Bosnian
 * Bulgarian
 * Burmese
 * Catalan
 * Cebuano
 * Chechen
+* Cherokee
 * Chichewa
 * Chinese Mandarin
+* Chuvash
 * Croatian
 * Czech
 * Danish
@@ -65,61 +73,102 @@ sudo docker compose up -d --force-recreate --build
 * Farsi
 * Finnish
 * French
+* Gaelic Irish
+* Gaelic Scottish
 * Galician
 * Georgian
 * German
 * Greek
+* Greenlandic
+* Guarani
 * Gujarati
+* Haitian Creole
 * Hausa
+* Hawaiian
 * Hebrew
 * Hindi
 * Hungarian
 * Icelandic
+* Ido
 * Indonesian
+* Interlingua
 * Isan
 * Italian
 * Jamaican
 * Japanese
 * Javanese
+* Kannada
 * Kazakh
 * Khmer Central
+* Kiche
+* Konkani
 * Korean
+* Kurdish
+* Kyrgyz
+* Lang Belta
 * Lao
+* Latgalian
+* Latin Classical
+* Latin Ecclesiastical
 * Latvian
+* Lingua Franca Nova
 * Lithuanian
+* Lojban
+* Lule Saami
 * Luxembourgish
 * Macedonian
 * Malayalam
 * Malay Arab
 * Malay Latin
 * Maltese
+* Maori
 * Marathi
 * Mongolian
+* Nahuatl Central
+* Nahuatl Classical
+* Nahuatl Mecayapan
+* Nahuatl Tetelcingo
 * Nepali
+* Nogai
 * Norwegian
+* Oromo
+* Papiamento
 * Pashto
 * Polish
 * Portuguese
 * Punjabi
+* Quechua
+* Quenya
 * Romanian
 * Russian
 * Serbian
+* Setswana
+* Shan Tai Yai
+* Sindarin
+* Sindhi
+* Sinhala
 * Slovak
+* Slovenian
 * Spanish
 * Swahili
 * Swedish
 * Tagalog
 * Tamil
+* Tatar
 * Telugu
 * Thai
 * Tibetan
 * Turkish
+* Turkmen
 * Ukrainian
 * Urdu
 * Uyghur
+* Uzbek
 * Vietnamese Central
 * Vietnamese Northern
 * Vietnamese Southern
+* Welsh North
+* Welsh South
 * Yoruba
 * Zulu
 
