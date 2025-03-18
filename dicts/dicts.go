@@ -87,6 +87,55 @@ import khmer "github.com/neurlang/goruut/dicts/khmer/central"
 import "github.com/neurlang/goruut/dicts/lao"
 import "github.com/neurlang/goruut/dicts/english/american"
 import "github.com/neurlang/goruut/dicts/english/british"
+import "github.com/neurlang/goruut/dicts/albanian"
+import "github.com/neurlang/goruut/dicts/aragonese"
+import "github.com/neurlang/goruut/dicts/assamese"
+import "github.com/neurlang/goruut/dicts/bashkir"
+import "github.com/neurlang/goruut/dicts/bishnupriyamanipuri"
+import "github.com/neurlang/goruut/dicts/bosnian"
+import "github.com/neurlang/goruut/dicts/cherokee"
+import "github.com/neurlang/goruut/dicts/chuvash"
+import "github.com/neurlang/goruut/dicts/gaelic/scottish"
+import "github.com/neurlang/goruut/dicts/gaelic/irish"
+import "github.com/neurlang/goruut/dicts/greenlandic"
+import "github.com/neurlang/goruut/dicts/guarani"
+import "github.com/neurlang/goruut/dicts/haitiancreole"
+import "github.com/neurlang/goruut/dicts/hawaiian"
+import "github.com/neurlang/goruut/dicts/ido"
+import "github.com/neurlang/goruut/dicts/interlingua"
+import "github.com/neurlang/goruut/dicts/kannada"
+import "github.com/neurlang/goruut/dicts/kiche"
+import "github.com/neurlang/goruut/dicts/konkani"
+import "github.com/neurlang/goruut/dicts/kurdish"
+import "github.com/neurlang/goruut/dicts/kyrgyz"
+import "github.com/neurlang/goruut/dicts/langbelta"
+import "github.com/neurlang/goruut/dicts/latgalian"
+import latinclassical "github.com/neurlang/goruut/dicts/latin/classical"
+import "github.com/neurlang/goruut/dicts/latin/ecclesiastical"
+import "github.com/neurlang/goruut/dicts/linguafrancanova"
+import "github.com/neurlang/goruut/dicts/lojban"
+import "github.com/neurlang/goruut/dicts/lulesaami"
+import "github.com/neurlang/goruut/dicts/maori"
+import nahuatlclassical "github.com/neurlang/goruut/dicts/nahuatl/classical"
+import nahuatl "github.com/neurlang/goruut/dicts/nahuatl/central"
+import "github.com/neurlang/goruut/dicts/nahuatl/mecayapan"
+import "github.com/neurlang/goruut/dicts/nahuatl/tetelcingo"
+import "github.com/neurlang/goruut/dicts/nogai"
+import "github.com/neurlang/goruut/dicts/oromo"
+import "github.com/neurlang/goruut/dicts/papiamento"
+import "github.com/neurlang/goruut/dicts/quechua"
+import "github.com/neurlang/goruut/dicts/quenya"
+import "github.com/neurlang/goruut/dicts/setswana"
+import "github.com/neurlang/goruut/dicts/shantaiyai"
+import "github.com/neurlang/goruut/dicts/sindarin"
+import "github.com/neurlang/goruut/dicts/sindhi"
+import "github.com/neurlang/goruut/dicts/sinhala"
+import "github.com/neurlang/goruut/dicts/slovenian"
+import "github.com/neurlang/goruut/dicts/tatar"
+import "github.com/neurlang/goruut/dicts/turkmen"
+import "github.com/neurlang/goruut/dicts/uzbek"
+import "github.com/neurlang/goruut/dicts/welsh/north"
+import "github.com/neurlang/goruut/dicts/welsh/south"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -291,6 +340,104 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return american.Language.ReadFile(filename)
 	case "EnglishBritish":
 		return british.Language.ReadFile(filename)
+	case "Albanian":
+		return albanian.Language.ReadFile(filename)
+	case "Aragonese":
+		return aragonese.Language.ReadFile(filename)
+	case "Assamese":
+		return assamese.Language.ReadFile(filename)
+	case "Bashkir":
+		return bashkir.Language.ReadFile(filename)
+	case "BishnupriyaManipuri":
+		return bishnupriyamanipuri.Language.ReadFile(filename)
+	case "Bosnian":
+		return bosnian.Language.ReadFile(filename)
+	case "Cherokee":
+		return cherokee.Language.ReadFile(filename)
+	case "Chuvash":
+		return chuvash.Language.ReadFile(filename)
+	case "GaelicScottish":
+		return scottish.Language.ReadFile(filename)
+	case "GaelicIrish":
+		return irish.Language.ReadFile(filename)
+	case "Greenlandic":
+		return greenlandic.Language.ReadFile(filename)
+	case "Guarani":
+		return guarani.Language.ReadFile(filename)
+	case "HaitianCreole":
+		return haitiancreole.Language.ReadFile(filename)
+	case "Hawaiian":
+		return hawaiian.Language.ReadFile(filename)
+	case "Ido":
+		return ido.Language.ReadFile(filename)
+	case "Interlingua":
+		return interlingua.Language.ReadFile(filename)
+	case "Kannada":
+		return kannada.Language.ReadFile(filename)
+	case "Kiche":
+		return kiche.Language.ReadFile(filename)
+	case "Konkani":
+		return konkani.Language.ReadFile(filename)
+	case "Kurdish":
+		return kurdish.Language.ReadFile(filename)
+	case "Kyrgyz":
+		return kyrgyz.Language.ReadFile(filename)
+	case "LangBelta":
+		return langbelta.Language.ReadFile(filename)
+	case "Latgalian":
+		return latgalian.Language.ReadFile(filename)
+	case "LatinClassical":
+		return latinclassical.Language.ReadFile(filename)
+	case "LatinEcclesiastical":
+		return ecclesiastical.Language.ReadFile(filename)
+	case "LinguaFrancaNova":
+		return linguafrancanova.Language.ReadFile(filename)
+	case "Lojban":
+		return lojban.Language.ReadFile(filename)
+	case "LuleSaami":
+		return lulesaami.Language.ReadFile(filename)
+	case "Maori":
+		return maori.Language.ReadFile(filename)
+	case "NahuatlClassical":
+		return nahuatlclassical.Language.ReadFile(filename)
+	case "NahuatlCentral":
+		return nahuatl.Language.ReadFile(filename)
+	case "NahuatlMecayapan":
+		return mecayapan.Language.ReadFile(filename)
+	case "NahuatlTetelcingo":
+		return tetelcingo.Language.ReadFile(filename)
+	case "Nogai":
+		return nogai.Language.ReadFile(filename)
+	case "Oromo":
+		return oromo.Language.ReadFile(filename)
+	case "Papiamento":
+		return papiamento.Language.ReadFile(filename)
+	case "Quechua":
+		return quechua.Language.ReadFile(filename)
+	case "Quenya":
+		return quenya.Language.ReadFile(filename)
+	case "Setswana":
+		return setswana.Language.ReadFile(filename)
+	case "ShanTaiYai":
+		return shantaiyai.Language.ReadFile(filename)
+	case "Sindarin":
+		return sindarin.Language.ReadFile(filename)
+	case "Sindhi":
+		return sindhi.Language.ReadFile(filename)
+	case "Sinhala":
+		return sinhala.Language.ReadFile(filename)
+	case "Slovenian":
+		return slovenian.Language.ReadFile(filename)
+	case "Tatar":
+		return tatar.Language.ReadFile(filename)
+	case "Turkmen":
+		return turkmen.Language.ReadFile(filename)
+	case "Uzbek":
+		return uzbek.Language.ReadFile(filename)
+	case "WelshNorth":
+		return north.Language.ReadFile(filename)
+	case "WelshSouth":
+		return south.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
@@ -385,6 +532,55 @@ func LangName(dir string) string {
 	case "vietnamese/southern": return "VietnameseSouthern";
 	case "yoruba": return "Yoruba";
 	case "zulu": return "Zulu";
+	case "albanian": return "Albanian";
+	case "aragonese": return "Aragonese";
+	case "assamese": return "Assamese";
+	case "bashkir": return "Bashkir";
+	case "bishnupriyamanipuri": return "BishnupriyaManipuri";
+	case "bosnian": return "Bosnian";
+	case "cherokee": return "Cherokee";
+	case "chuvash": return "Chuvash";
+	case "gaelic/scottish": return "GaelicScottish";
+	case "gaelic/irish": return "GaelicIrish";
+	case "greenlandic": return "Greenlandic";
+	case "guarani": return "Guarani";
+	case "haitiancreole": return "HaitianCreole";
+	case "hawaiian": return "Hawaiian";
+	case "ido": return "Ido";
+	case "interlingua": return "Interlingua";
+	case "kannada": return "Kannada";
+	case "kiche": return "Kiche";
+	case "konkani": return "Konkani";
+	case "kurdish": return "Kurdish";
+	case "kyrgyz": return "Kyrgyz";
+	case "langbelta": return "LangBelta";
+	case "latgalian": return "Latgalian";
+	case "latin/classical": return "LatinClassical";
+	case "latin/ecclesiastical": return "LatinEcclesiastical";
+	case "linguafrancanova": return "LinguaFrancaNova";
+	case "lojban": return "Lojban";
+	case "lulesaami": return "LuleSaami";
+	case "maori": return "Maori";
+	case "nahuatl/classical": return "NahuatlClassical";
+	case "nahuatl/central": return "NahuatlCentral";
+	case "nahuatl/mecayapan": return "NahuatlMecayapan";
+	case "nahuatl/tetelcingo": return "NahuatlTetelcingo";
+	case "nogai": return "Nogai";
+	case "oromo": return "Oromo";
+	case "papiamento": return "Papiamento";
+	case "quechua": return "Quechua";
+	case "quenya": return "Quenya";
+	case "setswana": return "Setswana";
+	case "shantaiyai": return "ShanTaiYai";
+	case "sindarin": return "Sindarin";
+	case "sindhi": return "Sindhi";
+	case "sinhala": return "Sinhala";
+	case "slovenian": return "Slovenian";
+	case "tatar": return "Tatar";
+	case "turkmen": return "Turkmen";
+	case "uzbek": return "Uzbek";
+	case "welsh/north": return "Welsh/North";
+	case "welsh/south": return "Welsh/South";
 	default: return "";
 	}
 }
