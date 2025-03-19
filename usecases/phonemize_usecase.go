@@ -13,6 +13,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeUsecase interface {
 	Sentence(requests.PhonemizeSentence) responses.PhonemizeSentence
+	Word(requests.ExplainWord) responses.ExplainWord
 }
 
 type PhonemizeUsecase struct {
@@ -21,6 +22,12 @@ type PhonemizeUsecase struct {
 	sel     services.IPartsOfSpeechSelectorService
 	flavor  services.IIpaFlavorService
 	maxwrds int
+}
+
+func (p *PhonemizeUsecase) Word(r requests.ExplainWord) (resp responses.ExplainWord) {
+	return responses.ExplainWord{
+		Rules: p.phon.ExplainWord(r.IsReverse, r.CleanWord, r.Phonetic, r.Language),
+	}
 }
 
 func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp responses.PhonemizeSentence) {
