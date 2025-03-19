@@ -96,7 +96,13 @@ const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bas
 "Maltese", "Marathi", "Mongolian", "Nepali", "Norwegian", "Pashto", "Polish", "Portuguese",
 "Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu",
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Yoruba", "Zulu",
-"Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern"];
+"Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern",
+"Albanian", "Aragonese", "Assamese", "Bashkir", "BishnupriyaManipuri", "Bosnian", "Cherokee", "Chuvash",
+"GaelicScottish", "GaelicIrish", "Greenlandic", "Guarani", "HaitianCreole", "Hawaiian", "Ido", "Interlingua",
+"Kannada", "Kiche", "Konkani", "Kurdish", "Kyrgyz", "LangBelta", "Latgalian", "LatinClassical", "LatinEcclesiastical",
+"LinguaFrancaNova", "Lojban", "LuleSaami", "Maori", "NahuatlCentral", "NahuatlMecayapan", "NahuatlTetelcingo", "Nogai",
+"Oromo", "Papiamento", "Quechua", "Quenya", "Setswana", "ShanTaiYai", "Sindarin", "Sindhi", "Sinhala", "Slovenian",
+"Tatar", "Turkmen", "Uzbek", "WelshNorth", "WelshSouth", "NahuatlClassical"];
 initDropdown("langsearchInput", "langdropdownList", items, true);
 const reverse_items = ["IPA", "Espeak", "Antvaset"].concat(items);
 initDropdown("tgtsearchInput", "tgtdropdownList", reverse_items, false);
