@@ -20,12 +20,3 @@
 # Go workspace file
 go.work
 go.work.sum
-
-# General
-.DS_Store
-
-# Binaries
-cmd/analysis2/analysis2
-cmd/backtest/backtest
-cmd/dicttomap/dicttomap
-cmd/goruut/goruut
