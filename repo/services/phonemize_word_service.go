@@ -21,7 +21,7 @@ type PhonemizeWordService struct {
 func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string) {
 	word = (*p.pre).PrePhonemizeWord(isReverse, lang, word)
 
-	word, lpunct, rpunct := (*p.ai).CleanWord(isReverse, word, languages)
+	word, lpunct, rpunct := (*p.ai).CleanWord(isReverse, word, append([]string{lang}, languages...))
 	if word == "" {
 		return nil, nil
 	}
@@ -33,6 +33,12 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string,
 		ret = (*p.repo).LookupWords(isReverse, lang, word)
 	}
 	if ret == nil {
+		word, lpunct2, rpunct2 := (*p.ai).CleanWord(isReverse, word, []string{lang})
+		if word == "" {
+			return nil, nil
+		}
+		lpunct += lpunct2
+		rpunct += rpunct2
 		hash := (*p.cach).HashWord(isReverse, lang, word)
 		r := (*p.cach).LoadWord(hash)
 		if r == nil || len(r) == 0 {
