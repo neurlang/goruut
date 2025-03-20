@@ -27,6 +27,12 @@ type SolutionFile struct {
 	UseCombining  bool `json:"UseCombining"`
 }
 
+func (s *SolutionFile) Init() {
+	if s.Map == nil {
+		s.Map = make(map[string][]string)
+	}
+}
+
 func (s *SolutionFile) WithoutKey(key string) {
 	//fmt.Println("WITHOUT KEY", key)
 	delete(s.Map, key)

@@ -135,6 +135,16 @@ func main() {
 
 	slice := load(*srcFile, 999999999)
 
+	if len(lang.Map) <= 1 {
+		lang.Init()
+		for i, kw := range Keywords(1000, slice) {
+			lang.With(kw[0], kw[1])
+			lang_eval.With(kw[0], kw[1])
+			if i == 10 {
+				break
+			}
+		}
+	}
 again:
 
 	threeways = make(map[[2]string]uint64)
