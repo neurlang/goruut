@@ -160,7 +160,7 @@ function findAndAddLongestPrefixToTable(word, map, otherword) {
                 if (process(word.slice(longestPrefix.length), otherword.slice(longestValue[i].length))) {
 
                     content.push(buffer);
-                    extras.push(longestValue.slice(i));
+                    extras.push(longestValue.slice(i+1));
                     return true;
                 }
             }
