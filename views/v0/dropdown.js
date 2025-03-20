@@ -62,6 +62,9 @@ function initDropdown(inp, lst, items, multiple) {
         itemDiv.textContent = item;
         itemDiv.addEventListener("click", () => {
           if (multiple) {
+                if (!searchInput.value.includes(',')) {
+                    searchInput.value = "";
+                }
 		if (searchInput.value.endsWith(filter)) {
 		    searchInput.value = searchInput.value.slice(0, -filter.length);
 		}
