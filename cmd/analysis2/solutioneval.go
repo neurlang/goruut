@@ -186,7 +186,8 @@ func (s *SolutionEval) ComplexityLoss(aligned1 []string) (ret uint64) {
 }
 func (s *SolutionEval) Align(word1, word2 string, asymmetric, isCleaning bool) (ret *[2][]string, cplxLoss uint64) {
 	if asymmetric {
-		ret = s.AlignAsymmetric(word1, word2, false, (len(word1) + len(word2)) / 2)
+		memo := make(map[[2]int]bool) // Initialize memoization map
+		ret = s.AlignAsymmetric(word1, word2, false, (len(word1) + len(word2)) / 2, 0, 0, memo)
 	} else {
 		ret = s.AlignSymmetric(word1, word2, false)
 	}
@@ -235,28 +236,41 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret
 	}
 	return
 }
-func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, depth int) (ret *[2][]string) {
+func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, depth int, word1consumed int, word2consumed int, memo map[[2]int]bool) (ret *[2][]string) {
 	if depth < 0 {
 		return nil
 	}
-	for i := range word1 {
-		word1k := word1[:len(word1)-i]
+
+	// Check memoization cache
+	cacheKey := [2]int{word1consumed, word2consumed}
+	if cached, ok := memo[cacheKey]; ok {
+		if !cached {
+			return nil // If this path doesn't lead to a solution, return early
+		}
+	}
+
+	// Ensure we cache even nil results to avoid reprocessing
+	defer func() {
+		memo[cacheKey] = (ret != nil)
+	}()
+
+	runes := []rune(word1)
+	for i := 0; i < len(runes); i++ {
+		word1k := string(runes[:len(runes)-i])
 		key := strings.Trim(word1k, "_")
+
 		if counts, ok := s.Map[key]; ok {
-			// Extract and sort lengths in descending order
 			lengths := make([]int, 0, len(counts)+1)
 			for l := range counts {
 				lengths = append(lengths, l)
 			}
-			// Only allow j=0 if word2 is fully consumed
 			if s.IsDrop(key) && len(word2) == 0 {
 				lengths = append(lengths, 0)
 			}
 			sort.Sort(sort.Reverse(sort.IntSlice(lengths)))
 
-			// Iterate over sorted lengths
 			for _, j := range lengths {
-				if j > len(word2) || (j == 0 && len(word2) > 0) { // Skip j=0 if word2 isn't empty
+				if j > len(word2) || (j == 0 && len(word2) > 0) {
 					continue
 				}
 				word2p := word2[:j]
@@ -268,12 +282,23 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, dep
 					if i == 0 || len(word2) == j {
 						return retok
 					}
-					if next := s.AlignAsymmetric(word1[len(word1)-i:], word2[j:], isCleaning, depth-1); next != nil {
+
+					remainingWord1 := string(runes[len(runes)-i:])
+					remainingWord2 := word2[j:]
+
+					// Update consumed lengths
+					nextWord1Consumed := word1consumed + len(runes[:len(runes)-i])
+					nextWord2Consumed := word2consumed + j
+
+					if next := s.AlignAsymmetric(remainingWord1, remainingWord2, isCleaning, depth-1, nextWord1Consumed, nextWord2Consumed, memo); next != nil {
 						retok[0] = append(retok[0], next[0]...)
 						retok[1] = append(retok[1], next[1]...)
 						if ret == nil || len(retok[0]) > len(ret[0]) {
 							ret = retok
 						}
+					}
+					if ret == nil {
+						ret = retok
 					}
 				}
 			}
