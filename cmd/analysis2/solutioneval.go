@@ -186,8 +186,8 @@ func (s *SolutionEval) ComplexityLoss(aligned1 []string) (ret uint64) {
 }
 func (s *SolutionEval) Align(word1, word2 string, asymmetric, isCleaning bool) (ret *[2][]string, cplxLoss uint64) {
 	if asymmetric {
-		memo := make(map[[2]int]bool) // Initialize memoization map
-		ret = s.AlignAsymmetric(word1, word2, false, (len(word1) + len(word2)) / 2, 0, 0, memo)
+		memo := make(map[[2]int]*[2][]string) // memo for each top-level call
+		ret = s.AlignAsymmetric(word1, word2, false, memo)
 	} else {
 		ret = s.AlignSymmetric(word1, word2, false)
 	}
@@ -236,35 +236,27 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret
 	}
 	return
 }
-func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, depth int, word1consumed int, word2consumed int, memo map[[2]int]bool) (ret *[2][]string) {
-	if depth < 0 {
-		return nil
+func (s *SolutionEval) AlignAsymmetric(word1 string, word2 string, isCleaning bool, memo map[[2]int]*[2][]string) *[2][]string {
+	// Memoization check
+	memo_key := [2]int{len(word1), len(word2)}
+	if cached, ok := memo[memo_key]; ok {
+		return cached
 	}
 
-	// Check memoization cache
-	cacheKey := [2]int{word1consumed, word2consumed}
-	if cached, ok := memo[cacheKey]; ok {
-		if !cached {
-			return nil // If this path doesn't lead to a solution, return early
-		}
-	}
+	var best *[2][]string
 
-	// Ensure we cache even nil results to avoid reprocessing
-	defer func() {
-		memo[cacheKey] = (ret != nil)
-	}()
-
-	runes := []rune(word1)
-	for i := 0; i < len(runes); i++ {
-		word1k := string(runes[:len(runes)-i])
+	// Original suffix-based splitting logic
+	for i := 0; i < len(word1); i++ {
+		word1k := word1[:len(word1)-i]
 		key := strings.Trim(word1k, "_")
 
 		if counts, ok := s.Map[key]; ok {
+			// Generate lengths with priority for longer matches
 			lengths := make([]int, 0, len(counts)+1)
 			for l := range counts {
 				lengths = append(lengths, l)
 			}
-			if s.IsDrop(key) && len(word2) == 0 {
+			if s.IsDrop(key) {
 				lengths = append(lengths, 0)
 			}
 			sort.Sort(sort.Reverse(sort.IntSlice(lengths)))
@@ -273,41 +265,56 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, dep
 				if j > len(word2) || (j == 0 && len(word2) > 0) {
 					continue
 				}
+
 				word2p := word2[:j]
 				if _, exists := counts[j][word2p]; exists {
-					retok := &[2][]string{
-						{word1k},
-						{word2p},
-					}
-					if i == 0 || len(word2) == j {
-						return retok
-					}
+					retok := &[2][]string{{word1k}, {word2p}}
 
-					remainingWord1 := string(runes[len(runes)-i:])
+					// Recursively process remaining parts
+					remainingWord1 := word1[len(word1)-i:]
 					remainingWord2 := word2[j:]
-
-					// Update consumed lengths
-					nextWord1Consumed := word1consumed + len(runes[:len(runes)-i])
-					nextWord2Consumed := word2consumed + j
-
-					if next := s.AlignAsymmetric(remainingWord1, remainingWord2, isCleaning, depth-1, nextWord1Consumed, nextWord2Consumed, memo); next != nil {
+					if next := s.AlignAsymmetric(remainingWord1, remainingWord2, isCleaning, memo); next != nil {
 						retok[0] = append(retok[0], next[0]...)
 						retok[1] = append(retok[1], next[1]...)
-						if ret == nil || len(retok[0]) > len(ret[0]) {
-							ret = retok
-						}
 					}
-					if ret == nil {
-						ret = retok
+
+					// Keep longest alignment
+					if best == nil || len(retok[0]) > len(best[0]) {
+						best = retok
+						// Early return for perfect match
+						if i == 0 && j == len(word2) {
+							memo[memo_key] = best
+							return best
+						}
 					}
 				}
 			}
-			if isCleaning {
+			if isCleaning && best != nil {
 				break
 			}
 		}
 	}
-	return ret
+
+	// Allow partial matches as fallback
+	if best == nil {
+		if len(word1) > 0 && len(word2) == 0 && s.IsDrop(word1) {
+			best = &[2][]string{{word1}, {}}
+		} else if len(word2) > 0 && len(word1) == 0 {
+			best = &[2][]string{{}, {word2}}
+		}
+	}
+
+	memo[memo_key] = best
+	return best
+}
+
+func sortedLengthsDesc(counts map[int]map[string]struct{}) []int {
+	lengths := make([]int, 0, len(counts))
+	for l := range counts {
+		lengths = append(lengths, l)
+	}
+	sort.Sort(sort.Reverse(sort.IntSlice(lengths)))
+	return lengths
 }
 
 // isCombiner checks if a rune is a UTF-8 combining character.
