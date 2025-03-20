@@ -145,6 +145,16 @@ func main() {
 			}
 		}
 	}
+	if len(lang.SrcDuplicate) > 0 {
+		for i := range slice {
+			for _, rule := range lang.SrcDuplicate {
+				for j := 1; j < len(rule); j++ {
+					slice[i][0] = strings.ReplaceAll(slice[i][0], rule[j], rule[0])
+				}
+			}
+		}
+	}
+
 again:
 
 	threeways = make(map[[2]string]uint64)

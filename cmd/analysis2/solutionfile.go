@@ -16,6 +16,8 @@ type SolutionFile struct {
 	DstMultiPrefix []string            `json:"DstMultiPrefix"`
 	DropLast       []string            `json:"DropLast"`
 
+	SrcDuplicate [][]string `json:"SrcDuplicate"`
+
 	IsDuplex    bool  `json:"IsDuplex"`
 	IsSrcSurround    bool  `json:"IsSrcSurround"`
 

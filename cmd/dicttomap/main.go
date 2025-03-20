@@ -42,6 +42,7 @@ type baseLanguage struct {
 	SplitAfter       interface{} `json:"SplitAfter"`
 	IsDuplex         interface{} `json:"IsDuplex"`
 	IsSrcSurround    interface{} `json:"IsSrcSurround"`
+	SrcDuplicate     interface{} `json:"SrcDuplicate"`
 }
 
 type Language struct {

@@ -30,7 +30,7 @@ do
 	echo "$LANG $count $SIZE"
 	grep --only-matching -P $generated_string ../goruut/dicts/$LANG/$LANGFILE | grep -P '\xC9\xA1' --invert-match >> ./$LANG/$LANGFILE
 	echo '"":[]},' >> ./$LANG/$LANGFILE
-	egrep --only-matching '"(SrcMulti|PrePhonWordSteps|DstMultiSuffix|DstMultiPrefix|DropLast|SplitAfter|SplitBefore|IsDuplex|IsSrcSurround)".+$' ../goruut/dicts/$LANG/$LANGFILE >> ./$LANG/$LANGFILE
+	egrep --only-matching '"(SrcMulti|PrePhonWordSteps|DstMultiSuffix|DstMultiPrefix|DropLast|SplitAfter|SplitBefore|IsDuplex|IsSrcSurround|SrcDuplicate)".+$' ../goruut/dicts/$LANG/$LANGFILE >> ./$LANG/$LANGFILE
 	#grep DropLast ../goruut/dicts/$LANG/$LANGFILE >> ./$LANG/$LANGFILE
 
 	# Check if the last character is a comma

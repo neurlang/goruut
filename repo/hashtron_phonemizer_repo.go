@@ -57,6 +57,7 @@ type language struct {
 	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
 	DstMultiSuffix []string            `json:"DstMultiSuffix"`
 	DropLast       []string            `json:"DropLast"`
+	SrcDuplicate   [][]string          `json:"SrcDuplicate"`
 	//Histogram         []string            `json:"Histogram"`
 	mapSrcMultiLen    int
 	mapSrcMultiSufLen int
@@ -119,7 +120,11 @@ func (l *language) letters() {
 	for k := range l.Mapping {
 		addLetters(k, l.mapLetters)
 	}
-
+	for _, rule := range l.SrcDuplicate {
+		for _, v := range rule {
+			addLetters(v, l.mapLetters)
+		}
+	}
 }
 
 /*
@@ -140,6 +145,13 @@ func (l *languages) SrcMulti(isReverse bool, lang string) map[string]struct{} {
 		reverse = "_reverse"
 	}
 	return (*l)[lang+reverse].mapSrcMulti
+}
+func (l *languages) SrcDuplicate(isReverse bool, lang string) [][]string {
+	var reverse string
+	if isReverse {
+		reverse = "_reverse"
+	}
+	return (*l)[lang+reverse].SrcDuplicate
 }
 
 func (l *languages) DstMulti(isReverse bool, lang string) map[string]struct{} {
@@ -649,6 +661,16 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 	}
 
 	var backoffs = 10
+	r.mut.RLock()
+	srcSame := r.lang.SrcDuplicate(isReverse, lang)
+	r.mut.RUnlock()
+
+	for _, rule := range srcSame {
+		for j := 1; j < len(rule); j++ {
+			word = strings.ReplaceAll(word, rule[j], rule[0])
+		}
+	}
+
 	r.mut.RLock()
 	srca := r.lang.SrcSlice(isReverse, lang, []rune(word))
 	r.mut.RUnlock()
