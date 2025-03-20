@@ -235,7 +235,6 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret
 	}
 	return
 }
-
 func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, depth int) (ret *[2][]string) {
 	if depth < 0 {
 		return nil
@@ -249,14 +248,15 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, dep
 			for l := range counts {
 				lengths = append(lengths, l)
 			}
-			if s.IsDrop(key) {
+			// Only allow j=0 if word2 is fully consumed
+			if s.IsDrop(key) && len(word2) == 0 {
 				lengths = append(lengths, 0)
 			}
-			sort.Sort(sort.Reverse(sort.IntSlice(lengths))) // Sort from big to small
+			sort.Sort(sort.Reverse(sort.IntSlice(lengths)))
 
 			// Iterate over sorted lengths
 			for _, j := range lengths {
-				if j > len(word2) {
+				if j > len(word2) || (j == 0 && len(word2) > 0) { // Skip j=0 if word2 isn't empty
 					continue
 				}
 				word2p := word2[:j]
@@ -265,22 +265,15 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, dep
 						{word1k},
 						{word2p},
 					}
-					// Allow partial alignment (not requiring full string processing)
 					if i == 0 || len(word2) == j {
-						return retok // return end match
+						return retok
 					}
-					// Try continuing alignment on the remaining substrings
 					if next := s.AlignAsymmetric(word1[len(word1)-i:], word2[j:], isCleaning, depth-1); next != nil {
 						retok[0] = append(retok[0], next[0]...)
 						retok[1] = append(retok[1], next[1]...)
-						if ret == nil {
-							ret = retok
-						} else if len(ret[0]) < len(retok[0]) {
+						if ret == nil || len(retok[0]) > len(ret[0]) {
 							ret = retok
 						}
-					}
-					if ret == nil {
-						ret = retok
 					}
 				}
 			}
@@ -289,7 +282,7 @@ func (s *SolutionEval) AlignAsymmetric(word1, word2 string, isCleaning bool, dep
 			}
 		}
 	}
-	return ret // Allow partial matches; returning nil means no valid alignment found
+	return ret
 }
 
 // isCombiner checks if a rune is a UTF-8 combining character.
