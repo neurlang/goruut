@@ -26,6 +26,7 @@ type IHashtronPhonemizerRepository interface {
 	CleanWord(isReverse bool, word string, languages []string) (ret string, lpunct string, rpunct string)
 	CheckWord(isReverse bool, lang, word, ipa string) bool
 	PhonemizeWords(isReverse bool, lang string, word string) []map[uint32]string
+	ExplainWord(isReverse bool, word1, word2, lang string) (ret map[string][]string)
 	//PhonemizeWord(isReverse bool, lang string, word string) map[uint64]string
 }
 type HashtronPhonemizerRepository struct {
@@ -616,6 +617,23 @@ func copystrings(s []string) (r []string) {
 		return m
 	}
 */
+
+func (r *HashtronPhonemizerRepository) ExplainWord(isReverse bool, word1, word2, lang string) (ret map[string][]string) {
+	ret = make(map[string][]string)
+	r.LoadLanguage(isReverse, lang)
+	r.mut.RLock()
+	srca := r.lang.SrcSlice(isReverse, lang, []rune(word1))
+	r.mut.RUnlock()
+	for i := 0; i < len(srca); i++ {
+		srcv := srca[i]
+		r.mut.RLock()
+		m := copystrings(r.lang.Slice(isReverse, lang)[string(srcv)])
+		r.mut.RUnlock()
+		ret[srcv] = m
+	}
+	return
+}
+
 func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint32]string) {
 	var reverse string
 	if isReverse {

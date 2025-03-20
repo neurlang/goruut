@@ -7,6 +7,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
 	PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string)
+	ExplainWord(isReverse bool, word1, word2, lang string) map[string][]string
 	//CleanWord(isReverse bool, lang, word string) string
 }
 
@@ -16,6 +17,10 @@ type PhonemizeWordService struct {
 	pre  *repo.IPrePhonWordStepsRepository
 	cach *repo.IWordCachingRepository
 	tag  *repo.IAutoTaggerRepository
+}
+
+func (p *PhonemizeWordService) ExplainWord(isReverse bool, word1, word2, lang string) map[string][]string {
+	return (*p.ai).ExplainWord(isReverse, word1, word2, lang)
 }
 
 func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string) {
