@@ -583,8 +583,8 @@ func LangName(dir string) string {
 	case "tatar": return "Tatar";
 	case "turkmen": return "Turkmen";
 	case "uzbek": return "Uzbek";
-	case "welsh/north": return "Welsh/North";
-	case "welsh/south": return "Welsh/South";
+	case "welsh/north": return "WelshNorth";
+	case "welsh/south": return "WelshSouth";
 	default: return "";
 	}
 }
