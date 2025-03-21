@@ -97,10 +97,10 @@ Use this default template and modify it according to your language:
 
 ## Step 6: Run `train_language.sh`
 
-1. Clone `https://github.com/neurlang/classifier` nex to the `goruut` repo folder uing git.
+1. Clone `https://github.com/neurlang/classifier` next to the `goruut` repo folder uing git.
 2. Compile the programs in `cmd/train_phonemizer` and `cmd/backtest` (`go build`).
 3. Run `train_language.sh <language> -maxpremodulo <value>` (recommended: 5 times the cleaning complexity).
-4. If resuming training or finetuning, use `-resume`. **Without** `-resume`, the old model will be **deleted**.
+4. If starting a new training (not finetuning), use `-overwrite`. **With** `-overwrite`, the old model will be **deleted**.
 5. For padspace languages, add `-padspace`.
 
 ## Step 7: Add Glue Code (`language.go`)
