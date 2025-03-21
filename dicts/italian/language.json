@@ -52,7 +52,9 @@
 "z":["ts","dz","tsˈ"],
 "zi":["tsiˈ","tsi","tsjˈ","tsj","tsˈi","dzi","dzˈi","dziˈ","dzjˈ","tsˈɪ"],
 "zz":["tsː","dzːˈ","dzː","tsːˈ","tsts"],
+"à":["a"],
 "é":["e"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
-"DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
-"PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":["-"],"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"DstMultiPrefix":["ˈ","'","ˌ"],
+"DropLast":null,"SrcDuplicate":null,"IsDuplex":false,"IsSrcSurround":false,"SplitBefore":["-"],
+"SplitAfter":null,"PrePhonWordSteps":[{"ToLower":true}],
+"UseCombining":false}

@@ -48,9 +48,6 @@
  timeout 600 ./study_language_reverse.sh	uzbek	
  timeout 600 ./study_language_reverse.sh	welsh/north	
  timeout 600 ./study_language_reverse.sh	welsh/south
- 
-exit
- 
  timeout 600 ./study_language_reverse.sh	afrikaans	
  timeout 600 ./study_language_reverse.sh	amharic	
  timeout 600 ./study_language_reverse.sh	arabic	

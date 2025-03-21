@@ -49,8 +49,6 @@
  timeout 600 ./study_language.sh	uzbek	
  timeout 600 ./study_language.sh	welsh/north	
  timeout 600 ./study_language.sh	welsh/south
-exit
-
  timeout 600 ./study_language.sh	afrikaans	
  timeout 600 ./study_language.sh	amharic	
  timeout 600 ./study_language.sh	arabic	
@@ -91,7 +89,7 @@ exit
  timeout 600 ./study_language.sh	icelandic	
  timeout 600 ./study_language.sh	indonesian	
  timeout 600 ./study_language.sh	isan	
- timeout 600 ./study_language.sh	italian	
+ timeout 600 ./study_language.sh	italian		--rowlossimportance 6
  timeout 600 ./study_language.sh	jamaican	
  timeout 600 ./study_language.sh	japanese	-padspace --hyperinit 16  --rowlossimportance 10
  timeout 600 ./study_language.sh	javanese	
@@ -123,7 +121,7 @@ exit
  timeout 600 ./study_language.sh	swahili	
  timeout 600 ./study_language.sh	swedish	
  timeout 600 ./study_language.sh	tagalog	
- timeout 600 ./study_language.sh	tamil	
+ timeout 600 ./study_language.sh	tamil		--rowlossimportance 6
  timeout 600 ./study_language.sh	telugu	
  timeout 600 ./study_language.sh	thai	
  timeout 600 ./study_language.sh	tibetan	-padspace  --hyperinit 16
