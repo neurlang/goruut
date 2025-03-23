@@ -13,14 +13,15 @@ type AutoTaggerRepository struct {
 }
 
 func (r *AutoTaggerRepository) IsCrossDictWord(isReverse bool, lang, word string) bool {
-	if !isReverse && strings.HasPrefix(lang, "English") {
-		return word == "the"
-	}
+	//if !isReverse && strings.HasPrefix(lang, "English") {
+	//	return word == "the"
+	//}
 	return false
 }
 
 func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string) []string {
 	if !isReverse && strings.HasPrefix(lang, "English") {
+		/*
 		if word1 == "the" {
 			if word2 == "ðə" || word2 == "ðˌɛ" {
 				return []string{"the"}
@@ -29,6 +30,7 @@ func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string
 				return []string{"thi"}
 			}
 		}
+		*/
 		for _, c := range []rune(word1) {
 			if _, ok := (*r.english_consonants)[c]; ok {
 				return []string{"consonant1st"}

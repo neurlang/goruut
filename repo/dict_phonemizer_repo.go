@@ -68,9 +68,6 @@ func serializeTags(tags map[uint32]string) (key uint32, ret string) {
 	} else {
 		ret = "[]"
 	}
-	if key == 0 {
-		key++
-	}
 	return
 }
 
@@ -147,9 +144,22 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 				log.Now().Debugf("Language %s has wrong number of columns: %d", src, len(v))
 				continue
 			}
+			if src == "dove" {
+				log.Now().Debugf("Loading dove: %s", dst) 
+			}
 			var tagkey, tagjson = serializeTags(addTags(parseTags(tagstr), "dict"))
 			if (*r.lang_words)[lang+reverse][src] == nil {
 				(*r.lang_words)[lang+reverse][src] = make(map[uint32]string)
+			}
+			for {
+				if dstold, ok := (*r.lang_words)[lang+reverse][src][tagkey]; ok && dstold != dst {
+					tagkey++
+				} else {
+					break
+				}
+			}
+			if src == "dove" {
+				log.Now().Debugf("Storing dove: %s as %d", dst, tagkey) 
 			}
 			(*r.lang_words)[lang+reverse][src][tagkey] = dst
 			if (*r.lang_tags)[lang+reverse] == nil {
@@ -179,7 +189,7 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 	}
 	var m = make(map[uint32]string)
 	for k, v := range found {
-		log.Now().Debugf("Key: %d, Value: %s", k, v)
+		log.Now().Debugf("LookupWords Key: %d, Value: %s", k, v)
 		m[k] = v
 	}
 	m[0] = word

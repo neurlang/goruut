@@ -17,6 +17,7 @@ import "math/rand"
 import "time"
 import "compress/zlib"
 import "io"
+import "encoding/json"
 
 func loop(filename string, top, group int, do func(string, string, string)) {
 	// Open the file
@@ -174,6 +175,14 @@ func recompress(langname string) {
 	}
 }
 
+func tomap(strs []string) map[string]bool {
+	ret := make(map[string]bool)
+	for _, str := range strs {
+		ret[str] = true
+	}
+	return ret
+}
+
 func main() {
 	langname := flag.String("langname", "", "directory language name")
 	isreverse := flag.Bool("reverse", false, "is reverse")
@@ -284,7 +293,36 @@ again:
 		errsum.Add(dist)
 		if target == word2 {
 			percent.Add(1)
-		} else if !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
+		}
+		var equal = true
+		var tags, wordtags []string
+		if len(resp.Words) > 0 {
+			err1 := json.Unmarshal([]byte(resp.Words[0].PosTags), &tags)
+			err2 := json.Unmarshal([]byte(word3), &wordtags)
+			if err1 == nil && err2 == nil {
+				tagmap := tomap(tags)
+				wordmap := tomap(wordtags)
+				delete(tagmap, "preferred")
+				delete(tagmap, "dict")
+				if langname != nil && strings.HasPrefix(*langname, "english") {
+					delete(tagmap, "the")
+					delete(tagmap, "thi")
+					delete(tagmap, "consonant1st")
+					delete(tagmap, "vowel1st")
+				}
+				//fmt.Println(tagmap, wordmap)
+				equal = len(tagmap) == len(wordmap)
+				if equal {
+					for k := range tagmap {
+						if !wordmap[k] {
+							equal = false
+						}
+					}
+				}
+			}
+		}
+		
+		if !equal || !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
 			dump(word1, word2, word3)
 		}
 
