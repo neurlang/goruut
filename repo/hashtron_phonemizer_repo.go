@@ -14,6 +14,7 @@ import (
 	"github.com/neurlang/classifier/net/feedforward"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
+	"github.com/neurlang/classifier/hash"
 	"strings"
 	"sync"
 	"unicode"
@@ -38,6 +39,10 @@ type HashtronPhonemizerRepository struct {
 	nets   *map[string]*feedforward.FeedforwardNetwork
 
 	aregnets *map[string]*feedforward.FeedforwardNetwork
+}
+
+func hashtronHash(str string) uint32 {
+	return hash.StringHash(0, str)
 }
 
 func get_hashtron(h *hashtron.Hashtron, err error) hashtron.Hashtron {
@@ -778,7 +783,7 @@ outer:
 	push := func() {
 		if len(src)+len(dst) > 0 {
 			m := make(map[uint32]string)
-			hsh := murmur3hash(src + "\x00" + dst)
+			hsh := hashtronHash(src + "\x00" + dst)
 			if hsh == 0 {
 				hsh++
 			}

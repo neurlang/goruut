@@ -9,7 +9,6 @@ require (
 	github.com/neurlang/classifier v0.1.8-0.20250323110244-765715b39782
 	github.com/neurlang/levenshtein v0.1.0
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spaolacci/murmur3 v1.1.0
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
 	golang.org/x/text v0.3.3
 )

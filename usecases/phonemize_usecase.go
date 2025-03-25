@@ -6,6 +6,7 @@ import (
 	"github.com/neurlang/goruut/models/responses"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/goruut/repo/services"
+	"github.com/neurlang/classifier/parallel"
 	"strings"
 	"encoding/json"
 )
@@ -30,6 +31,13 @@ func (p *PhonemizeUsecase) Word(r requests.ExplainWord) (resp responses.ExplainW
 	}
 }
 
+func collapse[T any](slice [][]T) (ret []T) {
+	for _, subslice := range slice {
+		ret = append(ret, subslice...)
+	}
+	return
+}
+
 func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp responses.PhonemizeSentence) {
 	r.Init()
 
@@ -39,15 +47,18 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
 	}
 
-	var phonemized []map[uint32]string
-	var punctuation [][2]string
+	var phonemized_all = make([][]map[uint32]string, len(splitted), len(splitted))
+	var punctuation_all = make([][][2]string, len(splitted), len(splitted))
 
-	for _, word := range splitted {
+	parallel.ForEach(len(splitted), 1000, func(i int) {
+		word := splitted[i]
 		words, punct := p.phon.PhonemizeWords(r.IsReverse, r.Language, word, r.Languages)
-		phonemized = append(phonemized, words...)
-		punctuation = append(punctuation, punct...)
+		phonemized_all[i] = words
+		punctuation_all[i] = punct
 		log.Now().Debugf("Word: %s, Words: %v", word, words)
-	}
+	})
+	var phonemized = collapse(phonemized_all)
+	var punctuation = collapse(punctuation_all)
 
 	parts_of_speech_selected := p.sel.Select(r.IsReverse, r.Language, phonemized, r.Languages)
 	log.Now().Debugf("Vector: %v", parts_of_speech_selected)

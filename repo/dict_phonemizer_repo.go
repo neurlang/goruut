@@ -6,7 +6,6 @@ import (
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/classifier/hash"
-	"github.com/spaolacci/murmur3"
 	"strings"
 	"sync"
 	"compress/zlib"
@@ -26,10 +25,6 @@ type DictPhonemizerRepository struct {
 	lang_tags  *map[string]map[uint32]string
 	words_tags *map[string]map[[2]string]uint32
 	mut    sync.Mutex
-}
-
-func murmur3hash(str string) uint32 {
-	return murmur3.Sum32WithSeed([]byte(str), 0)
 }
 
 func addTags(bag map[uint32]string, tags ...string) map[uint32]string {

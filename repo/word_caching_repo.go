@@ -5,7 +5,7 @@ import (
 	"encoding/binary"
 	"github.com/maypok86/otter"
 	"github.com/neurlang/goruut/helpers/log"
-	"github.com/spaolacci/murmur3"
+	"github.com/neurlang/classifier/hash"
 	"time"
 )
 import . "github.com/martinarisk/di/dependency_injection"
@@ -81,7 +81,7 @@ func (r WordCachingRepository) HashWord(isReverse bool, lang, word string) uint3
 		str += "_reverse"
 	}
 
-	return murmur3.Sum32WithSeed([]byte(str), r.seed)
+	return hash.StringHash(r.seed, str)
 }
 
 func NewWordCachingRepository(di *DependencyInjection) *WordCachingRepository {
