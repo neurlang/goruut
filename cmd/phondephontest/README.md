@@ -14,3 +14,10 @@ git lfs fetch
 git lfs clone
 git lfs pull
 ```
+
+## Example result
+
+```
+[success rate WER] 97 % 561258 for hebrew2
+[success rate CER] 18 % 3031252 for hebrew2
+```
