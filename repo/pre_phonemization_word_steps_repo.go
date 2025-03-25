@@ -55,6 +55,9 @@ func (p *prephonlanguages) IsNormalize(isReverse bool, lang string, n int) bool 
 	}
 	p.mut.RLock()
 	defer p.mut.RUnlock()
+	if p.lang == nil || (p.lang)[lang+reverse] == nil {
+		return false
+	}
 	return len((p.lang)[lang+reverse].PrePhonWordSteps[n].Normalize) > 0
 }
 func (p *prephonlanguages) IsTrim(isReverse bool, lang string, n int) bool {
@@ -64,6 +67,9 @@ func (p *prephonlanguages) IsTrim(isReverse bool, lang string, n int) bool {
 	}
 	p.mut.RLock()
 	defer p.mut.RUnlock()
+	if p.lang == nil || (p.lang)[lang+reverse] == nil {
+		return false
+	}
 	return len((p.lang)[lang+reverse].PrePhonWordSteps[n].Trim) > 0
 }
 func (p *prephonlanguages) IsToLower(isReverse bool, lang string, n int) bool {
@@ -73,6 +79,9 @@ func (p *prephonlanguages) IsToLower(isReverse bool, lang string, n int) bool {
 	}
 	p.mut.RLock()
 	defer p.mut.RUnlock()
+	if p.lang == nil || (p.lang)[lang+reverse] == nil {
+		return false
+	}
 	return (p.lang)[lang+reverse].PrePhonWordSteps[n].ToLower
 }
 func (p *prephonlanguages) GetNormalize(isReverse bool, lang string, n int) string {
