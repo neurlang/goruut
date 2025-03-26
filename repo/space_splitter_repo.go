@@ -6,6 +6,7 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"strings"
 	"sync"
+	"regexp"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -25,6 +26,17 @@ type spacesplitlanguages map[string]*spacesplitlanguage
 type spacesplitlanguage struct {
 	SplitAfter  []string `json:"SplitAfter"`
 	SplitBefore []string `json:"SplitBefore"`
+
+	SplitAt map[string]string `json:"SplitAt"`
+	splitAt []*regexp.Regexp
+	splitBy []string
+}
+
+func (l *spacesplitlanguage) load() {
+	for exp, splitStr := range l.SplitAt {
+		l.splitAt = append(l.splitAt, log.Error1(regexp.Compile(exp)))
+		l.splitBy = append(l.splitBy, splitStr)
+	}
 }
 
 func (s *SpaceSplitterRepository) Split(sentence string) []string {
@@ -38,12 +50,19 @@ func (s *SpaceSplitterRepository) SplitLang(isReverse bool, lang, sentence strin
 	}
 	s.mut.RLock()
 	language := (*s.lang)[lang+reverse]
-	var splitAfter, splitBefore []string
+	var splitAfter, splitBefore, splitBy []string
+	var splitAt []*regexp.Regexp
 	if language != nil {
 		splitAfter = language.SplitAfter
 		splitBefore = language.SplitBefore
+		splitBy = language.splitBy
+		splitAt = language.splitAt
 	}
 	s.mut.RUnlock()
+
+	for i, re := range splitAt {
+		sentence = re.ReplaceAllString(sentence, splitBy[i])
+	}
 
 	for _, v := range splitAfter {
 		sentence = strings.ReplaceAll(sentence, v, v+" ")
@@ -81,6 +100,7 @@ func (p *SpaceSplitterRepository) LoadLanguage(isReverse bool, lang string) {
 			log.Now().Errorf("Error parsing JSON: %v\n", err)
 			continue
 		}
+		langone.load()
 		p.mut.Lock()
 		(*p.lang)[lang+reverse] = &langone
 		p.mut.Unlock()

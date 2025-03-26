@@ -3688,4 +3688,5 @@
 "龟":["kweɪ˥˥_"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"Normalize":"NFC"}],
 "SplitBefore":["《","（","(","·","“"],
 "SplitAfter":["》","）",")","。","？","、","，","：","、","；","！","?","!",".","”"],
+"SplitAt":{"(\\p{Han})([^\\p{Han}])|([^\\p{Han}])(\\p{Han})":"$1$3 $2$4"},
 "IsDuplex":false,"IsSrcSurround":false}

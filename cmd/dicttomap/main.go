@@ -40,6 +40,7 @@ type baseLanguage struct {
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 	SplitBefore      interface{} `json:"SplitBefore"`
 	SplitAfter       interface{} `json:"SplitAfter"`
+	SplitAt          interface{} `json:"SplitAt"`
 	IsDuplex         interface{} `json:"IsDuplex"`
 	IsSrcSurround    interface{} `json:"IsSrcSurround"`
 	SrcDuplicate     interface{} `json:"SrcDuplicate"`

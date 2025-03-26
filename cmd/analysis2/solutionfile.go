@@ -23,6 +23,7 @@ type SolutionFile struct {
 
 	SplitBefore []string `json:"SplitBefore"`
 	SplitAfter  []string `json:"SplitAfter"`
+	SplitAt     interface{} `json:"SplitAt"`
 
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 
