@@ -1,18 +1,26 @@
 #!/bin/bash
 
-# Initialize a resume flag
+# Capture language name from first argument
+lang_name="$1"
+shift  # Remove $1 from arguments list, leaving only parameters for training
+
+# Initialize resume flag and filtered arguments
 resume_flag="-resume"
+filtered_args=()
+
+# Process remaining arguments ($2 and beyond from original command line)
 for arg in "$@"; do
-  if [ "$arg" == "-overwrite" ] || [ "$arg" == "--overwrite" ]; then
-    resume_flag=""
-    break
+  if [[ "$arg" == "-overwrite" || "$arg" == "--overwrite" ]]; then
+    resume_flag=""  # Disable resume if overwrite found
+  else
+    filtered_args+=("$arg")  # Keep all other arguments
   fi
 done
 
-# Function to handle the SIGINT signal (Ctrl+C)
+# Function to handle SIGINT (Ctrl+C)
 cleanup() {
-    echo "Caught SIGINT, killing both processes..."
-    kill -SIGTERM $PID1 $PID2
+    echo "Caught SIGINT, terminating processes..."
+    kill -SIGTERM $PID1 $PID2 2>/dev/null
     exit 1
 }
 
@@ -22,13 +30,14 @@ trap cleanup SIGINT
 #train
 
 ../../../classifier/cmd/train_phonemizer/train_phonemizer \
---maxdepth 9999 $resume_flag \
---cleantsv ../../dicts/$1/clean_reverse.tsv \
---dstmodel ../../dicts/$1/weights1_reverse.json.zlib $2 $3 $4 $5 $6 $7 $8 $9 & # > /dev/null 2>&1 &
+    --maxdepth 9999 $resume_flag \
+    --cleantsv "../../dicts/$lang_name/clean_reverse.tsv" \
+    --dstmodel "../../dicts/$lang_name/weights1_reverse.json.zlib" \
+    "${filtered_args[@]}" &  # Pass filtered arguments here
 PID1=$!
 
 # Start the second process in the background
-../backtest/backtest -reverse -testing  -langname $1 &
+../backtest/backtest -reverse -testing  -langname $lang_name &
 PID2=$!
 
 # Wait for both processes to finish
