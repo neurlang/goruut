@@ -11,7 +11,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPartsOfSpeechSelectorService interface {
-	Select(isReverse bool, lang string, sentence []map[uint32]string, languages []string) (ret [][3]string)
+	Select(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string)
 }
 
 type PartsOfSpeechSelectorService struct {
@@ -36,21 +36,21 @@ func next_continue_english(lang string, isReverse bool, my_tags, next_tags map[s
 	return false
 }
 
-func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sentence []map[uint32]string, languages []string) (ret [][3]string) {
+func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string) {
 
-	var input []map[uint32]string
+	var input []map[string][2]uint32
 
 	for _, words := range sentence {
 		var orig string
-		for k, word := range words {
+		for word, k := range words {
 			if k == 0 {
 				orig = word
 				break
 			}
 		}
-		var inputmap = make(map[uint32]string)
-		inputmap[0] = orig
-		for k, word := range words {
+		var inputmap = make(map[string][2]uint32)
+		inputmap[orig] = [2]uint32{0,0}
+		for word, k := range words {
 			if k == 0 {
 				continue
 			}
@@ -63,10 +63,10 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 			}
 			log.Now().Debugf("PreSelect Orig: %s, Word: %s, WordsTags: %s, HasDict: %v", orig, word, tags, hasdict)
 			if hasdict {
-				inputmap[k] = word
+				inputmap[word] = [2]uint32{k, 0}
 			} else {
 				// set dict flag
-				inputmap[k^hash.StringHash(0, "dict")] = word
+				inputmap[word] = [2]uint32{k^hash.StringHash(0, "dict"), 1}
 			}
 		}
 		log.Now().Debugf("PreSelect Word: %s Now: %v", orig, inputmap)
@@ -90,13 +90,19 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 			}
 			last_preferred = row[2]
 			hash_preferred = row[1]
+			break
 		}
 		log.Now().Debugf("Preferred: %d %d", last_preferred, hash_preferred)
-		var orig = words[0]
-		var wordstags = make(map[[2]string][]string)
-		for k, word := range words {
+		var orig string
+		for word, k := range words {
 			if k == 0 {
 				orig = word
+				break
+			}
+		}
+		var wordstags = make(map[[2]string][]string)
+		for word, k := range words {
+			if k == 0 {
 				continue
 			}
 			var tags = (*p.repo).LookupTags(isReverse, lang, orig, word)

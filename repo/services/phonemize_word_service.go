@@ -6,7 +6,7 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IPhonemizeWordService interface {
-	PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string)
+	PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[string]uint32, punct [][2]string)
 	ExplainWord(isReverse bool, word1, word2, lang string) map[string][]string
 	//CleanWord(isReverse bool, lang, word string) string
 }
@@ -23,7 +23,7 @@ func (p *PhonemizeWordService) ExplainWord(isReverse bool, word1, word2, lang st
 	return (*p.ai).ExplainWord(isReverse, word1, word2, lang)
 }
 
-func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[uint32]string, punct [][2]string) {
+func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[string]uint32, punct [][2]string) {
 	word = (*p.pre).PrePhonemizeWord(isReverse, lang, word)
 
 	word, lpunct, rpunct := (*p.ai).CleanWord(isReverse, word, append([]string{lang}, languages...))

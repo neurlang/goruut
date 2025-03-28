@@ -47,7 +47,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 		return responses.PhonemizeSentence{ErrorWordLimitExceeded: true}
 	}
 
-	var phonemized_all = make([][]map[uint32]string, len(splitted), len(splitted))
+	var phonemized_all = make([][]map[string]uint32, len(splitted), len(splitted))
 	var punctuation_all = make([][][2]string, len(splitted), len(splitted))
 
 	parallel.ForEach(len(splitted), 1000, func(i int) {

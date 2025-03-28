@@ -16,12 +16,12 @@ import (
 import . "github.com/martinarisk/di/dependency_injection"
 
 type IDictPhonemizerRepository interface {
-	LookupWords(isReverse bool, lang string, word string) []map[uint32]string
+	LookupWords(isReverse bool, lang string, word string) []map[string]uint32
 	LookupTags(isReverse bool, lang string, word1, word2 string) string
 }
 type DictPhonemizerRepository struct {
 	getter     *interfaces.DictGetter
-	lang_words *map[string]map[string]map[uint32]string
+	lang_words *map[string]map[string]map[string]uint32
 	lang_tags  *map[string]map[uint32]string
 	words_tags *map[string]map[[2]string]uint32
 	mut    sync.Mutex
@@ -74,7 +74,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 	r.mut.Lock()
 	defer r.mut.Unlock()
 	if (*r.lang_words)[lang+reverse] == nil {
-		(*r.lang_words)[lang+reverse] = make(map[string]map[uint32]string)
+		(*r.lang_words)[lang+reverse] = make(map[string]map[string]uint32)
 	} else {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
@@ -144,19 +144,19 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 			}
 			var tagkey, tagjson = serializeTags(addTags(parseTags(tagstr), "dict"))
 			if (*r.lang_words)[lang+reverse][src] == nil {
-				(*r.lang_words)[lang+reverse][src] = make(map[uint32]string)
-			}
-			for {
-				if dstold, ok := (*r.lang_words)[lang+reverse][src][tagkey]; ok && dstold != dst {
-					tagkey++
-				} else {
-					break
+				(*r.lang_words)[lang+reverse][src] = make(map[string]uint32)
+			} else if m, ok := (*r.lang_words)[lang+reverse][src][dst]; ok {
+				existingTags := parseTags((*r.lang_tags)[lang+reverse][m])
+				var existing []string
+				for _, tag := range existingTags {
+					existing = append(existing, tag)
 				}
+				tagkey, tagjson = serializeTags(addTags(parseTags(tagstr), existing...))
 			}
 			if src == "dove" {
 				log.Now().Debugf("Storing dove: %s as %d", dst, tagkey) 
 			}
-			(*r.lang_words)[lang+reverse][src][tagkey] = dst
+			(*r.lang_words)[lang+reverse][src][dst] = tagkey
 			if (*r.lang_tags)[lang+reverse] == nil {
 				(*r.lang_tags)[lang+reverse] = make(map[uint32]string)
 			}
@@ -169,7 +169,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 	}
 }
 
-func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string) (ret []map[uint32]string) {
+func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string) (ret []map[string]uint32) {
 	r.LoadLanguage(isReverse, lang)
 	var reverse string
 	if isReverse {
@@ -182,12 +182,12 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 	if len(found) == 0 {
 		return nil
 	}
-	var m = make(map[uint32]string)
+	var m = make(map[string]uint32)
 	for k, v := range found {
-		log.Now().Debugf("LookupWords Key: %d, Value: %s", k, v)
+		log.Now().Debugf("LookupWords Key: %s, Value: %v", k, v)
 		m[k] = v
 	}
-	m[0] = word
+	m[word] = 0
 	ret = append(ret, m)
 	return
 }
@@ -209,7 +209,7 @@ func (r *DictPhonemizerRepository) LookupTags(isReverse bool, lang string, word1
 
 func NewDictPhonemizerRepository(di *DependencyInjection) *DictPhonemizerRepository {
 	getter := MustAny[interfaces.DictGetter](di)
-	mapping := make(map[string]map[string]map[uint32]string)
+	mapping := make(map[string]map[string]map[string]uint32)
 	mapping2 := make(map[string]map[uint32]string)
 	mapping3 := make(map[string]map[[2]string]uint32)
 

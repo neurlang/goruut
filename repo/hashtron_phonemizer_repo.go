@@ -26,7 +26,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 type IHashtronPhonemizerRepository interface {
 	CleanWord(isReverse bool, word string, languages []string) (ret string, lpunct string, rpunct string)
 	CheckWord(isReverse bool, lang, word, ipa string) bool
-	PhonemizeWords(isReverse bool, lang string, word string) []map[uint32]string
+	PhonemizeWords(isReverse bool, lang string, word string) []map[string]uint32
 	ExplainWord(isReverse bool, word1, word2, lang string) (ret map[string][]string)
 	//PhonemizeWord(isReverse bool, lang string, word string) map[uint64]string
 }
@@ -651,7 +651,7 @@ func (r *HashtronPhonemizerRepository) ExplainWord(isReverse bool, word1, word2,
 	return
 }
 
-func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[uint32]string) {
+func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang string, word string) (ret []map[string]uint32) {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
@@ -662,7 +662,7 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 	mapLangIsNil := r.lang.Slice(isReverse, lang) == nil
 	r.mut.RUnlock()
 	if mapLangIsNil {
-		return []map[uint32]string{}
+		return []map[string]uint32{}
 	}
 
 	var backoffs = 10
@@ -782,13 +782,13 @@ outer:
 
 	push := func() {
 		if len(src)+len(dst) > 0 {
-			m := make(map[uint32]string)
+			m := make(map[string]uint32)
 			hsh := hashtronHash(src + "\x00" + dst)
 			if hsh == 0 {
 				hsh++
 			}
-			m[uint32(hsh)] = dst
-			m[0] = src
+			m[dst] = uint32(hsh)
+			m[src] = 0
 			ret = append(ret, m)
 			src, dst = "", ""
 		}

@@ -12,20 +12,20 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IWordCachingRepository interface {
 	HashWord(isReverse bool, lang, word string) uint32
-	LoadWord(hash uint32) map[uint32]string
-	StoreWord(one map[uint32]string, hash uint32)
+	LoadWord(hash uint32) map[string]uint32
+	StoreWord(one map[string]uint32, hash uint32)
 }
 type WordCachingRepository struct {
 	seed  uint32
 	cache otter.Cache[uint32, string]
 }
 
-func (r WordCachingRepository) LoadWord(hash uint32) (word map[uint32]string) {
+func (r WordCachingRepository) LoadWord(hash uint32) (word map[string]uint32) {
 	value, _ := r.cache.Get(hash)
 	if value == "" {
 		return nil
 	}
-	word = make(map[uint32]string)
+	word = make(map[string]uint32)
 	length := binary.LittleEndian.Uint32([]byte(value[0:4]))
 	end := 4 + length*16
 	for i := uint32(0); i < length; i++ {
@@ -36,18 +36,26 @@ func (r WordCachingRepository) LoadWord(hash uint32) (word map[uint32]string) {
 		end += l
 		dst := value[end : end+m]
 		end += m
-		word[0] = src
-		word[uint32(k)] = dst
+		word[src] = 0
+		word[dst] = uint32(k)
 	}
 	return word
 }
 
-func (r WordCachingRepository) StoreWord(value map[uint32]string, hash uint32) {
+func (r WordCachingRepository) StoreWord(value map[string]uint32, hash uint32) {
 
 	var buf, data []byte
 	var num4 [4]byte
 	var num8 [8]byte
-	_, has0 := value[0]
+	var has0 bool
+	var str0 string
+	for k, v := range value {
+		if v == 0 {
+			has0 = true
+			str0 = k
+			break
+		}
+	}
 	if has0 {
 		binary.LittleEndian.PutUint32(num4[:], uint32(len(value)-1))
 	} else {
@@ -55,17 +63,17 @@ func (r WordCachingRepository) StoreWord(value map[uint32]string, hash uint32) {
 	}
 	buf = append(buf, num4[:]...)
 
-	for k, v := range value {
+	for v, k := range value {
 		if k == 0 {
 			continue
 		}
 		binary.LittleEndian.PutUint64(num8[:], uint64(k))
 		buf = append(buf, num8[:]...)
-		binary.LittleEndian.PutUint32(num4[:], uint32(len(value[0])))
+		binary.LittleEndian.PutUint32(num4[:], uint32(len(str0)))
 		buf = append(buf, num4[:]...)
 		binary.LittleEndian.PutUint32(num4[:], uint32(len(v)))
 		buf = append(buf, num4[:]...)
-		data = append(data, []byte(value[0])...)
+		data = append(data, []byte(str0)...)
 		data = append(data, []byte(v)...)
 	}
 
