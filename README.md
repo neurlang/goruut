@@ -1,5 +1,7 @@
 # Goruut
 
+![:goruut](https://count.getloli.com/@:goruut?theme=miku)
+
 A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International_Phonetic_Alphabet) phonemizer/dephonemizer/transphonemizer for several human languages.
 
 ## Try it online
