@@ -235,7 +235,7 @@ A: Four-stage pipeline:
 ### Usage
 
 **Q: How to use as a library?**  
-A: Import `github.com/neurlang/goruut/lib` in Go code. The library exposes phonemization/dephonemization functions with language-specific contexts.
+A: Import `github.com/neurlang/goruut/lib` in Go code. The library exposes phonemization/dephonemization functions with language-specific contexts. In python, use `pygoruut`.
 
 **Q: HTTP service setup?**  
 A: Run the binary with a config file:
