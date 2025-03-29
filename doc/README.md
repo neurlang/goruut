@@ -280,6 +280,11 @@ A: All submissions are tested via:
 - Alignment quality checks
 - Benchmark comparisons against existing models
 
+### Customization
+
+**Q: Can I adjust phoneme representations for specific use cases?**  
+A: IPA Flavors mechanism exists (via configuraton) to translate to a custom IPA-like phone set. The default config file contains an example how to output espeak phones using the system.
+
 ### Limitations
 
 **Q: Can it process mixed-language text?**  
