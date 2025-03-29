@@ -51,7 +51,7 @@ timeout 200 ./train_language.sh 	welsh/north	-maxpremodulo	163965	-resume
 timeout 200 ./train_language.sh 	welsh/south	-maxpremodulo	272725	-resume
 
 
-exit
+timeout 200 ./train_language.sh cantonese --maxpremodulo 2004410 -padspace
 
 timeout 200 ./train_language.sh	afrikaans	-maxpremodulo	1956210	 -resume
 timeout 200 ./train_language.sh	amharic	-maxpremodulo	5235	 -resume
