@@ -25,7 +25,6 @@ func loop(filename string, top, group int, do func(string)) {
 	}
 	defer file.Close()
 
-
 	var rdr = io.ReadCloser(file)
 
 	if strings.HasSuffix(filename, ".zst") || strings.HasSuffix(filename, ".zstd") {
@@ -60,7 +59,7 @@ func loop(filename string, top, group int, do func(string)) {
 		// Process each column
 		column := slice[n]
 		// Example: Print the column
-		
+
 		if strings.Contains(filename, ".json") {
 			var buf map[string]string
 			err := json.Unmarshal([]byte(column), &buf)
@@ -81,12 +80,12 @@ func main() {
 	nostress := flag.Bool("nostress", false, "no stress")
 	batchsize := flag.Int("batchsize", 100, "batch size")
 	flag.Parse()
-	
+
 	if corpus == nil || *corpus == "" {
 		println("ERROR: Corpus flag is mandatory")
 		return
 	}
-	
+
 	var coolname string
 	if langname != nil {
 		coolname = dicts.LangName(*langname)
@@ -160,4 +159,3 @@ func main() {
 		println("[success rate CER]", success_cer, "%", errsum.Load(), "for", *langname)
 	}
 }
-

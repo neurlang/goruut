@@ -22,14 +22,14 @@ func (r *AutoTaggerRepository) IsCrossDictWord(isReverse bool, lang, word string
 func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string) []string {
 	if !isReverse && strings.HasPrefix(lang, "English") {
 		/*
-		if word1 == "the" {
-			if word2 == "ðə" || word2 == "ðˌɛ" {
-				return []string{"the"}
+			if word1 == "the" {
+				if word2 == "ðə" || word2 == "ðˌɛ" {
+					return []string{"the"}
+				}
+				if word2 == "ðɪ" || word2 == "ðˈi" || word2 == "ði" {
+					return []string{"thi"}
+				}
 			}
-			if word2 == "ðɪ" || word2 == "ðˈi" || word2 == "ði" {
-				return []string{"thi"}
-			}
-		}
 		*/
 		for _, c := range []rune(word1) {
 			if _, ok := (*r.english_consonants)[c]; ok {
@@ -43,7 +43,6 @@ func (r *AutoTaggerRepository) TagWord(isReverse bool, lang, word1, word2 string
 	return nil
 }
 
-
 func NewAutoTaggerRepository(di *DependencyInjection) *AutoTaggerRepository {
 	var english_consonants = make(map[rune]struct{})
 	var english_vowels = make(map[rune]struct{})
@@ -56,7 +55,7 @@ func NewAutoTaggerRepository(di *DependencyInjection) *AutoTaggerRepository {
 
 	return &AutoTaggerRepository{
 		english_consonants: &english_consonants,
-		english_vowels: &english_vowels,
+		english_vowels:     &english_vowels,
 	}
 }
 

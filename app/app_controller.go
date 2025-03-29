@@ -151,7 +151,6 @@ func (app *App) NewAppControllers(di *DependencyInjection) *Controllers {
 		r.PathPrefix("/favicon.ico").HandlerFunc(handler(proxy))
 	}
 
-
 	// Frontend handlers
 	r.PathPrefix("/static/" + defaultFrontendVersion).Handler(http.StripPrefix("/static/", v))
 	r.PathPrefix("/static/").Handler(http.StripPrefix("/static/", v))

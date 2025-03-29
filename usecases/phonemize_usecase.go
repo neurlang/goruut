@@ -1,14 +1,14 @@
 package usecases
 
 import (
+	"encoding/json"
+	"github.com/neurlang/classifier/parallel"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/models/requests"
 	"github.com/neurlang/goruut/models/responses"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/goruut/repo/services"
-	"github.com/neurlang/classifier/parallel"
 	"strings"
-	"encoding/json"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
