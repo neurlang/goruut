@@ -29,3 +29,4 @@ cmd/analysis2/analysis2
 cmd/backtest/backtest
 cmd/dicttomap/dicttomap
 cmd/goruut/goruut
+cmd/phondephontest/phondephontest
