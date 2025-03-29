@@ -1,23 +1,27 @@
 package main
 
-import "github.com/neurlang/levenshtein"
-import "github.com/neurlang/goruut/lib"
-import "github.com/neurlang/goruut/dicts"
-import "github.com/neurlang/goruut/models/requests"
-import di "github.com/martinarisk/di/dependency_injection"
-import "github.com/neurlang/goruut/repo/interfaces"
-import "os"
-import "fmt"
-import "github.com/neurlang/classifier/parallel"
-import "bufio"
-import "flag"
-import "strings"
-import "sync/atomic"
-import "math/rand"
-import "time"
-import "compress/zlib"
-import "io"
-import "encoding/json"
+import (
+	"github.com/neurlang/goruut/dicts"
+	"github.com/neurlang/goruut/lib"
+	"github.com/neurlang/goruut/models/requests"
+	"github.com/neurlang/levenshtein"
+
+	"bufio"
+	"compress/zlib"
+	"encoding/json"
+	"flag"
+	"fmt"
+	"io"
+	"math/rand"
+	"os"
+	"strings"
+	"sync/atomic"
+	"time"
+
+	di "github.com/martinarisk/di/dependency_injection"
+	"github.com/neurlang/classifier/parallel"
+	"github.com/neurlang/goruut/repo/interfaces"
+)
 
 func loop(filename string, top, group int, do func(string, string, string)) {
 	// Open the file
@@ -86,8 +90,8 @@ type DictGetter struct {
 
 func (d *DictGetter) GetDict(lang, filename string) ([]byte, error) {
 	if d.dumpwrong && (filename == "missing.all.zlib" ||
-				filename == "weights3.json.zlib" ||
-				filename == "weights3_reverse.json.zlib") {
+		filename == "weights3.json.zlib" ||
+		filename == "weights3_reverse.json.zlib") {
 		println("intentional error:")
 		return nil, fmt.Errorf("generating missing all zlib intentional error")
 	}
@@ -111,28 +115,28 @@ func (d *DictGetter) Write() {
 }
 
 func watchFile(filePath string) error {
-    initialStat, err := os.Stat(filePath)
-    if err != nil {
-    	println(err.Error())
-        return err
-    }
+	initialStat, err := os.Stat(filePath)
+	if err != nil {
+		println(err.Error())
+		return err
+	}
 
-    for {
-        stat, err := os.Stat(filePath)
-        if err != nil {
-    	    println(err.Error())
-            return err
-        }
+	for {
+		stat, err := os.Stat(filePath)
+		if err != nil {
+			println(err.Error())
+			return err
+		}
 
-        if stat.Size() != initialStat.Size() || stat.ModTime() != initialStat.ModTime() {
-        	println("changed")
-            break
-        }
+		if stat.Size() != initialStat.Size() || stat.ModTime() != initialStat.ModTime() {
+			println("changed")
+			break
+		}
 
-        time.Sleep(100 * time.Millisecond)
-    }
+		time.Sleep(100 * time.Millisecond)
+	}
 
-    return nil
+	return nil
 }
 
 type dummy struct {
@@ -144,7 +148,6 @@ func (dummy) GetIpaFlavors() map[string]map[string]string {
 func (dummy) GetPolicyMaxWords() int {
 	return 99999999999
 }
-
 
 func recompress(langname string) {
 	// Open the input file
@@ -205,7 +208,7 @@ again:
 	if langname != nil {
 		coolname = dicts.LangName(*langname)
 		dictgetter.coolname = coolname
-		srcfile = "../../dicts/" + *langname + "/dirty.tsv"
+		srcfile = "../../dicts/" + *langname + "/lexicon.tsv"
 		if testing != nil && *testing || dumpwrong != nil && *dumpwrong {
 			if isreverse != nil && *isreverse {
 				modelfile = "../../dicts/" + *langname + "/weights" + fmt.Sprint(*weightsfile) + "_reverse.json.zlib"
@@ -224,9 +227,9 @@ again:
 	if dumpwrong != nil && *dumpwrong {
 		var err error
 		if isreverse != nil && *isreverse {
-			err = writer.Open("../../dicts/" + *langname + "/learn_reverse.tsv", nil)
+			err = writer.Open("../../dicts/"+*langname+"/learn_reverse.tsv", nil)
 		} else {
-			err = writer.Open("../../dicts/" + *langname + "/learn.tsv", nil)
+			err = writer.Open("../../dicts/"+*langname+"/learn.tsv", nil)
 		}
 		if err != nil {
 			println(err.Error())
@@ -321,7 +324,7 @@ again:
 				}
 			}
 		}
-		
+
 		if !equal || !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
 			dump(word1, word2, word3)
 		}
@@ -347,7 +350,7 @@ again:
 		}
 		watchFile(dictgetter.modelfile)
 		time.Sleep(time.Second)
-		
+
 		dictgetter.modelfile = modelfile
 		goto again
 	}
