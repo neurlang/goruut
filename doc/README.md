@@ -283,7 +283,7 @@ A: All submissions are tested via:
 ### Limitations
 
 **Q: Can it process mixed-language text?**  
-A: Not currently - input must be language-specific. Automatic language detection is a planned feature.
+A: Yes, but not automatically - input must be specific to the user-selected languages in language priority order. Automatic language detection is a planned feature.
 
 **Q: How does it handle rare/unseen words?**  
 A: Uses learned phonetic patterns, but accuracy declines for:
