@@ -113,7 +113,7 @@ For each language, Goruut needs:
    `go build && ./coverage.sh french` (in `cmd/backtest` folder)
    
 4. **Homograph Transformer Training**  
-   `./train_language.sh french --maxpremodulo NUMBER` (in `cmd/analysis2` folder, NUMBER is set to 5 times the cleaning complexity)
+   `./train_language.sh french --maxpremodulo [NUMBER]` (in `cmd/analysis2` folder, NUMBER is set to 5 times the cleaning complexity)
 
 5. **Homograph Transformer Training (optional)**  
    `./train_homograph.sh french` (in `cmd/backtest` folder)
@@ -175,7 +175,7 @@ For each language, Goruut needs:
 
 1. Fork repository
 2. Train improved models using:  
-`./cmd/analysis2/train_language.sh [LANGUAGE]`
+`./cmd/analysis2/train_language.sh [LANGUAGE] --maxpremodulo [NUMBER]`
 3. Include validation results
 4. Submit PR with new weight files to [neurlang/goruut](https://github.com/neurlang/goruut)
 
