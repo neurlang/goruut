@@ -2,7 +2,7 @@
 
 ## Dictionary stage
 
-1. copy latest dirty.tsv and multi.tsv into your language's folder
+1. copy latest lexicon.tsv and multi.tsv into your language's folder
 2. create dummy (empty) weights5_reverse.json.zlib and weights5.json.zlib:
   - `touch ../../dicts/english/weights5_reverse.json.zlib `
   - `touch ../../dicts/english/weights5.json.zlib`

@@ -30,7 +30,7 @@ The pull request must contain (for the specific language):
 - LICENSE.md (**according the choice of the author**)
 
 The pull request can't contain (for the specific language):
-- dirty.tsv (**will leak the lexicon**)
+- lexicon.tsv (**will leak the lexicon**)
 - clean.tsv (**will partially leak the lexicon**)
 - clean_reverse.tsv (**will partially leak the lexicon**)
 - missing.all.zlib (**will partially leak the lexicon**)
@@ -45,6 +45,6 @@ but is distributed under a permissive license, such as MIT / BSD / Apache 2.
 A pull request must be opened to the neurlang/datasets repository.
 
 The pull request must contain (for the specific language):
-- dirty.tsv
+- lexicon.tsv
 - LICENSE.md (or an equivalent licensing message in the main README.md)
 

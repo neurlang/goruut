@@ -12,6 +12,6 @@ done
 analysis_script="./analysis2"
 
 original_json="../../dicts/$1/language$reverse_flag.json"
-srcfile="../../dicts/$1/dirty.tsv"
+srcfile="../../dicts/$1/lexicon.tsv"
 $analysis_script --lang "$original_json" --srcfile "$srcfile" -deleting -threeway -save  $2 $3 $4 $5 $6 $7 $8 $9
 
