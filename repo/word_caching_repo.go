@@ -4,8 +4,8 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"github.com/maypok86/otter"
-	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/classifier/hash"
+	"github.com/neurlang/goruut/helpers/log"
 	"time"
 )
 import . "github.com/martinarisk/di/dependency_injection"

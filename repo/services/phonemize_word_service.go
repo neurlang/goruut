@@ -84,10 +84,11 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string,
 	return
 
 }
+
 /*
-func (p *PhonemizeWordService) CleanWord(isReverse bool, lang, word string) string {
-	return (*p.ai).CleanWord(isReverse, lang, word)
-}
+	func (p *PhonemizeWordService) CleanWord(isReverse bool, lang, word string) string {
+		return (*p.ai).CleanWord(isReverse, lang, word)
+	}
 */
 func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
 	repoiface := (repo.IDictPhonemizerRepository)(Ptr(MustNeed(di, repo.NewDictPhonemizerRepository)))

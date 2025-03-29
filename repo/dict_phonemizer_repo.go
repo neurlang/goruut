@@ -2,16 +2,16 @@ package repo
 
 import (
 	"bytes"
+	"compress/zlib"
 	"encoding/csv"
+	"encoding/json"
+	"fmt"
+	"github.com/neurlang/classifier/hash"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
-	"github.com/neurlang/classifier/hash"
+	"sort"
 	"strings"
 	"sync"
-	"compress/zlib"
-	"encoding/json"
-	"sort"
-	"fmt"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 
@@ -24,7 +24,7 @@ type DictPhonemizerRepository struct {
 	lang_words *map[string]map[string]map[string]uint32
 	lang_tags  *map[string]map[uint32]string
 	words_tags *map[string]map[[2]string]uint32
-	mut    sync.Mutex
+	mut        sync.Mutex
 }
 
 func addTags(bag map[uint32]string, tags ...string) map[uint32]string {
@@ -140,7 +140,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 				continue
 			}
 			if src == "dove" {
-				log.Now().Debugf("Loading dove: %s", dst) 
+				log.Now().Debugf("Loading dove: %s", dst)
 			}
 			var tagkey, tagjson = serializeTags(addTags(parseTags(tagstr), "dict"))
 			if (*r.lang_words)[lang+reverse][src] == nil {
@@ -154,7 +154,7 @@ func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 				tagkey, tagjson = serializeTags(addTags(parseTags(tagstr), existing...))
 			}
 			if src == "dove" {
-				log.Now().Debugf("Storing dove: %s as %d", dst, tagkey) 
+				log.Now().Debugf("Storing dove: %s as %d", dst, tagkey)
 			}
 			(*r.lang_words)[lang+reverse][src][dst] = tagkey
 			if (*r.lang_tags)[lang+reverse] == nil {

@@ -39,19 +39,19 @@ func lambdaLoss(lambda *int, wordLoss, decisionComplexityLoss uint64) uint64 {
 	if lambda == nil || *lambda < -64 || *lambda > 64 {
 		return uint64(wordLoss)
 	}
-	
+
 	if *lambda < 0 {
 		l := uint64(-*lambda)
-		return (uint64(wordLoss)) + (uint64(decisionComplexityLoss)<<l)
+		return (uint64(wordLoss)) + (uint64(decisionComplexityLoss) << l)
 	} else {
 		l := uint64(*lambda)
-		return (uint64(wordLoss)<<l) + (uint64(decisionComplexityLoss))
+		return (uint64(wordLoss) << l) + (uint64(decisionComplexityLoss))
 	}
 }
 
 func duplicateRunesIf(input string, when bool) string {
 	if !when {
-		return input	
+		return input
 	}
 	var result strings.Builder
 
@@ -123,7 +123,7 @@ func main() {
 	}
 
 	lang_eval := lang.ToEval()
-	
+
 	if srcsurround != nil && *srcsurround {
 		lang_eval = lang_eval.With("[", "").With("]", "")
 	}
@@ -238,22 +238,20 @@ again:
 		word1 = duplicateRunesIf(word1, duplex != nil && *duplex)
 		word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
 
-
-
 		// evaluate key deletion languages
 		for i, lang_single := range delete_langs {
 			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 			if aligned != nil {
-					if padspace != nil && *padspace {
-						totalRowLossTry := totalRowLoss
-						for _, v := range aligned[0] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
-						}
-						for _, v := range aligned[1] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
-						}
-						delete_loss[i].Add(totalRowLossTry)
+				if padspace != nil && *padspace {
+					totalRowLossTry := totalRowLoss
+					for _, v := range aligned[0] {
+						totalRowLossTry -= uint64(strings.Count(v, "_"))
 					}
+					for _, v := range aligned[1] {
+						totalRowLossTry -= uint64(strings.Count(v, "_"))
+					}
+					delete_loss[i].Add(totalRowLossTry)
+				}
 				delete_complexity_loss[i].Add(cplxloss)
 			} else {
 				delete_loss[i].Add(totalRowLoss)
@@ -263,16 +261,16 @@ again:
 		for i, lang_single := range remove_langs {
 			aligned, cplxloss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 			if aligned != nil {
-					if padspace != nil && *padspace {
-						totalRowLossTry := totalRowLoss
-						for _, v := range aligned[0] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
-						}
-						for _, v := range aligned[1] {
-							totalRowLossTry -= uint64(strings.Count(v, "_"))
-						}
-						remove_loss[i].Add(totalRowLossTry)
+				if padspace != nil && *padspace {
+					totalRowLossTry := totalRowLoss
+					for _, v := range aligned[0] {
+						totalRowLossTry -= uint64(strings.Count(v, "_"))
 					}
+					for _, v := range aligned[1] {
+						totalRowLossTry -= uint64(strings.Count(v, "_"))
+					}
+					remove_loss[i].Add(totalRowLossTry)
+				}
 				remove_complexity_loss[i].Add(cplxloss)
 			} else {
 				remove_loss[i].Add(totalRowLoss)
@@ -285,7 +283,7 @@ again:
 			complexityLoss.Add(cplxloss)
 
 			if padspace != nil && *padspace {
-			
+
 				for _, v := range aligned[0] {
 					totalRowLoss -= uint64(strings.Count(v, "_"))
 				}
@@ -307,8 +305,8 @@ again:
 						j = i
 						tsvWrite(toprint)
 					} else if i+1 < len((*aligned)[k]) && i+1 < len((*aligned)[1-k]) && strings.HasSuffix(val, "_") {
-						toprint := [2][]string{(*aligned)[0][j:i+1], (*aligned)[1][j:i+1]}
-						j = i+1
+						toprint := [2][]string{(*aligned)[0][j : i+1], (*aligned)[1][j : i+1]}
+						j = i + 1
 
 						tsvWrite(toprint)
 					}
@@ -338,7 +336,7 @@ again:
 				return
 			}
 		}
-		
+
 		// count error
 		rowLoss.Add(totalRowLoss)
 		//analyze it
@@ -346,252 +344,247 @@ again:
 
 		for q := 0; q < 3; q++ {
 
-		if q == 1 && len(aligned2[1]) > len(aligned2[0]) {
-			aligned2[1] = lang_eval.Merge(word1, aligned2[1], len(aligned2[0]), false)
-		} else if q == 1 {
-			break
-		}
-		if q == 2 && len(aligned2[0]) > len(aligned2[1]) {
-			aligned2[0] = lang_eval.Merge(word1, aligned2[0], len(aligned2[1]), true)
-		} else if q == 2 {
-			break
-		}
+			if q == 1 && len(aligned2[1]) > len(aligned2[0]) {
+				aligned2[1] = lang_eval.Merge(word1, aligned2[1], len(aligned2[0]), false)
+			} else if q == 1 {
+				break
+			}
+			if q == 2 && len(aligned2[0]) > len(aligned2[1]) {
+				aligned2[0] = lang_eval.Merge(word1, aligned2[0], len(aligned2[1]), true)
+			} else if q == 2 {
+				break
+			}
 
-		//fmt.Println(aligned2[0], aligned2[1])
+			//fmt.Println(aligned2[0], aligned2[1])
 
-		var mat = levenshtein.MatrixSlices[uint64, string](aligned2[0], aligned2[1],
-			func(i uint) *uint64 {
-				if len(aligned2[1]) > int(i) {
-					if aligned2[1][i] == "" {
-						return nil
-					}
-				}
-				if len(aligned2[0]) > int(i) {
-					if ok := lang_eval.IsDrop(aligned2[0][i]); ok {
-						return nil
-					}
-				}
-				//fmt.Println(*x, *y)
-				var n uint64
-				n = 1
-				return &n
-			}, nil, func(x *string, y *string) *uint64 {
-				if ok := lang_eval.IsEdge(*x,*y); ok {
-					return nil
-				}
-				if *y == "" {
-					if ok := lang_eval.IsDrop(*x); ok {
-						return nil
-					}
-				}
-				//fmt.Println(*x, *y)
-				var n uint64
-				n = 1
-				return &n
-			}, nil)
-			
-			
-		if matrices != nil && *matrices {
-			var d = *levenshtein.Distance(mat)
-
-			w1p := aligned2[0]
-			w2p := aligned2[1]
-			length := len(aligned2[1])+1
-			{
-				mutex.Lock()
-				if false {
-					for _, rs := range w2p {
-						for _, r := range rs {
-							fmt.Fprintf(os.Stderr, "\\u%04X", r)
+			var mat = levenshtein.MatrixSlices[uint64, string](aligned2[0], aligned2[1],
+				func(i uint) *uint64 {
+					if len(aligned2[1]) > int(i) {
+						if aligned2[1][i] == "" {
+							return nil
 						}
-						fmt.Fprint(os.Stderr, " ")
 					}
-				} else {
-					for _, rs := range w2p {
-						fmt.Fprintf(os.Stderr, "%s ", rs)
+					if len(aligned2[0]) > int(i) {
+						if ok := lang_eval.IsDrop(aligned2[0][i]); ok {
+							return nil
+						}
 					}
+					//fmt.Println(*x, *y)
+					var n uint64
+					n = 1
+					return &n
+				}, nil, func(x *string, y *string) *uint64 {
+					if ok := lang_eval.IsEdge(*x, *y); ok {
+						return nil
+					}
+					if *y == "" {
+						if ok := lang_eval.IsDrop(*x); ok {
+							return nil
+						}
+					}
+					//fmt.Println(*x, *y)
+					var n uint64
+					n = 1
+					return &n
+				}, nil)
+
+			if matrices != nil && *matrices {
+				var d = *levenshtein.Distance(mat)
+
+				w1p := aligned2[0]
+				w2p := aligned2[1]
+				length := len(aligned2[1]) + 1
+				{
+					mutex.Lock()
+					if false {
+						for _, rs := range w2p {
+							for _, r := range rs {
+								fmt.Fprintf(os.Stderr, "\\u%04X", r)
+							}
+							fmt.Fprint(os.Stderr, " ")
+						}
+					} else {
+						for _, rs := range w2p {
+							fmt.Fprintf(os.Stderr, "%s ", rs)
+						}
+					}
+					fmt.Fprintln(os.Stderr)
+					for i := 0; i+length < len(mat); i += length {
+						fmt.Fprintln(os.Stderr, w1p[i/length], mat[i:i+length])
+					}
+					fmt.Fprintln(os.Stderr, d)
+					mutex.Unlock()
 				}
-				fmt.Fprintln(os.Stderr)
-				for i := 0; i+length < len(mat); i += length {
-					fmt.Fprintln(os.Stderr, w1p[i/length], mat[i:i+length])
+			}
+
+			var length = len(aligned2[1]) + 1
+			w1p := append(aligned2[0], "")
+			w2p := append(aligned2[1], "")
+
+			if threeway != nil && *threeway {
+				var bin_length = len(w1p)
+				if len(w2p) > bin_length {
+					bin_length = len(w2p)
 				}
-				fmt.Fprintln(os.Stderr, d)
-				mutex.Unlock()
-			}
-		}
 
+				var bins = make([][]string, bin_length, bin_length)
+				var miny = make(map[uint]uint)
+				var maxy = make(map[uint]uint)
+				var dels = make([]bool, bin_length, bin_length)
+				var swaps = make([]*string, bin_length, bin_length)
+				levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
 
-
-		var length = len(aligned2[1]) + 1
-		w1p := append(aligned2[0], "")
-		w2p := append(aligned2[1], "")
-
-		if threeway != nil && *threeway {
-			var bin_length = len(w1p)
-			if len(w2p) > bin_length {
-				bin_length = len(w2p)
-			}
-
-			var bins = make([][]string, bin_length, bin_length)
-			var miny = make(map[uint]uint)
-			var maxy = make(map[uint]uint)
-			var dels = make([]bool, bin_length, bin_length)
-			var swaps = make([]*string, bin_length, bin_length)
-			levenshtein.Diff(mat, uint(length), func(is_skip, is_insert, is_delete, is_replace bool, x, y uint) bool {
-
-				miny[x] = y
-				if _, ok := maxy[x]; ok {
-					if maxy[x] < y {
+					miny[x] = y
+					if _, ok := maxy[x]; ok {
+						if maxy[x] < y {
+							maxy[x] = y
+						}
+					} else {
 						maxy[x] = y
 					}
-				} else {
-					maxy[x] = y
-				}
 
-				if is_skip {
+					if is_skip {
+
+						return true
+					}
+
+					if is_replace {
+						swaps[x] = &w2p[y]
+					}
+					if is_insert {
+						bins[x] = append(bins[x], w2p[y])
+					}
+					if is_delete {
+
+						dels[x] = true
+					}
 
 					return true
-				}
+				})
+				var callback func(threeway_from, threeway_to, next_to string)
+				callback = func(threeway_from, threeway_to, next_to string) {
 
-				if is_replace {
-					swaps[x] = &w2p[y]
-				}
-				if is_insert {
-					bins[x] = append(bins[x], w2p[y])
-				}
-				if is_delete {
+					if strings.HasPrefix(threeway_from, "[") {
+						callback(strings.TrimLeft(threeway_from, "["), threeway_to, next_to)
+					}
+					if strings.HasPrefix(threeway_from, "]") {
+						callback(strings.TrimRight(threeway_from, "]"), threeway_to, next_to)
+					}
 
-					dels[x] = true
-				}
-
-				return true
-			})
-			var callback func(threeway_from, threeway_to, next_to string)
-			callback = func(threeway_from, threeway_to, next_to string) {
-
-				if strings.HasPrefix(threeway_from, "[") {
-					callback(strings.TrimLeft(threeway_from, "["), threeway_to, next_to)
-				}
-				if strings.HasPrefix(threeway_from, "]") {
-					callback(strings.TrimRight(threeway_from, "]"), threeway_to, next_to)
-				}
-
-				if ok := lang_eval.IsDstMultiPrefix(threeway_to); ok {
-					if next_to != "" {
-						if ok := lang_eval.IsDstMultiPrefix(next_to); !ok {
-							//println(threeway_from, threeway_to, next_to)
-							threeway_to += next_to
+					if ok := lang_eval.IsDstMultiPrefix(threeway_to); ok {
+						if next_to != "" {
+							if ok := lang_eval.IsDstMultiPrefix(next_to); !ok {
+								//println(threeway_from, threeway_to, next_to)
+								threeway_to += next_to
+							}
 						}
 					}
-				}
 
-				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
-					return
-				}
-				if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_from, "_"), "_") {
-					return
-				}
-				if padspace != nil && *padspace {
-					threeway_from = strings.Trim(threeway_from, "_")
-				}
+					if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_to, "_"), "_") {
+						return
+					}
+					if padspace != nil && *padspace && strings.Contains(strings.Trim(threeway_from, "_"), "_") {
+						return
+					}
+					if padspace != nil && *padspace {
+						threeway_from = strings.Trim(threeway_from, "_")
+					}
 
-				if ok := lang_eval.IsDstMultiSuffix(threeway_to); ok || lang_eval.StringStartsWithCombiner(threeway_to) {
-					return
-				}
-				if ok := lang_eval.IsEdge(threeway_from, threeway_to); ok {
-					return
-				}
-
-
-
-				mut.Lock()
-				//println(threeway_from, threeway_to)
-				/*
-				for _, w := range lang.Map[threeway_from] {
-					if w == threeway_to {
-						mut.Unlock()
+					if ok := lang_eval.IsDstMultiSuffix(threeway_to); ok || lang_eval.StringStartsWithCombiner(threeway_to) {
+						return
+					}
+					if ok := lang_eval.IsEdge(threeway_from, threeway_to); ok {
 						return
 					}
 
-					if strings.Trim(threeway_to, "_") != strings.Trim(w, "_") &&
-						strings.HasSuffix(strings.Trim(threeway_to, "_"), strings.Trim(w, "_")) {
-						mut.Unlock()
-						return
+					mut.Lock()
+					//println(threeway_from, threeway_to)
+					/*
+						for _, w := range lang.Map[threeway_from] {
+							if w == threeway_to {
+								mut.Unlock()
+								return
+							}
+
+							if strings.Trim(threeway_to, "_") != strings.Trim(w, "_") &&
+								strings.HasSuffix(strings.Trim(threeway_to, "_"), strings.Trim(w, "_")) {
+								mut.Unlock()
+								return
+							}
+						}
+					*/
+					threeways[[2]string{threeway_from, threeway_to}]++
+					mut.Unlock()
+				}
+				var resultx, resulty string
+				for x := range w1p {
+					var bin string
+					for xx := range bins[x] {
+						bin += (string(bins[x][xx]))
+					}
+
+					lookahead := bin
+					if len(bin) == 0 {
+						minn := miny[uint(x)]
+						maxx := maxy[uint(x)]
+						if minn > 0 {
+							minn--
+						}
+
+						lookahead = (string(nosep(w2p[minn:maxx])))
+					}
+					if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
+						if resultx != "" && resulty != "" {
+							//println(word1, word2, resultx, resulty, lookahead)
+							callback(resultx, resulty, lookahead)
+						} else if resultx != "" && lookahead != "" {
+							//println(word1, word2, resultx, resulty, lookahead)
+							callback(resultx, resulty+lookahead, "")
+						}
+					}
+
+					if padspace != nil && *padspace && strings.Contains(strings.Trim(resultx, "_"), "_") {
+						resultx, resulty = "", ""
+					}
+					if padspace != nil && *padspace && strings.Contains(strings.Trim(resulty, "_"), "_") {
+						resultx, resulty = "", ""
+					}
+
+					resulty += (bin)
+					//longresulty += (bin)
+					if swaps[x] != nil {
+						resultx += (string(w1p[x]))
+						resulty += (string(*swaps[x]))
+					} else if dels[x] {
+						resultx += (string(w1p[x]))
+					}
+
+					if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
+						if resultx != "" && resulty != "" {
+							callback(resultx, resulty, lookahead)
+						} else if resultx != "" && lookahead != "" {
+							//println(word1, word2, resultx, resulty, lookahead)
+							callback(resultx, resulty+lookahead, "")
+						}
+						resultx, resulty = "", ""
 					}
 				}
-				*/
-				threeways[[2]string{threeway_from,threeway_to}]++
-				mut.Unlock()
-			}
-			var resultx, resulty string
-			for x := range w1p {
-				var bin string
-				for xx := range bins[x] {
-					bin += (string(bins[x][xx]))
-				}
+				for x := len(w1p); x < bin_length; x++ {
 
-				lookahead := bin
-				if len(bin) == 0 {
-					minn := miny[uint(x)]
-					maxx := maxy[uint(x)]
-					if minn > 0 {
-						minn--
+					for xx := range bins[x] {
+						resulty += (string(bins[x][xx]))
 					}
-
-					lookahead = (string(nosep(w2p[minn:maxx])))
-				}
-				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
 					if resultx != "" && resulty != "" {
-						//println(word1, word2, resultx, resulty, lookahead)
-						callback(resultx, resulty, lookahead)
-					} else if resultx != "" && lookahead != "" {
-						//println(word1, word2, resultx, resulty, lookahead)
-						callback(resultx, resulty+lookahead, "")
+						callback(resultx, resulty, "")
 					}
 				}
-
-				if padspace != nil && *padspace && strings.Contains(strings.Trim(resultx, "_"), "_") {
-					resultx, resulty = "", ""
-				}
-				if padspace != nil && *padspace && strings.Contains(strings.Trim(resulty, "_"), "_") {
-					resultx, resulty = "", ""
-				}
-			
-				resulty += (bin)
-				//longresulty += (bin)
-				if swaps[x] != nil {
-					resultx += (string(w1p[x]))
-					resulty += (string(*swaps[x]))
-				} else if dels[x] {
-					resultx += (string(w1p[x]))
-				}
-
-				if len(bins[x]) == 0 && swaps[x] == nil && !dels[x] {
-					if resultx != "" && resulty != "" {
-						callback(resultx, resulty, lookahead)
-					} else if resultx != "" && lookahead != "" {
-						//println(word1, word2, resultx, resulty, lookahead)
-						callback(resultx, resulty+lookahead, "")
-					}
-					resultx, resulty = "", ""
-				}
 			}
-			for x := len(w1p); x < bin_length; x++ {
-
-				for xx := range bins[x] {
-					resulty += (string(bins[x][xx]))
-				}
-				if resultx != "" && resulty != "" {
-					callback(resultx, resulty, "")
-				}
-			}
-		}
 		}
 	})
 	println(slow1, slow2)
 	if threeway == nil || false == *threeway {
 
-		fmt.Println("row loss: ",rowLoss.Load(),", complexity loss: ",complexityLoss.Load())
+		fmt.Println("row loss: ", rowLoss.Load(), ", complexity loss: ", complexityLoss.Load())
 
 		return
 	}
@@ -629,7 +622,6 @@ again:
 
 	{
 
-
 		var threewayz [][3]string
 		for k, cnt := range threeways {
 			threewayz = append(threewayz, [3]string{k[0], k[1], fmt.Sprint(cnt)})
@@ -645,7 +637,7 @@ again:
 			}
 			return len(threewayz[i][2]) > len(threewayz[j][2])
 		})
-		
+
 		if len(threewayz) > now_hyper {
 			threewayz = threewayz[:now_hyper]
 		}
@@ -703,7 +695,7 @@ again:
 			if reverse != nil && *reverse {
 				word1, word2 = word2, word1
 			}
-			
+
 			word1 = duplicateRunesIf(word1, duplex != nil && *duplex)
 			word1 = surroundIf(word1, srcsurround != nil && *srcsurround)
 
@@ -712,11 +704,9 @@ again:
 					continue
 				}
 
-
-
 				aligned, cplxLoss := lang_single.Align(word1, word2, padspace != nil && *padspace, false)
 				if aligned != nil {
-				
+
 					if padspace != nil && *padspace {
 						totalRowLossTry := totalRowLoss
 						for _, v := range aligned[0] {
@@ -738,7 +728,6 @@ again:
 		if forcedecision != nil && 0 != *forcedecision && rowLoss.Load() > uint64(*forcedecision) {
 			minLoss = 999999999999999999
 		}
-
 
 		var minI = -1
 		for i := range threway_langs {

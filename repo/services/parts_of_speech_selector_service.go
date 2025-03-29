@@ -1,10 +1,10 @@
 package services
 
 import (
+	"github.com/neurlang/classifier/hash"
 	"github.com/neurlang/goruut/helpers"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo"
-	"github.com/neurlang/classifier/hash"
 	"strings"
 )
 
@@ -15,8 +15,8 @@ type IPartsOfSpeechSelectorService interface {
 }
 
 type PartsOfSpeechSelectorService struct {
-	repo *repo.IDictPhonemizerRepository
-	repoa *repo.IAutoTaggerRepository
+	repo   *repo.IDictPhonemizerRepository
+	repoa  *repo.IAutoTaggerRepository
 	repoai *repo.IHashtronHomonymSelectorRepository
 }
 
@@ -49,7 +49,7 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 			}
 		}
 		var inputmap = make(map[string][2]uint32)
-		inputmap[orig] = [2]uint32{0,0}
+		inputmap[orig] = [2]uint32{0, 0}
 		for word, k := range words {
 			if k == 0 {
 				continue
@@ -66,13 +66,12 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 				inputmap[word] = [2]uint32{k, 0}
 			} else {
 				// set dict flag
-				inputmap[word] = [2]uint32{k^hash.StringHash(0, "dict"), 1}
+				inputmap[word] = [2]uint32{k ^ hash.StringHash(0, "dict"), 1}
 			}
 		}
 		log.Now().Debugf("PreSelect Word: %s Now: %v", orig, inputmap)
 		input = append(input, inputmap)
 	}
-
 
 	var preferred = (*p.repoai).Select(isReverse, lang, input)
 
@@ -133,7 +132,7 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 outer:
 	for i, mapping := range intermediate {
 		var next_tags = make(map[string]bool)
-		if i + 1 < len(intermediate) {
+		if i+1 < len(intermediate) {
 			var next_mapping = intermediate[i+1]
 			for _, tags := range next_mapping {
 				for _, tag := range tags {
@@ -149,8 +148,12 @@ outer:
 			if next_continue_english(lang, isReverse, my_tags, next_tags) {
 				continue
 			}
-			if !my_tags["preferred"] {continue;}
-			if !my_tags["dict"] {continue;}
+			if !my_tags["preferred"] {
+				continue
+			}
+			if !my_tags["dict"] {
+				continue
+			}
 			var orig = words[0]
 			var dest = words[1]
 			ret = append(ret, [3]string{orig, dest, string(log.Error1(helpers.SerializeJson(tags)))})
@@ -164,7 +167,9 @@ outer:
 			if next_continue_english(lang, isReverse, my_tags, next_tags) {
 				continue
 			}
-			if !my_tags["dict"] {continue;}
+			if !my_tags["dict"] {
+				continue
+			}
 			var orig = words[0]
 			var dest = words[1]
 			ret = append(ret, [3]string{orig, dest, string(log.Error1(helpers.SerializeJson(tags)))})
@@ -194,8 +199,8 @@ func NewPartsOfSpeechSelectorService(di *DependencyInjection) *PartsOfSpeechSele
 	arepoiface := (repo.IAutoTaggerRepository)(Ptr(MustNeed(di, repo.NewAutoTaggerRepository)))
 	airepoiface := (repo.IHashtronHomonymSelectorRepository)(Ptr(MustNeed(di, repo.NewHashtronHomonymSelectorRepository)))
 	return &PartsOfSpeechSelectorService{
-		repo: &repoiface,
-		repoa: &arepoiface,
+		repo:   &repoiface,
+		repoa:  &arepoiface,
 		repoai: &airepoiface,
 	}
 }

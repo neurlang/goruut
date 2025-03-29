@@ -1,14 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"bytes"
 )
 
 type SolutionFile struct {
-	Map map[string][]string            `json:"Map"`
+	Map            map[string][]string `json:"Map"`
 	SrcMulti       []string            `json:"SrcMulti"`
 	DstMulti       []string            `json:"DstMulti"`
 	SrcMultiSuffix []string            `json:"SrcMultiSuffix"`
@@ -18,16 +18,16 @@ type SolutionFile struct {
 
 	SrcDuplicate [][]string `json:"SrcDuplicate"`
 
-	IsDuplex    bool  `json:"IsDuplex"`
-	IsSrcSurround    bool  `json:"IsSrcSurround"`
+	IsDuplex      bool `json:"IsDuplex"`
+	IsSrcSurround bool `json:"IsSrcSurround"`
 
-	SplitBefore []string `json:"SplitBefore"`
-	SplitAfter  []string `json:"SplitAfter"`
+	SplitBefore []string    `json:"SplitBefore"`
+	SplitAfter  []string    `json:"SplitAfter"`
 	SplitAt     interface{} `json:"SplitAt"`
 
 	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
 
-	UseCombining  bool `json:"UseCombining"`
+	UseCombining bool `json:"UseCombining"`
 }
 
 func (s *SolutionFile) Init() {
@@ -98,12 +98,12 @@ func (s *SolutionFile) SaveToJson(file string) error {
 
 func (s *SolutionFile) ToEval() (e *SolutionEval) {
 	e = &SolutionEval{
-		Map: make(map[string]map[int]map[string]struct{}),
-		Drop: make(map[string]struct{}),
+		Map:            make(map[string]map[int]map[string]struct{}),
+		Drop:           make(map[string]struct{}),
 		DstMultiPrefix: make(map[string]struct{}),
 		DstMultiSuffix: make(map[string]struct{}),
-		DropLast: make(map[string]struct{}),
-		UseCombining: s.UseCombining,
+		DropLast:       make(map[string]struct{}),
+		UseCombining:   s.UseCombining,
 	}
 	for k, val := range s.Map {
 		if k == "" {

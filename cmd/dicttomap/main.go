@@ -152,7 +152,6 @@ func main() {
 			osword[1] += " " + spacesep(sword2)
 		}
 
-
 		if len(osword[0]) > 0 && len(osword[1]) > 0 {
 			//println(word1, word2, osword[0][1:], osword[1][1:])
 			osword[0] = osword[0][1:]

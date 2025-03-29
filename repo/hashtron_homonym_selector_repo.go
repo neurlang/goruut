@@ -2,16 +2,16 @@ package repo
 
 import (
 	"bytes"
-	"github.com/neurlang/classifier/net/feedforward"
+	"fmt"
 	"github.com/neurlang/classifier/layer/crossattention"
 	"github.com/neurlang/classifier/layer/sochastic"
 	"github.com/neurlang/classifier/layer/sum"
+	"github.com/neurlang/classifier/net/feedforward"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
-	"sync"
 	"sort"
-	"fmt"
 	"strconv"
+	"sync"
 )
 import "github.com/neurlang/classifier/datasets/phonemizer_multi"
 import "github.com/neurlang/classifier/hash"
@@ -23,11 +23,10 @@ type IHashtronHomonymSelectorRepository interface {
 
 type HashtronHomonymSelectorRepository struct {
 	getter *interfaces.DictGetter
-	
-	mut    sync.RWMutex
-	hlang  *hlanguages
-	nets   *map[string]*feedforward.FeedforwardNetwork
 
+	mut   sync.RWMutex
+	hlang *hlanguages
+	nets  *map[string]*feedforward.FeedforwardNetwork
 }
 
 type hlanguages map[string]*hlanguage
@@ -99,7 +98,7 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 			log.Error0(err)
 
 			return
-		} 
+		}
 	}
 }
 
@@ -112,11 +111,11 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 	r.mut.RLock()
 	net := (*r.nets)[lang+reverse]
 	r.mut.RUnlock()
-	
+
 	if net == nil {
 		return
 	}
-	
+
 	var ai_sentence = phonemizer_multi.Sample{
 		Sentence: []phonemizer_multi.Token{},
 	}
@@ -154,11 +153,10 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 		//sol = 0
 		ai_sentence.Sentence = append(ai_sentence.Sentence, phonemizer_multi.Token{
 			Homograph: hash.StringHash(0, origword),
-			Choices: choices,
-			Solution: sol,
+			Choices:   choices,
+			Solution:  sol,
 		})
 	}
-
 
 	for i := range ai_sentence.Sentence {
 		const fanout1 = 48
@@ -182,7 +180,7 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 			if pred == 1 && !accept {
 				accept = true
 				chosed = ai_sentence.Sentence[i].Choices[j][0]
-				ret = append(ret, [4]uint32{uint32(i),ai_sentence.Sentence[i].Choices[j][0],ai_sentence.Sentence[i].Choices[j][1],1})
+				ret = append(ret, [4]uint32{uint32(i), ai_sentence.Sentence[i].Choices[j][0], ai_sentence.Sentence[i].Choices[j][1], 1})
 			} else if j == 0 {
 				unchosed = ai_sentence.Sentence[i].Choices[j][0]
 			}
@@ -201,7 +199,7 @@ func NewHashtronHomonymSelectorRepository(di *DependencyInjection) *HashtronHomo
 	hlangs := make(hlanguages)
 	return &HashtronHomonymSelectorRepository{
 		getter: &getter,
-		hlang: &hlangs,
+		hlang:  &hlangs,
 	}
 }
 

@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
+	"regexp"
 	"strings"
 	"sync"
-	"regexp"
 )
 import . "github.com/martinarisk/di/dependency_injection"
 

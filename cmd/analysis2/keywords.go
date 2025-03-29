@@ -7,7 +7,7 @@ import "sync"
 // this finds (usually short) words which may exist in other words but other words don't exist in them
 func Keywords(threading int, dict [][2]string) (ret [][2]string) {
 	sort.Slice(dict, func(i, j int) bool {
-		return len(dict[i][0]) + len(dict[i][1]) < len(dict[j][0]) + len(dict[j][1])
+		return len(dict[i][0])+len(dict[i][1]) < len(dict[j][0])+len(dict[j][1])
 	})
 	var mut sync.Mutex
 	loop(dict, threading, func(word1, word2 string) {
@@ -22,7 +22,7 @@ func Keywords(threading int, dict [][2]string) (ret [][2]string) {
 					return
 				}
 			}
-			if len(dict[i][0]) + len(dict[i][1]) > len(word1) + len(word2) {
+			if len(dict[i][0])+len(dict[i][1]) > len(word1)+len(word2) {
 				break
 			}
 		}
@@ -31,7 +31,7 @@ func Keywords(threading int, dict [][2]string) (ret [][2]string) {
 		mut.Unlock()
 	})
 	sort.Slice(ret, func(i, j int) bool {
-		return len(ret[i][0]) + len(ret[i][1]) < len(ret[j][0]) + len(ret[j][1])
+		return len(ret[i][0])+len(ret[i][1]) < len(ret[j][0])+len(ret[j][1])
 	})
 	return ret
 }
