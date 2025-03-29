@@ -92,7 +92,7 @@ function initDropdown(inp, lst, items, multiple) {
 
 // Sample data for dropdown items
 const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Basque", "Belarusian", "Bengali", "Bulgarian",
-"Burmese", "Cebuano", "Chechen", "Chichewa", "ChineseMandarin", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Dzongkha",
+"Burmese", "Cantonese", "Cebuano", "Chechen", "Chichewa", "ChineseMandarin", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Dzongkha",
 "English", "EnglishAmerican", "EnglishBritish", "Esperanto", "Estonian", "Farsi", "Finnish", "French", "Galician", "Georgian",
 "German", "Greek", "Gujarati", "Hausa", "Hebrew", "Hebrew2", "Hindi", "Hungarian", "Icelandic", "Indonesian", "Italian", "Jamaican", "Japanese",
 "Javanese", "Kazakh", "KhmerCentral", "Korean", "Lao", "Latvian", "Lithuanian", "Luxembourgish", "Macedonian", "Malayalam", "MalayLatin",

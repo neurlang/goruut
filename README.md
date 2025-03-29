@@ -55,6 +55,7 @@ sudo docker compose up -d --force-recreate --build
 * Bosnian
 * Bulgarian
 * Burmese
+* Cantonese
 * Catalan
 * Cebuano
 * Chechen
