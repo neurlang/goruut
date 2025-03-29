@@ -61,8 +61,9 @@ Goruut uses a hybrid approach:
 
 1. **Statistical Grammar Induction**
     - Automatically learns language-specific G2P/P2G rules
-    - Builds prefix trees from training data
+    - Builds longest prefix finite-state-transducer grammar from training data
     - Identifies productive morphological patterns
+    - Generates an alignment of words and the phonetic representation for many words in the lexicon
 
 2. **Hashtron Transformers**
     - Compact weightless networks using integer arithmetic
@@ -102,17 +103,20 @@ For each language, Goruut needs:
 
 ### Training Process
 
-1. **Data Preparation**  
-   `./cmd/analysis2/clean_language.sh French`
+1. **Grammar Induction**  
+   `./study_language.sh french` (in `cmd/analysis2` folder)
 
-2. **Grammar Induction**  
-   `./cmd/analysis2/train_language.sh French`
+2. **Data Preparation and Alignment**  
+   `./clean_language.sh french` (in `cmd/analysis2` folder)
+   
+3. **Coverage Evaluation**
+   `go build && ./coverage.sh french` (in `cmd/backtest` folder)
+   
+4. **Homograph Transformer Training**  
+   `./train_language.sh french --maxpremodulo NUMBER` (in `cmd/analysis2` folder, NUMBER is set to 5 times the cleaning complexity)
 
-3. **Transformer Training**  
-   `./cmd/backtest/train_homograph.sh English`
-
-4. **Evaluation**  
-   `./cmd/backtest/coverage.sh Spanish`
+5. **Homograph Transformer Training (optional)**  
+   `./train_homograph.sh french` (in `cmd/backtest` folder)
 
 ## API Reference
 
@@ -151,22 +155,21 @@ For each language, Goruut needs:
 
 ## Performance Characteristics
 
-| Operation               | Avg Latency | Throughput | Memory Usage |
-|-------------------------|-------------|------------|--------------|
-| Word Phonemization      | 2.1ms       | 480 ops/s  | 12MB         |
-| Sentence Processing     | 8.4ms       | 120 ops/s  | 18MB         |
-| Dephonemization         | 3.7ms       | 270 ops/s  | 14MB         |
+| Operation               | Initial Latency | Average latency | Memory Usage |
+|-------------------------|-----------------|-----------------|--------------|
+| Phonemization           | 236 ms/sentence | 2 ms/sentence   | 100MB        |
+| Dephonemization         | 228 ms/sentence | 1 ms/sentence   | 100MB        |
 
 ## Contribution Guide
 
 ### Adding New Languages
 
-1. Create language directory in `dicts/`
+1. Create language directory in [neurlang/dataset](https://github.com/neurlang/dataset) same as the ones in `dicts/` used for training
 2. Add training data:
  - dirty.tsv (required)
  - clean.tsv (recommended)
  - multi.tsv (optional for homographs)
-3. Submit pull request
+3. Submit pull request to [neurlang/dataset](https://github.com/neurlang/dataset)
 
 ### Improving Existing Models
 
@@ -174,7 +177,7 @@ For each language, Goruut needs:
 2. Train improved models using:  
 `./cmd/analysis2/train_language.sh [LANGUAGE]`
 3. Include validation results
-4. Submit PR with new weight files
+4. Submit PR with new weight files to [neurlang/goruut](https://github.com/neurlang/goruut)
 
 ## Limitations and Roadmap
 
@@ -197,7 +200,7 @@ For each language, Goruut needs:
 **A:** Current models achieve 85% accuracy on the Google Homograph Benchmark.
 
 **Q:** Can I use this commercially?  
-**A:** Yes, Goruut is licensed under MIT.
+**A:** Yes, Goruut is in general licensed under MIT. However keep in mind that some datasets (Tibetan) that we train permit only non commercial use. Consult a lawyer if needing the model trained on those languages.
 
 **Q:** What's the smallest language model?  
 **A:** Most models are 0.8-1.5MB. The smallest is probably Esperanto at ~60KB.
@@ -214,4 +217,4 @@ For each language, Goruut needs:
 ## License
 
 MIT - See LICENSE file for complete terms.
-
+See [neurlang/dataset](https://github.com/neurlang/dataset) regarding the licenses for the training data used.
