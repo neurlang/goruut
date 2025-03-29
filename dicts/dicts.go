@@ -137,6 +137,7 @@ import "github.com/neurlang/goruut/dicts/turkmen"
 import "github.com/neurlang/goruut/dicts/uzbek"
 import "github.com/neurlang/goruut/dicts/welsh/north"
 import "github.com/neurlang/goruut/dicts/welsh/south"
+import "github.com/neurlang/goruut/dicts/cantonese"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -441,6 +442,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return north.Language.ReadFile(filename)
 	case "WelshSouth":
 		return south.Language.ReadFile(filename)
+	case "Cantonese":
+		return cantonese.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
@@ -585,6 +588,7 @@ func LangName(dir string) string {
 	case "uzbek": return "Uzbek";
 	case "welsh/north": return "WelshNorth";
 	case "welsh/south": return "WelshSouth";
+	case "cantonese": return "Cantonese";
 	default: return "";
 	}
 }
