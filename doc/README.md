@@ -208,6 +208,104 @@ For each language, Goruut needs:
 **Q:** How often are models updated?  
 **A:** We release quarterly updates with improved models.
 
+
+### Technical Implementation
+
+**Q: What algorithms/models power the phonemization?**  
+A: Goruut uses a hybrid system combining Statistical Grammar Induction and Hashtron Transformers (compact weightless neural networks). The architecture includes specialized 7-layer transformers for phonemization, dephonemization, and homograph disambiguation.
+
+**Q: How are language models structured?**  
+A: Each language has forward (`weights4.json.zlib`) and reverse (`weights4_reverse.json.zlib`) model files containing transformer weights. These are trained separately for G2P and P2G tasks.
+
+### Data & Training
+
+**Q: How are new languages added?**  
+A: By submitting to `neurlang/dataset` with:
+- `dirty.tsv` (raw word-IPA pairs)
+- `clean.tsv` (aligned high-quality subset)
+- Optional `multi.tsv` for homographs
+
+**Q: What's the training workflow?**  
+A: Four-stage pipeline:
+1. Grammar induction (`study_language.sh`)
+2. Data alignment (`clean_language.sh`) 
+3. Coverage evaluation (`coverage.sh`)
+4. Model training (`train_language.sh`)
+
+### Usage
+
+**Q: How to use as a library?**  
+A: Import `github.com/neurlang/goruut/lib` in Go code. The library exposes phonemization/dephonemization functions with language-specific contexts.
+
+**Q: HTTP service setup?**  
+A: Run the binary with a config file:
+```bash
+./goruut --configfile configs/config.json
+```
+Then query endpoints like POST /tts/phonemize/sentence
+
+### Performance
+
+**Q: What accuracy metrics are available?**  
+A: The system generates:
+- `coverage_*.txt` files showing lexicon coverage percentages
+- Validation reports comparing model performance on test sets
+- Homograph disambiguation accuracy (e.g., 85% for English)
+
+**Q: How are models evaluated during training?**  
+A: Through:
+1. Automatic generation of `weights*.best` files (best-performing snapshots)
+2. Alignment quality scores in cleaning reports
+3. Out-of-vocabulary word handling tests
+
+### Contributing
+
+**Q: How can I improve existing language models?**  
+A: Three-step process:
+1. Fork the repository
+2. Retrain models using:  
+   `./train_language.sh [LANGUAGE] --maxpremodulo [NUMBER]`
+3. Submit pull request with new weight files
+
+**Q: What's needed to add a new language?**  
+A: Minimum requirements:
+- `dirty.tsv` (10,000+ word-IPA pairs)
+- `clean.tsv` (aligned subset)
+- Optional `multi.tsv` for homographs
+- Must follow existing directory structure
+
+**Q: How are contributions validated?**  
+A: All submissions are tested via:
+- Coverage verification scripts
+- Alignment quality checks
+- Benchmark comparisons against existing models
+
+### Limitations
+
+**Q: Can it process mixed-language text?**  
+A: Not currently - input must be language-specific. Automatic language detection is a planned feature.
+
+**Q: How does it handle rare/unseen words?**  
+A: Uses learned phonetic patterns, but accuracy declines for:
+- Highly irregular pronunciations
+- Words with no similar training examples
+- Obscure proper nouns
+
+### Comparison
+
+**Q: How does this compare to eSpeak/Festival?**  
+A: Key differentiators:
+
+| Feature          | Goruut                     | eSpeak/Festival          |
+|------------------|----------------------------|--------------------------|
+| Architecture     | Hashtron Transformers      | Rule-based               |
+| Bidirectional    | Yes (G2P + P2G)            | G2P only                 |
+| Model Size       | 0.8-1.5MB per language     | Larger                   |
+| Homographs       | Context-aware (85% acc.)   | Limited handling         |
+| Tonal Languages  | Full support               | Basic support            |
+| Self-hostable    | Yes, no external deps      | Depends on system        |
+
+
 ## Support and Community
 
 - GitHub Discussions: [https://github.com/neurlang/goruut/discussions](https://github.com/neurlang/goruut/discussions)
