@@ -1,0 +1,10 @@
+{
+    "[go]": {
+        "editor.formatOnSaveMode": "file",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+            "source.organizeImports": "never"
+        }
+    },
+    "go.formatFlags": ["-s"],
+}

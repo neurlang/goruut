@@ -48,3 +48,10 @@ The pull request must contain (for the specific language):
 - lexicon.tsv
 - LICENSE.md (or an equivalent licensing message in the main README.md)
 
+## Development recommendation
+
+Before submitting a pull request, please ensure your code meets the project's formatting
+
+```console
+gofmt -w -s .
+```
