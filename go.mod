@@ -7,7 +7,7 @@ require (
 	github.com/klauspost/compress v1.18.0
 	github.com/martinarisk/di v0.0.3
 	github.com/maypok86/otter v1.2.1
-	github.com/neurlang/classifier v0.1.8-0.20250328153447-d53749edc584
+	github.com/neurlang/classifier v0.1.8-0.20250329180241-9474c09b035f
 	github.com/neurlang/levenshtein v0.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
