@@ -141,4 +141,5 @@ timeout 200 ./train_language_reverse.sh	zulu	-maxpremodulo	470	 -resume
 timeout 200 ./train_language_reverse.sh	english/british	-maxpremodulo	2973725	 -resume
 timeout 200 ./train_language_reverse.sh	english/american	-maxpremodulo	688520	 -resume
 
-
+timeout 200 ./train_language_reverse.sh minnan/taiwanese -padspace --maxpremodulo 4035	 -resume
+timeout 200 ./train_language_reverse.sh	minnan/hokkien  -padspace -maxpremodulo 10000

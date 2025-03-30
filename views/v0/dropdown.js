@@ -96,7 +96,7 @@ const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Bas
 "English", "EnglishAmerican", "EnglishBritish", "Esperanto", "Estonian", "Farsi", "Finnish", "French", "Galician", "Georgian",
 "German", "Greek", "Gujarati", "Hausa", "Hebrew", "Hebrew2", "Hindi", "Hungarian", "Icelandic", "Indonesian", "Italian", "Jamaican", "Japanese",
 "Javanese", "Kazakh", "KhmerCentral", "Korean", "Lao", "Latvian", "Lithuanian", "Luxembourgish", "Macedonian", "Malayalam", "MalayLatin",
-"Maltese", "Marathi", "Mongolian", "Nepali", "Norwegian", "Pashto", "Polish", "Portuguese",
+"Maltese", "Marathi", "MinnanHokkien", "MinnanTaiwanese", "Mongolian", "Nepali", "Norwegian", "Pashto", "Polish", "Portuguese",
 "Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu",
 "Thai", "Tibetan", "Turkish", "Ukrainian", "Urdu", "Uyghur", "VietnameseNorthern", "Yoruba", "Zulu",
 "Isan", "BengaliDhaka", "BengaliRahr", "MalayArab", "VietnameseCentral", "VietnameseSouthern",

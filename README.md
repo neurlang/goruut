@@ -126,6 +126,8 @@ sudo docker compose up -d --force-recreate --build
 * Maltese
 * Maori
 * Marathi
+* Minnan Hokkien
+* Minnan Taiwanese
 * Mongolian
 * Nahuatl Central
 * Nahuatl Classical
