@@ -18,7 +18,7 @@ type TSVWriter struct {
 func (t *TSVWriter) Open(fileName string, headers []string) error {
 	var err error
 	// Create or open the TSV file
-	t.file, err = os.OpenFile(fileName, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0644)
+	t.file, err = os.Create(fileName)
 	if err != nil {
 		return fmt.Errorf("error creating file: %v", err)
 	}
