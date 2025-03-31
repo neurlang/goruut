@@ -191,6 +191,7 @@ func main() {
 	isreverse := flag.Bool("reverse", false, "is reverse")
 	nostress := flag.Bool("nostress", false, "no stress")
 	testing := flag.Bool("testing", false, "keep backtesting and overwriting the model with the best one")
+	batchsize := flag.Int("batchsize", 10000, "batch size number")
 	weightsfile := flag.Int("weightsfile", 4, "weights file number")
 	resume := flag.Bool("resume", false, "test old model initially")
 	dumpwrong := flag.Bool("dumpwrong", false, "dump wrong answers to dictionary")
@@ -221,7 +222,6 @@ again:
 			}
 		}
 	}
-	var batch = 10000
 	var dump func(string, string, string)
 	var writer TSVWriter
 	if dumpwrong != nil && *dumpwrong {
@@ -247,9 +247,9 @@ again:
 	p := lib.NewPhonemizer(nil)
 	if testing != nil && *testing || dumpwrong != nil && *dumpwrong {
 		if dumpwrong != nil && *dumpwrong {
-			batch = 99999999
+			*batchsize = 99999999
 		} else {
-			batch = 1000
+			*batchsize = 1000
 		}
 		di := di.NewDependencyInjection()
 		di.Add((interfaces.DictGetter)(&dictgetter))
@@ -259,7 +259,7 @@ again:
 	}
 
 	var percent, errsum, total atomic.Uint64
-	loop(srcfile, batch, 1000, func(word1, word2, word3 string) {
+	loop(srcfile, *batchsize, 1000, func(word1, word2, word3 string) {
 		total.Add(1)
 		if nostress != nil && *nostress {
 			word2 = strings.ReplaceAll(word2, "'", "")
