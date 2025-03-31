@@ -297,7 +297,7 @@ again:
 		if target == word2 {
 			percent.Add(1)
 		}
-		var equal = true
+		var equal = false
 		var tags, wordtags []string
 		if len(resp.Words) > 0 {
 			err1 := json.Unmarshal([]byte(resp.Words[0].PosTags), &tags)
@@ -318,7 +318,7 @@ again:
 				if equal {
 					for k := range tagmap {
 						if !wordmap[k] {
-							equal = false
+							equal = true
 						}
 					}
 				}
