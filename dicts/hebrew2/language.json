@@ -628,4 +628,7 @@
 "תע":["hitʔ","ta","hit","hatˈʔ","itˈʔ","ʔaˈtea","te"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"Normalize":"NFD"},{"Normalize":"Sort"}],
-"SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":null}
+"SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":[["ַ","ָ","ֲ"],
+["ֶ","ֵ","ֱ"],
+["ֹ","ׇ","ֳ"],
+["ּ","ֻ"]]}
