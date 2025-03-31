@@ -294,10 +294,11 @@ again:
 			levenshtein.OneSlice[rune, uint64]([]rune(target), []rune(word2)), nil)
 		var dist = *levenshtein.Distance(mat)
 		errsum.Add(dist)
+		var equal = false
 		if target == word2 {
+			equal = true
 			percent.Add(1)
 		}
-		var equal = true
 		var tags, wordtags []string
 		if len(resp.Words) > 0 {
 			err1 := json.Unmarshal([]byte(resp.Words[0].PosTags), &tags)
