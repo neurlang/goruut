@@ -25,9 +25,22 @@ type SolutionFile struct {
 	SplitAfter  []string    `json:"SplitAfter"`
 	SplitAt     interface{} `json:"SplitAt"`
 
-	PrePhonWordSteps interface{} `json:"PrePhonWordSteps"`
+	PrePhonWordSteps []map[string]interface{} `json:"PrePhonWordSteps"`
 
 	UseCombining bool `json:"UseCombining"`
+}
+
+func (s *SolutionFile) Clean(str string) string {
+	for _, step := range s.PrePhonWordSteps {
+		if step == nil {
+			continue
+		}
+		switch norm := step["Normalize"].(type) {
+		case string:
+			str = NormalizeTo(str, norm)
+		}
+	}
+	return str
 }
 
 func (s *SolutionFile) Init() {

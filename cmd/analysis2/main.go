@@ -154,7 +154,9 @@ func main() {
 			}
 		}
 	}
-
+	for i := range slice {
+		slice[i][0] = lang.Clean(slice[i][0])
+	}
 again:
 
 	threeways = make(map[[2]string]uint64)
