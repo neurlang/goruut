@@ -20,5 +20,6 @@ require (
 	github.com/jbarham/primegen v0.0.0-20200302115600-8ce4838491a0 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
 	github.com/neurlang/quaternary v0.1.1 // indirect
+	github.com/yousifnimah/NumToWordsGo v1.2.0 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )

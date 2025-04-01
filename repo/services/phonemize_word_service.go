@@ -17,6 +17,7 @@ type PhonemizeWordService struct {
 	pre  *repo.IPrePhonWordStepsRepository
 	cach *repo.IWordCachingRepository
 	tag  *repo.IAutoTaggerRepository
+	num  *repo.INumToWordsRepository
 }
 
 func (p *PhonemizeWordService) ExplainWord(isReverse bool, word1, word2, lang string) map[string][]string {
@@ -25,17 +26,37 @@ func (p *PhonemizeWordService) ExplainWord(isReverse bool, word1, word2, lang st
 
 func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string, languages []string) (ret []map[string]uint32, punct [][2]string) {
 	word = (*p.pre).PrePhonemizeWord(isReverse, lang, word)
-
-	word, lpunct, rpunct := (*p.ai).CleanWord(isReverse, word, append([]string{lang}, languages...))
-	if word == "" {
-		return nil, nil
+	ret = (*p.num).ExpandNumericWord(isReverse, lang, word, languages)
+	if ret != nil {
+		// handle numeric words
+		var expanded []map[string]uint32
+		for _, retword := range ret {
+			var numeric_word string
+			for w, key := range retword {
+				if key == 0 {
+					numeric_word = w
+					break
+				}
+			}
+			result, _ := p.PhonemizeWords(isReverse, lang, numeric_word, languages)
+			expanded = append(expanded, result...)
+		}
+		return expanded, make([][2]string, len(expanded))
 	}
-	ret = (*p.repo).LookupWords(isReverse, lang, word)
-	for _, lang := range languages {
-		if ret != nil {
-			break
+	var lpunct, rpunct string
+
+	if ret == nil {
+		word, lpunct, rpunct = (*p.ai).CleanWord(isReverse, word, append([]string{lang}, languages...))
+		if word == "" {
+			return nil, nil
 		}
 		ret = (*p.repo).LookupWords(isReverse, lang, word)
+		for _, lang := range languages {
+			if ret != nil {
+				break
+			}
+			ret = (*p.repo).LookupWords(isReverse, lang, word)
+		}
 	}
 	if ret == nil {
 		word, lpunct2, rpunct2 := (*p.ai).CleanWord(isReverse, word, []string{lang})
@@ -96,13 +117,15 @@ func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
 	pre_repo_iface := (repo.IPrePhonWordStepsRepository)(Ptr(MustNeed(di, repo.NewPrePhonWordStepsRepository)))
 	cach_repo_iface := (repo.IWordCachingRepository)(Ptr(MustNeed(di, repo.NewWordCachingRepository)))
 	tag_repo_iface := (repo.IAutoTaggerRepository)(Ptr(MustNeed(di, repo.NewAutoTaggerRepository)))
-
+	num_repo_iface := (repo.INumToWordsRepository)(Ptr(MustNeed(di, repo.NewNumToWordsRepository)))
+	
 	return &PhonemizeWordService{
 		repo: &repoiface,
 		ai:   &ai_repo_iface,
 		pre:  &pre_repo_iface,
 		cach: &cach_repo_iface,
 		tag:  &tag_repo_iface,
+		num:  &num_repo_iface,
 	}
 }
 
