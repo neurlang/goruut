@@ -1,5 +1,9 @@
 #!/bin/bash
-
+./clean_language_reverse.sh     cantonese -padspace
+./clean_language_reverse.sh     minnan/hokkien -padspace
+./clean_language_reverse.sh     minnan/taiwanese -padspace
+./clean_language_reverse.sh	hebrew2
+exit
 ./clean_language_reverse.sh	albanian	
 ./clean_language_reverse.sh	aragonese	
 ./clean_language_reverse.sh	assamese	
@@ -49,7 +53,6 @@
 ./clean_language_reverse.sh	uzbek	
 ./clean_language_reverse.sh	welsh/north	
 ./clean_language_reverse.sh	welsh/south
-
 ./clean_language_reverse.sh	afrikaans	
 ./clean_language_reverse.sh	amharic	
 ./clean_language_reverse.sh	arabic	
@@ -135,4 +138,3 @@
 ./clean_language_reverse.sh	vietnamese/southern	
 ./clean_language_reverse.sh	yoruba	
 ./clean_language_reverse.sh	zulu	
-

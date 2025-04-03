@@ -138,9 +138,12 @@ func main() {
 	if len(lang.Map) <= 1 {
 		lang.Init()
 		for i, kw := range Keywords(1000, slice) {
+			if reverse != nil && *reverse {
+				kw[0], kw[1] = kw[1], kw[0]
+			}
 			lang.With(kw[0], kw[1])
 			lang_eval.With(kw[0], kw[1])
-			if i == 10 {
+			if i == 100 {
 				break
 			}
 		}
