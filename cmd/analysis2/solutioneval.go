@@ -222,7 +222,7 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret
 				if _, ok := counts[j][word2p]; ok {
 					ret = s.AlignSymmetric(word1[len(word1)-i:], word2[j:], isCleaning)
 					if ret != nil {
-						ret[0] = append([]string{word1k}, ret[0]...)
+						ret[0] = append([]string{key}, ret[0]...)
 						ret[1] = append([]string{word2p}, ret[1]...)
 						return
 					}
