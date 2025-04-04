@@ -1,3 +1,4 @@
+// Package services encapsulates business logic and domain operations.
 package services
 
 import (

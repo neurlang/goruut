@@ -1,3 +1,4 @@
+// Package backtest implements benchmarking for phonemization on unlabelled data.
 package main
 
 import "github.com/neurlang/levenshtein"

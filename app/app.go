@@ -1,4 +1,4 @@
-// Package app provides functionalities for managing the application.
+// Package app manages application lifecycle, configuration, and shared dependencies.
 package app
 
 import (

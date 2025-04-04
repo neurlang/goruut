@@ -1,3 +1,4 @@
+// Package dicttomap converts algned dictionary files into language.json phonetic mappings.
 package main
 
 import (

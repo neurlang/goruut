@@ -1,3 +1,4 @@
+// Package requests contains API request payload models.
 package requests
 
 type ExplainWord struct {

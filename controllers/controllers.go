@@ -1,4 +1,4 @@
-// Package controllers integrates the controllers used by the application
+// Package controllers handles HTTP request routing and API layer logic.
 package controllers
 
 import (

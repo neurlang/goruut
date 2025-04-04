@@ -1,3 +1,4 @@
+// Package helpers contains common utilities (JSON, logging, etc.) for internal use.
 package helpers
 
 import (

@@ -1,3 +1,4 @@
+// Package analysis2 provides CLI tools for phonetic analysis and batch processing.
 package main
 
 import "fmt"

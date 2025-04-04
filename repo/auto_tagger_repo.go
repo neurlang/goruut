@@ -1,3 +1,4 @@
+// Package repo manages phonemization/dephonemization backend for the system.
 package repo
 
 import "strings"

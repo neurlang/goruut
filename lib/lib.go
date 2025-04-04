@@ -1,4 +1,5 @@
-// Package lib implements g2p IPA phonemizer/dephonemizer in golang for 136+ human languages
+// Package lib implements G2P (grapheme-to-phoneme) IPA phonemizer/dephonemizer 
+// for 136+ human languages, including validation and normalization.
 package lib
 
 import (

@@ -1,3 +1,4 @@
+// Package views renders frontend interfaces (HTML, templates, or static assets).
 package views
 
 import "embed"

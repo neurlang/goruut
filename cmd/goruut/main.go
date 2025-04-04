@@ -1,4 +1,4 @@
-// Main is the main package for the application executable
+// Main is the main production package for the application executable
 package main
 
 import (

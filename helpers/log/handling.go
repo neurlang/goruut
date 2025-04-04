@@ -1,3 +1,4 @@
+// Package log provides structured logging/error handling by logging support.
 package log
 
 import (

@@ -1,3 +1,4 @@
+// Package backtest implements benchmarking for phonemization quality on the entire lexicon.
 package main
 
 import (

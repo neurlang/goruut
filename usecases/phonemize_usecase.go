@@ -1,3 +1,4 @@
+// Package usecases orchestrates business workflows between controllers and services.
 package usecases
 
 import (

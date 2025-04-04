@@ -1,3 +1,4 @@
+// Package interfaces defines repository contracts
 package interfaces
 
 type DictGetter interface {

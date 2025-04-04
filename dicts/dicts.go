@@ -1,3 +1,4 @@
+// Package dicts provides multilingual language data for phonemization.
 package dicts
 
 import "github.com/neurlang/goruut/dicts/czech"
