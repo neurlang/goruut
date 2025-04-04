@@ -1,5 +1,4 @@
 {"Map":{"a":["а"],
-"aː":["а"],
 "b":["б"],
 "d":["д"],
 "e":["е"],
@@ -23,7 +22,6 @@
 "tʃ":["ч"],
 "tʃx":["хч"],
 "tʃʔ":["чӏ"],
-"tː":["тт"],
 "u":["у"],
 "uo̯":["о"],
 "uː":["у"],
@@ -47,5 +45,5 @@
 "ː":["й"],
 "ːtː":["тт"],
 "χ":["х"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
-"DstMultiSuffix":null,"DstMultiPrefix":null,"DropLast":null,"IsDuplex":false,"IsSrcSurround":false,"SplitBefore":null,"SplitAfter":null,"PrePhonWordSteps":[{"ToLower":true}],
-"UseCombining":false}
+"DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
+"SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":null}

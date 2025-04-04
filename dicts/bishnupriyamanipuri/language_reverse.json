@@ -3,10 +3,10 @@
 "hat":["হাত"],
 "kʰana":["খানা"],
 "ma":["মা"],
-"manuh":["মানুহ"],
+"nuh":["নুহ"],
 "pani":["পানি"],
 "tʃoku":["চকু"],
 "ɡatʃ":["গাছ"],
 "ɡʱor":["ঘর"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
 "DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":null}

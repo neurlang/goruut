@@ -9,7 +9,6 @@
 "l":["l"],
 "lː":["ll","l·l"],
 "m":["m"],
-"ma":["ma"],
 "n":["n"],
 "o":["o"],
 "oː":["o","u"],
@@ -17,7 +16,6 @@
 "s":["z","c","s"],
 "seː":["ce"],
 "t":["t"],
-"tɬ":["tl"],
 "tʃ":["ch"],
 "tʃt":["ch"],
 "u":["u"],
@@ -29,4 +27,4 @@
 "ʃ":["x"],
 "ʷ":["u"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
 "DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
-"SplitBefore":null,"SplitAfter":null,"IsDuplex":false,"IsSrcSurround":false}
+"SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":null}
