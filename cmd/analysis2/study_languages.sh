@@ -131,9 +131,9 @@ exit
  timeout 600 ./study_language.sh	urdu	
  timeout 600 ./study_language.sh	uyghur	
  timeout 600 ./study_language.sh	uzbek	
- timeout 600 ./study_language.sh	vietnamese/central	
- timeout 600 ./study_language.sh	vietnamese/northern	
- timeout 600 ./study_language.sh	vietnamese/southern	
+ timeout 600 ./study_language.sh	vietnamese/central			--rowlossimportance 8
+ timeout 600 ./study_language.sh	vietnamese/northern			--rowlossimportance 8
+ timeout 600 ./study_language.sh	vietnamese/southern			--rowlossimportance 8
  timeout 600 ./study_language.sh	welsh/north	
  timeout 600 ./study_language.sh	welsh/south
  timeout 600 ./study_language.sh	yoruba	

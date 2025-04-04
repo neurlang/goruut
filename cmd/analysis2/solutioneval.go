@@ -200,9 +200,8 @@ func (s *SolutionEval) AlignSymmetric(word1, word2 string, isCleaning bool) (ret
 	if len(word1) == 0 && len(word2) == 0 {
 		return &[2][]string{}
 	}
-	for i := range word1 {
-		word1k := word1[:len(word1)-i]
-		key := strings.Trim(word1k, "_")
+	for i := 0; i < len(word1); i++ {
+		key := word1[:len(word1)-i]
 		if counts, ok := s.Map[key]; ok {
 			// Extract and sort lengths in descending order
 			lengths := make([]int, 0, len(counts))
