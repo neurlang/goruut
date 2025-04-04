@@ -18,6 +18,8 @@ github.com/martinarisk/di v0.0.3 h1:rLMDG9ypmhUR7HbgT5dan1J4OAO54gZHA+VtIBNcCrI=
 github.com/martinarisk/di v0.0.3/go.mod h1:022Kk0FZeeE/uIOtGcB55cH79UMsa3YZGWxrwH5LQnA=
 github.com/maypok86/otter v1.2.1 h1:xyvMW+t0vE1sKt/++GTkznLitEl7D/msqXkAbLwiC1M=
 github.com/maypok86/otter v1.2.1/go.mod h1:mKLfoI7v1HOmQMwFgX4QkRk23mX6ge3RDvjdHOWG4R4=
+github.com/neurlang/NumToWordsGo v0.0.0-20250404160220-0468dd7401be h1:WCiGtydeTTGXNM2ZSucfWlc973OcMchVjLI0DfTha8Y=
+github.com/neurlang/NumToWordsGo v0.0.0-20250404160220-0468dd7401be/go.mod h1:CGbQKJZ89UJH2dtv2phUGy8iqAa2zwom3KdWpADVfZQ=
 github.com/neurlang/classifier v0.1.8 h1:XNMcabG+S3pPCE2o5jfGIMcn47CQ0/e+MAHVkEYF1pE=
 github.com/neurlang/classifier v0.1.8/go.mod h1:UMZjFT6yP2Z2VnrCdwY9f27vpw/f5pbn65zNlG5vQho=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
@@ -37,8 +39,6 @@ github.com/stretchr/testify v1.8.1 h1:w7B6lhMri9wdJUVmEZPGGhZzrYTPvgJArz7wNPgYKs
 github.com/stretchr/testify v1.8.1/go.mod h1:w2LPCIKwWwSfY2zedu0+kehJoqGctiVI29o6fzry7u4=
 github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816 h1:J6v8awz+me+xeb/cUTotKgceAYouhIB3pjzgRd6IlGk=
 github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816/go.mod h1:tzym/CEb5jnFI+Q0k4Qq3+LvRF4gO3E2pxS8fHP8jcA=
-github.com/yousifnimah/NumToWordsGo v1.2.0 h1:kTXLwsEWqnaf64B5QcMzkRM5UCZX8qo6pK0JjUuLB4w=
-github.com/yousifnimah/NumToWordsGo v1.2.0/go.mod h1:FQd6ynIPGkgraIwP21JBzGTGSO8xdkW6YDOcLJ3G7lE=
 golang.org/x/sys v0.0.0-20190422165155-953cdadca894/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.5.0 h1:MUK/U/4lj1t1oPg0HfuXDN/Z1wv31ZJ/YcPiGccS4DU=
