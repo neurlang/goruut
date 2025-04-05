@@ -11,7 +11,7 @@ It is possible to try this software live at [hashtron.cloud](https://hashtron.cl
 ## Features
 
 * Phone set: IPA
-* Supported languages: 136
+* Supported languages: 139
 * Processing speed: fast
 * Phone tokens: yes
 * Syllable tokens: no
