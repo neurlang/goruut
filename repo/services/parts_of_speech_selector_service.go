@@ -44,7 +44,7 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 		var orig string
 		for word, k := range words {
 			if k == 0 {
-				orig = word
+				orig = strings.TrimRight(word, " ")
 				break
 			}
 		}
@@ -95,7 +95,7 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 		var orig string
 		for word, k := range words {
 			if k == 0 {
-				orig = word
+				orig = strings.TrimRight(word, " ")
 				break
 			}
 		}

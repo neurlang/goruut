@@ -788,7 +788,7 @@ outer:
 				hsh++
 			}
 			m[dst] = uint32(hsh)
-			m[src] = 0
+			m[src + " "] = 0
 			ret = append(ret, m)
 			src, dst = "", ""
 		}

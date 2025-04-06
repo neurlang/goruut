@@ -82,7 +82,7 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 	for i := range ipa_flavored {
 		resp.Words = append(resp.Words, responses.PhonemizeSentenceWord{
 			Phonetic:  strings.Trim(ipa_flavored[i][1], "_"),
-			CleanWord: ipa_flavored[i][0],
+			CleanWord: strings.TrimRight(ipa_flavored[i][0], " "),
 			PosTags:   json.RawMessage(ipa_flavored[i][2]),
 			PrePunct:  punctuation[i][0],
 			PostPunct: punctuation[i][1],
