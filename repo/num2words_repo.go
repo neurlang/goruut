@@ -25,15 +25,33 @@ func expandNumericWord(word, lang string) (ret []map[string]uint32) {
 	switch lang {
 	case "Arabic":
 		sentence = log.Error1(NumToWords.Convert(num, "ar"))
+	case "Czech":
+		sentence = log.Error1(NumToWords.Convert(num, "cs"))
+	case "German":
+		sentence = log.Error1(NumToWords.Convert(num, "de"))
+	case "Spanish":
+		sentence = log.Error1(NumToWords.Convert(num, "es"))
+	case "French":
+		sentence = log.Error1(NumToWords.Convert(num, "fr"))
+	case "Hungarian":
+		sentence = log.Error1(NumToWords.Convert(num, "hu"))
+	case "Polish":
+		sentence = log.Error1(NumToWords.Convert(num, "pl"))
+	case "Russian":
+		sentence = log.Error1(NumToWords.Convert(num, "ru"))
+	case "Slovak":
+		sentence = log.Error1(NumToWords.Convert(num, "sk"))
+	case "Ukrainian":
+		sentence = log.Error1(NumToWords.Convert(num, "uk"))
 	case "English", "EnglishAmerican", "EnglishBritish":
 		sentence = log.Error1(NumToWords.Convert(num, "en"))
 	default:
 		return nil
 	}
-	log.Now().Infof("Num: %d Output: %s", num, sentence)
+	log.Now().Debugf("Num: %d Output: %s", num, sentence)
 	fields := strings.Fields(sentence)
 	for _, field := range fields {
-		log.Now().Infof("Field: %s", field)
+		log.Now().Debugf("Field: %s", field)
 		var mapping = make(map[string]uint32)
 		mapping[field] = 0
 		ret = append(ret, mapping)
