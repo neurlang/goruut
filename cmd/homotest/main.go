@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"slices"
 	"strings"
 
 	"github.com/neurlang/goruut/dicts"
@@ -37,6 +38,7 @@ func main() {
 
 	var total, correct int
 	var wrong_sentence string
+	var wrong_graphemes, wrong_phonemes, wrong_words []string
 
 	for scanner.Scan() {
 		line := scanner.Text()
@@ -48,6 +50,8 @@ func main() {
 
 		sentence := parts[0]
 		expectedPhonemes := strings.Split(parts[1], " ")
+		expectedGraphemes := strings.Split(parts[0], " ")
+		var words []string
 
 		resp := p.Sentence(requests.PhonemizeSentence{
 			Sentence:  sentence,
@@ -55,19 +59,34 @@ func main() {
 			IsReverse: false,
 		})
 
-		if len(resp.Words) != len(expectedPhonemes) {
+		if len(resp.Words) < len(expectedPhonemes) {
 			fmt.Printf("Mismatched word count in line: %s (expected %d, got %d)\n",
 				sentence, len(expectedPhonemes), len(resp.Words))
 			continue
 		}
-
+		if len(resp.Words) > len(expectedPhonemes) {
+			for i := 0; i < len(resp.Words); i++ {
+				w := resp.Words[i]
+				if len(resp.Words) <= len(expectedPhonemes) {
+					break
+				}
+				for i < len(resp.Words) && i < len(expectedGraphemes) && w.CleanWord != expectedGraphemes[i] {
+					expectedGraphemes = slices.Insert(expectedGraphemes, i, "_")
+					expectedPhonemes = slices.Insert(expectedPhonemes, i, "_")
+					i++
+				}
+			}
+		}
+		for _, word := range resp.Words {
+			words = append(words, word.Phonetic)
+		}
 		for i, word := range resp.Words {
 			expected := expectedPhonemes[i]
 			if expected == "_" {
 				continue
 			}
-
 			generated := word.Phonetic
+
 			if *nostress {
 				generated = removeStress(generated)
 				expected = removeStress(expected)
@@ -80,6 +99,9 @@ func main() {
 				fmt.Printf("Error: word '%s' expected '%s' got '%s'\n",
 					word.CleanWord, expected, generated)
 				wrong_sentence = sentence
+				wrong_graphemes = expectedGraphemes
+				wrong_phonemes = expectedPhonemes
+				wrong_words = words
 			}
 		}
 	}
@@ -94,7 +116,7 @@ func main() {
 	} else {
 		fmt.Println("No test cases processed")
 	}
-	fmt.Println("Last wrong sentence: ", wrong_sentence)
+	fmt.Println("Last wrong sentence: ", wrong_sentence, wrong_graphemes, wrong_phonemes, wrong_words)
 }
 
 func removeStress(s string) string {

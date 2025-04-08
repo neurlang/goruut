@@ -12,6 +12,7 @@ import (
 	"sort"
 	"strconv"
 	"sync"
+	"strings"
 )
 import "github.com/neurlang/classifier/datasets/phonemizer_multi"
 import "github.com/neurlang/classifier/hash"
@@ -125,11 +126,12 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 		var strkey [][3]string
 		for v, k := range mapping {
 			if k[0] == 0 {
-				origword = v
+				origword = strings.TrimRight(v, " ")
 				continue
 			}
 			strkey = append(strkey, [3]string{v, fmt.Sprint(k[0]), fmt.Sprint(k[1])})
 		}
+		log.Now().Debugf("Origword %d: %s", i, origword)
 		sort.SliceStable(strkey, func(i, j int) bool {
 			return strkey[i][0] < strkey[j][0]
 		})
@@ -160,7 +162,7 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 
 	for i := range ai_sentence.Sentence {
 		const fanout1 = 48
-		var sample = ai_sentence.V1(fanout1, i)
+		var sample = ai_sentence.V2(fanout1, i)
 		var unchosed, chosed uint32
 		var accept bool
 		for j := 0; !accept && j < sample.Len(); j++ {
@@ -176,6 +178,7 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 				r.mut.RLock()
 				pred = uint32(net.Infer2(sample.IO(j)))
 				r.mut.RUnlock()
+				log.Now().Debugf("Sample IO pred %d %d: %d", i, j, pred)
 			}
 			if pred == 1 && !accept {
 				accept = true
