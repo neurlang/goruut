@@ -49,3 +49,9 @@ A pull request must be opened to the neurlang/datasets repository.
 The pull request must contain (for the specific language):
 - lexicon.tsv
 - LICENSE.md (or an equivalent licensing message in the main README.md)
+
+## How model/dataset can become the official for a specific language 
+
+- win in blinded test contest based on 3 LLMs
+- only one submission (the final one) per dev cycle
+
