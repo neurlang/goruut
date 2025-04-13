@@ -15,3 +15,9 @@
   - `./train_homograph.sh english`
 2. You can also specify `--overwrite` to delete your existing model
 
+## Backtest stage
+
+Test WordErrorRate ignoring stress
+`./homotest --langname english -nostress`
+or test WordErrorRate taking stress into account
+`./homotest --langname english`
