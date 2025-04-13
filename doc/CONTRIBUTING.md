@@ -1,10 +1,12 @@
-# Contributing language model to goruut
+# Contributing language model/lexicon to goruut
 
 There are two options using which you - the author of a language lexicon - can
 contribute to the goruut project.
 
 - Contributing a model
 - Contributing a lexicon
+
+**If you are developer - see DEVELOPING.md instead**
 
 ## Contributing a model
 
@@ -47,11 +49,3 @@ A pull request must be opened to the neurlang/datasets repository.
 The pull request must contain (for the specific language):
 - lexicon.tsv
 - LICENSE.md (or an equivalent licensing message in the main README.md)
-
-## Development recommendation
-
-Before submitting a pull request, please ensure your code meets the project's formatting
-
-```console
-gofmt -w -s .
-```
