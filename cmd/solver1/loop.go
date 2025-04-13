@@ -67,8 +67,8 @@ func progressBar(progress, width int) string {
 func progressbar(pos, max uint64) {
 	const progressBarWidth = 40
 	if max > 0 {
-		progress := int(pos*progressBarWidth/max)
-		percent := int(pos*100/max)
+		progress := int(pos * progressBarWidth / max)
+		percent := int(pos * 100 / max)
 		fmt.Printf("\r[%s%s] %d%% ", progressBar(progress, progressBarWidth), emptySpace(progressBarWidth-progress), percent)
 	}
 }

@@ -41,7 +41,7 @@ func main() {
 	}
 
 	loop(load(*wordlist, 0), 1000, func(word string) {
-		word = strings.Trim(word)
+		word = strings.TrimSpace(word)
 		if word == "" {
 			return
 		}
