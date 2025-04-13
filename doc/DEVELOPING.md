@@ -59,6 +59,10 @@ Format current directory from CLI:
 
 `gofmt -w -s *.go`
 
+Format everything:
+
+`gofmt -w -s .`
+
 ## Enabling Debug
 
 Add the following to `configs/config.json`:
