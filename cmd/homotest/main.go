@@ -1,12 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"flag"
 	"fmt"
-	"os"
 	"slices"
 	"strings"
+	"sync"
+	"sync/atomic"
 
 	"github.com/neurlang/goruut/dicts"
 	"github.com/neurlang/goruut/lib"
@@ -15,42 +15,30 @@ import (
 
 func main() {
 	langname := flag.String("langname", "", "directory language name")
-	inputFile := flag.String("input", "multi.tsv", "input TSV file")
 	nostress := flag.Bool("nostress", false, "remove stress markers from phonemes")
+	eval := flag.Bool("eval", true, "eval set")
 	flag.Parse()
 
 	if *langname == "" {
 		fmt.Println("ERROR: langname flag is mandatory")
 		return
 	}
-
-	file, err := os.Open(*inputFile)
-	if err != nil {
-		fmt.Println("Error opening input file:", err)
-		return
+	srcfile := "../../dicts/" + *langname + "/multi.tsv"
+	if eval != nil && *eval {
+		srcfile = "../../dicts/" + *langname + "/multi_eval.tsv"
 	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
 
 	p := lib.NewPhonemizer(nil)
 	lang := dicts.LangName(*langname)
 
-	var total, correct int
+	var total, correct atomic.Uint64
+	var wrong_mutex sync.Mutex
 	var wrong_sentence string
 	var wrong_graphemes, wrong_phonemes, wrong_words []string
 
-	for scanner.Scan() {
-		line := scanner.Text()
-		parts := strings.Split(line, "\t")
-		if len(parts) != 2 {
-			fmt.Printf("Skipping invalid line: %s\n", line)
-			continue
-		}
-
-		sentence := parts[0]
-		expectedPhonemes := strings.Split(parts[1], " ")
-		expectedGraphemes := strings.Split(parts[0], " ")
+	loop(load(srcfile, 0), 1000, func(sentence, ipa string) {
+		expectedPhonemes := strings.Split(ipa, " ")
+		expectedGraphemes := strings.Split(sentence, " ")
 		var words []string
 
 		resp := p.Sentence(requests.PhonemizeSentence{
@@ -62,7 +50,7 @@ func main() {
 		if len(resp.Words) < len(expectedPhonemes) {
 			fmt.Printf("Mismatched word count in line: %s (expected %d, got %d)\n",
 				sentence, len(expectedPhonemes), len(resp.Words))
-			continue
+			return
 		}
 		if len(resp.Words) > len(expectedPhonemes) {
 			for i := 0; i < len(resp.Words); i++ {
@@ -92,31 +80,35 @@ func main() {
 				expected = removeStress(expected)
 			}
 
-			total++
+			total.Add(1)
 			if generated == expected {
-				correct++
+				correct.Add(1)
 			} else {
-				fmt.Printf("Error: word '%s' expected '%s' got '%s'\n",
-					word.CleanWord, expected, generated)
+				//fmt.Printf("Error: word '%s' expected '%s' got '%s'\n",
+				//	word.CleanWord, expected, generated)
+
+				wrong_mutex.Lock()
+
 				wrong_sentence = sentence
 				wrong_graphemes = expectedGraphemes
 				wrong_phonemes = expectedPhonemes
 				wrong_words = words
+
+				wrong_mutex.Unlock()
 			}
 		}
-	}
+	})
 
-	if err := scanner.Err(); err != nil {
-		fmt.Println("Error reading input file:", err)
-	}
-
-	if total > 0 {
-		accuracy_1k_percent := 100000 * int64(correct) / int64(total)
-		fmt.Printf("WER Accuracy: %d.%03d%% (%d/%d)\n", accuracy_1k_percent/1000, accuracy_1k_percent%1000, correct, total)
+	if total.Load() > 0 {
+		accuracy_1k_percent := 100000 * int64(correct.Load()) / int64(total.Load())
+		fmt.Printf("WER Accuracy: %d.%03d%% (%d/%d)\n", accuracy_1k_percent/1000, accuracy_1k_percent%1000, correct.Load(), total.Load())
 	} else {
 		fmt.Println("No test cases processed")
 	}
-	fmt.Println("Last wrong sentence: ", wrong_sentence, wrong_graphemes, wrong_phonemes, wrong_words)
+	fmt.Println("Last wrong sentence: ", wrong_sentence)
+	fmt.Println("Last wrong graphemes: ", wrong_graphemes)
+	fmt.Println("Last wrong phonemes: ", wrong_phonemes)
+	fmt.Println("Last wrong words: ", wrong_words)
 }
 
 func removeStress(s string) string {
