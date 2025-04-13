@@ -17,7 +17,9 @@
 
 ## Backtest stage
 
-Test WordErrorRate ignoring stress
-`./homotest --langname english -nostress`
-or test WordErrorRate taking stress into account
-`./homotest --langname english`
+- Compile homograph test:
+   `cmd/build.sh`
+- Test WordErrorRate ignoring stress
+   `./homotest --langname english -nostress`
+- Or test WordErrorRate taking stress into account
+   `./homotest --langname english`
