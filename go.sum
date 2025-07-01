@@ -26,6 +26,8 @@ github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZ
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
 github.com/neurlang/quaternary v0.1.1 h1:9pF/dTDM+KWHuDTlv0AN1RTS30Q3ekys1B0nNRU8f0w=
 github.com/neurlang/quaternary v0.1.1/go.mod h1:yP32mjSy4ataxp2pwQ+RXUQoD0byfW50vzBjXs8GY5Y=
+github.com/neurlang/table v0.0.2 h1:QPv2EBZ+6+ky08lpAtyGgpvYLOcJdFTc2X6G3z/NLk8=
+github.com/neurlang/table v0.0.2/go.mod h1:FZkCBvizmDrEA4KqO2NpSkRhItz7SlzBzvSy33s40eI=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
