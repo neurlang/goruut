@@ -35,6 +35,7 @@ func (c *PhonemizeSentenceController) ServeHTTP(w http.ResponseWriter, request *
 	var req requests.PhonemizeSentence
 	err := decoder.Decode(&req)
 	if err != nil {
+		log.Error0(err)
 		w.WriteHeader(500)
 		return
 	}
