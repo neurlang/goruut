@@ -24,8 +24,8 @@ github.com/neurlang/classifier v0.1.9-0.20250408144327-4f540b9a1e3c h1:vv5mrsrPL
 github.com/neurlang/classifier v0.1.9-0.20250408144327-4f540b9a1e3c/go.mod h1:E4XumjY7XBOZldR64dfPp/H26adyl+HysU3TWWavRbo=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
-github.com/neurlang/quaternary v0.1.1 h1:9pF/dTDM+KWHuDTlv0AN1RTS30Q3ekys1B0nNRU8f0w=
-github.com/neurlang/quaternary v0.1.1/go.mod h1:yP32mjSy4ataxp2pwQ+RXUQoD0byfW50vzBjXs8GY5Y=
+github.com/neurlang/quaternary v0.2.0 h1:X/Po/vTM5rtYBzuzEo4cqPrxQ5eTQOLhrz+OybrJW/Y=
+github.com/neurlang/quaternary v0.2.0/go.mod h1:yP32mjSy4ataxp2pwQ+RXUQoD0byfW50vzBjXs8GY5Y=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
