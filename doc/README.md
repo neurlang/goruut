@@ -112,7 +112,7 @@ For each language, Goruut needs:
 3. **Coverage Evaluation**
    `go build && ./coverage.sh french` (in `cmd/backtest` folder)
    
-4. **Homograph Transformer Training**  
+4. **Transformer Training**  
    `./train_language.sh french --maxpremodulo [NUMBER]` (in `cmd/analysis2` folder, NUMBER is set to 5 times the cleaning complexity)
 
 5. **Homograph Transformer Training (optional)**  
