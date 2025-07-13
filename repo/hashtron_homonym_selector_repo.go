@@ -11,8 +11,8 @@ import (
 	"github.com/neurlang/goruut/repo/interfaces"
 	"sort"
 	"strconv"
-	"sync"
 	"strings"
+	"sync"
 )
 import "github.com/neurlang/classifier/datasets/phonemizer_multi"
 import "github.com/neurlang/classifier/hash"
@@ -62,20 +62,17 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 		if compressedData == nil {
 			continue
 		}
-
 		if (*r.getter).IsNewFormat(compressedData) {
 			bytesReader := bytes.NewReader(compressedData)
 
 			switch i {
 			case 0:
 
-				const fanout1 = 48
-				const fanout2 = 4
-				const fanout3 = 3
+				const fanout1 = 24
+				const fanout2 = 1
+				const fanout3 = 8
 
 				var net feedforward.FeedforwardNetwork
-				//net.NewLayer(fanout1, 0)
-				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
 				net.NewLayer(fanout1*fanout2, 0)
 				for i := 0; i < fanout3; i++ {
 					if i == 0 {
@@ -84,7 +81,7 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 						net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
 					}
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
-					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 8*byte(i), uint32(i)))
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 4*byte(i), uint32(i)))
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
 				}
 				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 32, fanout3))
@@ -159,11 +156,14 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 			Solution:  sol,
 		})
 	}
-
+	const fanout1 = 24
 	for i := range ai_sentence.Sentence {
-		const fanout1 = 48
 		var sample = ai_sentence.V2(fanout1, i)
-		var unchosed, chosed uint32
+		if sample.Len() <= 1 {
+			// no choice
+			continue
+		}
+		var unchosed, chosed [2]uint32
 		var accept bool
 		for j := 0; !accept && j < sample.Len(); j++ {
 			ai_sentence.Sentence[i].Solution = ai_sentence.Sentence[i].Choices[j][0]
@@ -182,17 +182,24 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 			}
 			if pred == 1 && !accept {
 				accept = true
-				chosed = ai_sentence.Sentence[i].Choices[j][0]
-				ret = append(ret, [4]uint32{uint32(i), ai_sentence.Sentence[i].Choices[j][0], ai_sentence.Sentence[i].Choices[j][1], 1})
+				chosed = ai_sentence.Sentence[i].Choices[j]
 			} else if j == 0 {
-				unchosed = ai_sentence.Sentence[i].Choices[j][0]
+				unchosed = ai_sentence.Sentence[i].Choices[j]
 			}
 		}
+		var pred uint32
 		if !accept {
-			ai_sentence.Sentence[i].Solution = unchosed
+			ai_sentence.Sentence[i].Solution = unchosed[0]
+			pred = unchosed[1]
 		} else {
-			ai_sentence.Sentence[i].Solution = chosed
+			ai_sentence.Sentence[i].Solution = chosed[0]
+			pred = chosed[1]
 		}
+		ret = append(ret, [4]uint32{uint32(i), ai_sentence.Sentence[i].Solution, pred, 1})
+	}
+	if len(ai_sentence.Sentence) > 0 {
+		var sample = ai_sentence.V2(fanout1, len(ai_sentence.Sentence)-1)
+		log.Now().Debugf("Sample IO final: %v", (&sample).IO(0).SampleSentence.Sample.Sentence)
 	}
 	return
 }
