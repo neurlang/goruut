@@ -7,7 +7,25 @@
   - `touch ../../dicts/english/weights5_reverse.json.zlib `
   - `touch ../../dicts/english/weights5.json.zlib`
 3. in goruut compile cmd/backtest using go build
-4. run ./dict.sh <your_language_dir_name>
+4. run `./dict.sh <your_language_dir_name>`
+
+## Verifying the dataset (lexicon.tsv, multi.tsv, multi_eval.tsv)
+
+1. Make sure relevant words in lexicon.tsv are tagged. **Without any words tagged, the model won't learn anything.**
+Example tagged:
+```
+subordinate	sə'bɔːɹdənət	["adjective","noun"]
+subordinate	sə'bɔːɹdəˌneɪt	["verb"]
+```
+2. Make sure that all words that are in the homograph/homophone sentences in multi.tsv have their words in lexicon.
+3. Make sure that there are not any tag collisions in lexicon. A tag collision is a word with identical writing and tags.
+Example collsion:
+```
+remained	ɹɪmˈeɪnd	["verb"]
+remained	ɹɪˈmeɪnd	["verb"]
+```
+As you can see it has identical tags.
+You will be warned about these scenarios in the next stage.
 
 ## Homograph stage
 
