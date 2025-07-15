@@ -41,7 +41,8 @@ document.getElementById('phonemizer').onclick = function() {
         "Language": lng.includes(',') ? "" : lng,
         "Languages": lng.includes(',') ? lng.split(',') : [],
         "IpaFlavors": target,
-        "Sentence": text
+        "Sentence": text,
+        "SplitSentences": true
     };
 
     // Send the POST request to the specified endpoint
@@ -59,16 +60,20 @@ document.getElementById('phonemizer').onclick = function() {
 	    	for (var i in data.Words) {
 		const word = data.Words[i];
 		const not_dict = !word.PosTags?.includes("dict");
+		const is_last_hr = word.IsLast ? "<hr />" : "";
 		const ubegin = not_dict ? "<u>" : "";
 		const uend = not_dict ? "</u>" : "";
 		const lang = document.getElementById('output').innerHTML +=
-			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>";
+			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>" + is_last_hr;
 			if (not_dict) { addWord(word.CleanWord, word.PrePunct, word.Phonetic, word.PostPunct); }
 	    	}
 		console.log('Success:', data);
 		const checkbox = document.getElementById('toggleCheckbox');
 		checkbox.click();
 		checkbox.click();
+		const checkbox2 = document.getElementById('toggleSentCheckbox');
+		checkbox2.click();
+		checkbox2.click();
 		deduplicateWordsArray();
 		repaintDataTable(window.dataTable);
 		return
@@ -98,16 +103,20 @@ document.getElementById('phonemizer').onclick = function() {
 	    	for (var i in data.Words) {
 		const word = data.Words[i];
 		const not_dict = !word.PosTags?.includes("dict");
+		const is_last_hr = word.IsLast ? "<hr />" : "";
 		const ubegin = not_dict ? "<u>" : "";
 		const uend = not_dict ? "</u>" : "";
 		const lang = document.getElementById('output').innerHTML +=
-			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>";
+			((targ == "Antvaset") ? "" : " ") + "<b>" + word.PrePunct + "</b>" + ubegin + word.Phonetic + uend + "<b>" + word.PostPunct + "</b>" + is_last_hr;
 			if (not_dict) { addWord(word.CleanWord, word.PrePunct, word.Phonetic, word.PostPunct); }
 	    	}
 		console.log('Success:', data);
 		const checkbox = document.getElementById('toggleCheckbox');
 		checkbox.click();
 		checkbox.click();
+		const checkbox2 = document.getElementById('toggleSentCheckbox');
+		checkbox2.click();
+		checkbox2.click();
 		deduplicateWordsArray();
 		repaintDataTable(window.dataTable);
 		return

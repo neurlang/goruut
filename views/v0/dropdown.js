@@ -16,6 +16,24 @@ checkbox.addEventListener('change', function() {
   });
 });
 
+const checkbox2 = document.getElementById('toggleSentCheckbox');
+// Add an event listener to the checkbox
+checkbox2.addEventListener('change', function() {
+  // Get references to the checkbox and the div with the ID 'output'
+  const outputDiv = document.getElementById('output');
+  // Get the <hr> tag inside the output div
+  const hrTags = outputDiv.querySelectorAll('hr');
+  
+  // Loop through all <b> tags and toggle their visibility
+  hrTags.forEach(hrTag => {
+    if (this.checked) {
+      hrTag.style.display = 'block';
+    } else {
+      hrTag.style.display = 'none';
+    }
+  });
+});
+
 function initDropdown(inp, lst, items, multiple) {
 
   // Get the dropdown elements

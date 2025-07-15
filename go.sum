@@ -28,6 +28,8 @@ github.com/neurlang/quaternary v0.2.0 h1:X/Po/vTM5rtYBzuzEo4cqPrxQ5eTQOLhrz+Oybr
 github.com/neurlang/quaternary v0.2.0/go.mod h1:yP32mjSy4ataxp2pwQ+RXUQoD0byfW50vzBjXs8GY5Y=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
+github.com/sentencizer/sentencizer v0.1.8 h1:DSV2IerNYCVHsHy83VY3WO2QwwoNpmi0OtrCmTGqiv8=
+github.com/sentencizer/sentencizer v0.1.8/go.mod h1:JZlIS4U5SBHg2aFiweQrMjxSYiI0y5pxYzdktMI+xMk=
 github.com/sirupsen/logrus v1.4.2/go.mod h1:tLMulIdttU9McNUspp0xgXVQah82FyeX6MwdIuYE2rE=
 github.com/sirupsen/logrus v1.9.3 h1:dueUQJ1C2q9oE3F7wvmSGAaVtTmUizReu6fjN8uqzbQ=
 github.com/sirupsen/logrus v1.9.3/go.mod h1:naHLuLoDiP4jHNo9R0sCBMtWGeIprob74mVsIT4qYEQ=

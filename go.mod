@@ -10,6 +10,7 @@ require (
 	github.com/neurlang/NumToWordsGo v0.0.0-20250407021724-7b23483906ba
 	github.com/neurlang/classifier v0.1.9-0.20250408144327-4f540b9a1e3c
 	github.com/neurlang/levenshtein v0.1.0
+	github.com/sentencizer/sentencizer v0.1.8
 	github.com/sirupsen/logrus v1.9.3
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
 	golang.org/x/text v0.3.3

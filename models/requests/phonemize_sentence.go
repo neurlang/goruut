@@ -6,6 +6,8 @@ type PhonemizeSentence struct {
 	Languages  []string
 	Sentence   string
 	IsReverse  bool
+
+	SplitSentences bool
 }
 
 func (p *PhonemizeSentence) Init() {

@@ -20,4 +20,7 @@ type PhonemizeSentenceWord struct {
 	PosTags   json.RawMessage
 	PrePunct  string
 	PostPunct string
+
+	IsFirst bool
+	IsLast  bool
 }
