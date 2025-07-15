@@ -21,6 +21,11 @@ type AppConfig struct {
 			TimestampFormat string
 		}
 	}
+	LoadModels []*struct {
+		Lang string
+		File string
+		Size int64
+	}
 
 	BuiltinDictLanguages []string
 	IpaFlavors           map[string]map[string]string
@@ -58,6 +63,15 @@ func (c *AppConfig) GetIpaFlavors() map[string]map[string]string {
 // GetPolicyMaxWords returns the policy max word count.
 func (c *AppConfig) GetPolicyMaxWords() int {
 	return c.PolicyMaxWords
+}
+
+// GetLoadModels returns the models to be loaded.
+func (c *AppConfig) GetLoadModels() []*struct {
+	Lang string
+	File string
+	Size int64
+} {
+	return c.LoadModels
 }
 
 // ConfigureLogger configures the application's logger.

@@ -59,3 +59,19 @@ func (ac *Configs) GetPolicyMaxWords() int {
 	}
 	return 0
 }
+
+// GetLoadModels retrieves the models to be loaded from the configurations.
+func (ac *Configs) GetLoadModels() []*struct {
+	Lang string
+	File string
+	Size int64
+} {
+	for _, config := range ac.Configs {
+		site := config.GetLoadModels()
+
+		if len(site) > 0 {
+			return site
+		}
+	}
+	return nil
+}

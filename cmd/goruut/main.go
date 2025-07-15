@@ -6,6 +6,7 @@ import (
 )
 import application "github.com/neurlang/goruut/app"
 import "github.com/neurlang/goruut/dicts"
+import "github.com/neurlang/goruut/loader"
 import "github.com/neurlang/goruut/repo/interfaces"
 
 // main is the main function for the application executable
@@ -23,6 +24,11 @@ func main() {
 
 	conf.ConfigureLogger()
 
+	di.Add((interfaces.LoadModels)(conf))
+
+	var loader = loader.NewLoader(di)
+
+	di.Add((interfaces.DictGetter)(loader))
 	di.Add((interfaces.IpaFlavor)(conf))
 	di.Add((interfaces.PolicyMaxWords)(conf))
 
