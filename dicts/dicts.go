@@ -58,6 +58,7 @@ import "github.com/neurlang/goruut/dicts/javanese"
 import "github.com/neurlang/goruut/dicts/macedonian"
 import "github.com/neurlang/goruut/dicts/hebrew"
 import "github.com/neurlang/goruut/dicts/hebrew2"
+import "github.com/neurlang/goruut/dicts/hebrew3"
 import "github.com/neurlang/goruut/dicts/amharic"
 import "github.com/neurlang/goruut/dicts/belarusian"
 import "github.com/neurlang/goruut/dicts/chechen"
@@ -285,6 +286,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return hebrew.Language.ReadFile(filename)
 	case "Hebrew2":
 		return hebrew2.Language.ReadFile(filename)
+	case "Hebrew3":
+		return hebrew3.Language.ReadFile(filename)
 	case "Amharic":
 		return amharic.Language.ReadFile(filename)
 	case "Belarusian":
@@ -496,6 +499,7 @@ func LangName(dir string) string {
 	case "hausa": return "Hausa";
 	case "hebrew": return "Hebrew";
 	case "hebrew2": return "Hebrew2";
+	case "hebrew3": return "Hebrew3";
 	case "hindi": return "Hindi";
 	case "hungarian": return "Hungarian";
 	case "icelandic": return "Icelandic";
