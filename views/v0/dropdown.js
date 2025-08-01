@@ -112,7 +112,7 @@ function initDropdown(inp, lst, items, multiple) {
 const items = ["Afrikaans", "Amharic", "Arabic", "Armenian", "Azerbaijani", "Basque", "Belarusian", "Bengali", "Bulgarian",
 "Burmese", "Cantonese", "Cebuano", "Chechen", "Chichewa", "ChineseMandarin", "Catalan", "Croatian", "Czech", "Danish", "Dutch", "Dzongkha",
 "English", "EnglishAmerican", "EnglishBritish", "Esperanto", "Estonian", "Farsi", "Finnish", "French", "Galician", "Georgian",
-"German", "Greek", "Gujarati", "Hausa", "Hebrew", "Hebrew2", "Hindi", "Hungarian", "Icelandic", "Indonesian", "Italian", "Jamaican", "Japanese",
+"German", "Greek", "Gujarati", "Hausa", "Hebrew", "Hebrew2", "Hebrew3", "Hindi", "Hungarian", "Icelandic", "Indonesian", "Italian", "Jamaican", "Japanese",
 "Javanese", "Kazakh", "KhmerCentral", "Korean", "Lao", "Latvian", "Lithuanian", "Luxembourgish", "Macedonian", "Malayalam", "MalayLatin",
 "Maltese", "Marathi", "MinnanHokkien", "MinnanTaiwanese", "Mongolian", "Nepali", "Norwegian", "Pashto", "Polish", "Portuguese",
 "Punjabi", "Romanian", "Russian", "Serbian", "Slovak", "Spanish", "Swahili", "Swedish", "Tagalog", "Tamil", "Telugu",
