@@ -142,6 +142,8 @@ import "github.com/neurlang/goruut/dicts/welsh/south"
 import "github.com/neurlang/goruut/dicts/cantonese"
 import "github.com/neurlang/goruut/dicts/minnan/taiwanese"
 import "github.com/neurlang/goruut/dicts/minnan/hokkien"
+import "github.com/neurlang/goruut/dicts/minnan/taiwanese2"
+import "github.com/neurlang/goruut/dicts/minnan/hokkien2"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -454,6 +456,10 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return hokkien.Language.ReadFile(filename)
 	case "MinnanTaiwanese":
 		return taiwanese.Language.ReadFile(filename)
+	case "MinnanHokkien2":
+		return hokkien2.Language.ReadFile(filename)
+	case "MinnanTaiwanese2":
+		return taiwanese2.Language.ReadFile(filename)
 	default:
 		return nil, ErrUnsupportedLanguage
 	}
@@ -602,6 +608,8 @@ func LangName(dir string) string {
 	case "cantonese": return "Cantonese";
 	case "minnan/hokkien": return "MinnanHokkien";
 	case "minnan/taiwanese": return "MinnanTaiwanese";
+	case "minnan/hokkien2": return "MinnanHokkien2";
+	case "minnan/taiwanese2": return "MinnanTaiwanese2";
 	default: return "";
 	}
 }
