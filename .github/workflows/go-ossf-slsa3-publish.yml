@@ -64,7 +64,7 @@ jobs:
             os: android
     uses: slsa-framework/slsa-github-generator/.github/workflows/builder_go_slsa3.yml@v2.0.0
     with:
-      go-version: '1.23'
+      go-version: '1.24'
       compile-builder: true
       config-file: .slsa-goreleaser-${{matrix.os}}-${{matrix.arch}}.yml
       # =============================================================================================================
