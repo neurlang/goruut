@@ -1,7 +1,7 @@
 package repo
 
 import (
-	"github.com/neurlang/NumToWordsGo/NumToWords"
+	"github.com/yousifnimah/NumToWordsGo/NumToWords"
 	"github.com/neurlang/goruut/helpers/log"
 	"strconv"
 	"strings"
