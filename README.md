@@ -239,3 +239,7 @@ transformer-based grapheme-to-phoneme model.
 ## Discord Invite
 
 `https://discord.gg/HWZ47pCBaH`
+
+## Slack Invite
+
+`https://join.slack.com/t/neurlang/shared_invite/zt-3b59gqxzk-eIc5KQdjL1kWzmhU5g7Riw`
