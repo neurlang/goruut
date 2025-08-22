@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"github.com/neurlang/classifier/datasets/phonemizer"
+	"github.com/neurlang/classifier/datasets/phonemizer_ulevel"
 	"github.com/neurlang/classifier/hashtron"
 	//"github.com/neurlang/classifier/layer/full"
 	"github.com/neurlang/classifier/hash"
@@ -323,7 +324,13 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		r.phoner = &iface
 	}
 
-	var files = []string{"weights4" + reverse + ".json.zlib", "weights2" + reverse + ".json.zlib", "weights1" + reverse + ".json.zlib"}
+	var files = []string{
+//		"",
+		"weights6" + reverse + ".json.zlib",
+		"weights4" + reverse + ".json.zlib",
+		"weights2" + reverse + ".json.zlib",
+		"weights1" + reverse + ".json.zlib",
+	}
 
 	for i, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
@@ -336,7 +343,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			bytesReader := bytes.NewReader(compressedData)
 
 			switch i {
-			case 2:
+			case 3:
 				const fanout1 = 1
 				const fanout2 = 5
 				const fanout3 = 3
@@ -350,7 +357,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				net.NewLayer(1, 0)
 
 				(*r.nets)[lang+reverse] = &net
-			case 1:
+			case 2:
 
 				const fanout1 = 5
 				var net feedforward.FeedforwardNetwork
@@ -362,7 +369,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 				(*r.nets)[lang+reverse] = &net
 
-			case 0:
+			case 1:
 
 				const fanout1 = 32
 				const fanout2 = 4
@@ -385,6 +392,29 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 				(*r.nets)[lang+reverse] = &net
 
+			case 0:
+				const fanout1 = 24
+				const fanout2 = 1
+				const fanout3 = 4
+
+				var net feedforward.FeedforwardNetwork
+				net.NewLayer(fanout1*fanout2, 0)
+				for i := 0; i < fanout3; i++ {
+					if i == 0 {
+						net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
+					} else {
+						net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
+					}
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 8*byte(i), uint32(i)))
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+				}
+				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 32, fanout3))
+				net.NewLayer(fanout1*fanout2, 0)
+				net.NewCombiner(sum.MustNew([]uint{fanout1 * fanout2}, 0))
+				net.NewLayer(1, 0)
+
+				(*r.nets)[lang+reverse] = &net
 			}
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
 			log.Error0(err)
@@ -734,15 +764,19 @@ outer:
 					SrcFut: copystrings(srcaR[i : len(srcaR)-q]),
 					Option: option,
 				}
+				const fanout1new = 24
+				var input2 = phonemizer_ulevel.NewInferenceSubsample(srcaR, dstaR, option, fanout1new/3)
 				var pred int
 				r.mut.RLock()
 				if net.LenLayers() == 3 {
 					pred = int(net.Infer2(input.V1()))
 				} else if net.LenLayers() == 5 {
 					pred = int(net.Infer2(&input))
-				} else { // newest model
+				} else if net.LenLayers() == 17 {
 					const fanout1 = 32
 					pred = int(net.Infer2(input.V2(fanout1)))
+				} else { // newest model
+					pred = int(net.Infer2(input2))
 				}
 				r.mut.RUnlock()
 				predicted += pred

@@ -24,19 +24,20 @@ cleanup() {
     exit 1
 }
 
+# Trap the SIGINT signal and call the cleanup function
 trap cleanup SIGINT
 
 # Start training process with filtered arguments
-../../../classifier/cmd/train_phonemizer/train_phonemizer \
+../../../classifier/cmd/train_phonemizer_ulevel/train_phonemizer_ulevel \
     --maxdepth 9999 $resume_flag \
-    --cleantsv "../../dicts/$lang_name/clean.tsv" \
-    --dstmodel "../../dicts/$lang_name/weights1.json.zlib" \
+    --langdir "../../dicts/$lang_name" \
+    --dstmodel "../../dicts/$lang_name/weights6.json.zlib" \
     "${filtered_args[@]}" &  # Pass filtered arguments here
 PID1=$!
 
 # Start backtest process
-../backtest/backtest -testing -langname "$lang_name" &
-PID2=$!
+#../backtest/backtest -testing -langname "$lang_name" &
+#PID2=$!
 
 # Wait for processes and clean up
 wait $PID1

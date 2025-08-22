@@ -29,16 +29,17 @@ trap cleanup SIGINT
 
 #train
 
-../../../classifier/cmd/train_phonemizer/train_phonemizer \
+../../../classifier/cmd/train_phonemizer_ulevel/train_phonemizer_ulevel \
     --maxdepth 9999 $resume_flag \
-    --cleantsv "../../dicts/$lang_name/clean_reverse.tsv" \
-    --dstmodel "../../dicts/$lang_name/weights1_reverse.json.zlib" \
+    --langdir "../../dicts/$lang_name" \
+    --reverse \
+    --dstmodel "../../dicts/$lang_name/weights6_reverse.json.zlib" \
     "${filtered_args[@]}" &  # Pass filtered arguments here
 PID1=$!
 
 # Start the second process in the background
-../backtest/backtest -reverse -testing  -langname $lang_name &
-PID2=$!
+#../backtest/backtest -reverse -testing  -langname $lang_name &
+#PID2=$!
 
 # Wait for both processes to finish
 wait $PID1
