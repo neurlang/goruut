@@ -20,6 +20,9 @@ func expandNumericWord(word, lang string) (ret []map[string]uint32) {
 		log.Now().Debugf("%e", err)
 		return nil
 	}
+	if num < 0 {
+		return nil
+	}
 
 	var sentence string
 	switch lang {
