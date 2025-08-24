@@ -396,20 +396,17 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				const fanout1 = 24
 				const fanout2 = 1
 				const fanout3 = 4
+				const fanout4 = 32
 
 				var net feedforward.FeedforwardNetwork
 				net.NewLayer(fanout1*fanout2, 0)
 				for i := 0; i < fanout3; i++ {
-					if i == 0 {
-						net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
-					} else {
-						net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
-					}
+					net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
-					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 8*byte(i), uint32(i)))
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4 - 8*byte(i), uint32(i)))
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
 				}
-				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 32, fanout3))
+				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4, fanout3))
 				net.NewLayer(fanout1*fanout2, 0)
 				net.NewCombiner(sum.MustNew([]uint{fanout1 * fanout2}, 0))
 				net.NewLayer(1, 0)
