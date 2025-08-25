@@ -1,7 +1,9 @@
 #!/bin/bash
 
+../build.sh
+
 for n in $(shuf -i 0-10); do
-/bin/cp ../../dataset/$1/l* ../../../goruut/dicts/$1
+/bin/cp ../../../dataset/$1/l* ../../../goruut/dicts/$1
 ./study_language.sh $1 --rowlossimportance $n
 ./clean_language.sh $1 --rowlossimportance $n
 ./train_language.sh $1 --overwrite
