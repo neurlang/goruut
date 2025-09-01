@@ -1,16 +1,16 @@
-#!/bin/bash
- 
+#!/usr/bin/env bash
+
 # Function to handle SIGINT (Ctrl+C)
 cleanup() {
-    echo "Caught SIGINT, terminating proces..."
-    kill -SIGTERM $PID1 2>/dev/null
+    echo "Caught SIGINT, terminating process..."
+    if [ -n "$PID1" ]; then
+        kill -SIGTERM "$PID1" 2>/dev/null
+    fi
 }
- 
-trap cleanup SIGINT
- 
+trap cleanup INT
+
 lang_name() {
-    local dir="$1"
- 
+    dir="$1"
     case "$dir" in
         malay/arab) echo "MalayArab"; return;;
         malay/latin) echo "MalayLatin"; return;;
@@ -40,50 +40,45 @@ lang_name() {
         minnan/hokkien2) echo "MinnanHokkien2"; return;;
         minnan/taiwanese2) echo "MinnanTaiwanese2"; return;;
     esac
- 
+
     # Default case: split on '/' and capitalize each part
-    local result=""
-    IFS='/' read -ra parts <<< "$dir"
+    result=""
+    IFS='/' read -r -a parts <<< "$dir"
     for part in "${parts[@]}"; do
-        result+=$(tr '[:lower:]' '[:upper:]' <<< "${part:0:1}")${part:1}
+        first=$(printf "%s" "${part:0:1}" | tr '[:lower:]' '[:upper:]')
+        result+="${first}${part:1}"
     done
- 
     echo "$result"
 }
- 
-lang="$(lang_name $1)"
- 
-for i in $(seq -10 10); do
- 
-if [ ! -f ../../dicts/$1/weights6.$i.json.zlib ]; then
-    continue
-fi
- 
-rm ../../dicts/$1/weights6.json.zlib
-rm ../../dicts/$1/language.json
-rm ../../dicts/$1/missing.all.zlib
- 
-rm ../../dicts/$1/weights4.json.zlib
- 
-cp ../../dicts/$1/weights6.$i.json.zlib ../../dicts/$1/weights6.json.zlib
-cp ../../dicts/$1/language.$i.json ../../dicts/$1/language.json
- 
-../build.sh
- 
- 
- 
-../goruut/goruut --configfile ../../configs/config.json 2> /dev/null &
-PID1=$!
- 
-sleep 1
- 
-pushd ../../dicts_scripts/
-echo -n "$i: ";
-./phonemize.sh --lang $lang
-popd
- 
- 
- 
-cleanup
- 
+
+lang="$(lang_name "$1")"
+
+# Use brace expansion instead of seq (works in bash on Windows)
+for i in {-10..10}; do
+    if [ ! -f "../../dicts/$1/weights6.$i.json.zlib" ]; then
+        continue
+    fi
+
+    rm -f "../../dicts/$1/weights6.json.zlib" \
+          "../../dicts/$1/language.json" \
+          "../../dicts/$1/missing.all.zlib" \
+          "../../dicts/$1/weights4.json.zlib"
+
+    cp "../../dicts/$1/weights6.$i.json.zlib" "../../dicts/$1/weights6.json.zlib"
+    cp "../../dicts/$1/language.$i.json" "../../dicts/$1/language.json"
+
+    ../build.sh
+
+    ../goruut/goruut --configfile ../../configs/config.json 2>/dev/null &
+    PID1=$!
+
+    sleep 1
+
+    (
+        cd ../../dicts_scripts/ || exit 1
+        printf "%s: " "$i"
+        ./phonemize.sh --lang "$lang"
+    )
+
+    cleanup
 done
