@@ -47,10 +47,12 @@ lang_name() {
 
     # Default case: split on '/' and capitalize each part
     result=""
-    IFS='/' read -r -a parts <<< "$dir"
+    IFS='/' read -ra parts <<< "$dir"
     for part in "${parts[@]}"; do
-        first=$(printf "%s" "${part:0:1}" | tr '[:lower:]' '[:upper:]')
-        result+="${first}${part:1}"
+        # macOS-compatible capitalization
+        first_char=$(echo "${part:0:1}" | tr '[:lower:]' '[:upper:]')
+        rest_chars="${part:1}"
+        result+="${first_char}${rest_chars}"
     done
     echo "$result"
 }
