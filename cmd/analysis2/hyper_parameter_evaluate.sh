@@ -3,11 +3,15 @@
 # Function to handle SIGINT (Ctrl+C)
 cleanup() {
     echo "Caught SIGINT, terminating process..."
-    if [ -n "$PID1" ]; then
-        kill -SIGTERM "$PID1" 2>/dev/null
-    fi
+    [ -n "$PID1" ] && kill -SIGTERM "$PID1" 2>/dev/null
+    exit 1
 }
 trap cleanup INT
+
+stop_goruut() {
+    [ -n "$PID1" ] && kill -SIGTERM "$PID1" 2>/dev/null
+    PID1=""
+}
 
 lang_name() {
     dir="$1"
@@ -80,5 +84,6 @@ for i in {-10..10}; do
         ./phonemize.sh --lang "$lang"
     )
 
-    cleanup
+    # free the port before next iteration
+    stop_goruut
 done
