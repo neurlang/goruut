@@ -58,8 +58,8 @@ lang_name() {
 lang="$(lang_name "$1")"
 
 # Use brace expansion instead of seq (works in bash on Windows)
-for i in {-10..10}; do
-    if [ ! -f "../../dicts/$1/weights6.$i.json.zlib" ]; then
+for i in {0..10}; do
+    if [ ! -f "../../dicts/$1/weights6.${i}.json.zlib" ]; then
         continue
     fi
 
@@ -68,8 +68,8 @@ for i in {-10..10}; do
           "../../dicts/$1/missing.all.zlib" \
           "../../dicts/$1/weights4.json.zlib"
 
-    cp "../../dicts/$1/weights6.$i.json.zlib" "../../dicts/$1/weights6.json.zlib"
-    cp "../../dicts/$1/language.$i.json" "../../dicts/$1/language.json"
+    cp "../../dicts/$1/weights6.${i}.json.zlib" "../../dicts/$1/weights6.json.zlib"
+    cp "../../dicts/$1/language.${i}.json" "../../dicts/$1/language.json"
 
     ../build.sh
 
@@ -80,7 +80,7 @@ for i in {-10..10}; do
 
     (
         cd ../../dicts_scripts/ || exit 1
-        printf "%s: " "$i"
+        printf "%s: " "${i}"
         ./phonemize.sh --lang "$lang"
     )
 
