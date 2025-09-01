@@ -86,6 +86,8 @@ for i in {0..10}; do
         ./phonemize.sh --lang "$lang"
     )
 
+    sleep 1
+
     # free the port before next iteration
     stop_goruut
 done
