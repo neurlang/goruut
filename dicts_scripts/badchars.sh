@@ -13,5 +13,6 @@ rgrep ' ' --exclude-dir .git | \
 	grep --invert-match minnan | \
 	grep --invert-match japanese | \
 	grep --invert-match tibetan | \
+	grep --invert-match shantaiyai | \
 	grep --invert-match english/multi
 egrep '[[:upper:]]' */lexicon.tsv */*/lexicon.tsv
