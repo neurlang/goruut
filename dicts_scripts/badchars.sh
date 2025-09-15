@@ -1,10 +1,8 @@
 #!/bin/bash
 
 # ˑ
-rgrep -P '\xC9\xA1' . -I --exclude-dir .git
+rgrep "$(printf '\315\241\|\315\234\|\311\241')" . -I --exclude-dir .git
 grep \\. -I --exclude-dir .git */lexicon.tsv */*/lexicon.tsv
-rgrep -P '\xCD\xA1' . -I --exclude-dir .git
-rgrep -P '\xCD\x9C' . -I --exclude-dir .git
 egrep '\[[^"]' -I --exclude-dir .git */lexicon.tsv */*/lexicon.tsv
 egrep '[^"]\]' -I --exclude-dir .git */lexicon.tsv */*/lexicon.tsv
 egrep '	.*/' -I --exclude-dir .git */lexicon.tsv */*/lexicon.tsv
