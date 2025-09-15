@@ -20,6 +20,7 @@ lang_name() {
         malay/latin) echo "MalayLatin"; return;;
         bengali/dhaka) echo "BengaliDhaka"; return;;
         bengali/rahr) echo "BengaliRahr"; return;;
+        bishnupriyamanipuri) echo "BishnupriyaManipuri"; return;;
         chinese/mandarin) echo "ChineseMandarin"; return;;
         english/american) echo "EnglishAmerican"; return;;
         english/british) echo "EnglishBritish"; return;;
@@ -43,6 +44,7 @@ lang_name() {
         minnan/taiwanese) echo "MinnanTaiwanese"; return;;
         minnan/hokkien2) echo "MinnanHokkien2"; return;;
         minnan/taiwanese2) echo "MinnanTaiwanese2"; return;;
+        shantaiyai) echo "ShanTaiYai"; return;;
     esac
 
     # Default case: split on '/' and capitalize each part
