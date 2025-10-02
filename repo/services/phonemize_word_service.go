@@ -44,7 +44,15 @@ func (p *PhonemizeWordService) PhonemizeWords(isReverse bool, lang, word string,
 		return expanded, make([][2]string, len(expanded))
 	}
 	var lpunct, rpunct string
-
+	if ret == nil {
+		ret = (*p.repo).LookupWords(isReverse, lang, word)
+		for _, lang := range languages {
+			if ret != nil {
+				break
+			}
+			ret = (*p.repo).LookupWords(isReverse, lang, word)
+		}
+	}
 	if ret == nil {
 		word, lpunct, rpunct = (*p.ai).CleanWord(isReverse, word, append([]string{lang}, languages...))
 		if word == "" {
