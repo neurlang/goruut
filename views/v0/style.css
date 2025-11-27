@@ -40,3 +40,28 @@
 .dropdown-content {
   z-index: 2;
 }
+
+/* Add microphone icon to Phonemize button */
+#phonemizer::before {
+  content: "🗣️ ";
+  font-size: 1.1em;
+}
+
+/* Add copy icon to Copy button */
+#copyit::before {
+  content: "📋 ";
+  font-size: 1.1em;
+}
+
+/* Add recycle bin icon to Delete Selected button */
+#deleteSelected::before {
+  content: "🗑️ ";
+  font-size: 1.1em;
+}
+
+/* Optional: Add some spacing and alignment adjustments */
+#phonemizer, #copyit, #deleteSelected {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
