@@ -9,3 +9,34 @@
 	left: 0;
 	z-index: 1; /* Ensures it stays above other cells */
 }
+
+/* Add chevrons to dropdown inputs */
+.dropdown {
+  position: relative;
+}
+
+.dropdown input {
+  padding-right: 30px; /* Make space for the chevron */
+}
+
+.dropdown::after {
+  content: "▼";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #666;
+  font-size: 12px;
+  z-index: 1;
+}
+
+/* Optional: Change chevron color on focus */
+.dropdown:focus-within::after {
+  color: #005C5C;
+}
+
+/* Ensure the dropdown lists appear above the chevron */
+.dropdown-content {
+  z-index: 2;
+}
