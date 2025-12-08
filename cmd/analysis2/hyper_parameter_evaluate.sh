@@ -34,6 +34,7 @@ lang_name() {
         vietnamese/southern) echo "VietnameseSouthern"; return;;
         gaelic/scottish) echo "GaelicScottish"; return;;
         gaelic/irish) echo "GaelicIrish"; return;;
+        langbelta) echo "LangBelta"; return;;
         latin/classical) echo "LatinClassical"; return;;
         latin/ecclesiastical) echo "LatinEcclesiastical"; return;;
         nahuatl/classical) echo "NahuatlClassical"; return;;
