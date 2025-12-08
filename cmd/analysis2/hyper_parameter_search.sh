@@ -4,31 +4,31 @@
 
 padspace=""
 if [[  "$1" == "cantonese" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "minnan/hokkien" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "minnan/taiwanese" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "minnan/hokkien2" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "minnan/taiwanese2" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "chinese/mandarin" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "japanese" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "tibetan" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 if [[  "$1" == "shantaiyai" ]]; then
-	padspace="-padspace";
+	padspace="-padspace --hyperinit 16";
 fi
 
 for n in $(shuf -i 0-10); do
