@@ -27,6 +27,8 @@ lang_name() {
         hebrew2) echo "Hebrew2"; return;;
         hebrew3) echo "Hebrew3"; return;;
         khmer/central) echo "KhmerCentral"; return;;
+        linguafrancanova) echo "LinguaFrancaNova"; return;;
+        lulesaami) echo "LuleSaami"; return;;
         vietnamese/central) echo "VietnameseCentral"; return;;
         vietnamese/northern) echo "VietnameseNorthern"; return;;
         vietnamese/southern) echo "VietnameseSouthern"; return;;
