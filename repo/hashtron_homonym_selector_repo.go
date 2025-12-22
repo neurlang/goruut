@@ -55,7 +55,10 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 		return
 	}
 
-	var files = []string{"weights5" + reverse + ".json.zlib"}
+	var files = []string{
+		"weights7" + reverse + ".json.zlib",
+		"weights5" + reverse + ".json.zlib",
+	}
 	for i, file := range files {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
 
@@ -67,6 +70,26 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 
 			switch i {
 			case 0:
+				const fanout1 = 24
+				const fanout2 = 1
+				const fanout3 = 4
+				const fanout4 = 32
+
+				var net feedforward.FeedforwardNetwork
+				net.NewLayer(fanout1*fanout2, 0)
+				for i := 0; i < fanout3; i++ {
+					net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4-8*byte(i), uint32(i)))
+					net.NewLayerPI(fanout1*fanout2, 0, 0)
+				}
+				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4, fanout3))
+				net.NewLayer(fanout1*fanout2, 0)
+				net.NewCombiner(sum.MustNew([]uint{fanout1 * fanout2}, 0))
+				net.NewLayer(1, 0)
+
+				(*r.nets)[lang+reverse] = &net
+			case 1:
 
 				const fanout1 = 24
 				const fanout2 = 1
