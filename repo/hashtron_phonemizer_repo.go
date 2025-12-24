@@ -3,7 +3,6 @@ package repo
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/neurlang/classifier/datasets/phonemizer"
 	"github.com/neurlang/classifier/datasets/phonemizer_ulevel"
 	"github.com/neurlang/classifier/hashtron"
 	//"github.com/neurlang/classifier/layer/full"
@@ -754,30 +753,16 @@ outer:
 			}
 			var predicted int
 			for q := 0; (!multiword && q == 0) || (multiword && q < len(srcaR)-i); q++ {
-				var input = phonemizer.NewSample{
-					SrcA:   copystrings(srcaR[:len(srcaR)-q]),
-					DstA:   copystrings(dstaR[0:i]),
-					SrcCut: copystrings(srcaR[0:i]),
-					SrcFut: copystrings(srcaR[i : len(srcaR)-q]),
-					Option: option,
-				}
 				const fanout1new = 24
 				var input2 = phonemizer_ulevel.NewInferenceSubsample(srcaR, dstaR, option, fanout1new/3)
 				var pred int
 				r.mut.RLock()
-				if net.LenLayers() == 3 {
-					pred = int(net.Infer2(input.V1()))
-				} else if net.LenLayers() == 5 {
-					pred = int(net.Infer2(&input))
-				} else if net.LenLayers() == 17 {
-					const fanout1 = 32
-					pred = int(net.Infer2(input.V2(fanout1)))
-				} else { // newest model
+				if true { // newest model
 					pred = int(net.Infer2(input2))
 				}
 				r.mut.RUnlock()
 				predicted += pred
-				log.Now().Debugf("Model predicted: %v %v %v %v %v -> %d", input.SrcA, input.DstA, input.SrcCut, input.SrcFut, input.Option, pred)
+				log.Now().Debugf("Model predicted: %v %v %v -> %d", srcaR, dstaR, option, pred)
 			}
 			if (!multiword && predicted == 1) || (multiword && 2*predicted > len(srcaR)) {
 				if option == "_" {
