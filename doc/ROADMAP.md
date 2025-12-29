@@ -13,14 +13,18 @@ Following Sutton's "Bitter Lesson," the project should emphasize general-purpose
 - Preserves punctuation, stress marks and tonal diacritics
 - Fast performance (milliseconds per sentence) via prefix lookups and ML inference
 
-**Recent Enhancements (v0.6.1, Apr 2025):**
-- Retrained all forward/reverse G2P models
-- Added transformer-based disambiguation for English homographs
-- Numeric normalization for Arabic/English
-- Improved Hebrew diacritic handling
-- Overhauled Hebrew phonemization (sorting diacritics and grouping marks)
+**Recent Enhancements (v0.6.3 - Dec 2025):**
+- Massive model retraining: 140×11 = 1,540 forward phonemization models trained and evaluated
+- Selected best performing models from hyperparameter search for all 140 languages
+- Retrained all reverse (P2G) models using latest 6-layer transformer architecture
+- Integrated utterance-level transformer for improved context handling
+- Added hyperparameter search and evaluation framework
+- Improved Hebrew homograph disambiguation with new net architecture
+- Enhanced transcript handling for multiple languages
+- Implemented padspace language support with hyperinit
+- Added comprehensive evaluation scripts and phonemization tools
 
-**Current Challenge:** Many languages remain at "beta" quality (rare/irregular scripts)
+**Current Challenge:** Continuous model improvement and quality assurance across all 140 languages, better datasets for low resource languages.
 
 ## Data & Models (Scale with Compute)
 **Strategy:**
