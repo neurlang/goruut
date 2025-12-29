@@ -11,7 +11,7 @@ It is possible to try this software live at [hashtron.cloud](https://hashtron.cl
 ## Features
 
 * Phone set: IPA
-* Supported languages: 139
+* Supported languages: 140
 * Processing speed: fast
 * Phone tokens: yes
 * Syllable tokens: no
@@ -88,7 +88,8 @@ sudo docker compose up -d --force-recreate --build
 * Haitian Creole
 * Hausa
 * Hawaiian
-* Hebrew
+* Hebrew Diacritized
+* Hebrew Undiacritized
 * Hindi
 * Hungarian
 * Icelandic

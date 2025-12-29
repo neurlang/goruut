@@ -9,7 +9,7 @@ Following Sutton's "Bitter Lesson," the project should emphasize general-purpose
 - Favoring neural retraining and data-driven modeling as compute gets cheaper
 
 ## Current Status
-- Go-based IPA phonemizer covering 139 languages (matching Voice2Json's list)
+- Go-based IPA phonemizer covering 140 languages (matching Voice2Json's list)
 - Preserves punctuation, stress marks and tonal diacritics
 - Fast performance (milliseconds per sentence) via prefix lookups and ML inference
 
@@ -119,7 +119,7 @@ Key steps:
 - Smooth language-specific quirks
 - Foster contributor community
 
-**Goal:** Continuously improve phonemization quality across all 139 languages for TTS/STT, education, singing synthesis, etc.
+**Goal:** Continuously improve phonemization quality across all 140 languages for TTS/STT, education, singing synthesis, etc.
 
 ## Sources
 1. [Goruut's github](https://github.com/neurlang/goruut)

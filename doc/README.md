@@ -4,7 +4,7 @@
 
 Goruut is an advanced open-source phonemization system that provides bidirectional conversion between written text and IPA phonetic representations. Designed for both research and production use, it offers:
 
-- High-accuracy phonemization for 130+ languages
+- High-accuracy phonemization for 140 languages
 - Compact, efficient models that run on CPU
 - Self-hostable architecture with no external dependencies
 - Support for both word-level and sentence-level processing
