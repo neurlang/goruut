@@ -42,7 +42,7 @@ Go to the directory `goruut/cmd/analysis2` and run `./hyper_parameter_evaluate.s
 
 ```bash
 cd goruut/cmd/analysis2/
-./hyper_parameter_search.sh vietnamese/central
+./hyper_parameter_evaluate.sh vietnamese/central
 ```
 
 
