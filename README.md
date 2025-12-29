@@ -190,7 +190,7 @@ There are currently 3 target languages (IPA flavors). They are:
 
 ## Dependencies
 
-See go.mod file for an up-to-date list of depended-on projects. Minimum supported version of golang is go 1.19 (project uses type parameters).
+See go.mod file for an up-to-date list of depended-on projects. Minimum supported version of golang is go 1.22 (project uses type parameters).
 
 ## Numbers, Dates, and More
 

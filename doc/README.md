@@ -143,7 +143,7 @@ For each language, Goruut needs:
 ### Bare Metal Installation
 
 1. **Requirements:**
- - Go 1.20+
+ - Go 1.22+
  - Python 3.8+ (for inference only)
  - 2GB RAM minimum
 

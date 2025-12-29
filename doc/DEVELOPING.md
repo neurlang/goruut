@@ -126,7 +126,7 @@ More tests wanted!
 ## Troubleshooting
 
 ### Common Issues
-- **Compilation errors:** Check Go version (requires 1.19+)
+- **Compilation errors:** Check Go version (requires 1.22+)
 - **Dependency issues:** Use `go mod tidy`
 - **Local development:** Use `replace` in `go.mod` for local forks
 
