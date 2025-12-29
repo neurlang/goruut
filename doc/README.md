@@ -68,17 +68,17 @@ Goruut uses a hybrid approach:
 2. **Hashtron Transformers**
     - Compact weightless networks using integer arithmetic
     - Specialized architectures for different tasks:
-        - Phonemization (16-phoneme window)
-        - Dephonemization (16-phoneme window)
-        - Homograph disambiguation (16-word window)
+        - Phonemization (8-phoneme window)
+        - Dephonemization (8-phoneme window)
+        - Homograph disambiguation (8-word window)
 
 ### Model Specifications
 
 | Component               | Layers | Attention Heads | Context Window      | Model Size |
 |-------------------------|--------|-----------------|---------------------|------------|
-| Phonemization           | 7      | 4               | 16 phonemes         | ~1.2MB     |
-| Dephonemization         | 7      | 4               | 16 phonemes         | ~1.2MB     |
-| Homograph Resolver      | 7      | 4               | 16 words            | ~1.0MB     |
+| Phonemization           | 6      | 4               | 8 phonemes          | ~1.2MB     |
+| Dephonemization         | 6      | 4               | 8 phonemes          | ~1.2MB     |
+| Homograph Resolver      | 6      | 4               | 8 words             | ~100.0MB (dataset size specific) |
 
 ## Training System
 
@@ -212,7 +212,7 @@ For each language, Goruut needs:
 ### Technical Implementation
 
 **Q: What algorithms/models power the phonemization?**  
-A: Goruut uses a hybrid system combining Statistical Grammar Induction and Hashtron Transformers (compact weightless neural networks). The architecture includes specialized 7-layer transformers for phonemization, dephonemization, and homograph disambiguation.
+A: Goruut uses a hybrid system combining Statistical Grammar Induction and Hashtron Transformers (compact weightless neural networks). The architecture includes specialized 6-layer transformers for phonemization, dephonemization, and homograph disambiguation.
 
 **Q: How are language models structured?**  
 A: Each language has forward (`weights4.json.zlib`) and reverse (`weights4_reverse.json.zlib`) model files containing transformer weights. These are trained separately for G2P and P2G tasks.
