@@ -27,8 +27,8 @@ The pull request must contain (for the specific language):
 - language.go
 - language.json
 - language_reverse.json
-- weights4.json.zlib
-- weights4_reverse.json.zlib
+- weights6.json.zlib
+- weights6_reverse.json.zlib
 - LICENSE.md (**according the choice of the author**)
 
 The pull request can't contain (for the specific language):

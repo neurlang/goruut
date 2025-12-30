@@ -215,7 +215,7 @@ For each language, Goruut needs:
 A: Goruut uses a hybrid system combining Statistical Grammar Induction and Hashtron Transformers (compact weightless neural networks). The architecture includes specialized 6-layer transformers for phonemization, dephonemization, and homograph disambiguation.
 
 **Q: How are language models structured?**  
-A: Each language has forward (`weights4.json.zlib`) and reverse (`weights4_reverse.json.zlib`) model files containing transformer weights. These are trained separately for G2P and P2G tasks.
+A: Each language has forward (`weights6.json.zlib`) and reverse (`weights6_reverse.json.zlib`) model files containing transformer weights. These are trained separately for G2P and P2G tasks.
 
 ### Data & Training
 

@@ -107,7 +107,7 @@ Use this default template and modify it according to your language:
 
 1. Copy `language.go` from another language and place it in your folder.
 2. Modify `package otherlanguage` to `package <yourfoldername>`.
-3. Ensure `weights4.json.lzw` is embedded.
+3. Ensure `weights6.json.lzw` is embedded.
 4. Create blank files for the other files (`missing.tsv`) which are embedded to bypass `go build`.
 
 ## Step 8: Modify `dicts.go`

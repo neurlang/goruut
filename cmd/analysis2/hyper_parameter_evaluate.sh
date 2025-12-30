@@ -73,8 +73,7 @@ for i in {0..10}; do
 
     rm -f "../../dicts/$1/weights6.json.zlib" \
           "../../dicts/$1/language.json" \
-          "../../dicts/$1/missing.all.zlib" \
-          "../../dicts/$1/weights4.json.zlib"
+          "../../dicts/$1/missing.all.zlib"
 
     cp "../../dicts/$1/weights6.${i}.json.zlib" "../../dicts/$1/weights6.json.zlib"
     cp "../../dicts/$1/language.${i}.json" "../../dicts/$1/language.json"
