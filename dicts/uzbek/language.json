@@ -1,4 +1,4 @@
-{"Map":{"a":["ɒ","ɒˈ","a","æ"],
+{"Map":{"a":["ɒ","ɒˈ","a","ˈ","æ"],
 "b":["b","bˈ","ˈ"],
 "ch":["tʃ"],
 "d":["d"],
@@ -24,9 +24,10 @@
 "u":["u","uˈ"],
 "v":["v","vˈ"],
 "x":["χ","x"],
-"y":["j","jˈ"],
+"y":["j","jˈ","ʲ"],
 "z":["z"],
-"ʼa":["ɵˈ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
+"ʼ":["ɵ"],
+"а":["ɒ"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":null,"DstMultiSuffix":["ː"],
 "DropLast":null,"DstMultiPrefix":["ˈ","'","ˌ"],
 "PrePhonWordSteps":[{"Normalize":"NFC"},{"ToLower":true}],
 "SplitBefore":null,"SplitAfter":null,"SplitAt":null,"IsDuplex":false,"IsSrcSurround":false,"SrcDuplicate":null}
