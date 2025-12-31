@@ -8,8 +8,8 @@ import (
 	//"github.com/neurlang/classifier/layer/full"
 	"github.com/neurlang/classifier/hash"
 	"github.com/neurlang/classifier/layer/crossattention"
-	"github.com/neurlang/classifier/layer/majpool2d"
-	"github.com/neurlang/classifier/layer/parity"
+	//"github.com/neurlang/classifier/layer/majpool2d"
+	//"github.com/neurlang/classifier/layer/parity"
 	"github.com/neurlang/classifier/layer/sochastic"
 	"github.com/neurlang/classifier/layer/sum"
 	"github.com/neurlang/classifier/net/feedforward"
@@ -326,9 +326,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 	var files = []string{
 //		"",
 		"weights6" + reverse + ".json.zlib",
-		"weights4" + reverse + ".json.zlib",
-		"weights2" + reverse + ".json.zlib",
-		"weights1" + reverse + ".json.zlib",
 	}
 
 	for i, file := range files {
@@ -342,55 +339,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			bytesReader := bytes.NewReader(compressedData)
 
 			switch i {
-			case 3:
-				const fanout1 = 1
-				const fanout2 = 5
-				const fanout3 = 3
-				const fanout4 = 5
-
-				var net feedforward.FeedforwardNetwork
-				net.NewLayerP(fanout1*fanout2*fanout3*fanout4, 0, 1<<13)
-				net.NewCombiner(majpool2d.MustNew2(fanout1*fanout2*fanout4, 1, fanout3, 1, fanout4, 1, 1, 0))
-				net.NewLayer(fanout1*fanout2, 0)
-				net.NewCombiner(majpool2d.MustNew2(fanout2, 1, fanout1, 1, fanout2, 1, 1, 0))
-				net.NewLayer(1, 0)
-
-				(*r.nets)[lang+reverse] = &net
-			case 2:
-
-				const fanout1 = 5
-				var net feedforward.FeedforwardNetwork
-				//net.NewLayer(fanout1, 0)
-				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
-				net.NewLayer(fanout1, 0)
-				net.NewCombiner(parity.MustNew(fanout1))
-				net.NewLayer(1, 0)
-
-				(*r.nets)[lang+reverse] = &net
-
-			case 1:
-
-				const fanout1 = 32
-				const fanout2 = 4
-				const fanout3 = 3
-
-				var net feedforward.FeedforwardNetwork
-				//net.NewLayer(fanout1, 0)
-				//net.NewCombiner(sochastic.MustNew(fanout1, 32, 0))
-				net.NewLayer(fanout1*fanout2, 0)
-				for i := 0; i < fanout3; i++ {
-					net.NewCombiner(crossattention.MustNew(fanout1, fanout2))
-					net.NewLayerPI(fanout1*fanout2, 0, 0)
-					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 8*byte(i), uint32(i)))
-					net.NewLayerPI(fanout1*fanout2, 0, 0)
-				}
-				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, 32, fanout3))
-				net.NewLayer(fanout1*fanout2, 0)
-				net.NewCombiner(sum.MustNew([]uint{fanout1 * fanout2}, 0))
-				net.NewLayer(1, 0)
-
-				(*r.nets)[lang+reverse] = &net
-
 			case 0:
 				const fanout1 = 24
 				const fanout2 = 1
