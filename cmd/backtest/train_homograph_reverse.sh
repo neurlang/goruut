@@ -31,7 +31,7 @@ trap cleanup SIGINT
 ../../../classifier/cmd/train_phonemizer_multi/train_phonemizer_multi \
 --maxdepth 9999 $resume_flag \
 --langdir "../../dicts/$lang_name" \
---dstmodel "../../dicts/$lang_name/weights5_reverse.json.zlib" \
+--dstmodel "../../dicts/$lang_name/weights7_reverse.json.zlib" \
 "${filtered_args[@]}" &  # Pass filtered arguments here
 PID1=$!
 
