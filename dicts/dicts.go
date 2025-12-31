@@ -56,7 +56,6 @@ import "github.com/neurlang/goruut/dicts/danish"
 import "github.com/neurlang/goruut/dicts/malayalam"
 import "github.com/neurlang/goruut/dicts/javanese"
 import "github.com/neurlang/goruut/dicts/macedonian"
-import "github.com/neurlang/goruut/dicts/hebrew"
 import "github.com/neurlang/goruut/dicts/hebrew2"
 import "github.com/neurlang/goruut/dicts/hebrew3"
 import "github.com/neurlang/goruut/dicts/amharic"
@@ -140,8 +139,6 @@ import "github.com/neurlang/goruut/dicts/uzbek"
 import "github.com/neurlang/goruut/dicts/welsh/north"
 import "github.com/neurlang/goruut/dicts/welsh/south"
 import "github.com/neurlang/goruut/dicts/cantonese"
-import "github.com/neurlang/goruut/dicts/minnan/taiwanese"
-import "github.com/neurlang/goruut/dicts/minnan/hokkien"
 import "github.com/neurlang/goruut/dicts/minnan/taiwanese2"
 import "github.com/neurlang/goruut/dicts/minnan/hokkien2"
 import "errors"
@@ -285,7 +282,7 @@ func GetDict(lang, filename string) ([]byte, error) {
 	case "Macedonian":
 		return macedonian.Language.ReadFile(filename)
 	case "Hebrew":
-		return hebrew.Language.ReadFile(filename)
+		return hebrew3.Language.ReadFile(filename)
 	case "Hebrew2":
 		return hebrew2.Language.ReadFile(filename)
 	case "Hebrew3":
@@ -453,9 +450,9 @@ func GetDict(lang, filename string) ([]byte, error) {
 	case "Cantonese":
 		return cantonese.Language.ReadFile(filename)
 	case "MinnanHokkien":
-		return hokkien.Language.ReadFile(filename)
+		return hokkien2.Language.ReadFile(filename)
 	case "MinnanTaiwanese":
-		return taiwanese.Language.ReadFile(filename)
+		return taiwanese2.Language.ReadFile(filename)
 	case "MinnanHokkien2":
 		return hokkien2.Language.ReadFile(filename)
 	case "MinnanTaiwanese2":
