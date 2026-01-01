@@ -1,142 +1,144 @@
 #!/bin/bash
-timeout 200 ./train_language.sh	afrikaans	-maxpremodulo	1956210	 $1
-timeout 200 ./train_language.sh 	albanian	-maxpremodulo	11575	$1
-timeout 200 ./train_language.sh	amharic	-maxpremodulo	5235	 $1
-timeout 200 ./train_language.sh	arabic	-maxpremodulo	4293630	 $1
-timeout 200 ./train_language.sh 	aragonese	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	armenian	-maxpremodulo	678535	 $1
-timeout 200 ./train_language.sh 	assamese	-maxpremodulo	24885	$1
-timeout 200 ./train_language.sh	azerbaijani	-maxpremodulo	92640	 $1
-timeout 200 ./train_language.sh 	bashkir	-maxpremodulo	15200	$1
-timeout 200 ./train_language.sh	basque	-maxpremodulo	388590	 $1
-timeout 200 ./train_language.sh	belarusian	-maxpremodulo	88190	 $1
-timeout 200 ./train_language.sh	bengali/dhaka	-maxpremodulo	422165	 $1
-timeout 200 ./train_language.sh	bengali	-maxpremodulo	291400	 $1
-timeout 200 ./train_language.sh	bengali/rahr	-maxpremodulo	293375	 $1
-timeout 200 ./train_language.sh 	bishnupriyamanipuri	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	bosnian	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	bulgarian	-maxpremodulo	1627195	 $1
-timeout 200 ./train_language.sh	burmese	-maxpremodulo	196885	 $1
-timeout 200 ./train_language.sh cantonese --maxpremodulo 2004410 -padspace
-timeout 200 ./train_language.sh	catalan	-maxpremodulo	4139855	 $1
-timeout 200 ./train_language.sh	cebuano	-maxpremodulo	167715	 $1
-timeout 200 ./train_language.sh	chechen	-maxpremodulo	3800	 $1
-timeout 200 ./train_language.sh 	cherokee	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	chichewa	-maxpremodulo	10835	 $1
-timeout 200 ./train_language.sh	chinese/mandarin	-maxpremodulo	7723930	 $1 -padspace
-timeout 200 ./train_language.sh 	chuvash	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	croatian	-maxpremodulo	1319925	 $1
-timeout 200 ./train_language.sh	czech	-maxpremodulo	1358830	 $1
-timeout 200 ./train_language.sh	danish	-maxpremodulo	659115	 $1
-timeout 200 ./train_language.sh	dutch	-maxpremodulo	4706230	 $1
-timeout 200 ./train_language.sh	dzongkha	-maxpremodulo	70	 $1
-timeout 200 ./train_language.sh	english/american	-maxpremodulo	7436250	 $1
-timeout 200 ./train_language.sh	english/british	-maxpremodulo	13133470	 $1
-timeout 200 ./train_language.sh	english	-maxpremodulo	13891660	 $1
-timeout 200 ./train_language.sh	esperanto	-maxpremodulo	3040	 $1
-timeout 200 ./train_language.sh	estonian	-maxpremodulo	53635	 $1
-timeout 200 ./train_language.sh	farsi	-maxpremodulo	7838035	 $1
-timeout 200 ./train_language.sh	finnish	-maxpremodulo	1437785	 $1
-timeout 200 ./train_language.sh	french	-maxpremodulo	5313785	 $1
-timeout 200 ./train_language.sh 	gaelic/irish	-maxpremodulo	248365	$1
-timeout 200 ./train_language.sh 	gaelic/scottish	-maxpremodulo	55075	$1
-timeout 200 ./train_language.sh	galician	-maxpremodulo	213690	 $1
-timeout 200 ./train_language.sh	georgian	-maxpremodulo	100660	 $1
-timeout 200 ./train_language.sh german -minpremodulo 10000      -maxpremodulo   28608185         $1
-timeout 200 ./train_language.sh	greek	-maxpremodulo	6055395	 $1
-timeout 200 ./train_language.sh 	greenlandic	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	guarani	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	gujarati	-maxpremodulo	5296775	 $1
-timeout 200 ./train_language.sh 	haitiancreole	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	hausa	-maxpremodulo	38785	 $1
-timeout 200 ./train_language.sh 	hawaiian	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	hebrew	-maxpremodulo	2144590	 $1
-timeout 200 ./train_language.sh	hebrew2	-maxpremodulo	2144590	 $1
-timeout 200 ./train_language.sh	hindi	-maxpremodulo	4194135	 $1
-timeout 200 ./train_language.sh	hungarian	-maxpremodulo	7548565	 $1
-timeout 200 ./train_language.sh	icelandic	-maxpremodulo	7655595	 $1
-timeout 200 ./train_language.sh 	ido	-maxpremodulo	101725	$1
-timeout 200 ./train_language.sh	indonesian	-maxpremodulo	4712925	 $1
-timeout 200 ./train_language.sh 	interlingua	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	isan	-maxpremodulo	17655	 $1
-timeout 200 ./train_language.sh	italian	-maxpremodulo	2058955	 $1
-timeout 200 ./train_language.sh	jamaican	-maxpremodulo	19455	 $1
-timeout 200 ./train_language.sh	japanese	-maxpremodulo	7461370	 $1 -padspace
-timeout 200 ./train_language.sh	javanese	-maxpremodulo	7080	 $1
-timeout 200 ./train_language.sh 	kannada	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	kazakh	-maxpremodulo	595510	 $1
-timeout 200 ./train_language.sh	khmer/central	-maxpremodulo	265370	 $1
-timeout 200 ./train_language.sh 	kiche	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	konkani	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	korean	-maxpremodulo	1356725	 $1
-timeout 200 ./train_language.sh 	kurdish	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	kyrgyz	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	langbelta	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	lao	-maxpremodulo	12755	 $1
-timeout 200 ./train_language.sh 	latgalian	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	latin/classical	-maxpremodulo	371940	$1
-timeout 200 ./train_language.sh 	latin/ecclesiastical	-maxpremodulo	95680	$1
-timeout 200 ./train_language.sh	latvian	-maxpremodulo	30155	 $1
-timeout 200 ./train_language.sh 	linguafrancanova	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	lithuanian	-maxpremodulo	987765	 $1
-timeout 200 ./train_language.sh 	lojban	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	lulesaami	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	luxembourgish	-maxpremodulo	4590935	 $1
-timeout 200 ./train_language.sh	macedonian	-maxpremodulo	8783170	 $1
-timeout 200 ./train_language.sh	malayalam	-maxpremodulo	3274270	 $1
-timeout 200 ./train_language.sh	malay/arab	-maxpremodulo	1890	 $1
-timeout 200 ./train_language.sh	malay/latin	-maxpremodulo	3960855	 $1
-timeout 200 ./train_language.sh	maltese	-maxpremodulo	611590	 $1
-timeout 200 ./train_language.sh 	maori	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	marathi	-maxpremodulo	4356285	 $1
-timeout 200 ./train_language.sh        minnan/hokkien  -padspace        --maxpremodulo 4568360
-timeout 200 ./train_language.sh minnan/taiwanese        -padspace --maxpremodulo 1374255
-timeout 200 ./train_language.sh	mongolian	-maxpremodulo	37715	 $1
-timeout 200 ./train_language.sh 	nahuatl/central	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	nahuatl/classical	-maxpremodulo	70555	$1
-timeout 200 ./train_language.sh 	nahuatl/mecayapan	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	nahuatl/tetelcingo	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	nepali	-maxpremodulo	35525	 $1
-timeout 200 ./train_language.sh 	nogai	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	norwegian	-maxpremodulo	5130950	 $1
-timeout 200 ./train_language.sh 	oromo	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	papiamento	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	pashto	-maxpremodulo	26065	 $1
-timeout 200 ./train_language.sh	polish	-maxpremodulo	1860860	 $1
-timeout 200 ./train_language.sh	portuguese	-maxpremodulo	5307220	 $1
-timeout 200 ./train_language.sh	punjabi	-maxpremodulo	1934585	 $1
-timeout 200 ./train_language.sh 	quechua	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	quenya	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	romanian	-maxpremodulo	7150480	 $1
-timeout 200 ./train_language.sh        russian -minpremodulo 10000     -maxpremodulo   35700125         $1
-timeout 200 ./train_language.sh	serbian	-maxpremodulo	1293135	 $1
-timeout 200 ./train_language.sh 	setswana	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	shantaiyai	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	sindarin	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	sindhi	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh 	sinhala	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	slovak	-maxpremodulo	402700	 $1
-timeout 200 ./train_language.sh 	slovenian	-maxpremodulo	99300	$1
-timeout 200 ./train_language.sh	spanish -minpremodulo 10000     -maxpremodulo   51129080         $1
-timeout 200 ./train_language.sh	swahili	-maxpremodulo	4524845	 $1
-timeout 200 ./train_language.sh	swedish	-maxpremodulo	3156080	 $1
-timeout 200 ./train_language.sh	tagalog	-maxpremodulo	1081545	 $1
-timeout 200 ./train_language.sh	tamil	-maxpremodulo	3860515	 $1
-timeout 200 ./train_language.sh 	tatar	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	telugu	-maxpremodulo	1454810	 $1
-timeout 200 ./train_language.sh	thai	-maxpremodulo	2373125	 $1
-timeout 200 ./train_language.sh	tibetan	-maxpremodulo	3222250	 $1 -padspace
-timeout 200 ./train_language.sh	turkish	-maxpremodulo	4048690	 $1
-timeout 200 ./train_language.sh 	turkmen	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	ukrainian	-maxpremodulo	10052395	 $1
-timeout 200 ./train_language.sh	urdu	-maxpremodulo	666235	 $1
-timeout 200 ./train_language.sh	uyghur	-maxpremodulo	19750	 $1
-timeout 200 ./train_language.sh 	uzbek	-maxpremodulo	10000	$1
-timeout 200 ./train_language.sh	vietnamese/central	-maxpremodulo	25015	 $1
-timeout 200 ./train_language.sh	vietnamese/northern	-maxpremodulo	26705	 $1
-timeout 200 ./train_language.sh	vietnamese/southern	-maxpremodulo	25610	 $1
-timeout 200 ./train_language.sh 	welsh/north	-maxpremodulo	163965	$1
-timeout 200 ./train_language.sh 	welsh/south	-maxpremodulo	272725	$1
-timeout 200 ./train_language.sh	yoruba	-maxpremodulo	96640	 $1
-timeout 200 ./train_language.sh	zulu	-maxpremodulo	106155	 $1
+
+./train_language.sh	afrikaans --overwrite 
+./train_language.sh	albanian --overwrite 
+./train_language.sh	amharic --overwrite 
+./train_language.sh	arabic --overwrite 
+./train_language.sh	aragonese --overwrite 
+./train_language.sh	armenian --overwrite 
+./train_language.sh	assamese --overwrite 
+./train_language.sh	azerbaijani --overwrite 
+./train_language.sh	bashkir --overwrite 
+./train_language.sh	basque --overwrite 
+./train_language.sh	belarusian --overwrite 
+./train_language.sh	bengali --overwrite 
+./train_language.sh	bishnupriyamanipuri --overwrite 
+./train_language.sh	bosnian --overwrite 
+./train_language.sh	bulgarian --overwrite 
+./train_language.sh	burmese --overwrite 
+./train_language.sh	cantonese  --overwrite 
+./train_language.sh	catalan --overwrite 
+./train_language.sh	cebuano --overwrite 
+./train_language.sh	chechen --overwrite 
+./train_language.sh	cherokee --overwrite 
+./train_language.sh	chichewa --overwrite 
+./train_language.sh	chuvash --overwrite 
+./train_language.sh	croatian --overwrite 
+./train_language.sh	czech --overwrite 
+./train_language.sh	danish --overwrite 
+./train_language.sh	dutch --overwrite 
+./train_language.sh	dzongkha --overwrite 
+./train_language.sh	english --overwrite 
+./train_language.sh	esperanto --overwrite 
+./train_language.sh	estonian --overwrite 
+./train_language.sh	farsi --overwrite 
+./train_language.sh	finnish --overwrite 
+./train_language.sh	french --overwrite 
+./train_language.sh	galician --overwrite 
+./train_language.sh	georgian --overwrite 
+./train_language.sh	german --overwrite 
+./train_language.sh	greek --overwrite 
+./train_language.sh	greenlandic --overwrite 
+./train_language.sh	guarani --overwrite 
+./train_language.sh	gujarati --overwrite 
+./train_language.sh	haitiancreole --overwrite 
+./train_language.sh	hausa --overwrite 
+./train_language.sh	hawaiian --overwrite 
+./train_language.sh	hebrew2 --overwrite 
+./train_language.sh	hebrew3 --overwrite 
+./train_language.sh	hindi --overwrite 
+./train_language.sh	hungarian --overwrite 
+./train_language.sh	icelandic --overwrite 
+./train_language.sh	ido --overwrite 
+./train_language.sh	indonesian --overwrite 
+./train_language.sh	interlingua --overwrite 
+./train_language.sh	isan --overwrite 
+./train_language.sh	italian --overwrite 
+./train_language.sh	jamaican --overwrite 
+./train_language.sh	japanese  --overwrite 
+./train_language.sh	javanese --overwrite 
+./train_language.sh	kannada --overwrite 
+./train_language.sh	kazakh --overwrite 
+./train_language.sh	kiche --overwrite 
+./train_language.sh	konkani --overwrite 
+./train_language.sh	korean --overwrite 
+./train_language.sh	kurdish --overwrite 
+./train_language.sh	kyrgyz --overwrite 
+./train_language.sh	langbelta --overwrite 
+./train_language.sh	lao --overwrite 
+./train_language.sh	latgalian --overwrite 
+./train_language.sh	latvian --overwrite 
+./train_language.sh	linguafrancanova --overwrite 
+./train_language.sh	lithuanian --overwrite 
+./train_language.sh	lojban --overwrite 
+./train_language.sh	lulesaami --overwrite 
+./train_language.sh	luxembourgish --overwrite 
+./train_language.sh	macedonian --overwrite 
+./train_language.sh	malayalam --overwrite 
+./train_language.sh	maltese --overwrite 
+./train_language.sh	maori --overwrite 
+./train_language.sh	marathi --overwrite 
+./train_language.sh	mongolian --overwrite 
+./train_language.sh	nepali --overwrite 
+./train_language.sh	nogai --overwrite 
+./train_language.sh	norwegian --overwrite 
+./train_language.sh	oromo --overwrite 
+./train_language.sh	papiamento --overwrite 
+./train_language.sh	pashto --overwrite 
+./train_language.sh	polish --overwrite 
+./train_language.sh	portuguese --overwrite 
+./train_language.sh	punjabi --overwrite 
+./train_language.sh	quechua --overwrite 
+./train_language.sh	quenya --overwrite 
+./train_language.sh	romanian --overwrite 
+./train_language.sh	russian --overwrite 
+./train_language.sh	serbian --overwrite 
+./train_language.sh	setswana --overwrite 
+./train_language.sh	shantaiyai  --overwrite 
+./train_language.sh	sindarin --overwrite 
+./train_language.sh	sindhi --overwrite 
+./train_language.sh	sinhala --overwrite 
+./train_language.sh	slovak --overwrite 
+./train_language.sh	slovenian --overwrite 
+./train_language.sh	spanish --overwrite 
+./train_language.sh	swahili --overwrite 
+./train_language.sh	swedish --overwrite 
+./train_language.sh	tagalog --overwrite 
+./train_language.sh	tamil --overwrite 
+./train_language.sh	tatar --overwrite 
+./train_language.sh	telugu --overwrite 
+./train_language.sh	thai --overwrite 
+./train_language.sh	tibetan  --overwrite 
+./train_language.sh	turkish --overwrite 
+./train_language.sh	turkmen --overwrite 
+./train_language.sh	ukrainian --overwrite 
+./train_language.sh	urdu --overwrite 
+./train_language.sh	uyghur --overwrite 
+./train_language.sh	uzbek --overwrite 
+./train_language.sh	yoruba --overwrite 
+./train_language.sh	zulu --overwrite 
+./train_language.sh	bengali/dhaka --overwrite 
+./train_language.sh	bengali/rahr --overwrite 
+./train_language.sh	chinese/mandarin  --overwrite 
+./train_language.sh	english/american --overwrite 
+./train_language.sh	english/british --overwrite 
+./train_language.sh	gaelic/irish --overwrite 
+./train_language.sh	gaelic/scottish --overwrite 
+./train_language.sh	khmer/central --overwrite 
+./train_language.sh	latin/classical --overwrite 
+./train_language.sh	latin/ecclesiastical --overwrite 
+./train_language.sh	malay/arab --overwrite 
+./train_language.sh	malay/latin --overwrite 
+./train_language.sh	minnan/hokkien2  --overwrite 
+./train_language.sh	minnan/taiwanese2  --overwrite 
+./train_language.sh	nahuatl/central --overwrite 
+./train_language.sh	nahuatl/classical --overwrite 
+./train_language.sh	nahuatl/mecayapan --overwrite 
+./train_language.sh	nahuatl/tetelcingo --overwrite 
+./train_language.sh	vietnamese/central --overwrite 
+./train_language.sh	vietnamese/northern --overwrite 
+./train_language.sh	vietnamese/southern --overwrite 
+./train_language.sh	welsh/north --overwrite 
+./train_language.sh	welsh/south --overwrite 
+
 

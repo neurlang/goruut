@@ -1,141 +1,143 @@
 #!/bin/bash
-./clean_language.sh     cantonese -padspace
-./clean_language.sh     minnan/hokkien -padspace
-./clean_language.sh     minnan/taiwanese -padspace
-./clean_language.sh     hebrew2
-exit
-./clean_language.sh	afrikaans	
-./clean_language.sh	albanian	
-./clean_language.sh	amharic	
-./clean_language.sh	arabic	
-./clean_language.sh	aragonese	
-./clean_language.sh	armenian	
-./clean_language.sh	assamese	
-./clean_language.sh	azerbaijani	
-./clean_language.sh	bashkir	
-./clean_language.sh	basque	
-./clean_language.sh	belarusian	
-./clean_language.sh	bengali	
-./clean_language.sh	bengali/dhaka	
-./clean_language.sh	bengali/rahr	
-./clean_language.sh	bishnupriyamanipuri	
-./clean_language.sh	bosnian	
-./clean_language.sh	bulgarian	
-./clean_language.sh	burmese	
-./clean_language.sh	catalan	
-./clean_language.sh	cebuano	
-./clean_language.sh	chechen	
-./clean_language.sh	cherokee	
-./clean_language.sh	chichewa	
-./clean_language.sh	chinese/mandarin	-padspace
-./clean_language.sh	chuvash	
-./clean_language.sh	croatian	
-./clean_language.sh	czech	
-./clean_language.sh	danish	
-./clean_language.sh	dutch	
-./clean_language.sh	dzongkha	
-./clean_language.sh	english	
-./clean_language.sh	esperanto	
-./clean_language.sh	estonian	
-./clean_language.sh	farsi	
-./clean_language.sh	finnish	
-./clean_language.sh	french	
-./clean_language.sh	gaelic/irish	
-./clean_language.sh	gaelic/scottish	
-./clean_language.sh	galician	
-./clean_language.sh	georgian	
-./clean_language.sh	german	
-./clean_language.sh	greek	
-./clean_language.sh	greenlandic	
-./clean_language.sh	guarani	
-./clean_language.sh	gujarati	
-./clean_language.sh	haitiancreole	
-./clean_language.sh	hausa	
-./clean_language.sh	hawaiian	
-./clean_language.sh	hebrew	
-./clean_language.sh	hindi	
-./clean_language.sh	hungarian	
-./clean_language.sh	icelandic	
-./clean_language.sh	ido	
-./clean_language.sh	indonesian	
-./clean_language.sh	interlingua	
-./clean_language.sh	isan	
-./clean_language.sh	italian	
-./clean_language.sh	jamaican	
-./clean_language.sh	japanese	-padspace
-./clean_language.sh	javanese	
-./clean_language.sh	kannada	
-./clean_language.sh	kazakh	
-./clean_language.sh	khmer/central	
-./clean_language.sh	kiche	
-./clean_language.sh	konkani	
-./clean_language.sh	korean	
-./clean_language.sh	kurdish	
-./clean_language.sh	kyrgyz	
-./clean_language.sh	langbelta	
-./clean_language.sh	lao	
-./clean_language.sh	latgalian	
-./clean_language.sh	latin/classical	
-./clean_language.sh	latin/ecclesiastical	
-./clean_language.sh	latvian	
-./clean_language.sh	linguafrancanova	
-./clean_language.sh	lithuanian	
-./clean_language.sh	lojban	
-./clean_language.sh	lulesaami	
-./clean_language.sh	luxembourgish	
-./clean_language.sh	macedonian	
-./clean_language.sh	malayalam	
-./clean_language.sh	malay/arab	
-./clean_language.sh	malay/latin	
-./clean_language.sh	maltese	
-./clean_language.sh	maori	
-./clean_language.sh	marathi	
-./clean_language.sh	mongolian	
-./clean_language.sh	nahuatl/central	
-./clean_language.sh	nahuatl/classical	
-./clean_language.sh	nahuatl/mecayapan	
-./clean_language.sh	nahuatl/tetelcingo	
-./clean_language.sh	nepali	
-./clean_language.sh	nogai	
-./clean_language.sh	norwegian	
-./clean_language.sh	oromo	
-./clean_language.sh	papiamento	
-./clean_language.sh	pashto	
-./clean_language.sh	polish	
-./clean_language.sh	portuguese	
-./clean_language.sh	punjabi	
-./clean_language.sh	quechua	
-./clean_language.sh	quenya	
-./clean_language.sh	romanian	
-./clean_language.sh	russian	
-./clean_language.sh	serbian	
-./clean_language.sh	setswana	
-./clean_language.sh	shantaiyai	
-./clean_language.sh	sindarin	
-./clean_language.sh	sindhi	
-./clean_language.sh	sinhala	
-./clean_language.sh	slovak	
-./clean_language.sh	slovenian	
-./clean_language.sh	spanish	
-./clean_language.sh	swahili	
-./clean_language.sh	swedish	
-./clean_language.sh	tagalog	
-./clean_language.sh	tamil	
-./clean_language.sh	tatar	
-./clean_language.sh	telugu	
-./clean_language.sh	thai	
-./clean_language.sh	tibetan	-padspace
-./clean_language.sh	turkish	
-./clean_language.sh	turkmen	
-./clean_language.sh	ukrainian	
-./clean_language.sh	urdu	
-./clean_language.sh	uyghur	
-./clean_language.sh	uzbek	
-./clean_language.sh	vietnamese/central	
-./clean_language.sh	vietnamese/northern	
-./clean_language.sh	vietnamese/southern	
-./clean_language.sh	welsh/north	
-./clean_language.sh	welsh/south
-./clean_language.sh	yoruba	
-./clean_language.sh	zulu	
+
+./clean_language.sh	afrikaans  --rowlossimportance 0
+./clean_language.sh	albanian  --rowlossimportance 0
+./clean_language.sh	amharic  --rowlossimportance 0
+./clean_language.sh	arabic  --rowlossimportance 3
+./clean_language.sh	aragonese  --rowlossimportance 0
+./clean_language.sh	armenian  --rowlossimportance 1
+./clean_language.sh	assamese  --rowlossimportance 0
+./clean_language.sh	azerbaijani  --rowlossimportance 1
+./clean_language.sh	bashkir  --rowlossimportance 0
+./clean_language.sh	basque  --rowlossimportance 3
+./clean_language.sh	belarusian  --rowlossimportance 1
+./clean_language.sh	bengali  --rowlossimportance 10
+./clean_language.sh	bengali/dhaka  --rowlossimportance 7
+./clean_language.sh	bengali/rahr  --rowlossimportance 10
+./clean_language.sh	bishnupriyamanipuri  --rowlossimportance 0
+./clean_language.sh	bosnian  --rowlossimportance 9
+./clean_language.sh	bulgarian  --rowlossimportance 3
+./clean_language.sh	burmese  --rowlossimportance 5
+./clean_language.sh	cantonese  --rowlossimportance 0 -padspace --hyperinit 16
+./clean_language.sh	catalan  --rowlossimportance 1
+./clean_language.sh	cebuano  --rowlossimportance 3
+./clean_language.sh	chechen  --rowlossimportance 1
+./clean_language.sh	cherokee  --rowlossimportance 0
+./clean_language.sh	chichewa  --rowlossimportance 2
+./clean_language.sh	chinese/mandarin  --rowlossimportance 7 -padspace --hyperinit 16
+./clean_language.sh	chuvash  --rowlossimportance 8
+./clean_language.sh	croatian  --rowlossimportance 3
+./clean_language.sh	czech  --rowlossimportance 0
+./clean_language.sh	danish  --rowlossimportance 0
+./clean_language.sh	dutch  --rowlossimportance 0
+./clean_language.sh	dzongkha  --rowlossimportance 9
+./clean_language.sh	english  --rowlossimportance 3
+./clean_language.sh	english/american  --rowlossimportance 2
+./clean_language.sh	english/british  --rowlossimportance 1
+./clean_language.sh	esperanto  --rowlossimportance 10
+./clean_language.sh	estonian  --rowlossimportance 0
+./clean_language.sh	farsi  --rowlossimportance 10
+./clean_language.sh	finnish  --rowlossimportance 5
+./clean_language.sh	french  --rowlossimportance 5
+./clean_language.sh	gaelic/irish  --rowlossimportance 1
+./clean_language.sh	gaelic/scottish  --rowlossimportance 3
+./clean_language.sh	galician  --rowlossimportance 0
+./clean_language.sh	georgian  --rowlossimportance 2
+./clean_language.sh	german  --rowlossimportance 7
+./clean_language.sh	greek  --rowlossimportance 2
+./clean_language.sh	greenlandic  --rowlossimportance 4
+./clean_language.sh	guarani  --rowlossimportance 3
+./clean_language.sh	gujarati  --rowlossimportance 8
+./clean_language.sh	haitiancreole  --rowlossimportance 3
+./clean_language.sh	hausa  --rowlossimportance 3
+./clean_language.sh	hawaiian  --rowlossimportance 3
+./clean_language.sh	hebrew2  --rowlossimportance 6
+./clean_language.sh	hebrew3  --rowlossimportance 8
+./clean_language.sh	hindi  --rowlossimportance 10
+./clean_language.sh	hungarian  --rowlossimportance 1
+./clean_language.sh	icelandic  --rowlossimportance 1
+./clean_language.sh	ido  --rowlossimportance 1
+./clean_language.sh	indonesian  --rowlossimportance 2
+./clean_language.sh	interlingua  --rowlossimportance 3
+./clean_language.sh	isan  --rowlossimportance 5
+./clean_language.sh	italian  --rowlossimportance 9
+./clean_language.sh	jamaican  --rowlossimportance 1
+./clean_language.sh	japanese  --rowlossimportance 7 -padspace --hyperinit 16
+./clean_language.sh	javanese  --rowlossimportance 10
+./clean_language.sh	kannada  --rowlossimportance 0
+./clean_language.sh	kazakh  --rowlossimportance 0
+./clean_language.sh	khmer/central  --rowlossimportance 3
+./clean_language.sh	kiche  --rowlossimportance 7
+./clean_language.sh	konkani  --rowlossimportance 3
+./clean_language.sh	korean  --rowlossimportance 3
+./clean_language.sh	kurdish  --rowlossimportance 2
+./clean_language.sh	kyrgyz  --rowlossimportance 9
+./clean_language.sh	langbelta  --rowlossimportance 6
+./clean_language.sh	lao  --rowlossimportance 0
+./clean_language.sh	latgalian  --rowlossimportance 1
+./clean_language.sh	latin/classical  --rowlossimportance 9
+./clean_language.sh	latin/ecclesiastical  --rowlossimportance 1
+./clean_language.sh	latvian  --rowlossimportance 2
+./clean_language.sh	linguafrancanova  --rowlossimportance 1
+./clean_language.sh	lithuanian  --rowlossimportance 1
+./clean_language.sh	lojban  --rowlossimportance 1
+./clean_language.sh	lulesaami  --rowlossimportance 8
+./clean_language.sh	luxembourgish  --rowlossimportance 4
+./clean_language.sh	macedonian  --rowlossimportance 1
+./clean_language.sh	malayalam  --rowlossimportance 7
+./clean_language.sh	malay/arab  --rowlossimportance 6
+./clean_language.sh	malay/latin  --rowlossimportance 2
+./clean_language.sh	maltese  --rowlossimportance 2
+./clean_language.sh	maori  --rowlossimportance 3
+./clean_language.sh	marathi  --rowlossimportance 7
+./clean_language.sh	minnan/hokkien2  --rowlossimportance 3 -padspace --hyperinit 16
+./clean_language.sh	minnan/taiwanese2  --rowlossimportance 1 -padspace --hyperinit 16
+./clean_language.sh	mongolian  --rowlossimportance 2
+./clean_language.sh	nahuatl/central  --rowlossimportance 7
+./clean_language.sh	nahuatl/classical  --rowlossimportance 3
+./clean_language.sh	nahuatl/mecayapan  --rowlossimportance 9
+./clean_language.sh	nahuatl/tetelcingo  --rowlossimportance 6
+./clean_language.sh	nepali  --rowlossimportance 0
+./clean_language.sh	nogai  --rowlossimportance 8
+./clean_language.sh	norwegian  --rowlossimportance 2
+./clean_language.sh	oromo  --rowlossimportance 1
+./clean_language.sh	papiamento  --rowlossimportance 5
+./clean_language.sh	pashto  --rowlossimportance 1
+./clean_language.sh	polish  --rowlossimportance 5
+./clean_language.sh	portuguese  --rowlossimportance 5
+./clean_language.sh	punjabi  --rowlossimportance 7
+./clean_language.sh	quechua  --rowlossimportance 3
+./clean_language.sh	quenya  --rowlossimportance 8
+./clean_language.sh	romanian  --rowlossimportance 6
+./clean_language.sh	russian  --rowlossimportance 7
+./clean_language.sh	serbian  --rowlossimportance 6
+./clean_language.sh	setswana  --rowlossimportance 3
+./clean_language.sh	shantaiyai  --rowlossimportance 4 -padspace --hyperinit 16
+./clean_language.sh	sindarin  --rowlossimportance 4
+./clean_language.sh	sindhi  --rowlossimportance 3
+./clean_language.sh	sinhala  --rowlossimportance 5
+./clean_language.sh	slovak  --rowlossimportance 7
+./clean_language.sh	slovenian  --rowlossimportance 1
+./clean_language.sh	spanish  --rowlossimportance 7
+./clean_language.sh	swahili  --rowlossimportance 3
+./clean_language.sh	swedish  --rowlossimportance 1
+./clean_language.sh	tagalog  --rowlossimportance 1
+./clean_language.sh	tamil  --rowlossimportance 10
+./clean_language.sh	tatar  --rowlossimportance 4
+./clean_language.sh	telugu  --rowlossimportance 4
+./clean_language.sh	thai  --rowlossimportance 5
+./clean_language.sh	tibetan  --rowlossimportance 6 -padspace --hyperinit 16
+./clean_language.sh	turkish  --rowlossimportance 2
+./clean_language.sh	turkmen  --rowlossimportance 0
+./clean_language.sh	ukrainian  --rowlossimportance 5
+./clean_language.sh	urdu  --rowlossimportance 3
+./clean_language.sh	uyghur  --rowlossimportance 4
+./clean_language.sh	uzbek  --rowlossimportance 5
+./clean_language.sh	vietnamese/central  --rowlossimportance 0
+./clean_language.sh	vietnamese/northern  --rowlossimportance 0
+./clean_language.sh	vietnamese/southern  --rowlossimportance 3
+./clean_language.sh	welsh/north  --rowlossimportance 1
+./clean_language.sh	welsh/south  --rowlossimportance 6
+./clean_language.sh	yoruba  --rowlossimportance 7
+./clean_language.sh	zulu  --rowlossimportance 7
 

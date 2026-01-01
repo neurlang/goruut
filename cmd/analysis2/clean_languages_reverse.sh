@@ -1,140 +1,142 @@
 #!/bin/bash
-./clean_language_reverse.sh     cantonese -padspace
-./clean_language_reverse.sh     minnan/hokkien -padspace
-./clean_language_reverse.sh     minnan/taiwanese -padspace
-./clean_language_reverse.sh	hebrew2
-exit
-./clean_language_reverse.sh	albanian	
-./clean_language_reverse.sh	aragonese	
-./clean_language_reverse.sh	assamese	
-./clean_language_reverse.sh	bashkir	
-./clean_language_reverse.sh	bishnupriyamanipuri	
-./clean_language_reverse.sh	bosnian	
-./clean_language_reverse.sh	cherokee	
-./clean_language_reverse.sh	chuvash	
-./clean_language_reverse.sh	gaelic/irish	
-./clean_language_reverse.sh	gaelic/scottish	
-./clean_language_reverse.sh	greenlandic	
-./clean_language_reverse.sh	guarani	
-./clean_language_reverse.sh	haitiancreole	
-./clean_language_reverse.sh	hawaiian	
-./clean_language_reverse.sh	ido	
-./clean_language_reverse.sh	interlingua	
-./clean_language_reverse.sh	kannada	
-./clean_language_reverse.sh	kiche	
-./clean_language_reverse.sh	konkani	
-./clean_language_reverse.sh	kurdish	
-./clean_language_reverse.sh	kyrgyz	
-./clean_language_reverse.sh	langbelta	
-./clean_language_reverse.sh	latgalian	
-./clean_language_reverse.sh	latin/classical	
-./clean_language_reverse.sh	latin/ecclesiastical	
-./clean_language_reverse.sh	linguafrancanova	
-./clean_language_reverse.sh	lojban	
-./clean_language_reverse.sh	lulesaami	
-./clean_language_reverse.sh	maori	
-./clean_language_reverse.sh	nahuatl/central	
-./clean_language_reverse.sh	nahuatl/classical	
-./clean_language_reverse.sh	nahuatl/mecayapan	
-./clean_language_reverse.sh	nahuatl/tetelcingo	
-./clean_language_reverse.sh	nogai	
-./clean_language_reverse.sh	oromo	
-./clean_language_reverse.sh	papiamento	
-./clean_language_reverse.sh	quechua	
-./clean_language_reverse.sh	quenya	
-./clean_language_reverse.sh	setswana	
-./clean_language_reverse.sh	shantaiyai	
-./clean_language_reverse.sh	sindarin	
-./clean_language_reverse.sh	sindhi	
-./clean_language_reverse.sh	sinhala	
-./clean_language_reverse.sh	slovenian	
-./clean_language_reverse.sh	tatar	
-./clean_language_reverse.sh	turkmen	
-./clean_language_reverse.sh	uzbek	
-./clean_language_reverse.sh	welsh/north	
-./clean_language_reverse.sh	welsh/south
-./clean_language_reverse.sh	afrikaans	
-./clean_language_reverse.sh	amharic	
-./clean_language_reverse.sh	arabic	
-./clean_language_reverse.sh	armenian	
-./clean_language_reverse.sh	azerbaijani	
-./clean_language_reverse.sh	basque	
-./clean_language_reverse.sh	belarusian	
-./clean_language_reverse.sh	bengali	
-./clean_language_reverse.sh	bengali/dhaka	
-./clean_language_reverse.sh	bengali/rahr	
-./clean_language_reverse.sh	bulgarian	
-./clean_language_reverse.sh	burmese	
-./clean_language_reverse.sh	catalan	
-./clean_language_reverse.sh	cebuano	
-./clean_language_reverse.sh	chechen	
-./clean_language_reverse.sh	chichewa	
-./clean_language_reverse.sh	chinese/mandarin	-padspace
-./clean_language_reverse.sh	croatian	
-./clean_language_reverse.sh	czech	
-./clean_language_reverse.sh	danish	
-./clean_language_reverse.sh	dutch	
-./clean_language_reverse.sh	dzongkha	
-./clean_language_reverse.sh	english	
-./clean_language_reverse.sh	esperanto	
-./clean_language_reverse.sh	estonian	
-./clean_language_reverse.sh	farsi	
-./clean_language_reverse.sh	finnish	
-./clean_language_reverse.sh	french	
-./clean_language_reverse.sh	galician	
-./clean_language_reverse.sh	georgian	
-./clean_language_reverse.sh	german	
-./clean_language_reverse.sh	greek	
-./clean_language_reverse.sh	gujarati	
-./clean_language_reverse.sh	hausa	
-./clean_language_reverse.sh	hebrew	
-./clean_language_reverse.sh	hindi	
-./clean_language_reverse.sh	hungarian	
-./clean_language_reverse.sh	icelandic	
-./clean_language_reverse.sh	indonesian	
-./clean_language_reverse.sh	isan	
-./clean_language_reverse.sh	italian	
-./clean_language_reverse.sh	jamaican	
-./clean_language_reverse.sh	japanese	-padspace
-./clean_language_reverse.sh	javanese	
-./clean_language_reverse.sh	kazakh	
-./clean_language_reverse.sh	khmer/central	
-./clean_language_reverse.sh	korean	
-./clean_language_reverse.sh	lao	
-./clean_language_reverse.sh	latvian	
-./clean_language_reverse.sh	lithuanian	
-./clean_language_reverse.sh	luxembourgish	
-./clean_language_reverse.sh	macedonian	
-./clean_language_reverse.sh	malay/arab	
-./clean_language_reverse.sh	malay/latin	
-./clean_language_reverse.sh	malayalam	
-./clean_language_reverse.sh	maltese	
-./clean_language_reverse.sh	marathi	
-./clean_language_reverse.sh	mongolian	
-./clean_language_reverse.sh	nepali	
-./clean_language_reverse.sh	norwegian	
-./clean_language_reverse.sh	pashto	
-./clean_language_reverse.sh	polish	
-./clean_language_reverse.sh	portuguese	
-./clean_language_reverse.sh	punjabi	
-./clean_language_reverse.sh	romanian	
-./clean_language_reverse.sh	russian	
-./clean_language_reverse.sh	serbian	
-./clean_language_reverse.sh	slovak	
-./clean_language_reverse.sh	spanish	
-./clean_language_reverse.sh	swahili	
-./clean_language_reverse.sh	swedish	
-./clean_language_reverse.sh	tagalog	
-./clean_language_reverse.sh	tamil	
-./clean_language_reverse.sh	telugu	
-./clean_language_reverse.sh	thai	
-./clean_language_reverse.sh	tibetan	-padspace
-./clean_language_reverse.sh	turkish	
-./clean_language_reverse.sh	ukrainian	
-./clean_language_reverse.sh	urdu	
-./clean_language_reverse.sh	uyghur	
-./clean_language_reverse.sh	vietnamese/central	
-./clean_language_reverse.sh	vietnamese/northern	
-./clean_language_reverse.sh	vietnamese/southern	
-./clean_language_reverse.sh	yoruba	
-./clean_language_reverse.sh	zulu	
+
+./clean_language_reverse.sh	afrikaans  --rowlossimportance 10
+./clean_language_reverse.sh	albanian  --rowlossimportance 10
+./clean_language_reverse.sh	amharic  --rowlossimportance 10
+./clean_language_reverse.sh	arabic  --rowlossimportance 10
+./clean_language_reverse.sh	aragonese  --rowlossimportance 10
+./clean_language_reverse.sh	armenian  --rowlossimportance 10
+./clean_language_reverse.sh	assamese  --rowlossimportance 10
+./clean_language_reverse.sh	azerbaijani  --rowlossimportance 10
+./clean_language_reverse.sh	bashkir  --rowlossimportance 10
+./clean_language_reverse.sh	basque  --rowlossimportance 10
+./clean_language_reverse.sh	belarusian  --rowlossimportance 10
+./clean_language_reverse.sh	bengali  --rowlossimportance 10
+./clean_language_reverse.sh	bishnupriyamanipuri  --rowlossimportance 10
+./clean_language_reverse.sh	bosnian  --rowlossimportance 10
+./clean_language_reverse.sh	bulgarian  --rowlossimportance 10
+./clean_language_reverse.sh	burmese  --rowlossimportance 10
+./clean_language_reverse.sh	cantonese -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	catalan  --rowlossimportance 10
+./clean_language_reverse.sh	cebuano  --rowlossimportance 10
+./clean_language_reverse.sh	chechen  --rowlossimportance 10
+./clean_language_reverse.sh	cherokee  --rowlossimportance 10
+./clean_language_reverse.sh	chichewa  --rowlossimportance 10
+./clean_language_reverse.sh	chuvash  --rowlossimportance 10
+./clean_language_reverse.sh	croatian  --rowlossimportance 10
+./clean_language_reverse.sh	czech  --rowlossimportance 10
+./clean_language_reverse.sh	danish  --rowlossimportance 10
+./clean_language_reverse.sh	dutch  --rowlossimportance 10
+./clean_language_reverse.sh	dzongkha  --rowlossimportance 10
+./clean_language_reverse.sh	english  --rowlossimportance 10
+./clean_language_reverse.sh	esperanto  --rowlossimportance 10
+./clean_language_reverse.sh	estonian  --rowlossimportance 10
+./clean_language_reverse.sh	farsi  --rowlossimportance 10
+./clean_language_reverse.sh	finnish  --rowlossimportance 10
+./clean_language_reverse.sh	french  --rowlossimportance 10
+./clean_language_reverse.sh	galician  --rowlossimportance 10
+./clean_language_reverse.sh	georgian  --rowlossimportance 10
+./clean_language_reverse.sh	german  --rowlossimportance 10
+./clean_language_reverse.sh	greek  --rowlossimportance 10
+./clean_language_reverse.sh	greenlandic  --rowlossimportance 10
+./clean_language_reverse.sh	guarani  --rowlossimportance 10
+./clean_language_reverse.sh	gujarati  --rowlossimportance 10
+./clean_language_reverse.sh	haitiancreole  --rowlossimportance 10
+./clean_language_reverse.sh	hausa  --rowlossimportance 10
+./clean_language_reverse.sh	hawaiian  --rowlossimportance 10
+./clean_language_reverse.sh	hebrew2  --rowlossimportance 10
+./clean_language_reverse.sh	hebrew3  --rowlossimportance 10
+./clean_language_reverse.sh	hindi  --rowlossimportance 10
+./clean_language_reverse.sh	hungarian  --rowlossimportance 10
+./clean_language_reverse.sh	icelandic  --rowlossimportance 10
+./clean_language_reverse.sh	ido  --rowlossimportance 10
+./clean_language_reverse.sh	indonesian  --rowlossimportance 10
+./clean_language_reverse.sh	interlingua  --rowlossimportance 10
+./clean_language_reverse.sh	isan  --rowlossimportance 10
+./clean_language_reverse.sh	italian  --rowlossimportance 10
+./clean_language_reverse.sh	jamaican  --rowlossimportance 10
+./clean_language_reverse.sh	japanese -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	javanese  --rowlossimportance 10
+./clean_language_reverse.sh	kannada  --rowlossimportance 10
+./clean_language_reverse.sh	kazakh  --rowlossimportance 10
+./clean_language_reverse.sh	kiche  --rowlossimportance 10
+./clean_language_reverse.sh	konkani  --rowlossimportance 10
+./clean_language_reverse.sh	korean  --rowlossimportance 10
+./clean_language_reverse.sh	kurdish  --rowlossimportance 10
+./clean_language_reverse.sh	kyrgyz  --rowlossimportance 10
+./clean_language_reverse.sh	langbelta  --rowlossimportance 10
+./clean_language_reverse.sh	lao  --rowlossimportance 10
+./clean_language_reverse.sh	latgalian  --rowlossimportance 10
+./clean_language_reverse.sh	latvian  --rowlossimportance 10
+./clean_language_reverse.sh	linguafrancanova  --rowlossimportance 10
+./clean_language_reverse.sh	lithuanian  --rowlossimportance 10
+./clean_language_reverse.sh	lojban  --rowlossimportance 10
+./clean_language_reverse.sh	lulesaami  --rowlossimportance 10
+./clean_language_reverse.sh	luxembourgish  --rowlossimportance 10
+./clean_language_reverse.sh	macedonian  --rowlossimportance 10
+./clean_language_reverse.sh	malayalam  --rowlossimportance 10
+./clean_language_reverse.sh	maltese  --rowlossimportance 10
+./clean_language_reverse.sh	maori  --rowlossimportance 10
+./clean_language_reverse.sh	marathi  --rowlossimportance 10
+./clean_language_reverse.sh	mongolian  --rowlossimportance 10
+./clean_language_reverse.sh	nepali  --rowlossimportance 10
+./clean_language_reverse.sh	nogai  --rowlossimportance 10
+./clean_language_reverse.sh	norwegian  --rowlossimportance 10
+./clean_language_reverse.sh	oromo  --rowlossimportance 10
+./clean_language_reverse.sh	papiamento  --rowlossimportance 10
+./clean_language_reverse.sh	pashto  --rowlossimportance 10
+./clean_language_reverse.sh	polish  --rowlossimportance 10
+./clean_language_reverse.sh	portuguese  --rowlossimportance 10
+./clean_language_reverse.sh	punjabi  --rowlossimportance 10
+./clean_language_reverse.sh	quechua  --rowlossimportance 10
+./clean_language_reverse.sh	quenya  --rowlossimportance 10
+./clean_language_reverse.sh	romanian  --rowlossimportance 10
+./clean_language_reverse.sh	russian  --rowlossimportance 10
+./clean_language_reverse.sh	serbian  --rowlossimportance 10
+./clean_language_reverse.sh	setswana  --rowlossimportance 10
+./clean_language_reverse.sh	shantaiyai -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	sindarin  --rowlossimportance 10
+./clean_language_reverse.sh	sindhi  --rowlossimportance 10
+./clean_language_reverse.sh	sinhala  --rowlossimportance 10
+./clean_language_reverse.sh	slovak  --rowlossimportance 10
+./clean_language_reverse.sh	slovenian  --rowlossimportance 10
+./clean_language_reverse.sh	spanish  --rowlossimportance 10
+./clean_language_reverse.sh	swahili  --rowlossimportance 10
+./clean_language_reverse.sh	swedish  --rowlossimportance 10
+./clean_language_reverse.sh	tagalog  --rowlossimportance 10
+./clean_language_reverse.sh	tamil  --rowlossimportance 10
+./clean_language_reverse.sh	tatar  --rowlossimportance 10
+./clean_language_reverse.sh	telugu  --rowlossimportance 10
+./clean_language_reverse.sh	thai  --rowlossimportance 10
+./clean_language_reverse.sh	tibetan -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	turkish  --rowlossimportance 10
+./clean_language_reverse.sh	turkmen  --rowlossimportance 10
+./clean_language_reverse.sh	ukrainian  --rowlossimportance 10
+./clean_language_reverse.sh	urdu  --rowlossimportance 10
+./clean_language_reverse.sh	uyghur  --rowlossimportance 10
+./clean_language_reverse.sh	uzbek  --rowlossimportance 10
+./clean_language_reverse.sh	yoruba  --rowlossimportance 10
+./clean_language_reverse.sh	zulu  --rowlossimportance 10
+./clean_language_reverse.sh	bengali/dhaka  --rowlossimportance 10
+./clean_language_reverse.sh	bengali/rahr  --rowlossimportance 10
+./clean_language_reverse.sh	chinese/mandarin -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	english/american  --rowlossimportance 10
+./clean_language_reverse.sh	english/british  --rowlossimportance 10
+./clean_language_reverse.sh	gaelic/irish  --rowlossimportance 10
+./clean_language_reverse.sh	gaelic/scottish  --rowlossimportance 10
+./clean_language_reverse.sh	khmer/central  --rowlossimportance 10
+./clean_language_reverse.sh	latin/classical  --rowlossimportance 10
+./clean_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 10
+./clean_language_reverse.sh	malay/arab  --rowlossimportance 10
+./clean_language_reverse.sh	malay/latin  --rowlossimportance 10
+./clean_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 10
+./clean_language_reverse.sh	nahuatl/central  --rowlossimportance 10
+./clean_language_reverse.sh	nahuatl/classical  --rowlossimportance 10
+./clean_language_reverse.sh	nahuatl/mecayapan  --rowlossimportance 10
+./clean_language_reverse.sh	nahuatl/tetelcingo  --rowlossimportance 10
+./clean_language_reverse.sh	vietnamese/central  --rowlossimportance 10
+./clean_language_reverse.sh	vietnamese/northern  --rowlossimportance 10
+./clean_language_reverse.sh	vietnamese/southern  --rowlossimportance 10
+./clean_language_reverse.sh	welsh/north  --rowlossimportance 10
+./clean_language_reverse.sh	welsh/south  --rowlossimportance 10

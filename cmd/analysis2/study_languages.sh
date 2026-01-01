@@ -1,141 +1,143 @@
 #!/bin/bash
- timeout 600 ./study_language.sh	cantonese -padspace
- timeout 600 ./study_language.sh	minnan/hokkien -padspace
- timeout 600 ./study_language.sh	minnan/taiwanese -padspace
- timeout 600 ./study_language.sh	hebrew2		--rowlossimportance 10
-exit
- timeout 600 ./study_language.sh	afrikaans	
- timeout 600 ./study_language.sh	albanian	
- timeout 600 ./study_language.sh	amharic	
- timeout 600 ./study_language.sh	arabic	
- timeout 600 ./study_language.sh	aragonese	
- timeout 600 ./study_language.sh	armenian		
- timeout 600 ./study_language.sh	assamese	
- timeout 600 ./study_language.sh	azerbaijani		
- timeout 600 ./study_language.sh	bashkir	
- timeout 600 ./study_language.sh	basque	
- timeout 600 ./study_language.sh	belarusian	
- timeout 600 ./study_language.sh	bengali			
- timeout 600 ./study_language.sh	bengali/dhaka		
- timeout 600 ./study_language.sh	bengali/rahr		
- timeout 600 ./study_language.sh	bishnupriyamanipuri	
- timeout 600 ./study_language.sh	bosnian	
- timeout 600 ./study_language.sh	bulgarian	
- timeout 600 ./study_language.sh	burmese	
- timeout 600 ./study_language.sh	catalan	
- timeout 600 ./study_language.sh	cebuano	
- timeout 600 ./study_language.sh	chechen	
- timeout 600 ./study_language.sh	cherokee	
- timeout 600 ./study_language.sh	chichewa	
- timeout 600 ./study_language.sh	chinese/mandarin	-padspace	 --hyperinit 16  --rowlossimportance 10
- timeout 600 ./study_language.sh	chuvash	
- timeout 600 ./study_language.sh	croatian	
- timeout 600 ./study_language.sh	czech	
- timeout 600 ./study_language.sh	danish	
- timeout 600 ./study_language.sh	dutch	
- timeout 600 ./study_language.sh	dzongkha	
- timeout 600 ./study_language.sh	english	
- timeout 600 ./study_language.sh	esperanto	
- timeout 600 ./study_language.sh	estonian	
- timeout 600 ./study_language.sh	farsi	
- timeout 600 ./study_language.sh	finnish	
- timeout 600 ./study_language.sh	french	
- timeout 600 ./study_language.sh	gaelic/irish	
- timeout 600 ./study_language.sh	gaelic/scottish	
- timeout 600 ./study_language.sh	galician	
- timeout 600 ./study_language.sh	georgian	
- timeout 600 ./study_language.sh	german	
- timeout 600 ./study_language.sh	greek	
- timeout 600 ./study_language.sh	greenlandic	
- timeout 600 ./study_language.sh	guarani	
- timeout 600 ./study_language.sh	gujarati	
- timeout 600 ./study_language.sh	haitiancreole	
- timeout 600 ./study_language.sh	hausa	
- timeout 600 ./study_language.sh	hawaiian	
- timeout 600 ./study_language.sh	hebrew	
- timeout 600 ./study_language.sh	hindi	
- timeout 600 ./study_language.sh	hungarian	
- timeout 600 ./study_language.sh	icelandic	
- timeout 600 ./study_language.sh	ido	
- timeout 600 ./study_language.sh	indonesian	
- timeout 600 ./study_language.sh	interlingua	
- timeout 600 ./study_language.sh	isan	
- timeout 600 ./study_language.sh	italian		--rowlossimportance 6
- timeout 600 ./study_language.sh	jamaican	
- timeout 600 ./study_language.sh	japanese	-padspace --hyperinit 16  --rowlossimportance 10
- timeout 600 ./study_language.sh	javanese	
- timeout 600 ./study_language.sh	kannada	
- timeout 600 ./study_language.sh	kazakh	
- timeout 600 ./study_language.sh	khmer/central	
- timeout 600 ./study_language.sh	kiche	
- timeout 600 ./study_language.sh	konkani	
- timeout 600 ./study_language.sh	korean	
- timeout 600 ./study_language.sh	kurdish	
- timeout 600 ./study_language.sh	kyrgyz	
- timeout 600 ./study_language.sh	langbelta	
- timeout 600 ./study_language.sh	lao	
- timeout 600 ./study_language.sh	latgalian	
- timeout 600 ./study_language.sh	latin/classical	
- timeout 600 ./study_language.sh	latin/ecclesiastical	
- timeout 600 ./study_language.sh	latvian	
- timeout 600 ./study_language.sh	linguafrancanova	
- timeout 600 ./study_language.sh	lithuanian	
- timeout 600 ./study_language.sh	lojban	
- timeout 600 ./study_language.sh	lulesaami	
- timeout 600 ./study_language.sh	luxembourgish	
- timeout 600 ./study_language.sh	macedonian	
- timeout 600 ./study_language.sh	malayalam	
- timeout 600 ./study_language.sh	malay/arab	
- timeout 600 ./study_language.sh	malay/latin	
- timeout 600 ./study_language.sh	maltese	
- timeout 600 ./study_language.sh	maori	
- timeout 600 ./study_language.sh	marathi	
- timeout 600 ./study_language.sh	mongolian	
- timeout 600 ./study_language.sh	nahuatl/central	
- timeout 600 ./study_language.sh	nahuatl/classical	
- timeout 600 ./study_language.sh	nahuatl/mecayapan	
- timeout 600 ./study_language.sh	nahuatl/tetelcingo	
- timeout 600 ./study_language.sh	nepali	
- timeout 600 ./study_language.sh	nogai	
- timeout 600 ./study_language.sh	norwegian	
- timeout 600 ./study_language.sh	oromo	
- timeout 600 ./study_language.sh	papiamento	
- timeout 600 ./study_language.sh	pashto	
- timeout 600 ./study_language.sh	polish	
- timeout 600 ./study_language.sh	portuguese	
- timeout 600 ./study_language.sh	punjabi	
- timeout 600 ./study_language.sh	quechua	
- timeout 600 ./study_language.sh	quenya	
- timeout 600 ./study_language.sh	romanian	
- timeout 600 ./study_language.sh	russian	
- timeout 600 ./study_language.sh	serbian	
- timeout 600 ./study_language.sh	setswana	
- timeout 600 ./study_language.sh	shantaiyai	
- timeout 600 ./study_language.sh	sindarin	
- timeout 600 ./study_language.sh	sindhi	
- timeout 600 ./study_language.sh	sinhala	
- timeout 600 ./study_language.sh	slovak	
- timeout 600 ./study_language.sh	slovenian	
- timeout 600 ./study_language.sh	spanish	
- timeout 600 ./study_language.sh	swahili	
- timeout 600 ./study_language.sh	swedish	
- timeout 600 ./study_language.sh	tagalog	
- timeout 600 ./study_language.sh	tamil		--rowlossimportance 6
- timeout 600 ./study_language.sh	tatar	
- timeout 600 ./study_language.sh	telugu	
- timeout 600 ./study_language.sh	thai	
- timeout 600 ./study_language.sh	tibetan	-padspace  --hyperinit 16
- timeout 600 ./study_language.sh	turkish	
- timeout 600 ./study_language.sh	turkmen	
- timeout 600 ./study_language.sh	ukrainian	
- timeout 600 ./study_language.sh	urdu	
- timeout 600 ./study_language.sh	uyghur	
- timeout 600 ./study_language.sh	uzbek	
- timeout 600 ./study_language.sh	vietnamese/central			--rowlossimportance 8
- timeout 600 ./study_language.sh	vietnamese/northern			--rowlossimportance 8
- timeout 600 ./study_language.sh	vietnamese/southern			--rowlossimportance 8
- timeout 600 ./study_language.sh	welsh/north	
- timeout 600 ./study_language.sh	welsh/south
- timeout 600 ./study_language.sh	yoruba	
- timeout 600 ./study_language.sh	zulu	
+
+./study_language.sh	afrikaans  --rowlossimportance 0
+./study_language.sh	albanian  --rowlossimportance 0
+./study_language.sh	amharic  --rowlossimportance 0
+./study_language.sh	arabic  --rowlossimportance 3
+./study_language.sh	aragonese  --rowlossimportance 0
+./study_language.sh	armenian  --rowlossimportance 1
+./study_language.sh	assamese  --rowlossimportance 0
+./study_language.sh	azerbaijani  --rowlossimportance 1
+./study_language.sh	bashkir  --rowlossimportance 0
+./study_language.sh	basque  --rowlossimportance 3
+./study_language.sh	belarusian  --rowlossimportance 1
+./study_language.sh	bengali  --rowlossimportance 10
+./study_language.sh	bengali/dhaka  --rowlossimportance 7
+./study_language.sh	bengali/rahr  --rowlossimportance 10
+./study_language.sh	bishnupriyamanipuri  --rowlossimportance 0
+./study_language.sh	bosnian  --rowlossimportance 9
+./study_language.sh	bulgarian  --rowlossimportance 3
+./study_language.sh	burmese  --rowlossimportance 5
+./study_language.sh	cantonese  --rowlossimportance 0 -padspace --hyperinit 16
+./study_language.sh	catalan  --rowlossimportance 1
+./study_language.sh	cebuano  --rowlossimportance 3
+./study_language.sh	chechen  --rowlossimportance 1
+./study_language.sh	cherokee  --rowlossimportance 0
+./study_language.sh	chichewa  --rowlossimportance 2
+./study_language.sh	chinese/mandarin  --rowlossimportance 7 -padspace --hyperinit 16
+./study_language.sh	chuvash  --rowlossimportance 8
+./study_language.sh	croatian  --rowlossimportance 3
+./study_language.sh	czech  --rowlossimportance 0
+./study_language.sh	danish  --rowlossimportance 0
+./study_language.sh	dutch  --rowlossimportance 0
+./study_language.sh	dzongkha  --rowlossimportance 9
+./study_language.sh	english  --rowlossimportance 3
+./study_language.sh	english/american  --rowlossimportance 2
+./study_language.sh	english/british  --rowlossimportance 1
+./study_language.sh	esperanto  --rowlossimportance 10
+./study_language.sh	estonian  --rowlossimportance 0
+./study_language.sh	farsi  --rowlossimportance 10
+./study_language.sh	finnish  --rowlossimportance 5
+./study_language.sh	french  --rowlossimportance 5
+./study_language.sh	gaelic/irish  --rowlossimportance 1
+./study_language.sh	gaelic/scottish  --rowlossimportance 3
+./study_language.sh	galician  --rowlossimportance 0
+./study_language.sh	georgian  --rowlossimportance 2
+./study_language.sh	german  --rowlossimportance 7
+./study_language.sh	greek  --rowlossimportance 2
+./study_language.sh	greenlandic  --rowlossimportance 4
+./study_language.sh	guarani  --rowlossimportance 3
+./study_language.sh	gujarati  --rowlossimportance 8
+./study_language.sh	haitiancreole  --rowlossimportance 3
+./study_language.sh	hausa  --rowlossimportance 3
+./study_language.sh	hawaiian  --rowlossimportance 3
+./study_language.sh	hebrew2  --rowlossimportance 6
+./study_language.sh	hebrew3  --rowlossimportance 8
+./study_language.sh	hindi  --rowlossimportance 10
+./study_language.sh	hungarian  --rowlossimportance 1
+./study_language.sh	icelandic  --rowlossimportance 1
+./study_language.sh	ido  --rowlossimportance 1
+./study_language.sh	indonesian  --rowlossimportance 2
+./study_language.sh	interlingua  --rowlossimportance 3
+./study_language.sh	isan  --rowlossimportance 5
+./study_language.sh	italian  --rowlossimportance 9
+./study_language.sh	jamaican  --rowlossimportance 1
+./study_language.sh	japanese  --rowlossimportance 7 -padspace --hyperinit 16
+./study_language.sh	javanese  --rowlossimportance 10
+./study_language.sh	kannada  --rowlossimportance 0
+./study_language.sh	kazakh  --rowlossimportance 0
+./study_language.sh	khmer/central  --rowlossimportance 3
+./study_language.sh	kiche  --rowlossimportance 7
+./study_language.sh	konkani  --rowlossimportance 3
+./study_language.sh	korean  --rowlossimportance 3
+./study_language.sh	kurdish  --rowlossimportance 2
+./study_language.sh	kyrgyz  --rowlossimportance 9
+./study_language.sh	langbelta  --rowlossimportance 6
+./study_language.sh	lao  --rowlossimportance 0
+./study_language.sh	latgalian  --rowlossimportance 1
+./study_language.sh	latin/classical  --rowlossimportance 9
+./study_language.sh	latin/ecclesiastical  --rowlossimportance 1
+./study_language.sh	latvian  --rowlossimportance 2
+./study_language.sh	linguafrancanova  --rowlossimportance 1
+./study_language.sh	lithuanian  --rowlossimportance 1
+./study_language.sh	lojban  --rowlossimportance 1
+./study_language.sh	lulesaami  --rowlossimportance 8
+./study_language.sh	luxembourgish  --rowlossimportance 4
+./study_language.sh	macedonian  --rowlossimportance 1
+./study_language.sh	malayalam  --rowlossimportance 7
+./study_language.sh	malay/arab  --rowlossimportance 6
+./study_language.sh	malay/latin  --rowlossimportance 2
+./study_language.sh	maltese  --rowlossimportance 2
+./study_language.sh	maori  --rowlossimportance 3
+./study_language.sh	marathi  --rowlossimportance 7
+./study_language.sh	minnan/hokkien2  --rowlossimportance 3 -padspace --hyperinit 16
+./study_language.sh	minnan/taiwanese2  --rowlossimportance 1 -padspace --hyperinit 16
+./study_language.sh	mongolian  --rowlossimportance 2
+./study_language.sh	nahuatl/central  --rowlossimportance 7
+./study_language.sh	nahuatl/classical  --rowlossimportance 3
+./study_language.sh	nahuatl/mecayapan  --rowlossimportance 9
+./study_language.sh	nahuatl/tetelcingo  --rowlossimportance 6
+./study_language.sh	nepali  --rowlossimportance 0
+./study_language.sh	nogai  --rowlossimportance 8
+./study_language.sh	norwegian  --rowlossimportance 2
+./study_language.sh	oromo  --rowlossimportance 1
+./study_language.sh	papiamento  --rowlossimportance 5
+./study_language.sh	pashto  --rowlossimportance 1
+./study_language.sh	polish  --rowlossimportance 5
+./study_language.sh	portuguese  --rowlossimportance 5
+./study_language.sh	punjabi  --rowlossimportance 7
+./study_language.sh	quechua  --rowlossimportance 3
+./study_language.sh	quenya  --rowlossimportance 8
+./study_language.sh	romanian  --rowlossimportance 6
+./study_language.sh	russian  --rowlossimportance 7
+./study_language.sh	serbian  --rowlossimportance 6
+./study_language.sh	setswana  --rowlossimportance 3
+./study_language.sh	shantaiyai  --rowlossimportance 4 -padspace --hyperinit 16
+./study_language.sh	sindarin  --rowlossimportance 4
+./study_language.sh	sindhi  --rowlossimportance 3
+./study_language.sh	sinhala  --rowlossimportance 5
+./study_language.sh	slovak  --rowlossimportance 7
+./study_language.sh	slovenian  --rowlossimportance 1
+./study_language.sh	spanish  --rowlossimportance 7
+./study_language.sh	swahili  --rowlossimportance 3
+./study_language.sh	swedish  --rowlossimportance 1
+./study_language.sh	tagalog  --rowlossimportance 1
+./study_language.sh	tamil  --rowlossimportance 10
+./study_language.sh	tatar  --rowlossimportance 4
+./study_language.sh	telugu  --rowlossimportance 4
+./study_language.sh	thai  --rowlossimportance 5
+./study_language.sh	tibetan  --rowlossimportance 6 -padspace --hyperinit 16
+./study_language.sh	turkish  --rowlossimportance 2
+./study_language.sh	turkmen  --rowlossimportance 0
+./study_language.sh	ukrainian  --rowlossimportance 5
+./study_language.sh	urdu  --rowlossimportance 3
+./study_language.sh	uyghur  --rowlossimportance 4
+./study_language.sh	uzbek  --rowlossimportance 5
+./study_language.sh	vietnamese/central  --rowlossimportance 0
+./study_language.sh	vietnamese/northern  --rowlossimportance 0
+./study_language.sh	vietnamese/southern  --rowlossimportance 3
+./study_language.sh	welsh/north  --rowlossimportance 1
+./study_language.sh	welsh/south  --rowlossimportance 6
+./study_language.sh	yoruba  --rowlossimportance 7
+./study_language.sh	zulu  --rowlossimportance 7
 

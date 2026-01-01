@@ -1,141 +1,142 @@
 #!/bin/bash
- timeout 600 ./study_language_reverse.sh	cantonese -padspace
- timeout 600 ./study_language_reverse.sh	minnan/hokkien -padspace
- timeout 600 ./study_language_reverse.sh	minnan/taiwanese -padspace
- timeout 600 ./study_language_reverse.sh	hebrew2
-exit
- timeout 600 ./study_language_reverse.sh	afrikaans	
- timeout 600 ./study_language_reverse.sh	albanian	
- timeout 600 ./study_language_reverse.sh	amharic	
- timeout 600 ./study_language_reverse.sh	arabic	
- timeout 600 ./study_language_reverse.sh	aragonese	
- timeout 600 ./study_language_reverse.sh	armenian	
- timeout 600 ./study_language_reverse.sh	assamese	
- timeout 600 ./study_language_reverse.sh	azerbaijani	
- timeout 600 ./study_language_reverse.sh	bashkir	
- timeout 600 ./study_language_reverse.sh	basque	
- timeout 600 ./study_language_reverse.sh	belarusian	
- timeout 600 ./study_language_reverse.sh	bengali		
- timeout 600 ./study_language_reverse.sh	bengali/dhaka	
- timeout 600 ./study_language_reverse.sh	bengali/rahr	
- timeout 600 ./study_language_reverse.sh	bishnupriyamanipuri	
- timeout 600 ./study_language_reverse.sh	bosnian	
- timeout 600 ./study_language_reverse.sh	bulgarian	
- timeout 600 ./study_language_reverse.sh	burmese	
- timeout 600 ./study_language_reverse.sh	catalan	
- timeout 600 ./study_language_reverse.sh	cebuano	
- timeout 600 ./study_language_reverse.sh	chechen	
- timeout 600 ./study_language_reverse.sh	cherokee	
- timeout 600 ./study_language_reverse.sh	chichewa	
- timeout 600 ./study_language_reverse.sh	chinese/mandarin	-padspace
- timeout 600 ./study_language_reverse.sh	chuvash	
- timeout 600 ./study_language_reverse.sh	croatian	
- timeout 600 ./study_language_reverse.sh	czech	
- timeout 600 ./study_language_reverse.sh	danish	
- timeout 600 ./study_language_reverse.sh	dutch	
- timeout 600 ./study_language_reverse.sh	dzongkha	
- timeout 600 ./study_language_reverse.sh	english	
- timeout 600 ./study_language_reverse.sh	esperanto	
- timeout 600 ./study_language_reverse.sh	estonian	
- timeout 600 ./study_language_reverse.sh	farsi	
- timeout 600 ./study_language_reverse.sh	finnish	
- timeout 600 ./study_language_reverse.sh	french	
- timeout 600 ./study_language_reverse.sh	gaelic/irish	
- timeout 600 ./study_language_reverse.sh	gaelic/scottish	
- timeout 600 ./study_language_reverse.sh	galician	
- timeout 600 ./study_language_reverse.sh	georgian	
- timeout 600 ./study_language_reverse.sh	german
- timeout 600 ./study_language_reverse.sh	greek	
- timeout 600 ./study_language_reverse.sh	greenlandic	
- timeout 600 ./study_language_reverse.sh	guarani	
- timeout 600 ./study_language_reverse.sh	gujarati	
- timeout 600 ./study_language_reverse.sh	haitiancreole	
- timeout 600 ./study_language_reverse.sh	hausa	
- timeout 600 ./study_language_reverse.sh	hawaiian	
- timeout 600 ./study_language_reverse.sh	hebrew	
- timeout 600 ./study_language_reverse.sh	hindi	
- timeout 600 ./study_language_reverse.sh	hungarian	
- timeout 600 ./study_language_reverse.sh	icelandic	
- timeout 600 ./study_language_reverse.sh	ido	
- timeout 600 ./study_language_reverse.sh	indonesian	
- timeout 600 ./study_language_reverse.sh	interlingua	
- timeout 600 ./study_language_reverse.sh	isan	
- timeout 600 ./study_language_reverse.sh	italian	
- timeout 600 ./study_language_reverse.sh	jamaican	
- timeout 600 ./study_language_reverse.sh	japanese	-padspace --hyperinit 16 --rowlossimportance 10
- timeout 600 ./study_language_reverse.sh	javanese	
- timeout 600 ./study_language_reverse.sh	kannada	
- timeout 600 ./study_language_reverse.sh	kazakh	
- timeout 600 ./study_language_reverse.sh	khmer/central	
- timeout 600 ./study_language_reverse.sh	kiche	
- timeout 600 ./study_language_reverse.sh	konkani	
- timeout 600 ./study_language_reverse.sh	korean	
- timeout 600 ./study_language_reverse.sh	kurdish	
- timeout 600 ./study_language_reverse.sh	kyrgyz	
- timeout 600 ./study_language_reverse.sh	langbelta	
- timeout 600 ./study_language_reverse.sh	lao	
- timeout 600 ./study_language_reverse.sh	latgalian	
- timeout 600 ./study_language_reverse.sh	latin/classical	
- timeout 600 ./study_language_reverse.sh	latin/ecclesiastical	
- timeout 600 ./study_language_reverse.sh	latvian	
- timeout 600 ./study_language_reverse.sh	linguafrancanova	
- timeout 600 ./study_language_reverse.sh	lithuanian	
- timeout 600 ./study_language_reverse.sh	lojban	
- timeout 600 ./study_language_reverse.sh	lulesaami	
- timeout 600 ./study_language_reverse.sh	luxembourgish	
- timeout 600 ./study_language_reverse.sh	macedonian	
- timeout 600 ./study_language_reverse.sh	malayalam	
- timeout 600 ./study_language_reverse.sh	malay/arab	
- timeout 600 ./study_language_reverse.sh	malay/latin	
- timeout 600 ./study_language_reverse.sh	maltese	
- timeout 600 ./study_language_reverse.sh	maori	
- timeout 600 ./study_language_reverse.sh	marathi	
- timeout 600 ./study_language_reverse.sh	mongolian	
- timeout 600 ./study_language_reverse.sh	nahuatl/central	
- timeout 600 ./study_language_reverse.sh	nahuatl/classical	
- timeout 600 ./study_language_reverse.sh	nahuatl/mecayapan	
- timeout 600 ./study_language_reverse.sh	nahuatl/tetelcingo	
- timeout 600 ./study_language_reverse.sh	nepali	
- timeout 600 ./study_language_reverse.sh	nogai	
- timeout 600 ./study_language_reverse.sh	norwegian	
- timeout 600 ./study_language_reverse.sh	oromo	
- timeout 600 ./study_language_reverse.sh	papiamento	
- timeout 600 ./study_language_reverse.sh	pashto	
- timeout 600 ./study_language_reverse.sh	polish	
- timeout 600 ./study_language_reverse.sh	portuguese	
- timeout 600 ./study_language_reverse.sh	punjabi	
- timeout 600 ./study_language_reverse.sh	quechua	
- timeout 600 ./study_language_reverse.sh	quenya	
- timeout 600 ./study_language_reverse.sh	romanian	
- timeout 600 ./study_language_reverse.sh	russian
- timeout 600 ./study_language_reverse.sh	serbian	
- timeout 600 ./study_language_reverse.sh	setswana	
- timeout 600 ./study_language_reverse.sh	shantaiyai	
- timeout 600 ./study_language_reverse.sh	sindarin	
- timeout 600 ./study_language_reverse.sh	sindhi	
- timeout 600 ./study_language_reverse.sh	sinhala	
- timeout 600 ./study_language_reverse.sh	slovak	
- timeout 600 ./study_language_reverse.sh	slovenian	
- timeout 600 ./study_language_reverse.sh	spanish
- timeout 600 ./study_language_reverse.sh	swahili
- timeout 600 ./study_language_reverse.sh	swedish	
- timeout 600 ./study_language_reverse.sh	tagalog	
- timeout 600 ./study_language_reverse.sh	tamil	
- timeout 600 ./study_language_reverse.sh	tatar	
- timeout 600 ./study_language_reverse.sh	telugu	
- timeout 600 ./study_language_reverse.sh	thai	
- timeout 600 ./study_language_reverse.sh        tibetan -padspace --forcedecision 1000000
- timeout 600 ./study_language_reverse.sh	turkish	
- timeout 600 ./study_language_reverse.sh	turkmen	
- timeout 600 ./study_language_reverse.sh	ukrainian	
- timeout 600 ./study_language_reverse.sh	urdu	
- timeout 600 ./study_language_reverse.sh	uyghur	
- timeout 600 ./study_language_reverse.sh	uzbek	
- timeout 600 ./study_language_reverse.sh	vietnamese/central	
- timeout 600 ./study_language_reverse.sh	vietnamese/northern	
- timeout 600 ./study_language_reverse.sh	vietnamese/southern	
- timeout 600 ./study_language_reverse.sh	welsh/north	
- timeout 600 ./study_language_reverse.sh	welsh/south
- timeout 600 ./study_language_reverse.sh	yoruba	
- timeout 600 ./study_language_reverse.sh	zulu	
 
+./study_language_reverse.sh	afrikaans  --rowlossimportance 10
+./study_language_reverse.sh	albanian  --rowlossimportance 10
+./study_language_reverse.sh	amharic  --rowlossimportance 10
+./study_language_reverse.sh	arabic  --rowlossimportance 10
+./study_language_reverse.sh	aragonese  --rowlossimportance 10
+./study_language_reverse.sh	armenian  --rowlossimportance 10
+./study_language_reverse.sh	assamese  --rowlossimportance 10
+./study_language_reverse.sh	azerbaijani  --rowlossimportance 10
+./study_language_reverse.sh	bashkir  --rowlossimportance 10
+./study_language_reverse.sh	basque  --rowlossimportance 10
+./study_language_reverse.sh	belarusian  --rowlossimportance 10
+./study_language_reverse.sh	bengali  --rowlossimportance 10
+./study_language_reverse.sh	bishnupriyamanipuri  --rowlossimportance 10
+./study_language_reverse.sh	bosnian  --rowlossimportance 10
+./study_language_reverse.sh	bulgarian  --rowlossimportance 10
+./study_language_reverse.sh	burmese  --rowlossimportance 10
+./study_language_reverse.sh	cantonese -padspace  --rowlossimportance 10
+./study_language_reverse.sh	catalan  --rowlossimportance 10
+./study_language_reverse.sh	cebuano  --rowlossimportance 10
+./study_language_reverse.sh	chechen  --rowlossimportance 10
+./study_language_reverse.sh	cherokee  --rowlossimportance 10
+./study_language_reverse.sh	chichewa  --rowlossimportance 10
+./study_language_reverse.sh	chuvash  --rowlossimportance 10
+./study_language_reverse.sh	croatian  --rowlossimportance 10
+./study_language_reverse.sh	czech  --rowlossimportance 10
+./study_language_reverse.sh	danish  --rowlossimportance 10
+./study_language_reverse.sh	dutch  --rowlossimportance 10
+./study_language_reverse.sh	dzongkha  --rowlossimportance 10
+./study_language_reverse.sh	english  --rowlossimportance 10
+./study_language_reverse.sh	esperanto  --rowlossimportance 10
+./study_language_reverse.sh	estonian  --rowlossimportance 10
+./study_language_reverse.sh	farsi  --rowlossimportance 10
+./study_language_reverse.sh	finnish  --rowlossimportance 10
+./study_language_reverse.sh	french  --rowlossimportance 10
+./study_language_reverse.sh	galician  --rowlossimportance 10
+./study_language_reverse.sh	georgian  --rowlossimportance 10
+./study_language_reverse.sh	german  --rowlossimportance 10
+./study_language_reverse.sh	greek  --rowlossimportance 10
+./study_language_reverse.sh	greenlandic  --rowlossimportance 10
+./study_language_reverse.sh	guarani  --rowlossimportance 10
+./study_language_reverse.sh	gujarati  --rowlossimportance 10
+./study_language_reverse.sh	haitiancreole  --rowlossimportance 10
+./study_language_reverse.sh	hausa  --rowlossimportance 10
+./study_language_reverse.sh	hawaiian  --rowlossimportance 10
+./study_language_reverse.sh	hebrew2  --rowlossimportance 10
+./study_language_reverse.sh	hebrew3  --rowlossimportance 10
+./study_language_reverse.sh	hindi  --rowlossimportance 10
+./study_language_reverse.sh	hungarian  --rowlossimportance 10
+./study_language_reverse.sh	icelandic  --rowlossimportance 10
+./study_language_reverse.sh	ido  --rowlossimportance 10
+./study_language_reverse.sh	indonesian  --rowlossimportance 10
+./study_language_reverse.sh	interlingua  --rowlossimportance 10
+./study_language_reverse.sh	isan  --rowlossimportance 10
+./study_language_reverse.sh	italian  --rowlossimportance 10
+./study_language_reverse.sh	jamaican  --rowlossimportance 10
+./study_language_reverse.sh	japanese -padspace  --rowlossimportance 10
+./study_language_reverse.sh	javanese  --rowlossimportance 10
+./study_language_reverse.sh	kannada  --rowlossimportance 10
+./study_language_reverse.sh	kazakh  --rowlossimportance 10
+./study_language_reverse.sh	kiche  --rowlossimportance 10
+./study_language_reverse.sh	konkani  --rowlossimportance 10
+./study_language_reverse.sh	korean  --rowlossimportance 10
+./study_language_reverse.sh	kurdish  --rowlossimportance 10
+./study_language_reverse.sh	kyrgyz  --rowlossimportance 10
+./study_language_reverse.sh	langbelta  --rowlossimportance 10
+./study_language_reverse.sh	lao  --rowlossimportance 10
+./study_language_reverse.sh	latgalian  --rowlossimportance 10
+./study_language_reverse.sh	latvian  --rowlossimportance 10
+./study_language_reverse.sh	linguafrancanova  --rowlossimportance 10
+./study_language_reverse.sh	lithuanian  --rowlossimportance 10
+./study_language_reverse.sh	lojban  --rowlossimportance 10
+./study_language_reverse.sh	lulesaami  --rowlossimportance 10
+./study_language_reverse.sh	luxembourgish  --rowlossimportance 10
+./study_language_reverse.sh	macedonian  --rowlossimportance 10
+./study_language_reverse.sh	malayalam  --rowlossimportance 10
+./study_language_reverse.sh	maltese  --rowlossimportance 10
+./study_language_reverse.sh	maori  --rowlossimportance 10
+./study_language_reverse.sh	marathi  --rowlossimportance 10
+./study_language_reverse.sh	mongolian  --rowlossimportance 10
+./study_language_reverse.sh	nepali  --rowlossimportance 10
+./study_language_reverse.sh	nogai  --rowlossimportance 10
+./study_language_reverse.sh	norwegian  --rowlossimportance 10
+./study_language_reverse.sh	oromo  --rowlossimportance 10
+./study_language_reverse.sh	papiamento  --rowlossimportance 10
+./study_language_reverse.sh	pashto  --rowlossimportance 10
+./study_language_reverse.sh	polish  --rowlossimportance 10
+./study_language_reverse.sh	portuguese  --rowlossimportance 10
+./study_language_reverse.sh	punjabi  --rowlossimportance 10
+./study_language_reverse.sh	quechua  --rowlossimportance 10
+./study_language_reverse.sh	quenya  --rowlossimportance 10
+./study_language_reverse.sh	romanian  --rowlossimportance 10
+./study_language_reverse.sh	russian  --rowlossimportance 10
+./study_language_reverse.sh	serbian  --rowlossimportance 10
+./study_language_reverse.sh	setswana  --rowlossimportance 10
+./study_language_reverse.sh	shantaiyai -padspace  --rowlossimportance 10
+./study_language_reverse.sh	sindarin  --rowlossimportance 10
+./study_language_reverse.sh	sindhi  --rowlossimportance 10
+./study_language_reverse.sh	sinhala  --rowlossimportance 10
+./study_language_reverse.sh	slovak  --rowlossimportance 10
+./study_language_reverse.sh	slovenian  --rowlossimportance 10
+./study_language_reverse.sh	spanish  --rowlossimportance 10
+./study_language_reverse.sh	swahili  --rowlossimportance 10
+./study_language_reverse.sh	swedish  --rowlossimportance 10
+./study_language_reverse.sh	tagalog  --rowlossimportance 10
+./study_language_reverse.sh	tamil  --rowlossimportance 10
+./study_language_reverse.sh	tatar  --rowlossimportance 10
+./study_language_reverse.sh	telugu  --rowlossimportance 10
+./study_language_reverse.sh	thai  --rowlossimportance 10
+./study_language_reverse.sh	tibetan -padspace  --rowlossimportance 10
+./study_language_reverse.sh	turkish  --rowlossimportance 10
+./study_language_reverse.sh	turkmen  --rowlossimportance 10
+./study_language_reverse.sh	ukrainian  --rowlossimportance 10
+./study_language_reverse.sh	urdu  --rowlossimportance 10
+./study_language_reverse.sh	uyghur  --rowlossimportance 10
+./study_language_reverse.sh	uzbek  --rowlossimportance 10
+./study_language_reverse.sh	yoruba  --rowlossimportance 10
+./study_language_reverse.sh	zulu  --rowlossimportance 10
+./study_language_reverse.sh	bengali/dhaka  --rowlossimportance 10
+./study_language_reverse.sh	bengali/rahr  --rowlossimportance 10
+./study_language_reverse.sh	chinese/mandarin -padspace  --rowlossimportance 10
+./study_language_reverse.sh	english/american  --rowlossimportance 10
+./study_language_reverse.sh	english/british  --rowlossimportance 10
+./study_language_reverse.sh	gaelic/irish  --rowlossimportance 10
+./study_language_reverse.sh	gaelic/scottish  --rowlossimportance 10
+./study_language_reverse.sh	khmer/central  --rowlossimportance 10
+./study_language_reverse.sh	latin/classical  --rowlossimportance 10
+./study_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 10
+./study_language_reverse.sh	malay/arab  --rowlossimportance 10
+./study_language_reverse.sh	malay/latin  --rowlossimportance 10
+./study_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 10
+./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 10
+./study_language_reverse.sh	nahuatl/central  --rowlossimportance 10
+./study_language_reverse.sh	nahuatl/classical  --rowlossimportance 10
+./study_language_reverse.sh	nahuatl/mecayapan  --rowlossimportance 10
+./study_language_reverse.sh	nahuatl/tetelcingo  --rowlossimportance 10
+./study_language_reverse.sh	vietnamese/central  --rowlossimportance 10
+./study_language_reverse.sh	vietnamese/northern  --rowlossimportance 10
+./study_language_reverse.sh	vietnamese/southern  --rowlossimportance 10
+./study_language_reverse.sh	welsh/north  --rowlossimportance 10
+./study_language_reverse.sh	welsh/south  --rowlossimportance 10
