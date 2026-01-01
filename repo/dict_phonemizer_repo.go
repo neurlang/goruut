@@ -24,7 +24,7 @@ type DictPhonemizerRepository struct {
 	lang_words *map[string]map[string]map[string]uint32
 	lang_tags  *map[string]map[uint32]string
 	words_tags *map[string]map[[2]string]uint32
-	mut        sync.Mutex
+	mut        *sync.RWMutex
 }
 
 func addTags(bag map[uint32]string, tags ...string) map[uint32]string {
@@ -66,11 +66,21 @@ func serializeTags(tags map[uint32]string) (key uint32, ret string) {
 	return
 }
 
+
 func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 	var reverse string
 	if isReverse {
 		reverse = "_reverse"
 	}
+	r.mut.RLock()
+	if (*r.lang_words)[lang+reverse] == nil {
+		r.mut.RUnlock()
+	} else {
+		log.Now().Debugf("Language %s already loaded", lang)
+		r.mut.RUnlock()
+		return
+	}
+
 	r.mut.Lock()
 	defer r.mut.Unlock()
 	if (*r.lang_words)[lang+reverse] == nil {
@@ -175,15 +185,23 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 	if isReverse {
 		reverse = "_reverse"
 	}
-	r.mut.Lock()
+	r.mut.RLock()
 	found := (*r.lang_words)[lang+reverse][word]
-	r.mut.Unlock()
+	// Create a copy of the found map while holding the mutex
+	var foundCopy map[string]uint32
+	if len(found) > 0 {
+		foundCopy = make(map[string]uint32)
+		for k, v := range found {
+			foundCopy[k] = v
+		}
+	}
+	r.mut.RUnlock()
 
-	if len(found) == 0 {
+	if len(foundCopy) == 0 {
 		return nil
 	}
 	var m = make(map[string]uint32)
-	for k, v := range found {
+	for k, v := range foundCopy {
 		log.Now().Debugf("LookupWords Key: %s, Value: %v", k, v)
 		m[k] = v
 	}
@@ -198,9 +216,11 @@ func (r *DictPhonemizerRepository) LookupTags(isReverse bool, lang string, word1
 	if isReverse {
 		reverse = "_reverse"
 	}
-	r.mut.Lock()
-	found := (*r.lang_tags)[lang+reverse][(*r.words_tags)[lang+reverse][[2]string{word1, word2}]]
-	r.mut.Unlock()
+	r.mut.RLock()
+	// Copy the result while holding the mutex
+	tagKey := (*r.words_tags)[lang+reverse][[2]string{word1, word2}]
+	found := (*r.lang_tags)[lang+reverse][tagKey]
+	r.mut.RUnlock()
 	if found != "" {
 		return found
 	}
@@ -218,6 +238,7 @@ func NewDictPhonemizerRepository(di *DependencyInjection) *DictPhonemizerReposit
 		lang_words: &mapping,
 		lang_tags:  &mapping2,
 		words_tags: &mapping3,
+		mut:        &sync.RWMutex{},
 	}
 }
 

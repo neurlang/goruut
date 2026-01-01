@@ -33,7 +33,7 @@ type IHashtronPhonemizerRepository interface {
 type HashtronPhonemizerRepository struct {
 	getter *interfaces.DictGetter
 
-	mut    sync.RWMutex
+	mut    *sync.RWMutex
 	lang   *languages
 	phoner *interfaces.Phonemizer
 	nets   *map[string]*feedforward.FeedforwardNetwork
@@ -274,6 +274,16 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 		reverse = "_reverse"
 	}
 
+	// First check with read lock to avoid unnecessary write lock
+	r.mut.RLock()
+	if r.nets != nil && (*r.nets)[lang+reverse] != nil {
+		log.Now().Debugf("Language %s already loaded", lang)
+		r.mut.RUnlock()
+		return
+	}
+	r.mut.RUnlock()
+
+	// Double-checked locking: acquire write lock and check again
 	r.mut.Lock()
 	defer r.mut.Unlock()
 
@@ -778,6 +788,7 @@ func NewHashtronPhonemizerRepository(di *DependencyInjection) *HashtronPhonemize
 	return &HashtronPhonemizerRepository{
 		getter: &getter,
 		lang:   &langs,
+		mut:    &sync.RWMutex{},
 	}
 }
 

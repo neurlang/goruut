@@ -25,7 +25,7 @@ type IHashtronHomonymSelectorRepository interface {
 type HashtronHomonymSelectorRepository struct {
 	getter *interfaces.DictGetter
 
-	mut   sync.RWMutex
+	mut   *sync.RWMutex
 	hlang *hlanguages
 	nets  *map[string]*feedforward.FeedforwardNetwork
 }
@@ -40,6 +40,16 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 		reverse = "_reverse"
 	}
 
+	// First check with read lock to avoid unnecessary write lock
+	r.mut.RLock()
+	if r.nets != nil && (*r.nets)[lang+reverse] != nil {
+		log.Now().Debugf("Language %s already loaded", lang)
+		r.mut.RUnlock()
+		return
+	}
+	r.mut.RUnlock()
+
+	// Double-checked locking: acquire write lock and check again
 	r.mut.Lock()
 	defer r.mut.Unlock()
 
@@ -210,6 +220,7 @@ func NewHashtronHomonymSelectorRepository(di *DependencyInjection) *HashtronHomo
 	return &HashtronHomonymSelectorRepository{
 		getter: &getter,
 		hlang:  &hlangs,
+		mut:    &sync.RWMutex{},
 	}
 }
 

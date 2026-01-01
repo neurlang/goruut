@@ -17,7 +17,7 @@ type ISpaceSplitterRepository interface {
 type SpaceSplitterRepository struct {
 	getter *interfaces.DictGetter
 
-	mut  sync.RWMutex
+	mut  *sync.RWMutex
 	lang *spacesplitlanguages
 }
 
@@ -113,6 +113,7 @@ func NewSpaceSplitterRepository(di *DependencyInjection) *SpaceSplitterRepositor
 	return &SpaceSplitterRepository{
 		getter: &getter,
 		lang:   &langs,
+		mut:    &sync.RWMutex{},
 	}
 }
 

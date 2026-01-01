@@ -18,13 +18,13 @@ type IPrePhonWordStepsRepository interface {
 type PrePhonWordStepsRepository struct {
 	getter *interfaces.DictGetter
 
-	mut   sync.RWMutex
+	mut   *sync.RWMutex
 	lang  *prephonlanguages
 	steps *interfaces.PrePhonemizationSteps
 }
 
 type prephonlanguages struct {
-	mut  sync.RWMutex
+	mut  *sync.RWMutex
 	lang map[string]*prephonlanguage
 }
 
@@ -111,8 +111,28 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 		reverse = "_reverse"
 	}
 
+	// First check with read lock to avoid unnecessary write lock
+	p.mut.RLock()
+	p.lang.mut.RLock()
+	if p.lang.lang != nil && (p.lang.lang)[lang+reverse] != nil {
+		p.lang.mut.RUnlock()
+		p.mut.RUnlock()
+		return
+	}
+	p.lang.mut.RUnlock()
+	p.mut.RUnlock()
+
+	// Double-checked locking: acquire write lock and check again
 	p.mut.Lock()
 	defer p.mut.Unlock()
+
+	// Also need to lock the inner lang mutex when accessing p.lang.lang
+	p.lang.mut.Lock()
+	defer p.lang.mut.Unlock()
+
+	if p.lang.lang == nil {
+		p.lang.lang = make(map[string]*prephonlanguage)
+	}
 
 	existing_lang := (p.lang.lang)[lang+reverse]
 
@@ -132,7 +152,6 @@ func (p *PrePhonWordStepsRepository) LoadLanguage(isReverse bool, lang string) {
 			log.Now().Errorf("Error parsing JSON: %v\n", err)
 			continue
 		}
-		p.lang.lang = make(map[string]*prephonlanguage)
 		(p.lang.lang)[lang+reverse] = &langone
 
 		iface := (interfaces.PrePhonemizationSteps)((p.lang))
@@ -210,11 +229,14 @@ func (s *PrePhonWordStepsRepository) PrePhonemizeWord(isReverse bool, lang strin
 
 func NewPrePhonWordStepsRepository(di *DependencyInjection) *PrePhonWordStepsRepository {
 	getter := MustAny[interfaces.DictGetter](di)
-	langs := prephonlanguages{}
+	langs := prephonlanguages{
+		mut: &sync.RWMutex{},
+	}
 
 	return &PrePhonWordStepsRepository{
 		getter: &getter,
 		lang:   &langs,
+		mut:    &sync.RWMutex{},
 	}
 }
 
