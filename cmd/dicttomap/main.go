@@ -217,7 +217,13 @@ func main() {
 	}
 	for k, sli := range data {
 		sort.Slice(sli, func(i, j int) bool {
-			return histogram[[2]string{k, sli[i]}] > histogram[[2]string{k, sli[j]}]
+			histI := histogram[[2]string{k, sli[i]}]
+			histJ := histogram[[2]string{k, sli[j]}]
+			if histI == histJ {
+				// If histogram values are equal, sort alphabetically
+				return sli[i] < sli[j]
+			}
+			return histI > histJ
 		})
 	}
 	bytes, err := json.Marshal(data)
