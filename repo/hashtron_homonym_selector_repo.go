@@ -100,7 +100,6 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 
 				(*r.nets)[lang+reverse] = &net
 
-
 			}
 			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
 			log.Error0(err)

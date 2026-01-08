@@ -1,4 +1,4 @@
-// Package lib implements G2P (grapheme-to-phoneme) IPA phonemizer/dephonemizer 
+// Package lib implements G2P (grapheme-to-phoneme) IPA phonemizer/dephonemizer
 // for 136+ human languages, including validation and normalization.
 package lib
 

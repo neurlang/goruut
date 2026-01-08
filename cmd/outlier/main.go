@@ -8,10 +8,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/neurlang/goruut/dicts"
-	"github.com/neurlang/levenshtein"
 	di "github.com/martinarisk/di/dependency_injection"
+	"github.com/neurlang/goruut/dicts"
 	"github.com/neurlang/goruut/repo/interfaces"
+	"github.com/neurlang/levenshtein"
 )
 
 type dummy struct{}
@@ -113,10 +113,10 @@ func main() {
 
 		// Only print if there are errors in either direction
 		if editDistForward > 0 || editDistReverse > 0 {
-			result := fmt.Sprintf("%d\t%s\t%s\t%s\t%s", 
-				editDistForward + editDistReverse, word, ipa, inferredWord, inferredIPA)
+			result := fmt.Sprintf("%d\t%s\t%s\t%s\t%s",
+				editDistForward+editDistReverse, word, ipa, inferredWord, inferredIPA)
 			fmt.Println(result)
-			
+
 			if dumpWriter != nil {
 				fmt.Fprintln(dumpWriter, result)
 			}
@@ -129,11 +129,11 @@ func splitWordLongestPrefix(word string, langMap map[string][]string) []string {
 	var segments []string
 	runes := []rune(word)
 	i := 0
-	
+
 	for i < len(runes) {
 		longestMatch := ""
 		longestMatchLen := 0
-		
+
 		// Find the longest prefix match by testing all possible lengths
 		for j := i + 1; j <= len(runes); j++ {
 			prefix := string(runes[i:j])
@@ -142,7 +142,7 @@ func splitWordLongestPrefix(word string, langMap map[string][]string) []string {
 				longestMatchLen = j - i
 			}
 		}
-		
+
 		if longestMatch != "" {
 			segments = append(segments, longestMatch)
 			i += longestMatchLen
@@ -152,7 +152,7 @@ func splitWordLongestPrefix(word string, langMap map[string][]string) []string {
 			i++
 		}
 	}
-	
+
 	return segments
 }
 
@@ -163,10 +163,10 @@ func generateInferredIPA(segments []string, langMap map[string][]string, targetI
 	if len(segments) == 0 {
 		return ""
 	}
-	
+
 	targetRunes := []rune(strings.ToLower(targetIPA))
 	currentIPA := ""
-	
+
 	// Process each segment greedily
 	for _, segment := range segments {
 		// Skip segments that have no mapping
@@ -174,12 +174,12 @@ func generateInferredIPA(segments []string, langMap map[string][]string, targetI
 			// Find the best option for this segment
 			bestOption := phonemes[0]
 			minDistance := uint64(^uint64(0)) // Max uint64
-			
+
 			for _, option := range phonemes {
 				// Try this option and calculate edit distance
 				testIPA := currentIPA + option
 				testRunes := []rune(strings.ToLower(testIPA))
-				
+
 				// Calculate edit distance between partial IPA and corresponding part of target
 				targetLen := len(targetRunes)
 				testLen := len(testRunes)
@@ -187,30 +187,30 @@ func generateInferredIPA(segments []string, langMap map[string][]string, targetI
 				if compareLen > targetLen {
 					compareLen = targetLen
 				}
-				
+
 				var targetPart []rune
 				if compareLen > 0 {
 					targetPart = targetRunes[:compareLen]
 				}
-				
+
 				mat := levenshtein.Matrix[uint64](uint(len(testRunes)), uint(len(targetPart)),
 					nil, nil,
 					levenshtein.OneSlice[rune, uint64](testRunes, targetPart), nil)
-				
+
 				distance := *levenshtein.Distance(mat)
-				
+
 				if distance < minDistance {
 					minDistance = distance
 					bestOption = option
 				}
 			}
-			
+
 			// Add the best option to current IPA
 			currentIPA += bestOption
 		}
 		// If no mapping exists, skip this segment (don't add anything)
 	}
-	
+
 	return currentIPA
 }
 
@@ -221,10 +221,10 @@ func generateInferredWord(ipaSegments []string, langReverseMap map[string][]stri
 	if len(ipaSegments) == 0 {
 		return ""
 	}
-	
+
 	targetRunes := []rune(strings.ToLower(targetWord))
 	currentWord := ""
-	
+
 	// Process each IPA segment greedily
 	for _, ipaSegment := range ipaSegments {
 		// Skip segments that have no mapping
@@ -232,12 +232,12 @@ func generateInferredWord(ipaSegments []string, langReverseMap map[string][]stri
 			// Find the best option for this IPA segment
 			bestOption := graphemes[0]
 			minDistance := uint64(^uint64(0)) // Max uint64
-			
+
 			for _, option := range graphemes {
 				// Try this option and calculate edit distance
 				testWord := currentWord + option
 				testRunes := []rune(strings.ToLower(testWord))
-				
+
 				// Calculate edit distance between partial word and corresponding part of target
 				targetLen := len(targetRunes)
 				testLen := len(testRunes)
@@ -245,30 +245,30 @@ func generateInferredWord(ipaSegments []string, langReverseMap map[string][]stri
 				if compareLen > targetLen {
 					compareLen = targetLen
 				}
-				
+
 				var targetPart []rune
 				if compareLen > 0 {
 					targetPart = targetRunes[:compareLen]
 				}
-				
+
 				mat := levenshtein.Matrix[uint64](uint(len(testRunes)), uint(len(targetPart)),
 					nil, nil,
 					levenshtein.OneSlice[rune, uint64](testRunes, targetPart), nil)
-				
+
 				distance := *levenshtein.Distance(mat)
-				
+
 				if distance < minDistance {
 					minDistance = distance
 					bestOption = option
 				}
 			}
-			
+
 			// Add the best option to current word
 			currentWord += bestOption
 		}
 		// If no mapping exists, skip this segment (don't add anything)
 	}
-	
+
 	return currentWord
 }
 
@@ -276,10 +276,10 @@ func generateInferredWord(ipaSegments []string, langReverseMap map[string][]stri
 func calculateEditDistance(s1, s2 string) uint64 {
 	runes1 := []rune(strings.ToLower(s1))
 	runes2 := []rune(strings.ToLower(s2))
-	
+
 	mat := levenshtein.Matrix[uint64](uint(len(runes1)), uint(len(runes2)),
 		nil, nil,
 		levenshtein.OneSlice[rune, uint64](runes1, runes2), nil)
-	
+
 	return *levenshtein.Distance(mat)
 }

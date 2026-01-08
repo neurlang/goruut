@@ -334,7 +334,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 	}
 
 	var files = []string{
-//		"",
+		//		"",
 		"weights6" + reverse + ".json.zlib",
 	}
 
@@ -360,7 +360,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 				for i := 0; i < fanout3; i++ {
 					net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
-					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4 - 8*byte(i), uint32(i)))
+					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4-8*byte(i), uint32(i)))
 					net.NewLayerPI(fanout1*fanout2, 0, 0)
 				}
 				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4, fanout3))
@@ -762,7 +762,7 @@ outer:
 				hsh++
 			}
 			m[dst] = uint32(hsh)
-			m[src + " "] = 0
+			m[src+" "] = 0
 			ret = append(ret, m)
 			src, dst = "", ""
 		}

@@ -126,7 +126,7 @@ func NewPhonemizeWordService(di *DependencyInjection) *PhonemizeWordService {
 	cach_repo_iface := (repo.IWordCachingRepository)(Ptr(MustNeed(di, repo.NewWordCachingRepository)))
 	tag_repo_iface := (repo.IAutoTaggerRepository)(Ptr(MustNeed(di, repo.NewAutoTaggerRepository)))
 	num_repo_iface := (repo.INumToWordsRepository)(Ptr(MustNeed(di, repo.NewNumToWordsRepository)))
-	
+
 	return &PhonemizeWordService{
 		repo: &repoiface,
 		ai:   &ai_repo_iface,

@@ -1,8 +1,8 @@
 package repo
 
 import (
-	"github.com/yousifnimah/NumToWordsGo/NumToWords"
 	"github.com/neurlang/goruut/helpers/log"
+	"github.com/yousifnimah/NumToWordsGo/NumToWords"
 	"strconv"
 	"strings"
 )
@@ -85,8 +85,7 @@ func (n *NumToWordsRepository) ExpandNumericWord(isReverse bool, lang, word stri
 
 func NewNumToWordsRepository(di *DependencyInjection) *NumToWordsRepository {
 
-	return &NumToWordsRepository{
-	}
+	return &NumToWordsRepository{}
 }
 
 var _ INumToWordsRepository = &NumToWordsRepository{}

@@ -135,6 +135,7 @@ func main() {
 		source = strings.ToLower(source)
 		target = strings.ToLower(target)
 		words = strings.ToLower(words)
+
 		var dist = *levenshtein.Distance(levenshtein.Matrix[uint64](uint(len([]rune(target))), uint(len([]rune(words))),
 			nil, nil,
 			levenshtein.OneSlice[rune, uint64]([]rune(target), []rune(words)), nil))
@@ -152,11 +153,11 @@ func main() {
 		percent.Add(dist2)
 	})
 	if total.Load() > 0 {
-		success_wer := 100 * percent.Load() / total.Load()
+		success_wer := 100 - (100 * percent.Load() / total.Load())
 		println("[success rate WER]", success_wer, "%", percent.Load(), "for", *langname)
 	}
 	if maxsum.Load() > 0 {
-		success_cer := 100 * errsum.Load() / maxsum.Load()
+		success_cer := 100 - (100 * errsum.Load() / maxsum.Load())
 		println("[success rate CER]", success_cer, "%", errsum.Load(), "for", *langname)
 	}
 }

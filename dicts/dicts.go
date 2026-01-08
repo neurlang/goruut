@@ -464,149 +464,293 @@ func GetDict(lang, filename string) ([]byte, error) {
 
 func LangName(dir string) string {
 	switch dir {
-	case "afrikaans": return "Afrikaans";
-	case "amharic": return "Amharic";
-	case "arabic": return "Arabic";
-	case "armenian": return "Armenian";
-	case "azerbaijani": return "Azerbaijani";
-	case "basque": return "Basque";
-	case "belarusian": return "Belarusian";
-	case "bengali": return "Bengali";
-	case "bengali/dhaka": return "BengaliDhaka";
-	case "bengali/rahr": return "BengaliRahr";
-	case "bulgarian": return "Bulgarian";
-	case "burmese": return "Burmese";
-	case "catalan": return "Catalan";
-	case "cebuano": return "Cebuano";
-	case "chechen": return "Chechen";
-	case "chichewa": return "Chichewa";
-	case "chinese/mandarin": return "ChineseMandarin";
-	case "croatian": return "Croatian";
-	case "czech": return "Czech";
-	case "danish": return "Danish";
-	case "dutch": return "Dutch";
-	case "dzongkha": return "Dzongkha";
-	case "english": return "English";
-	case "english/american": return "EnglishAmerican";
-	case "english/british": return "EnglishBritish";
-	case "esperanto": return "Esperanto";
-	case "estonian": return "Estonian";
-	case "farsi": return "Farsi";
-	case "finnish": return "Finnish";
-	case "french": return "French";
-	case "galician": return "Galician";
-	case "georgian": return "Georgian";
-	case "german": return "German";
-	case "greek": return "Greek";
-	case "gujarati": return "Gujarati";
-	case "hausa": return "Hausa";
-	case "hebrew": return "Hebrew";
-	case "hebrew2": return "Hebrew2";
-	case "hebrew3": return "Hebrew3";
-	case "hindi": return "Hindi";
-	case "hungarian": return "Hungarian";
-	case "icelandic": return "Icelandic";
-	case "indonesian": return "Indonesian";
-	case "isan": return "Isan";
-	case "italian": return "Italian";
-	case "jamaican": return "Jamaican";
-	case "japanese": return "Japanese";
-	case "javanese": return "Javanese";
-	case "kazakh": return "Kazakh";
-	case "khmer/central": return "KhmerCentral";
-	case "korean": return "Korean";
-	case "lao": return "Lao";
-	case "latvian": return "Latvian";
-	case "lithuanian": return "Lithuanian";
-	case "luxembourgish": return "Luxembourgish";
-	case "macedonian": return "Macedonian";
-	case "malay/arab": return "Malayalam";
-	case "malay/latin": return "MalayArab";
-	case "malayalam": return "MalayLatin";
-	case "maltese": return "Maltese";
-	case "marathi": return "Marathi";
-	case "mongolian": return "Mongolian";
-	case "nepali": return "Nepali";
-	case "norwegian": return "Norwegian";
-	case "pashto": return "Pashto";
-	case "polish": return "Polish";
-	case "portuguese": return "Portuguese";
-	case "punjabi": return "Punjabi";
-	case "romanian": return "Romanian";
-	case "russian": return "Russian";
-	case "serbian": return "Serbian";
-	case "slovak": return "Slovak";
-	case "spanish": return "Spanish";
-	case "swahili": return "Swahili";
-	case "swedish": return "Swedish";
-	case "tagalog": return "Tagalog";
-	case "tamil": return "Tamil";
-	case "telugu": return "Telugu";
-	case "thai": return "Thai";
-	case "tibetan": return "Tibetan";
-	case "turkish": return "Turkish";
-	case "ukrainian": return "Ukrainian";
-	case "urdu": return "Urdu";
-	case "uyghur": return "Uyghur";
-	case "vietnamese/central": return "VietnameseCentral";
-	case "vietnamese/northern": return "VietnameseNorthern";
-	case "vietnamese/southern": return "VietnameseSouthern";
-	case "yoruba": return "Yoruba";
-	case "zulu": return "Zulu";
-	case "albanian": return "Albanian";
-	case "aragonese": return "Aragonese";
-	case "assamese": return "Assamese";
-	case "bashkir": return "Bashkir";
-	case "bishnupriyamanipuri": return "BishnupriyaManipuri";
-	case "bosnian": return "Bosnian";
-	case "cherokee": return "Cherokee";
-	case "chuvash": return "Chuvash";
-	case "gaelic/scottish": return "GaelicScottish";
-	case "gaelic/irish": return "GaelicIrish";
-	case "greenlandic": return "Greenlandic";
-	case "guarani": return "Guarani";
-	case "haitiancreole": return "HaitianCreole";
-	case "hawaiian": return "Hawaiian";
-	case "ido": return "Ido";
-	case "interlingua": return "Interlingua";
-	case "kannada": return "Kannada";
-	case "kiche": return "Kiche";
-	case "konkani": return "Konkani";
-	case "kurdish": return "Kurdish";
-	case "kyrgyz": return "Kyrgyz";
-	case "langbelta": return "LangBelta";
-	case "latgalian": return "Latgalian";
-	case "latin/classical": return "LatinClassical";
-	case "latin/ecclesiastical": return "LatinEcclesiastical";
-	case "linguafrancanova": return "LinguaFrancaNova";
-	case "lojban": return "Lojban";
-	case "lulesaami": return "LuleSaami";
-	case "maori": return "Maori";
-	case "nahuatl/classical": return "NahuatlClassical";
-	case "nahuatl/central": return "NahuatlCentral";
-	case "nahuatl/mecayapan": return "NahuatlMecayapan";
-	case "nahuatl/tetelcingo": return "NahuatlTetelcingo";
-	case "nogai": return "Nogai";
-	case "oromo": return "Oromo";
-	case "papiamento": return "Papiamento";
-	case "quechua": return "Quechua";
-	case "quenya": return "Quenya";
-	case "setswana": return "Setswana";
-	case "shantaiyai": return "ShanTaiYai";
-	case "sindarin": return "Sindarin";
-	case "sindhi": return "Sindhi";
-	case "sinhala": return "Sinhala";
-	case "slovenian": return "Slovenian";
-	case "tatar": return "Tatar";
-	case "turkmen": return "Turkmen";
-	case "uzbek": return "Uzbek";
-	case "welsh/north": return "WelshNorth";
-	case "welsh/south": return "WelshSouth";
-	case "cantonese": return "Cantonese";
-	case "minnan/hokkien": return "MinnanHokkien";
-	case "minnan/taiwanese": return "MinnanTaiwanese";
-	case "minnan/hokkien2": return "MinnanHokkien2";
-	case "minnan/taiwanese2": return "MinnanTaiwanese2";
-	default: return "";
+	case "afrikaans":
+		return "Afrikaans"
+	case "amharic":
+		return "Amharic"
+	case "arabic":
+		return "Arabic"
+	case "armenian":
+		return "Armenian"
+	case "azerbaijani":
+		return "Azerbaijani"
+	case "basque":
+		return "Basque"
+	case "belarusian":
+		return "Belarusian"
+	case "bengali":
+		return "Bengali"
+	case "bengali/dhaka":
+		return "BengaliDhaka"
+	case "bengali/rahr":
+		return "BengaliRahr"
+	case "bulgarian":
+		return "Bulgarian"
+	case "burmese":
+		return "Burmese"
+	case "catalan":
+		return "Catalan"
+	case "cebuano":
+		return "Cebuano"
+	case "chechen":
+		return "Chechen"
+	case "chichewa":
+		return "Chichewa"
+	case "chinese/mandarin":
+		return "ChineseMandarin"
+	case "croatian":
+		return "Croatian"
+	case "czech":
+		return "Czech"
+	case "danish":
+		return "Danish"
+	case "dutch":
+		return "Dutch"
+	case "dzongkha":
+		return "Dzongkha"
+	case "english":
+		return "English"
+	case "english/american":
+		return "EnglishAmerican"
+	case "english/british":
+		return "EnglishBritish"
+	case "esperanto":
+		return "Esperanto"
+	case "estonian":
+		return "Estonian"
+	case "farsi":
+		return "Farsi"
+	case "finnish":
+		return "Finnish"
+	case "french":
+		return "French"
+	case "galician":
+		return "Galician"
+	case "georgian":
+		return "Georgian"
+	case "german":
+		return "German"
+	case "greek":
+		return "Greek"
+	case "gujarati":
+		return "Gujarati"
+	case "hausa":
+		return "Hausa"
+	case "hebrew":
+		return "Hebrew"
+	case "hebrew2":
+		return "Hebrew2"
+	case "hebrew3":
+		return "Hebrew3"
+	case "hindi":
+		return "Hindi"
+	case "hungarian":
+		return "Hungarian"
+	case "icelandic":
+		return "Icelandic"
+	case "indonesian":
+		return "Indonesian"
+	case "isan":
+		return "Isan"
+	case "italian":
+		return "Italian"
+	case "jamaican":
+		return "Jamaican"
+	case "japanese":
+		return "Japanese"
+	case "javanese":
+		return "Javanese"
+	case "kazakh":
+		return "Kazakh"
+	case "khmer/central":
+		return "KhmerCentral"
+	case "korean":
+		return "Korean"
+	case "lao":
+		return "Lao"
+	case "latvian":
+		return "Latvian"
+	case "lithuanian":
+		return "Lithuanian"
+	case "luxembourgish":
+		return "Luxembourgish"
+	case "macedonian":
+		return "Macedonian"
+	case "malay/arab":
+		return "Malayalam"
+	case "malay/latin":
+		return "MalayArab"
+	case "malayalam":
+		return "MalayLatin"
+	case "maltese":
+		return "Maltese"
+	case "marathi":
+		return "Marathi"
+	case "mongolian":
+		return "Mongolian"
+	case "nepali":
+		return "Nepali"
+	case "norwegian":
+		return "Norwegian"
+	case "pashto":
+		return "Pashto"
+	case "polish":
+		return "Polish"
+	case "portuguese":
+		return "Portuguese"
+	case "punjabi":
+		return "Punjabi"
+	case "romanian":
+		return "Romanian"
+	case "russian":
+		return "Russian"
+	case "serbian":
+		return "Serbian"
+	case "slovak":
+		return "Slovak"
+	case "spanish":
+		return "Spanish"
+	case "swahili":
+		return "Swahili"
+	case "swedish":
+		return "Swedish"
+	case "tagalog":
+		return "Tagalog"
+	case "tamil":
+		return "Tamil"
+	case "telugu":
+		return "Telugu"
+	case "thai":
+		return "Thai"
+	case "tibetan":
+		return "Tibetan"
+	case "turkish":
+		return "Turkish"
+	case "ukrainian":
+		return "Ukrainian"
+	case "urdu":
+		return "Urdu"
+	case "uyghur":
+		return "Uyghur"
+	case "vietnamese/central":
+		return "VietnameseCentral"
+	case "vietnamese/northern":
+		return "VietnameseNorthern"
+	case "vietnamese/southern":
+		return "VietnameseSouthern"
+	case "yoruba":
+		return "Yoruba"
+	case "zulu":
+		return "Zulu"
+	case "albanian":
+		return "Albanian"
+	case "aragonese":
+		return "Aragonese"
+	case "assamese":
+		return "Assamese"
+	case "bashkir":
+		return "Bashkir"
+	case "bishnupriyamanipuri":
+		return "BishnupriyaManipuri"
+	case "bosnian":
+		return "Bosnian"
+	case "cherokee":
+		return "Cherokee"
+	case "chuvash":
+		return "Chuvash"
+	case "gaelic/scottish":
+		return "GaelicScottish"
+	case "gaelic/irish":
+		return "GaelicIrish"
+	case "greenlandic":
+		return "Greenlandic"
+	case "guarani":
+		return "Guarani"
+	case "haitiancreole":
+		return "HaitianCreole"
+	case "hawaiian":
+		return "Hawaiian"
+	case "ido":
+		return "Ido"
+	case "interlingua":
+		return "Interlingua"
+	case "kannada":
+		return "Kannada"
+	case "kiche":
+		return "Kiche"
+	case "konkani":
+		return "Konkani"
+	case "kurdish":
+		return "Kurdish"
+	case "kyrgyz":
+		return "Kyrgyz"
+	case "langbelta":
+		return "LangBelta"
+	case "latgalian":
+		return "Latgalian"
+	case "latin/classical":
+		return "LatinClassical"
+	case "latin/ecclesiastical":
+		return "LatinEcclesiastical"
+	case "linguafrancanova":
+		return "LinguaFrancaNova"
+	case "lojban":
+		return "Lojban"
+	case "lulesaami":
+		return "LuleSaami"
+	case "maori":
+		return "Maori"
+	case "nahuatl/classical":
+		return "NahuatlClassical"
+	case "nahuatl/central":
+		return "NahuatlCentral"
+	case "nahuatl/mecayapan":
+		return "NahuatlMecayapan"
+	case "nahuatl/tetelcingo":
+		return "NahuatlTetelcingo"
+	case "nogai":
+		return "Nogai"
+	case "oromo":
+		return "Oromo"
+	case "papiamento":
+		return "Papiamento"
+	case "quechua":
+		return "Quechua"
+	case "quenya":
+		return "Quenya"
+	case "setswana":
+		return "Setswana"
+	case "shantaiyai":
+		return "ShanTaiYai"
+	case "sindarin":
+		return "Sindarin"
+	case "sindhi":
+		return "Sindhi"
+	case "sinhala":
+		return "Sinhala"
+	case "slovenian":
+		return "Slovenian"
+	case "tatar":
+		return "Tatar"
+	case "turkmen":
+		return "Turkmen"
+	case "uzbek":
+		return "Uzbek"
+	case "welsh/north":
+		return "WelshNorth"
+	case "welsh/south":
+		return "WelshSouth"
+	case "cantonese":
+		return "Cantonese"
+	case "minnan/hokkien":
+		return "MinnanHokkien"
+	case "minnan/taiwanese":
+		return "MinnanTaiwanese"
+	case "minnan/hokkien2":
+		return "MinnanHokkien2"
+	case "minnan/taiwanese2":
+		return "MinnanTaiwanese2"
+	default:
+		return ""
 	}
 }

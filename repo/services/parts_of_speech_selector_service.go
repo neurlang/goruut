@@ -49,7 +49,7 @@ func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sente
 			}
 		}
 		var inputmap = make(map[string][2]uint32)
-		inputmap[orig + " "] = [2]uint32{0, 0}
+		inputmap[orig+" "] = [2]uint32{0, 0}
 		for word, k := range words {
 			if k == 0 {
 				continue

@@ -66,7 +66,6 @@ func serializeTags(tags map[uint32]string) (key uint32, ret string) {
 	return
 }
 
-
 func (r *DictPhonemizerRepository) LoadLanguage(isReverse bool, lang string) {
 	var reverse string
 	if isReverse {
@@ -205,7 +204,7 @@ func (r *DictPhonemizerRepository) LookupWords(isReverse bool, lang, word string
 		log.Now().Debugf("LookupWords Key: %s, Value: %v", k, v)
 		m[k] = v
 	}
-	m[word + " "] = 0
+	m[word+" "] = 0
 	ret = append(ret, m)
 	return
 }
