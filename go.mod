@@ -1,6 +1,6 @@
 module github.com/neurlang/goruut
 
-go 1.22
+go 1.22.4
 
 require (
 	github.com/gorilla/mux v1.8.1
@@ -20,6 +20,7 @@ require (
 	github.com/dolthub/maphash v0.1.0 // indirect
 	github.com/gammazero/deque v0.2.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
+	github.com/neurlang/noaregtransformer/go v0.0.0-20260210165246-8343b31cc031 // indirect
 	github.com/neurlang/quaternary v0.2.4 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )

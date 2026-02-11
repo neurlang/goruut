@@ -22,6 +22,8 @@ github.com/neurlang/classifier v0.3.0 h1:8xGvMBAkAKjBLB7XwrGQA0p655tu0QhRBp+EQ+p
 github.com/neurlang/classifier v0.3.0/go.mod h1:eTbTsao5PkP5onvcdmZiRqq3eSnXVZGVjXmRFDaYfCU=
 github.com/neurlang/levenshtein v0.1.0 h1:353zUJ4YL4b3p6IUS3k0vsPXIUr2r1ddImDGqZuezj0=
 github.com/neurlang/levenshtein v0.1.0/go.mod h1:WEohFlzG+ZuOltuzlmOJnT8Yw+7WR9MuxaUfKbfA7vA=
+github.com/neurlang/noaregtransformer/go v0.0.0-20260210165246-8343b31cc031 h1:EzpocRqJ87+k3GdJQvlxUflNmq5XfONigZTU0Lc4EHs=
+github.com/neurlang/noaregtransformer/go v0.0.0-20260210165246-8343b31cc031/go.mod h1:8hrg7apZ4oL4Lvlxlzi3bAc4jtq7KQto7Nm2/c6YZZg=
 github.com/neurlang/quaternary v0.2.4 h1:ITmuGIZvwIpMm/ZZC6SfZlOaCJfS3YMg0ttdU3wOBNg=
 github.com/neurlang/quaternary v0.2.4/go.mod h1:5ljAzCe6Udiox2BieFnce/egIMH42tAZLdNZ0i1edmk=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=

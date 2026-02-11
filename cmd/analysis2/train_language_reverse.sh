@@ -4,6 +4,20 @@
 lang_name="$1"
 shift  # Remove $1 from arguments list, leaving only parameters for training
 
+python3 -m venv .venv
+./.venv/bin/pip3 install numpy torch --index-url https://download.pytorch.org/whl/cpu
+./.venv/bin/python3 ../../../noaregtransformer/noareg_main.py --input-tsv-file "../../dicts/$lang_name/clean_reverse.tsv" --output-train-file "../../dicts/$lang_name/weights8_reverse.bin"
+
+
+
+
+exit 0
+
+
+# Capture language name from first argument
+lang_name="$1"
+shift  # Remove $1 from arguments list, leaving only parameters for training
+
 # Initialize resume flag and filtered arguments
 resume_flag="-resume"
 filtered_args=()
