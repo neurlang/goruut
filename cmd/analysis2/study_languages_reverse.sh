@@ -14,7 +14,7 @@
 ./study_language_reverse.sh	bengali  --rowlossimportance 10
 ./study_language_reverse.sh	bishnupriyamanipuri  --rowlossimportance 10
 ./study_language_reverse.sh	bosnian  --rowlossimportance 10
-./study_language_reverse.sh	bulgarian  --rowlossimportance 10
+./study_language_reverse.sh	bulgarian  --rowlossimportance 3
 ./study_language_reverse.sh	burmese  --rowlossimportance 10
 ./study_language_reverse.sh	cantonese -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	catalan  --rowlossimportance 10
