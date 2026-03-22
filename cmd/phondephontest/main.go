@@ -16,6 +16,8 @@ import "math/rand"
 import "github.com/klauspost/compress/zstd"
 import "io"
 import "encoding/json"
+import di "github.com/martinarisk/di/dependency_injection"
+import "github.com/neurlang/goruut/repo/interfaces"
 
 func loop(filename string, top, group int, do func(string)) {
 	// Open the file
@@ -75,23 +77,68 @@ func loop(filename string, top, group int, do func(string)) {
 	})
 }
 
+
+type DictGetter struct {
+	getter      dicts.DictGetter
+	coolname    string
+                langname    string
+	dir         string
+}
+
+func (d *DictGetter) GetDict(lang, filename string) ([]byte, error) {
+	if lang == d.coolname {
+		fullpath := d.dir + string(os.PathSeparator) + d.langname + string(os.PathSeparator) + filename
+		data, err := os.ReadFile(fullpath)
+		return data, err
+	}
+	return d.getter.GetDict(lang, filename)
+}
+func (d *DictGetter) IsNewFormat(magic []byte) bool {
+	return true
+}
+func (d *DictGetter) IsOldFormat(magic []byte) bool {
+	return false
+}
+
+
+type dummy struct {
+}
+
+func (dummy) GetIpaFlavors() map[string]map[string]string {
+	return make(map[string]map[string]string)
+}
+func (dummy) GetPolicyMaxWords() int {
+	return 99999999999
+}
+
 func main() {
 	langname := flag.String("langname", "", "directory language name")
 	corpus := flag.String("corpus", "", "corpus txt file in language name")
 	nostress := flag.Bool("nostress", false, "no stress")
 	batchsize := flag.Int("batchsize", 100, "batch size")
+	dictgetterdir := flag.String("dictgetterdir", "", "dict getter dir")
 	flag.Parse()
 
 	if corpus == nil || *corpus == "" {
 		println("ERROR: Corpus flag is mandatory")
 		return
 	}
-
+	var dictgetter DictGetter
 	var coolname string
 	if langname != nil {
 		coolname = dicts.LangName(*langname)
+		dictgetter.coolname = coolname
+		dictgetter.langname = *langname
 	}
 	p := lib.NewPhonemizer(nil)
+	if dictgetterdir != nil && "" != *dictgetterdir {
+		dictgetter.dir = *dictgetterdir
+		di := di.NewDependencyInjection()
+		di.Add((interfaces.DictGetter)(&dictgetter))
+		di.Add((interfaces.IpaFlavor)(dummy{}))
+		di.Add((interfaces.PolicyMaxWords)(dummy{}))
+		p = lib.NewPhonemizer(di)
+	}
 	var percent, errsum, total, maxsum atomic.Uint64
 	loop(*corpus, *batchsize, 1000, func(words string) {
 		if nostress != nil && *nostress {
