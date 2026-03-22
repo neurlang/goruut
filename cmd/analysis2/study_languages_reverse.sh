@@ -127,7 +127,7 @@
 ./study_language_reverse.sh	khmer/central  --rowlossimportance 10
 ./study_language_reverse.sh	latin/classical  --rowlossimportance 10
 ./study_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 10
-./study_language_reverse.sh	malay/arab  --rowlossimportance 10
+./study_language_reverse.sh	malay/arab  --rowlossimportance 8
 ./study_language_reverse.sh	malay/latin  --rowlossimportance 10
 ./study_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 10
