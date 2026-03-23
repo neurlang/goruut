@@ -74,7 +74,7 @@
 ./study_language_reverse.sh	lulesaami  --rowlossimportance 10
 ./study_language_reverse.sh	luxembourgish  --rowlossimportance 10
 ./study_language_reverse.sh	macedonian  --rowlossimportance 10
-./study_language_reverse.sh	malayalam  --rowlossimportance 10
+./study_language_reverse.sh	malayalam  --rowlossimportance 2
 ./study_language_reverse.sh	maltese  --rowlossimportance 10
 ./study_language_reverse.sh	maori  --rowlossimportance 10
 ./study_language_reverse.sh	marathi  --rowlossimportance 10
@@ -128,7 +128,7 @@
 ./study_language_reverse.sh	latin/classical  --rowlossimportance 10
 ./study_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 10
 ./study_language_reverse.sh	malay/arab  --rowlossimportance 8
-./study_language_reverse.sh	malay/latin  --rowlossimportance 10
+./study_language_reverse.sh	malay/latin  --rowlossimportance 6
 ./study_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	nahuatl/central  --rowlossimportance 10
