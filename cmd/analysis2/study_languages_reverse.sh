@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ./study_language_reverse.sh	afrikaans  --rowlossimportance 5
-./study_language_reverse.sh	albanian  --rowlossimportance 10
+./study_language_reverse.sh	albanian  --rowlossimportance 2
 ./study_language_reverse.sh	amharic  --rowlossimportance 10
 ./study_language_reverse.sh	arabic  --rowlossimportance 10
 ./study_language_reverse.sh	aragonese  --rowlossimportance 10
