@@ -17,7 +17,7 @@
 ./study_language_reverse.sh	bulgarian  --rowlossimportance 3
 ./study_language_reverse.sh	burmese  --rowlossimportance 0
 ./study_language_reverse.sh	cantonese -padspace  --rowlossimportance 0
-./study_language_reverse.sh	catalan  --rowlossimportance 10
+./study_language_reverse.sh	catalan  --rowlossimportance 2
 ./study_language_reverse.sh	cebuano  --rowlossimportance 10
 ./study_language_reverse.sh	chechen  --rowlossimportance 10
 ./study_language_reverse.sh	cherokee  --rowlossimportance 10
