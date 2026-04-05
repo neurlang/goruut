@@ -52,7 +52,7 @@
 ./study_language_reverse.sh	ido  --rowlossimportance 1
 ./study_language_reverse.sh	indonesian  --rowlossimportance 2
 ./study_language_reverse.sh	interlingua  --rowlossimportance 7
-./study_language_reverse.sh	isan  --rowlossimportance 10
+./study_language_reverse.sh	isan  --rowlossimportance 5
 ./study_language_reverse.sh	italian  --rowlossimportance 10
 ./study_language_reverse.sh	jamaican  --rowlossimportance 10
 ./study_language_reverse.sh	japanese -padspace  --rowlossimportance 10
