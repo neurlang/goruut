@@ -58,7 +58,7 @@
 "ʒ":["ж"],
 "ʲa":["я"],
 "ʲo":["ё"],
-"ː":["а","к","с","з"],
+"ː":["а","з","к","с"],
 "β":["б"],
 "χ":["х"]},"SrcMulti":null,"DstMulti":null,"SrcMultiSuffix":["ː"],
 "DstMultiSuffix":null,"DropLast":null,"DstMultiPrefix":null,"PrePhonWordSteps":[{"ToLower":true}],
