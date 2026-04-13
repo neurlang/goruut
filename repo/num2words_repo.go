@@ -15,6 +15,19 @@ type NumToWordsRepository struct {
 }
 
 func expandNumericWord(word, lang string) (ret []map[string]uint32) {
+	// prevent stack overflow, e.g. 9781427604354 english
+	if len(word) > 10 {
+		return nil
+	}
+
+	// force only digits
+	for _, c := range word {
+		if c < '0' || c > '9' {
+			return nil
+		}
+	}
+
+
 	num, err := strconv.Atoi(word)
 	if err != nil {
 		log.Now().Debugf("%e", err)
