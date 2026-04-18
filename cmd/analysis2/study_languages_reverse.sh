@@ -93,7 +93,7 @@
 ./study_language_reverse.sh	romanian  --rowlossimportance 10
 ./study_language_reverse.sh	russian  --rowlossimportance 9
 ./study_language_reverse.sh	serbian  --rowlossimportance 10
-./study_language_reverse.sh	setswana  --rowlossimportance 10
+./study_language_reverse.sh	setswana  --rowlossimportance 1
 ./study_language_reverse.sh	shantaiyai -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	sindarin  --rowlossimportance 10
 ./study_language_reverse.sh	sindhi  --rowlossimportance 10
