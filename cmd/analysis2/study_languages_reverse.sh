@@ -96,7 +96,7 @@
 ./study_language_reverse.sh	setswana  --rowlossimportance 1
 ./study_language_reverse.sh	shantaiyai -padspace  --rowlossimportance 9
 ./study_language_reverse.sh	sindarin  --rowlossimportance 9
-./study_language_reverse.sh	sindhi  --rowlossimportance 10
+./study_language_reverse.sh	sindhi  --rowlossimportance 2
 ./study_language_reverse.sh	sinhala  --rowlossimportance 10
 ./study_language_reverse.sh	slovak  --rowlossimportance 7
 ./study_language_reverse.sh	slovenian  --rowlossimportance 10
