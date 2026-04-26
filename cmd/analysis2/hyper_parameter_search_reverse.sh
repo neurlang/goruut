@@ -26,7 +26,7 @@ if [[  "$1" == "japanese" ]]; then
 	padspace="-padspace";
 fi
 if [[  "$1" == "tibetan" ]]; then
-	padspace="";
+	padspace="-padspace";
 fi
 if [[  "$1" == "shantaiyai" ]]; then
 	padspace="-padspace";
