@@ -106,7 +106,7 @@
 ./study_language_reverse.sh	tagalog  --rowlossimportance 3
 ./study_language_reverse.sh	tamil  --rowlossimportance 1
 ./study_language_reverse.sh	tatar  --rowlossimportance 6
-./study_language_reverse.sh	telugu  --rowlossimportance 10
+./study_language_reverse.sh	telugu  --rowlossimportance 2
 ./study_language_reverse.sh	thai  --rowlossimportance 10
 ./study_language_reverse.sh	tibetan -padspace  --rowlossimportance 10
 ./study_language_reverse.sh	turkish  --rowlossimportance 10
