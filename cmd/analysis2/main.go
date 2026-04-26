@@ -223,7 +223,6 @@ again:
 			slow1, slow2 = word1, word2
 			slowmutex.Unlock()
 		}()
-
 		if padspace != nil && *padspace {
 			word2 = strings.ReplaceAll(word2, " ", "_")
 			word2 += "_"
@@ -651,6 +650,29 @@ again:
 		const individual = false
 		var threway_langs = make([]*SolutionEval, 2*len(threewayz), 2*len(threewayz))
 		for i := range threewayz {
+			// trim space in case there is one
+
+			threewayz[i][0] = strings.TrimSpace(threewayz[i][0])
+			threewayz[i][1] = strings.TrimSpace(threewayz[i][1])
+
+			if strings.Contains(threewayz[i][0], " ") || strings.Contains(threewayz[i][1], " ") {
+
+				fmt.Println("ignoring", threewayz[i][0], threewayz[i][1])
+
+				if i == 0 {
+					threway_langs[i] = lang_eval
+					threway_langs[len(threewayz)+i] = lang_eval
+
+				} else if individual {
+					threway_langs[i] = lang_eval
+					threway_langs[len(threewayz)+i] = lang_eval
+				} else {
+					threway_langs[i] = threway_langs[i-1]
+					threway_langs[len(threewayz)+i] = lang_eval
+				}
+				continue
+			}
+
 			if i == 0 {
 				threway_langs[i] = lang_eval.With(threewayz[i][0], threewayz[i][1])
 
@@ -752,9 +774,11 @@ again:
 					if individual {
 						i = minI
 					}
-					lang_eval = lang_eval.With(threewayz[i][0], threewayz[i][1])
-					if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
-						lang.With(threewayz[i][0], threewayz[i][1])
+					if !strings.Contains(threewayz[i][0], " ") && !strings.Contains(threewayz[i][1], " ") {
+						lang_eval = lang_eval.With(threewayz[i][0], threewayz[i][1])
+						if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+							lang.With(threewayz[i][0], threewayz[i][1])
+						}
 					}
 				}
 			} else {
@@ -780,9 +804,11 @@ again:
 				//	threeway_complexity_loss[minI].Load()))
 				minI -= len(threewayz)
 				fmt.Println(maxLoss, threewayz[minI], minLoss)
-				lang_eval = lang_eval.With(threewayz[minI][0], threewayz[minI][1])
-				if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
-					lang.With(threewayz[minI][0], threewayz[minI][1])
+				if !strings.Contains(threewayz[minI][0], " ") && !strings.Contains(threewayz[minI][1], " ") {
+					lang_eval = lang_eval.With(threewayz[minI][0], threewayz[minI][1])
+					if (save != nil) && *save && (langFile != nil) && (*langFile != "") {
+						lang.With(threewayz[minI][0], threewayz[minI][1])
+					}
 				}
 			}
 		}
