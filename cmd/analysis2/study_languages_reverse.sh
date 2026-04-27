@@ -111,7 +111,7 @@
 ./study_language_reverse.sh	tibetan -padspace  --rowlossimportance 2
 ./study_language_reverse.sh	turkish  --rowlossimportance 8
 ./study_language_reverse.sh	turkmen  --rowlossimportance 6
-./study_language_reverse.sh	ukrainian  --rowlossimportance 10
+./study_language_reverse.sh	ukrainian  --rowlossimportance 4
 ./study_language_reverse.sh	urdu  --rowlossimportance 10
 ./study_language_reverse.sh	uyghur  --rowlossimportance 10
 ./study_language_reverse.sh	uzbek  --rowlossimportance 10
