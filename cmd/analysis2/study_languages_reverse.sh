@@ -121,7 +121,7 @@
 ./study_language_reverse.sh	bengali/rahr  --rowlossimportance 2
 ./study_language_reverse.sh	chinese/mandarin -padspace  --rowlossimportance 0
 ./study_language_reverse.sh	english/american  --rowlossimportance 2
-./study_language_reverse.sh	english/british  --rowlossimportance 10
+./study_language_reverse.sh	english/british  --rowlossimportance 1
 ./study_language_reverse.sh	gaelic/irish  --rowlossimportance 10
 ./study_language_reverse.sh	gaelic/scottish  --rowlossimportance 10
 ./study_language_reverse.sh	khmer/central  --rowlossimportance 10
