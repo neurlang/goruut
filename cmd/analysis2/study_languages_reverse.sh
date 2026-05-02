@@ -126,7 +126,7 @@
 ./study_language_reverse.sh	gaelic/scottish  --rowlossimportance 4
 ./study_language_reverse.sh	khmer/central  --rowlossimportance 9
 ./study_language_reverse.sh	latin/classical  --rowlossimportance 2
-./study_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 10
+./study_language_reverse.sh	latin/ecclesiastical  --rowlossimportance 9
 ./study_language_reverse.sh	malay/arab  --rowlossimportance 8
 ./study_language_reverse.sh	malay/latin  --rowlossimportance 6
 ./study_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 10
