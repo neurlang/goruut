@@ -133,7 +133,7 @@
 ./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 2
 ./study_language_reverse.sh	nahuatl/central  --rowlossimportance 6
 ./study_language_reverse.sh	nahuatl/classical  --rowlossimportance 6
-./study_language_reverse.sh	nahuatl/mecayapan  --rowlossimportance 10
+./study_language_reverse.sh	nahuatl/mecayapan  --rowlossimportance 8
 ./study_language_reverse.sh	nahuatl/tetelcingo  --rowlossimportance 10
 ./study_language_reverse.sh	vietnamese/central  --rowlossimportance 10
 ./study_language_reverse.sh	vietnamese/northern  --rowlossimportance 10
