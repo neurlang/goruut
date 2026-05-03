@@ -9,6 +9,8 @@ import (
 	"github.com/neurlang/classifier/net/feedforward"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
+	"github.com/neurlang/noaregtransformer/go/noareg"
+	"compress/zlib"
 	"sort"
 	"strconv"
 	"strings"
@@ -28,6 +30,8 @@ type HashtronHomonymSelectorRepository struct {
 	mut   *sync.RWMutex
 	hlang *hlanguages
 	nets  *map[string]*feedforward.FeedforwardNetwork
+
+	tformers *map[string]*noareg.NoaregTransformer
 }
 
 type hlanguages map[string]*hlanguage
@@ -60,11 +64,53 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 		r.nets = &netss
 		log.Now().Debugf("Language %s made map of nets", lang)
 	}
+	tformers := r.tformers
+	if tformers == nil {
+		tformerss := make(map[string]*noareg.NoaregTransformer)
+		tformers = &tformerss
+		r.tformers = &tformerss
+		log.Now().Debugf("Language %s made map of tformers", lang)
+	}
 	if (*nets)[lang+reverse] != nil {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
 	}
+	if (*tformers)[lang+reverse] != nil {
+		log.Now().Debugf("Language %s already loaded", lang)
+		return
+	}
+	var files_new = []string{
+		"weights9" + reverse + ".bin.zlib",
+	}
+	for i, file := range files_new {
+		compressedData := log.Error1((*r.getter).GetDict(lang, file))
 
+		if compressedData == nil {
+			continue
+		}
+		bytesReader := bytes.NewReader(compressedData)
+		zlibReader := log.Error1(zlib.NewReader(bytesReader))
+		if zlibReader == nil {
+			continue
+		}
+		defer zlibReader.Close()
+
+		switch i {
+		case 0:
+			tensors := log.Error1(noareg.ReadTensors(zlibReader))
+			if tensors == nil {
+				break
+			}
+			// Initialize transformer
+			transformer := noareg.NewNoaregTransformer(32, 16, 100, 4)
+
+			noareg.LoadTransformerFile(transformer, tensors)
+
+			(*r.tformers)[lang+reverse] = transformer
+
+			return
+		}
+	}
 	var files = []string{
 		"weights7" + reverse + ".json.zlib",
 		//"weights5" + reverse + ".json.zlib",
@@ -117,9 +163,51 @@ func (r *HashtronHomonymSelectorRepository) Select(isReverse bool, lang string, 
 	r.LoadLanguage(isReverse, lang)
 	r.mut.RLock()
 	net := (*r.nets)[lang+reverse]
+	tformer := (*r.tformers)[lang+reverse]
 	r.mut.RUnlock()
 
 	if net == nil {
+		if tformer == nil {
+			return
+		}
+
+		var datas [][][2]uint32
+		var job [][]string
+		for i, mapping := range sentence {
+			var origword string
+			var data [][2]uint32
+			var strkey []string
+			for v, k := range mapping {
+				if k[0] == 0 {
+					origword = strings.TrimRight(v, " ")
+					continue
+				}
+				strkey = append(strkey, v)
+				data = append(data, k)
+			}
+			strkey = append([]string{origword}, strkey...)
+			log.Now().Debugf("Sentence %d: %v | %v", i, strkey, data)
+			job = append(job, strkey)
+			datas = append(datas, data)
+		}
+
+		var solution = log.Error1(noareg.MultiWordInferFull(tformer, job))
+		log.Now().Debugf("Solution: %s", solution)
+
+		var fields = strings.Fields(solution)
+		for i, field := range fields {
+			if len(job[i]) <= 1 {
+				continue
+			}
+			var kk [2]uint32
+			for j, entry := range job[i][1:] {
+				if entry == field {
+					kk = datas[i][j]
+				}
+			}
+			ret = append(ret, [4]uint32{uint32(i), hash.StringHash(0, field), kk[0], 1 })
+		}
+		log.Now().Debugf("Ret: %v", ret)
 		return
 	}
 
