@@ -138,5 +138,5 @@
 ./study_language_reverse.sh	vietnamese/central  --rowlossimportance 0
 ./study_language_reverse.sh	vietnamese/northern  --rowlossimportance 3
 ./study_language_reverse.sh	vietnamese/southern  --rowlossimportance 1
-./study_language_reverse.sh	welsh/north  --rowlossimportance 10
+./study_language_reverse.sh	welsh/north  --rowlossimportance 2
 ./study_language_reverse.sh	welsh/south  --rowlossimportance 10
