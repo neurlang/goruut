@@ -130,7 +130,7 @@
 ./study_language_reverse.sh	malay/arab  --rowlossimportance 8
 ./study_language_reverse.sh	malay/latin  --rowlossimportance 6
 ./study_language_reverse.sh	minnan/hokkien2 -padspace  --rowlossimportance 2
-./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 10
+./study_language_reverse.sh	minnan/taiwanese2 -padspace  --rowlossimportance 2
 ./study_language_reverse.sh	nahuatl/central  --rowlossimportance 10
 ./study_language_reverse.sh	nahuatl/classical  --rowlossimportance 10
 ./study_language_reverse.sh	nahuatl/mecayapan  --rowlossimportance 10
