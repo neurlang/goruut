@@ -23,9 +23,17 @@ func (dummy) GetPolicyMaxWords() int {
 	return 99999999999
 }
 
+func minimum(a, b uint64) uint64 {
+	if a > b {
+		return b
+	}
+	return a
+}
+
 func main() {
 	langFile := flag.String("lang", "", "path to the language directory (e.g., 'english')")
 	dumpFile := flag.String("dump", "", "file where to dump outliers")
+	tsvFile := flag.String("tsv", "", "lexicon to process for outliers (optional)")
 	flag.Parse()
 
 	if *langFile == "" {
@@ -82,6 +90,9 @@ func main() {
 
 	// Load lexicon.tsv
 	lexiconPath := filepath.Join("dicts", *langFile, "lexicon.tsv")
+	if tsvFile != nil && *tsvFile != "" {
+		lexiconPath = *tsvFile
+	}
 	lexiconData := load(lexiconPath, -1) // Load all entries
 
 	if len(lexiconData) == 0 {
@@ -114,7 +125,7 @@ func main() {
 		// Only print if there are errors in either direction
 		if editDistForward > 0 || editDistReverse > 0 {
 			result := fmt.Sprintf("%d\t%s\t%s\t%s\t%s",
-				editDistForward+editDistReverse, word, ipa, inferredWord, inferredIPA)
+				minimum(editDistForward, editDistReverse), word, ipa, inferredWord, inferredIPA)
 			fmt.Println(result)
 
 			if dumpWriter != nil {
