@@ -67,15 +67,15 @@ lang="$(lang_name "$1")"
 
 # Use brace expansion instead of seq (works in bash on Windows)
 for i in {0..10}; do
-    if [ ! -f "../../dicts/$1/weights6.${i}.json.zlib" ]; then
+    if [ ! -f "../../dicts/$1/weights8.${i}.bin.zlib" ]; then
         continue
     fi
 
-    rm -f "../../dicts/$1/weights6.json.zlib" \
+    rm -f "../../dicts/$1/weights8.bin.zlib" \
           "../../dicts/$1/language.json" \
           "../../dicts/$1/missing.all.zlib"
 
-    cp "../../dicts/$1/weights6.${i}.json.zlib" "../../dicts/$1/weights6.json.zlib"
+    cp "../../dicts/$1/weights8.${i}.bin.zlib" "../../dicts/$1/weights8.bin.zlib"
     cp "../../dicts/$1/language.${i}.json" "../../dicts/$1/language.json"
 
     ../build.sh
