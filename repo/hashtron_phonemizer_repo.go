@@ -618,20 +618,59 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 
 		if is_ok {
 
-			out, _ := log.Error2(noareg.TransformerInferFull(tran_new, detokenizer_new, word))
+			out, _ := log.Error2(noareg.TransformerInferFull2(tran_new, detokenizer_new, word))
 			//println(word, gbg[0], gbg[1], out)
 
-			src := word
-			dst := out
+			var fullsrc string
+			var fulldst string
 
-			m := make(map[string]uint32)
-			hsh := hashtronHash(src + "\x00" + dst)
-			if hsh == 0 {
-				hsh++
+			for _, srcdst := range out {
+
+				src := srcdst[0]
+				dst := srcdst[1]
+
+				if strings.HasPrefix(dst, "_") && fullsrc != "" && fulldst != "" {
+					m := make(map[string]uint32)
+					hsh := hashtronHash(fullsrc + "\x00" + fulldst)
+					if hsh == 0 {
+						hsh++
+					}
+					m[fulldst] = uint32(hsh)
+					m[fullsrc+" "] = 0
+					ret = append(ret, m)
+
+					fullsrc = ""
+					fulldst = ""
+				}
+
+				fullsrc += src
+				fulldst += dst
+
+				if strings.HasSuffix(fulldst, "_") && fullsrc != "" && fulldst != "" {
+					m := make(map[string]uint32)
+					hsh := hashtronHash(fullsrc + "\x00" + fulldst)
+					if hsh == 0 {
+						hsh++
+					}
+					m[fulldst] = uint32(hsh)
+					m[fullsrc+" "] = 0
+					ret = append(ret, m)
+
+					fullsrc = ""
+					fulldst = ""
+				}
 			}
-			m[dst] = uint32(hsh)
-			m[src+" "] = 0
-			ret = append(ret, m)
+			if fullsrc != "" && fulldst != "" {
+				m := make(map[string]uint32)
+				hsh := hashtronHash(fullsrc + "\x00" + fulldst)
+				if hsh == 0 {
+					hsh++
+				}
+				m[fulldst] = uint32(hsh)
+				m[fullsrc+" "] = 0
+				ret = append(ret, m)
+			}
+
 			return
 		}
 	}

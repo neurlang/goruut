@@ -9,6 +9,7 @@ require (
 	github.com/maypok86/otter v1.2.1
 	github.com/neurlang/classifier v0.3.0
 	github.com/neurlang/levenshtein v0.1.0
+	github.com/neurlang/noaregtransformer/go v0.0.0-20260617141659-227f63f11c67
 	github.com/sentencizer/sentencizer v0.1.8
 	github.com/sirupsen/logrus v1.9.3
 	github.com/t-tomalak/logrus-easy-formatter v0.0.0-20190827215021-c074f06c5816
@@ -20,7 +21,6 @@ require (
 	github.com/dolthub/maphash v0.1.0 // indirect
 	github.com/gammazero/deque v0.2.1 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.8 // indirect
-	github.com/neurlang/noaregtransformer/go v0.0.0-20260503123706-12eac925dc27 // indirect
 	github.com/neurlang/quaternary v0.2.4 // indirect
 	golang.org/x/sys v0.5.0 // indirect
 )
