@@ -9,7 +9,6 @@ import (
 
 	"bufio"
 	"compress/zlib"
-	"encoding/json"
 	"flag"
 	"fmt"
 	"io"
