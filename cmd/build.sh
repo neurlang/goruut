@@ -9,6 +9,7 @@ go build -o ./backtest/backtest ./backtest
 go build -o ./dicttomap/dicttomap ./dicttomap
 go build -o ./goruut/goruut ./goruut
 go build -o ./phondephontest/phondephontest ./phondephontest
+go build -o ./askllmtest/askllmtest ./askllmtest
 go build -o ./homotest/homotest ./homotest
 
 echo "Goruut binaries built successfuly"
