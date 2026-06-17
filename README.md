@@ -6,7 +6,7 @@ A tokenizer, text cleaner, and [IPA](https://en.wikipedia.org/wiki/International
 
 ## Try it online
 
-It is possible to try this software live at [hashtron.cloud](https://hashtron.cloud/) or at [hugging face](https://huggingface.co/spaces/neurlang/pygoruut).
+It is possible to try this software live at [neurlang.online](https://neurlang.online/) or at [hugging face](https://huggingface.co/spaces/neurlang/pygoruut).
 
 ## Features
 
