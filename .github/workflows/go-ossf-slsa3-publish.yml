@@ -52,6 +52,8 @@ jobs:
             os: darwin
           - arch: riscv64
             os: windows
+          - arch: arm
+            os: windows
           - arch: riscv64
             os: freebsd
           - arch: amd64
