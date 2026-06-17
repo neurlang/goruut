@@ -300,35 +300,8 @@ again:
 			equal = true
 			percent.Add(1)
 		}
-		var tags, wordtags []string
-		if len(resp.Words) > 0 {
-			err1 := json.Unmarshal([]byte(resp.Words[0].PosTags), &tags)
-			err2 := json.Unmarshal([]byte(word3), &wordtags)
-			if err1 == nil && err2 == nil {
-				tagmap := tomap(tags)
-				wordmap := tomap(wordtags)
-				delete(tagmap, "preferred")
-				delete(tagmap, "dict")
-				if langname != nil && strings.HasPrefix(*langname, "english") {
-					delete(tagmap, "the")
-					delete(tagmap, "thi")
-					delete(tagmap, "consonant1st")
-					delete(tagmap, "vowel1st")
-				}
-				//fmt.Println(tagmap, wordmap)
-				equal = len(tagmap) == len(wordmap)
-				if equal {
-					for k := range tagmap {
-						if !wordmap[k] {
-							equal = false
-						}
-					}
-				}
-			}
-		}
-
 		if !equal || !strings.Contains(word1, " ") && !strings.Contains(word2, " ") {
-			dump(word1, word2, word3)
+			dump(word1, word2, "")
 		}
 
 		//success := 100 * percent.Load() / total.Load()
