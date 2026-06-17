@@ -80,6 +80,10 @@ for i in {0..10}; do
 
     ../build.sh
 
+    ../askllmtest/askllmtest --langname "$1" --corpus "$2" --batchsize 10 --dictgetterdir ../../dicts/
+
+    #continue
+
     ../goruut/goruut --configfile ../../configs/config.json 2>/dev/null &
     PID1=$!
 
