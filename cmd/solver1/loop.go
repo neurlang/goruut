@@ -2,7 +2,7 @@ package main
 
 import "os"
 import "fmt"
-import "github.com/neurlang/classifier/parallel"
+import 	"github.com/neurlang/goruut/external/classifier/parallel"
 import "bufio"
 import "math/rand"
 import "sync/atomic"

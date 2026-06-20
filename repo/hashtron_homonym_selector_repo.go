@@ -3,7 +3,7 @@ package repo
 import (
 	"bytes"
 	"compress/zlib"
-	"github.com/neurlang/classifier/hash"
+	"github.com/neurlang/goruut/external/classifier/hash"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/noaregtransformer/go/noareg"

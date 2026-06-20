@@ -1,7 +1,7 @@
 package services
 
 import (
-	"github.com/neurlang/classifier/hash"
+	"github.com/neurlang/goruut/external/classifier/hash"
 	"github.com/neurlang/goruut/helpers"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo"

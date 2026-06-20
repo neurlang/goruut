@@ -19,7 +19,7 @@ import (
 	"time"
 
 	di "github.com/martinarisk/di/dependency_injection"
-	"github.com/neurlang/classifier/parallel"
+	"github.com/neurlang/goruut/external/classifier/parallel"
 	"github.com/neurlang/goruut/repo/interfaces"
 )
 

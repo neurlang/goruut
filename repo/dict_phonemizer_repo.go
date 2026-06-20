@@ -6,7 +6,7 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"github.com/neurlang/classifier/hash"
+	"github.com/neurlang/goruut/external/classifier/hash"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"sort"

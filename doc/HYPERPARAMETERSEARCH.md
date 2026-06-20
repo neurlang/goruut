@@ -16,7 +16,7 @@ mkdir hyper_parameter_search
 cd hyper_parameter_search
 git clone https://github.com/neurlang/goruut
 git clone https://github.com/neurlang/dataset
-git clone https://github.com/neurlang/classifier
+# git clone https://github.com/neurlang/classifier (no longer needed)
 ```
 
 Now you need the utterance level phonemizer trainer:

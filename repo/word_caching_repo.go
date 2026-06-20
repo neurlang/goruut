@@ -4,7 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/binary"
 	"github.com/maypok86/otter"
-	"github.com/neurlang/classifier/hash"
+	"github.com/neurlang/goruut/external/classifier/hash"
 	"github.com/neurlang/goruut/helpers/log"
 	"time"
 )

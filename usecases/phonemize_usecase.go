@@ -3,7 +3,7 @@ package usecases
 
 import (
 	"encoding/json"
-	"github.com/neurlang/classifier/parallel"
+	"github.com/neurlang/goruut/external/classifier/parallel"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/models/requests"
 	"github.com/neurlang/goruut/models/responses"
