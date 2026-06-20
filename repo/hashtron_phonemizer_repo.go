@@ -3,17 +3,8 @@ package repo
 import (
 	"bytes"
 	"encoding/json"
-	"github.com/neurlang/classifier/datasets/phonemizer_ulevel"
-	"github.com/neurlang/classifier/hashtron"
-	//"github.com/neurlang/classifier/layer/full"
-	"github.com/neurlang/classifier/hash"
-	"github.com/neurlang/classifier/layer/crossattention"
-	//"github.com/neurlang/classifier/layer/majpool2d"
-	//"github.com/neurlang/classifier/layer/parity"
 	"compress/zlib"
-	"github.com/neurlang/classifier/layer/sochastic"
-	"github.com/neurlang/classifier/layer/sum"
-	"github.com/neurlang/classifier/net/feedforward"
+	"github.com/neurlang/classifier/hash"
 	"github.com/neurlang/goruut/helpers/log"
 	"github.com/neurlang/goruut/repo/interfaces"
 	"github.com/neurlang/noaregtransformer/go/noareg"
@@ -38,21 +29,12 @@ type HashtronPhonemizerRepository struct {
 	mut    *sync.RWMutex
 	lang   *languages
 	phoner *interfaces.Phonemizer
-	nets   *map[string]*feedforward.FeedforwardNetwork
 
 	tformers *map[string]*noareg.NoaregTransformer
 }
 
 func hashtronHash(str string) uint32 {
 	return hash.StringHash(0, str)
-}
-
-func get_hashtron(h *hashtron.Hashtron, err error) hashtron.Hashtron {
-	if err != nil {
-		log.Now().Errorf("Failed to load one hashtron: %v", err)
-		return *log.Error1(hashtron.New(nil, 1))
-	}
-	return *h
 }
 
 type languages map[string]*language
@@ -291,7 +273,7 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 
 	// First check with read lock to avoid unnecessary write lock
 	r.mut.RLock()
-	if r.nets != nil && (*r.nets)[lang+reverse] != nil {
+	if r.tformers != nil && (*r.tformers)[lang+reverse] != nil {
 		log.Now().Debugf("Language %s already loaded", lang)
 		r.mut.RUnlock()
 		return
@@ -302,13 +284,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 	r.mut.Lock()
 	defer r.mut.Unlock()
 
-	nets := r.nets
-	if nets == nil {
-		netss := make(map[string]*feedforward.FeedforwardNetwork)
-		nets = &netss
-		r.nets = &netss
-		log.Now().Debugf("Language %s made map of nets", lang)
-	}
 	tformers := r.tformers
 	if tformers == nil {
 		tformerss := make(map[string]*noareg.NoaregTransformer)
@@ -325,10 +300,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			log.Now().Debugf("Language %s made map of nets", lang)
 		}
 	*/
-	if (*nets)[lang+reverse] != nil {
-		log.Now().Debugf("Language %s already loaded", lang)
-		return
-	}
 	if (*tformers)[lang+reverse] != nil {
 		log.Now().Debugf("Language %s already loaded", lang)
 		return
@@ -392,56 +363,6 @@ func (r *HashtronPhonemizerRepository) LoadLanguage(isReverse bool, lang string)
 			return
 		}
 	}
-
-	var files = []string{
-		//		"",
-		"weights6" + reverse + ".json.zlib",
-	}
-
-	for i, file := range files {
-		compressedData := log.Error1((*r.getter).GetDict(lang, file))
-
-		if compressedData == nil {
-			continue
-		}
-
-		if (*r.getter).IsNewFormat(compressedData) {
-			bytesReader := bytes.NewReader(compressedData)
-
-			switch i {
-			case 0:
-				const fanout1 = 24
-				const fanout2 = 1
-				const fanout3 = 4
-				const fanout4 = 32
-
-				var net feedforward.FeedforwardNetwork
-				net.NewLayer(fanout1*fanout2, 0)
-				for i := 0; i < fanout3; i++ {
-					net.NewCombiner(crossattention.MustNew3(fanout1, fanout2))
-					net.NewLayerPI(fanout1*fanout2, 0, 0)
-					net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4-8*byte(i), uint32(i)))
-					net.NewLayerPI(fanout1*fanout2, 0, 0)
-				}
-				net.NewCombiner(sochastic.MustNew(fanout1*fanout2, fanout4, fanout3))
-				net.NewLayer(fanout1*fanout2, 0)
-				net.NewCombiner(sum.MustNew([]uint{fanout1 * fanout2}, 0))
-				net.NewLayer(1, 0)
-
-				(*r.nets)[lang+reverse] = &net
-			}
-			err := (*r.nets)[lang+reverse].ReadZlibWeights(bytesReader)
-			log.Error0(err)
-
-			return
-		} /*else if !isReverse  doesnt work: && (*r.getter).IsOldFormat(compressedData) {
-			bytesReader := bytes.NewReader(compressedData)
-			err := (*r.nets)[lang+reverse].ReadCompressedWeights(bytesReader)
-			log.Error0(err)
-			return
-		}*/
-	}
-
 }
 
 func isCombining(r uint32) bool {
@@ -674,143 +595,6 @@ func (r *HashtronPhonemizerRepository) PhonemizeWords(isReverse bool, lang strin
 			return
 		}
 	}
-
-	r.mut.RLock()
-	mapLangIsNil := r.lang.Slice(isReverse, lang) == nil
-	r.mut.RUnlock()
-	if mapLangIsNil {
-		return []map[string]uint32{}
-	}
-
-	var backoffs = 10
-	r.mut.RLock()
-	srcSame := r.lang.SrcDuplicate(isReverse, lang)
-	r.mut.RUnlock()
-
-	for _, rule := range srcSame {
-		for j := 1; j < len(rule); j++ {
-			word = strings.ReplaceAll(word, rule[j], rule[0])
-		}
-	}
-
-	r.mut.RLock()
-	srca := r.lang.SrcSlice(isReverse, lang, []rune(word))
-	r.mut.RUnlock()
-	dsta := []string{}
-
-	var lastspace = 0
-outer:
-	for i := 0; i < len(srca); i++ {
-		srcv := srca[i]
-		r.mut.RLock()
-		m := r.lang.Slice(isReverse, lang)[string(srcv)]
-		if i == len(srca)-1 {
-			if r.lang.DroppedLast(isReverse, lang, string(srcv)) {
-				m = append([]string{""}, m...)
-			}
-		}
-		r.mut.RUnlock()
-
-		if len(m) == 0 {
-			dsta = append(dsta, "")
-			continue
-		}
-		if len(m) == 1 {
-			for _, mfirst := range m {
-				if mfirst == "_" {
-					lastspace = i + 1
-				} else if strings.HasPrefix(mfirst, "_") {
-					lastspace = i
-				} else if strings.HasSuffix(mfirst, "_") {
-					lastspace = i + 1
-				}
-				dsta = append(dsta, mfirst)
-				break
-			}
-			continue
-		}
-		for _, option := range m {
-			srcaR := srca[lastspace:]
-			dstaR := dsta[lastspace:]
-			origi := i
-			i := i - lastspace
-			r.mut.RLock()
-			net := (*r.nets)[lang+reverse]
-			r.mut.RUnlock()
-			var multiword = lastspace > 0
-			if net == nil {
-				log.Now().Errorf("Net is nil")
-				continue
-			}
-			var predicted int
-			for q := 0; (!multiword && q == 0) || (multiword && q < len(srcaR)-i); q++ {
-				const fanout1new = 24
-				var input2 = phonemizer_ulevel.NewInferenceSubsample(srcaR, dstaR, option, fanout1new/3)
-				var pred int
-				r.mut.RLock()
-				if true { // newest model
-					pred = int(net.Infer2(input2))
-				}
-				r.mut.RUnlock()
-				predicted += pred
-				log.Now().Debugf("Model predicted: %v %v %v -> %d", srcaR, dstaR, option, pred)
-			}
-			if (!multiword && predicted == 1) || (multiword && 2*predicted > len(srcaR)) {
-				if option == "_" {
-					lastspace = origi + 1
-				} else if strings.HasPrefix(option, "_") {
-					lastspace = origi
-				} else if strings.HasSuffix(option, "_") {
-					lastspace = origi + 1
-				}
-				dsta = append(dsta, option)
-				continue outer
-			}
-		}
-		if backoffs > 0 {
-			i = lastspace - 1
-			dsta = dsta[:lastspace]
-			backoffs--
-			continue
-		}
-		for _, mfirst := range m {
-			if mfirst == "_" {
-				lastspace = i + 1
-			} else if strings.HasPrefix(mfirst, "_") {
-				lastspace = i
-			} else if strings.HasSuffix(mfirst, "_") {
-				lastspace = i + 1
-			}
-			dsta = append(dsta, mfirst)
-			break
-		}
-	}
-	var src, dst string
-
-	push := func() {
-		if len(src)+len(dst) > 0 {
-			m := make(map[string]uint32)
-			hsh := hashtronHash(src + "\x00" + dst)
-			if hsh == 0 {
-				hsh++
-			}
-			m[dst] = uint32(hsh)
-			m[src+" "] = 0
-			ret = append(ret, m)
-			src, dst = "", ""
-		}
-	}
-	for i, v := range dsta {
-		if v != "_" && strings.HasPrefix(v, "_") {
-			push()
-		}
-		src += srca[i]
-		dst += v
-		if strings.HasSuffix(v, "_") {
-			push()
-		}
-	}
-	push()
 	return
 }
 
