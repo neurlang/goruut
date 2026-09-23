@@ -6,6 +6,9 @@ type PhonemizeSentence struct {
 	Words []PhonemizeSentenceWord
 
 	ErrorWordLimitExceeded bool `json:"ErrorWordLimitExceeded,omitempty"`
+
+	RandomizationWordsCount   int `json:"RandomizationWordsCount,omitempty"`
+	RandomizationWordsChoices int `json:"RandomizationWordsChoices,omitempty"`
 }
 
 func (p *PhonemizeSentence) Init() {

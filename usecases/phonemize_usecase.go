@@ -78,8 +78,11 @@ func (p *PhonemizeUsecase) Sentence(r requests.PhonemizeSentence) (resp response
 			return
 		}
 
-		parts_of_speech_selected := p.sel.Select(r.IsReverse, r.Language, phonemized, r.Languages)
+		parts_of_speech_selected, escape_valve := p.sel.SelectE(r.IsReverse, r.Language, phonemized, r.Languages)
 		log.Now().Debugf("Vector: %v", parts_of_speech_selected)
+
+		resp.RandomizationWordsCount += escape_valve[0]
+		resp.RandomizationWordsChoices += escape_valve[1]
 
 		if totalLenSplitted.Load() > p.maxwrds {
 			return

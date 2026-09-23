@@ -12,6 +12,7 @@ import . "github.com/martinarisk/di/dependency_injection"
 
 type IPartsOfSpeechSelectorService interface {
 	Select(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string)
+	SelectE(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string, escape [2]int)
 }
 
 type PartsOfSpeechSelectorService struct {
@@ -35,8 +36,11 @@ func next_continue_english(lang string, isReverse bool, my_tags, next_tags map[s
 	}
 	return false
 }
-
 func (p *PartsOfSpeechSelectorService) Select(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string) {
+	ret, _ = p.SelectE(isReverse, lang, sentence, languages)
+	return
+}
+func (p *PartsOfSpeechSelectorService) SelectE(isReverse bool, lang string, sentence []map[string]uint32, languages []string) (ret [][3]string, escape [2]int) {
 
 	var input []map[string][2]uint32
 
@@ -140,6 +144,7 @@ outer:
 				}
 			}
 		}
+		// This loop selects preferred and dict pronounce. If homograph model worked, there will be exactly one preferred (deterministic).
 		for words, tags := range mapping {
 			var my_tags = make(map[string]bool)
 			for _, tag := range tags {
@@ -159,6 +164,26 @@ outer:
 			ret = append(ret, [3]string{orig, dest, string(log.Error1(helpers.SerializeJson(tags)))})
 			continue outer
 		}
+		// Here we count the homographs in lexicon
+		var dict_count = 0
+		for _, tags := range mapping {
+			var my_tags = make(map[string]bool)
+			for _, tag := range tags {
+				my_tags[tag] = true
+			}
+			if next_continue_english(lang, isReverse, my_tags, next_tags) {
+				continue
+			}
+			if !my_tags["dict"] {
+				continue
+			}
+			dict_count++
+		}
+		if dict_count > 1 {
+			escape[0] ++
+			escape[1] += dict_count
+		}
+		// This loop selects random dict pronounce. This is the one that glitches if no homograph model.
 		for words, tags := range mapping {
 			var my_tags = make(map[string]bool)
 			for _, tag := range tags {
@@ -175,6 +200,7 @@ outer:
 			ret = append(ret, [3]string{orig, dest, string(log.Error1(helpers.SerializeJson(tags)))})
 			continue outer
 		}
+		// This loop selects a last-resort any pronounce. However there can be only one non-dict pronounce. Hence this selects deterministically.
 		for words, tags := range mapping {
 			var my_tags = make(map[string]bool)
 			for _, tag := range tags {
