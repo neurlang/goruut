@@ -4,6 +4,19 @@
 lang_name="$1"
 shift  # Remove $1 from arguments list, leaving only parameters for training
 
+python3 -m venv .venv
+./.venv/bin/pip3 install numpy torch --index-url https://download.pytorch.org/whl/cpu tqdm
+./.venv/bin/python3 ../../../noaregtransformer/noareg_multi.py --lexicon "../../dicts/$lang_name/lexicon.tsv" --multi "../../dicts/$lang_name/multi.tsv" --output "../../dicts/$lang_name/weights9.bin"
+
+
+
+
+exit 0
+
+# Capture language name from first argument
+lang_name="$1"
+shift  # Remove $1 from arguments list, leaving only parameters for training
+
 # Initialize resume flag and filtered arguments
 resume_flag="-resume"
 filtered_args=()
