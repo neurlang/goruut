@@ -36,6 +36,7 @@ lang_name() {
         minnan/hokkien2) echo "MinnanHokkien2"; return;;
         minnan/taiwanese2) echo "MinnanTaiwanese2"; return;;
         shantaiyai) echo "ShanTaiYai"; return;;
+        mirandese/central) echo "MirandeseCentral"; return;;
     esac
 
     # Default case: split on '/' and capitalize each part

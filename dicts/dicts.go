@@ -141,6 +141,7 @@ import "github.com/neurlang/goruut/dicts/welsh/south"
 import "github.com/neurlang/goruut/dicts/cantonese"
 import "github.com/neurlang/goruut/dicts/minnan/taiwanese2"
 import "github.com/neurlang/goruut/dicts/minnan/hokkien2"
+import mirandese "github.com/neurlang/goruut/dicts/mirandese/central"
 import "errors"
 
 var ErrUnsupportedLanguage = errors.New("unsupportedLang")
@@ -407,6 +408,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return lulesaami.Language.ReadFile(filename)
 	case "Maori":
 		return maori.Language.ReadFile(filename)
+	case "MirandeseCentral":
+		return mirandese.Language.ReadFile(filename)
 	case "NahuatlClassical":
 		return nahuatlclassical.Language.ReadFile(filename)
 	case "NahuatlCentral":
@@ -586,6 +589,8 @@ func LangName(dir string) string {
 		return "Maltese"
 	case "marathi":
 		return "Marathi"
+	case "mirandese/central":
+		return "MirandeseCentral"
 	case "mongolian":
 		return "Mongolian"
 	case "nepali":

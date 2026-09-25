@@ -134,6 +134,7 @@ sudo docker compose up -d --force-recreate --build
 * Nahuatl Classical
 * Nahuatl Mecayapan
 * Nahuatl Tetelcingo
+* Mirandese Central
 * Nepali
 * Nogai
 * Norwegian
