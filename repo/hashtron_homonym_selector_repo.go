@@ -60,7 +60,7 @@ func (r *HashtronHomonymSelectorRepository) LoadLanguage(isReverse bool, lang st
 	for i, file := range files_new {
 		compressedData := log.Error1((*r.getter).GetDict(lang, file))
 
-		if compressedData == nil {
+		if len(compressedData) == 0 {
 			continue
 		}
 		bytesReader := bytes.NewReader(compressedData)
