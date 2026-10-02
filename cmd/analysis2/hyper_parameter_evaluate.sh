@@ -24,6 +24,7 @@ lang_name() {
         chinese/mandarin) echo "ChineseMandarin"; return;;
         english/american) echo "EnglishAmerican"; return;;
         english/british) echo "EnglishBritish"; return;;
+        greek/ancient) echo "GreekAncient"; return;;
         haitiancreole) echo "HaitianCreole"; return;;
         hebrew2) echo "Hebrew2"; return;;
         hebrew3) echo "Hebrew3"; return;;

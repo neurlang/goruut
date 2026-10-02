@@ -41,6 +41,7 @@ import "github.com/neurlang/goruut/dicts/vietnamese/central"
 import "github.com/neurlang/goruut/dicts/vietnamese/northern"
 import "github.com/neurlang/goruut/dicts/polish"
 import "github.com/neurlang/goruut/dicts/greek"
+import "github.com/neurlang/goruut/dicts/greek/ancient"
 import "github.com/neurlang/goruut/dicts/ukrainian"
 import "github.com/neurlang/goruut/dicts/hungarian"
 import "github.com/neurlang/goruut/dicts/malay/arab"
@@ -252,6 +253,8 @@ func GetDict(lang, filename string) ([]byte, error) {
 		return polish.Language.ReadFile(filename)
 	case "Greek":
 		return greek.Language.ReadFile(filename)
+	case "GreekAncient":
+		return ancient.Language.ReadFile(filename)
 	case "Ukrainian":
 		return ukrainian.Language.ReadFile(filename)
 	case "Hungarian":
@@ -535,6 +538,8 @@ func LangName(dir string) string {
 		return "German"
 	case "greek":
 		return "Greek"
+	case "greek/ancient":
+		return "GreekAncient"
 	case "gujarati":
 		return "Gujarati"
 	case "hausa":

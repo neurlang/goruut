@@ -82,6 +82,7 @@ sudo docker compose up -d --force-recreate --build
 * Georgian
 * German
 * Greek
+* Greek Ancient
 * Greenlandic
 * Guarani
 * Gujarati
